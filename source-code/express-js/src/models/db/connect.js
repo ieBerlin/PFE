@@ -12,8 +12,5 @@ const pool = mysql.createPool({
 
 
 module.exports = {
-    promisePool: pool.promise(),
-    close: async() => {
-        await pool.promise().end()
-    }
+    pool: pool.promise(),
 }
