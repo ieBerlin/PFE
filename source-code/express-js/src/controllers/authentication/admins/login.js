@@ -1,63 +1,4 @@
-const {
-    validateLoginInputs,
-    hashPassword,
-    insertAdmin,
-    adminExists,
-    validateSignUpInputs,
-    comparePassword,
-} = require("./func");
-const createAdmin = async(req, res) => {
-    const {
-        email,
-        password,
-        username,
-        firstName,
-        lastName,
-        dateOfBirth,
-        gender,
-        address,
-        phoneNumber,
-    } = req.body;
-    const errors = validateSignUpInputs({
-        email,
-        password,
-        username,
-        firstName,
-        lastName,
-        dateOfBirth,
-        phoneNumber,
-        gender,
-        address,
-    });
-
-    if (Object.keys(errors).length > 0) {
-        return res.status(422).json(errors);
-    }
-
-    try {
-        if (await adminExists(email, username)) {
-            return res.status(409).json({ message: "Admin already exists" });
-        }
-        const hashedPassword = await hashPassword(password);
-        await insertAdmin({
-            email,
-            hashedPassword,
-            username,
-            firstName,
-            lastName,
-            dateOfBirth,
-            gender,
-            address,
-            phoneNumber,
-        });
-
-        return res.status(201).json({ message: "Admin created successfully" });
-    } catch (error) {
-        console.error("Error creating admin:", error);
-        return res.status(500).json({ message: "Internal server error" });
-    }
-};
-
+const { validateLoginInputs, adminExists, comparePassword } = require("./func");
 const loginAdmin = async(req, res) => {
     const { email, password, username } = req.body;
     let errors = {};
@@ -76,7 +17,7 @@ const loginAdmin = async(req, res) => {
                 return res.status(422).json(errors);
             }
             if (!(await adminExists(email, null))) {
-                return res.status(404).json({ message: "Admin not found" });
+                return res.status(404).json({ message: "User not found" });
             }
             const passwordMatch = await comparePassword({
                 type: "email",
@@ -92,14 +33,18 @@ const loginAdmin = async(req, res) => {
 
         // If username is provided, validate username and password
         else if (username) {
-            errors = validateLoginInputs({ type: "username", field: username, password });
+            errors = validateLoginInputs({
+                type: "username",
+                field: username,
+                password,
+            });
             if (Object.keys(errors).length > 0) {
                 return res.status(422).json(errors);
             }
             // Implement similar logic as above for username
 
             if (!(await adminExists(null, username))) {
-                return res.status(404).json({ message: "Admin not found" });
+                return res.status(404).json({ message: "User not found" });
             }
             const passwordMatch = await comparePassword({
                 type: "username",
@@ -119,7 +64,4 @@ const loginAdmin = async(req, res) => {
     }
 };
 
-module.exports = {
-    createAdmin,
-    loginAdmin,
-};
+module.exports = loginAdmin;

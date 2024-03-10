@@ -4,11 +4,13 @@ const app = express();
 const dotenv = require("dotenv");
 const adminsRouter = require("./src/routes/authentication/admins/index.js");
 const { pool } = require('./src/models/db/connect.js');
+const cors = require("./src/middlewares/cors/corsConfig.js");
 
 // Middlewares
 dotenv.config();
 app.use(express.static("./src"));
 app.use(express.json());
+app.use(cors)
 
 // Authentication routes
 app.use("/auth/admins", adminsRouter);

@@ -104,7 +104,6 @@ const comparePassword = async({ type, field, plainPassword }) => {
         const match = await bcrypt.compare(plainPassword, hashedPasswordFromDB);
         return match;
     } catch (error) {
-        console.error("Error comparing passwords:", error);
         throw new Error('Invalid credentials!');
     }
 };
