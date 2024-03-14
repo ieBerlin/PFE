@@ -5,15 +5,21 @@ const dotenv = require("dotenv");
 const adminsRouter = require("./src/routes/authentication/admins/index.js");
 const { pool } = require('./src/models/db/connect.js');
 const cors = require("./src/middlewares/cors/corsConfig.js");
-
+const { storageImage } = require("./src/utils/imageUploader/imageUploader.js");
 // Middlewares
 dotenv.config();
 app.use(express.static("./src"));
 app.use(express.json());
 app.use(cors)
-
-// Authentication routes
+app.use(express.static('uploads'))
+app.use(express.urlencoded({ extended: true }))
+    // Authentication router
 app.use("/auth/admins", adminsRouter);
+
+//temporary router :
+app.post('/', storageImage, (req, res) => {
+    res.send('created')
+});
 
 const port = process.env.PORT || 8080;
 
