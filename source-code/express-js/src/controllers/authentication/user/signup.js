@@ -1,12 +1,12 @@
 const {
     hashPassword,
-    insertAdmin,
-    adminExists,
+    insertUser,
+    userExists,
     validateSignUpInputs,
-} = require("./func");
+} = require("./func.js");
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../../config/jwt_secret.js')
-const createAdmin = async(req, res) => {
+const createUser = async(req, res) => {
     const {
         email,
         password,
@@ -35,11 +35,11 @@ const createAdmin = async(req, res) => {
     }
 
     try {
-        if (await adminExists(email, username)) {
+        if (await userExists(email, username)) {
             return res.status(409).json({ message: "User already exists" });
         }
         const hashedPassword = await hashPassword(password);
-        await insertAdmin({
+        await insertUser({
             email,
             hashedPassword,
             username,
@@ -50,16 +50,11 @@ const createAdmin = async(req, res) => {
             address,
             phoneNumber,
         });
-        const token = jwt.sign({
-            username: username
-        }, SECRET_KEY, {
-            expiresIn: 200
-        })
-        return res.status(201).json({ username, token, message: "User created successfully" });
+        return res.status(201).json({ message: "User created successfully" });
     } catch (error) {
-        console.error("Error creating admin:", error);
+        console.error("Error creating user:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 };
 
-module.exports = createAdmin;
+module.exports = createUser;

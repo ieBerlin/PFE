@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken'); // Corrected require statement for jwt
 const SECRET_KEY = require('../../config/jwt_secret.js');
 
 function verifyToken(req, res, next) {
+    console.log('token')
     let token = req.headers['x-access-token'] || req.headers['authorization']; // Changed '|' to '||' for logical OR
     if (!token)
         return res.status(403).json({

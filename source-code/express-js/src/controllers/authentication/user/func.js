@@ -1,4 +1,4 @@
-const { isValidEmail } = require("../../../utils/validation/emailValidation");
+const { isValidEmail } = require("../../../utils/validation/emailValidation.js");
 const {
     isValidPhoneNumber,
 } = require("../../../utils/validation/phoneNumberValidation.js");
@@ -9,7 +9,7 @@ const { isValidName } = require("../../../utils/validation/nameValidation.js");
 const { isValidAge } = require("../../../utils/validation/ageValidation.js");
 const {
     isValidPassword,
-} = require("../../../utils/validation/passwordValidation");
+} = require("../../../utils/validation/passwordValidation.js");
 const {
     dateOfBirthFormatter,
 } = require("../../../utils/formatter/dateOfBirth.js");
@@ -54,7 +54,7 @@ const validateSignUpInputs = ({
     if (!address || address.trim() === "") {
         errors.address = "Invalid address!";
     }
-    if (!gender || !gender.trim() === "") {
+    if (!gender || !isValidName(gender.trim())) {
         errors.gender = "Invalid gender!";
     }
 
@@ -77,11 +77,11 @@ const validateLoginInputs = ({ type, field, password }) => {
     return errors;
 };
 
-const adminExists = async(email, username) => {
-    const [existingAdmin] = await pool.query(
-        "SELECT * FROM admin WHERE email = ? OR username = ?", [email, username]
+const userExists = async(email, username) => {
+    const [existingUser] = await pool.query(
+        "SELECT * FROM users WHERE email = ? OR username = ?", [email, username]
     );
-    return existingAdmin.length > 0;
+    return existingUser.length > 0;
 };
 
 const hashPassword = async(password) => {
@@ -92,10 +92,10 @@ const comparePassword = async({ type, field, plainPassword }) => {
     try {
         let result;
         if (type === 'email') {
-            result = await pool.query('SELECT password FROM admin WHERE email = ? LIMIT 1', [field]);
+            result = await pool.query('SELECT password FROM users WHERE email = ? LIMIT 1', [field]);
         } else {
 
-            result = await pool.query('SELECT password FROM admin WHERE username = ? LIMIT 1', [field]);
+            result = await pool.query('SELECT password FROM users WHERE username = ? LIMIT 1', [field]);
         }
         if (!result[0] || !result[0][0] || !result[0][0].password) {
             return false;
@@ -108,7 +108,7 @@ const comparePassword = async({ type, field, plainPassword }) => {
     }
 };
 
-const insertAdmin = async({
+const insertUser = async({
     email,
     hashedPassword,
     username,
@@ -122,7 +122,7 @@ const insertAdmin = async({
     const formattedPhoneNumber = phoneNumberFormatter(phoneNumber);
     const formattedDateOfBirth = dateOfBirthFormatter(dateOfBirth);
     const sql = `
-        INSERT INTO admin (
+        INSERT INTO users (
             email,
             password,
             username,
@@ -131,8 +131,9 @@ const insertAdmin = async({
             date_of_birth,
             gender,
             address,
-            phone_number
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            phone_number,
+            role
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,'user')`;
     const values = [
         email,
         hashedPassword,
@@ -148,9 +149,9 @@ const insertAdmin = async({
 };
 
 module.exports = {
-    insertAdmin,
+    insertUser,
     hashPassword,
-    adminExists,
+    userExists,
     validateLoginInputs,
     validateSignUpInputs,
     comparePassword

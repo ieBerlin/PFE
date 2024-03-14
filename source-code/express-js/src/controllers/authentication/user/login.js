@@ -1,5 +1,7 @@
-const { validateLoginInputs, adminExists, comparePassword } = require("./func");
-const loginAdmin = async(req, res) => {
+const { validateLoginInputs, userExists, comparePassword } = require("./func");
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = require('../../../config/jwt_secret.js')
+const loginUser = async(req, res) => {
     const { email, password, username } = req.body;
     let errors = {};
 
@@ -16,7 +18,7 @@ const loginAdmin = async(req, res) => {
             if (Object.keys(errors).length > 0) {
                 return res.status(422).json(errors);
             }
-            if (!(await adminExists(email, null))) {
+            if (!(await userExists(email, null))) {
                 return res.status(404).json({ message: "User not found" });
             }
             const passwordMatch = await comparePassword({
@@ -27,8 +29,13 @@ const loginAdmin = async(req, res) => {
             if (!passwordMatch) {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
-            // Password matched, send success response
-            return res.status(200).json({ message: "Login successful" });
+            const token = jwt.sign({
+                    email
+                }, SECRET_KEY, {
+                    expiresIn: 200
+                })
+                // Password matched, send success response
+            return res.status(200).json({ token, message: "Login successful" });
         }
 
         // If username is provided, validate username and password
@@ -43,7 +50,7 @@ const loginAdmin = async(req, res) => {
             }
             // Implement similar logic as above for username
 
-            if (!(await adminExists(null, username))) {
+            if (!(await userExists(null, username))) {
                 return res.status(404).json({ message: "User not found" });
             }
             const passwordMatch = await comparePassword({
@@ -55,13 +62,19 @@ const loginAdmin = async(req, res) => {
             if (!passwordMatch) {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
-            // Password matched, send success response
-            return res.status(200).json({ message: "Login successful" });
+            const token = jwt.sign({
+                username: username
+            }, SECRET_KEY, {
+                expiresIn: 200
+            })
+            console.log("token :" + token)
+                // Password matched, send success response
+            return res.status(200).json({ token, message: "Login successful" });
         }
     } catch (error) {
-        console.error("Error logging in admin:", error);
+        console.error("Error logging in user:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 };
 
-module.exports = loginAdmin;
+module.exports = loginUser;

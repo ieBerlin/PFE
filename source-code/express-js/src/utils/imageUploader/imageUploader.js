@@ -1,13 +1,13 @@
 const multer = require("multer");
 const storage = multer.diskStorage({
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const fileExtension = file.originalname.split(".").pop(); // Extract file extension
-    cb(null, `../uploads/images/users/member/${uniqueSuffix}.${fileExtension}`);
+    cb(null, `${uniqueSuffix}.${fileExtension}`);
   },
 
-  destination: (req, file, cb) => {
-    cb(null, "src/");
+  destination: (_req, file, cb) => {
+    cb(null, "uploads/images/users/member");
   },
 });
 const upload = multer({
