@@ -32,7 +32,7 @@ const loginUser = async(req, res) => {
             const token = jwt.sign({
                     email
                 }, SECRET_KEY, {
-                    expiresIn: 200
+                    expiresIn: 2400
                 })
                 // Password matched, send success response
             return res.status(200).json({ token, message: "Login successful" });
