@@ -4,8 +4,6 @@ const {
     userExists,
     validateSignUpInputs,
 } = require("./func.js");
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = require('../../../config/jwt_secret.js')
 const createUser = async(req, res) => {
     const {
         email,

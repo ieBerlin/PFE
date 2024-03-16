@@ -133,7 +133,7 @@ const insertUser = async({
             address,
             phone_number,
             role
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,'user')`;
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,'registered-user')`;
     const values = [
         email,
         hashedPassword,
