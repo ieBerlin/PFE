@@ -4,7 +4,8 @@ const app = express();
 const dotenv = require("dotenv");
 const usersRouter = require("./src/routes/authentication/user/index.js");
 const userProfileRouter = require("./src/routes/userProfile/index.js");
-const membershipPlansRouter = require("./src/routes/membershipPlansRouter/index.js");
+const membershipPlansRouter = require("./src/routes/membershipPlan/index.js");
+const feedbackRouter = require("./src/routes/feedback/index.js");
 const { pool } = require("./src/models/db/connect.js");
 const cors = require("./src/middlewares/cors/corsConfig.js");
 // Middlewares
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/auth/users", usersRouter);
 app.use("/user/profile", userProfileRouter);
 app.use("/membership-plans", membershipPlansRouter);
+app.use('/feedback', feedbackRouter)
 const port = process.env.PORT || 8080;
 
 // Start the server
