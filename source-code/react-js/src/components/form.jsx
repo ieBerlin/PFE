@@ -1,14 +1,14 @@
+import FormInput from "./FormInput";
+
 export default function Form() {
   return (
     <>
       <form>
         <div className="email">
-          <label htmlFor="email">email</label>
-          <input type="text" id="email" />
+          <FormInput label="email" />
         </div>
         <div className="password">
-          <label htmlFor="password">password</label>
-          <input type="text" id="password" />
+          <FormInput label="password" />
         </div>
       </form>
     </>

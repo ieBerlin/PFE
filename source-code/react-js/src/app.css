@@ -28,6 +28,7 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
+    box-shadow: 0 4px 8px grey;
 }
 
 .gym-picture {
@@ -48,32 +49,115 @@ body {
 }
 
 .form-section {
-    background-color: red;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0px 11px;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     padding: 3px 6px;
-    background-color: purple;
     width: 100%;
 }
 
 header img {
-    width: 30px;
+    width: 70px;
 }
 
 .remember-me {
     margin: 0x auto;
-    background-color: blue;
     display: flex;
+    color: black;
     gap: 10px;
 }
 
 .gym-picture img {
     max-width: 100%;
     max-height: 100%;
+}
+
+.enroll-now {
+    background-color: white;
+    outline: 0px;
+    font-size: 17px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 1px solid grey;
+    color: lightgreen;
+}
+
+.sign-up-wrapper p {
+    color: grey;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+
+h1 {
+    color: black;
+    font-size: 40px;
+    margin: 0px 0px 5px;
+    padding: 0px;
+}
+
+h4 {
+    margin: 0px 0px 20px 0px;
+    padding: 0px;
+    color: grey;
+}
+
+.remember-me {
+    display: flex;
+    width: 100%;
+}
+
+.remember-me input {
+    color: red;
+}
+
+label {
+    color: grey;
+}
+
+.login-button {
+    width: 450px;
+    padding: 10px 0px;
+    font-size: 20px;
+    background-color: lightgreen;
+    color: white;
+    border-radius: 3rem;
+    border: 1px solid grey;
+}
+
+.form-input {
+    position: relative;
+    border-radius: 1rem;
+    padding: 10px 20px;
+    margin: 10px 0px;
+    display: flex;
+    gap: 2px;
+    width: 450px;
+    border: 1px solid grey;
+    flex-direction: column;
+}
+
+.input:focus-within .form-input {
+    color: red;
+}
+
+.form-input input {
+    border: 0px;
+    font-size: 20px;
+}
+
+.form-input input:focus {
+    outline: 0px;
+    font-size: 20px;
 }
