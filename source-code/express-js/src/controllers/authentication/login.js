@@ -1,6 +1,6 @@
 const { validateLoginInputs, userExists, comparePassword } = require("./func");
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = require('../../../config/jwt_secret.js')
+const SECRET_KEY = require('../../config/jwt_secret.js')
 const loginUser = async(req, res) => {
     const { email, password, username } = req.body;
     let errors = {};

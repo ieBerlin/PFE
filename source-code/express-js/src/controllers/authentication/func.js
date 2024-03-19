@@ -1,22 +1,22 @@
-const { isValidEmail } = require("../../../utils/validation/emailValidation.js");
+const { isValidEmail } = require("../../utils/validation/emailValidation.js");
 const {
     isValidPhoneNumber,
-} = require("../../../utils/validation/phoneNumberValidation.js");
+} = require("../../utils/validation/phoneNumberValidation.js");
 const {
     isValidUsername,
-} = require("../../../utils/validation/usernameValidation.js");
-const { isValidName } = require("../../../utils/validation/nameValidation.js");
-const { isValidAge } = require("../../../utils/validation/ageValidation.js");
+} = require("../../utils/validation/usernameValidation.js");
+const { isValidName } = require("../../utils/validation/nameValidation.js");
+const { isValidAge } = require("../../utils/validation/ageValidation.js");
 const {
     isValidPassword,
-} = require("../../../utils/validation/passwordValidation.js");
+} = require("../../utils/validation/passwordValidation.js");
 const {
     dateOfBirthFormatter,
-} = require("../../../utils/formatter/dateOfBirth.js");
+} = require("../../utils/formatter/dateOfBirth.js");
 const {
     phoneNumberFormatter,
-} = require("../../../utils/formatter/phoneNumber.js");
-const { pool } = require("../../../models/db/connect.js");
+} = require("../../utils/formatter/phoneNumber.js");
+const { pool } = require("../../models/db/connect.js");
 const bcrypt = require("bcrypt");
 const validateSignUpInputs = ({
     email,

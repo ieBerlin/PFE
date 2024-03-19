@@ -1,4 +1,4 @@
-const { pool } = require("../../../models/db/connect");
+const { pool } = require("../../models/db/connect");
 const bcrypt = require('bcrypt');
 
 const resetPassword = async(req, res) => {
