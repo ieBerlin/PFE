@@ -1,5 +1,9 @@
+/* Global styles */
+
 * {
     box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
 }
 
 html {
@@ -12,7 +16,6 @@ html {
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
     height: 100%;
-    /* min-height: 100rem; */
 }
 
 body {
@@ -20,6 +23,18 @@ body {
     padding: 2rem;
     background-color: lightgreen;
 }
+
+
+/* Main content */
+
+.main-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Form wrapper */
 
 .form-wrapper {
     background-color: white;
@@ -31,22 +46,8 @@ body {
     box-shadow: 0 4px 8px grey;
 }
 
-.gym-picture {
-    align-items: center;
-    display: flex;
-}
 
-.gym-picture img {
-    border-radius: 2rem;
-}
-
-.sign-up-wrapper {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    align-items: center;
-    /* Align items to the end of the column */
-}
+/* Form section */
 
 .form-section {
     display: flex;
@@ -54,6 +55,9 @@ body {
     align-items: center;
     padding: 0px 11px;
 }
+
+
+/* Header */
 
 header {
     display: flex;
@@ -66,32 +70,46 @@ header img {
     width: 70px;
 }
 
-.remember-me {
-    margin: 0x auto;
+
+/* Sign-up wrapper */
+
+.sign-up-wrapper {
     display: flex;
-    color: black;
-    gap: 10px;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
 }
 
-.gym-picture img {
-    max-width: 100%;
-    max-height: 100%;
-}
 
-.enroll-now {
+/* Buttons */
+
+.enroll-now,
+.login-button {
+    cursor: pointer;
     background-color: white;
-    outline: 0px;
+    outline: none;
     font-size: 17px;
     padding: 5px 10px;
     border-radius: 20px;
     font-weight: 600;
     border: 1px solid grey;
+}
+
+.enroll-now {
     color: lightgreen;
 }
 
-.sign-up-wrapper p {
-    color: grey;
+.login-button {
+    width: 100%;
+    padding: 10px 0px;
+    font-size: 20px;
+    background-color: lightgreen;
+    color: white;
+    border-radius: 3rem;
 }
+
+
+/* Main content */
 
 main {
     display: flex;
@@ -104,37 +122,15 @@ h1 {
     color: black;
     font-size: 40px;
     margin: 0px 0px 5px;
-    padding: 0px;
 }
 
 h4 {
     margin: 0px 0px 20px 0px;
-    padding: 0px;
     color: grey;
 }
 
-.remember-me {
-    display: flex;
-    width: 100%;
-}
 
-.remember-me input {
-    color: red;
-}
-
-label {
-    color: grey;
-}
-
-.login-button {
-    width: 450px;
-    padding: 10px 0px;
-    font-size: 20px;
-    background-color: lightgreen;
-    color: white;
-    border-radius: 3rem;
-    border: 1px solid grey;
-}
+/* Form inputs */
 
 .form-input {
     position: relative;
@@ -143,21 +139,148 @@ label {
     margin: 10px 0px;
     display: flex;
     gap: 2px;
-    width: 450px;
+    width: 100%;
     border: 1px solid grey;
     flex-direction: column;
 }
 
-.input:focus-within .form-input {
-    color: red;
-}
-
 .form-input input {
-    border: 0px;
+    border: none;
     font-size: 20px;
 }
 
 .form-input input:focus {
-    outline: 0px;
-    font-size: 20px;
+    outline: none;
+}
+
+
+/* Password input */
+
+.password-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.password-input-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.password-input-wrapper button {
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    font-size: 14px;
+    padding: 2px 4px;
+    font-weight: bold;
+    color: grey;
+}
+
+
+/* Sign-up wrapper */
+
+.sign-up-wrapper p {
+    color: grey;
+}
+
+
+/* Remember me checkbox */
+
+.remember-me {
+    display: flex;
+    margin: 0 auto;
+    color: black;
+    gap: 10px;
+    margin: 20px 0px;
+}
+
+.remember-me input {
+    color: red;
+}
+
+
+/* Labels */
+
+label {
+    color: grey;
+    font-weight: 600;
+}
+
+label::first-letter {
+    text-transform: uppercase;
+}
+
+
+/* Input validator */
+
+.input-validator {
+    margin: 0px 3px 0px;
+    display: inline-flex;
+    align-items: center;
+    background-color: rgb(220, 246, 226);
+    color: black;
+    border-radius: 10px;
+    padding: 8px 13px;
+    box-sizing: border-box;
+    font-weight: 600;
+    font-size: 13px;
+    gap: 5px;
+}
+
+.input-validator img {
+    width: 20px;
+}
+
+.input-validator img,
+.input-validator p {
+    display: inline;
+}
+
+
+/* Gym picture */
+
+.gym-picture {
+    align-items: center;
+    display: flex;
+}
+
+.gym-picture img {
+    border-radius: 2rem;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+/* Password show button */
+
+.password-input-wrapper button {
+    cursor: pointer;
+    background-color: white;
+    border: 0px;
+    font-size: 14px;
+    padding: 2px 4px;
+    font-weight: bold;
+    color: grey;
+    margin: 0px;
+}
+
+
+/* Media query for screens smaller than 600px (typical phone width) */
+
+@media (max-width: 762px) {
+    .gym-picture {
+        display: none;
+        /* Hide the gym picture */
+    }
+    .form-wrapper {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.input-not-valid {
+    color: red;
+    padding-left: 20px;
 }
