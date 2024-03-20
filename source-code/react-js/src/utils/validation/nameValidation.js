@@ -1,4 +1,4 @@
-function isValidName(name) {
+export default function isValidName(name) {
     // Regular expression pattern for a valid name
     const namePattern = /^[a-zA-Z\s.'-]{1,50}$/;
 
@@ -24,8 +24,4 @@ function test() {
         )
     ); // false (too long)
     console.log(isValidName("")); // false (empty string)
-}
-
-module.exports = {
-    isValidName
 }
