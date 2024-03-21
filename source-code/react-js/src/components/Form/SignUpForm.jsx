@@ -35,21 +35,21 @@ export default function SignUpForm() {
           required
         />
         <FormInput
-          isNotValidInput="Last name is not valid"
-          isValidInputFun={isValidName}
-          label="Last Name"
-          type="name"
-          id="last-name"
-          name="last-name"
-          required
-        />
-        <FormInput
           isNotValidInput="First name is not valid"
           isValidInputFun={isValidName}
           label="First Name"
           type="name"
           id="first-name"
           name="first-name"
+          required
+        />
+        <FormInput
+          isNotValidInput="Last name is not valid"
+          isValidInputFun={isValidName}
+          label="Last Name"
+          type="name"
+          id="last-name"
+          name="last-name"
           required
         />
         <PasswordFormInput

@@ -1,8 +1,13 @@
 import logoImage from "../../../assets/logoImage.png";
 import gymImage from "../../../assets/gymImage.jpg";
-import SignUpForm from "../../Form/SignUpForm";
+import SignUpForm from "../../form/SignUpForm";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpInterface() {
+  const navigate = useNavigate();
+  function handleEnrollNowClick() {
+    navigate("/authentication?mode=login");
+  }
   return (
     <div className="main-background">
       <div className="form-wrapper">
@@ -11,7 +16,11 @@ export default function SignUpInterface() {
             <img src={logoImage} alt="Logo" />
             <div className="sign-up-wrapper">
               <p>Already have an account?</p>
-              <button type="button" className="enroll-now">
+              <button
+                type="button"
+                className="enroll-now"
+                onClick={handleEnrollNowClick}
+              >
                 Login
               </button>
             </div>

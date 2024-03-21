@@ -1,0 +1,75 @@
+.main-background {
+    background-color: white;
+    border-radius: 2rem;
+    box-shadow: 0 4px 8px grey;
+    min-height: 100vh;
+    position: relative;
+}
+
+.footer {
+    border-radius: 0rem 0rem 2rem 2rem;
+    width: 100%;
+    background-color: red;
+    padding: 0px 30px 5px;
+    position: absolute;
+    bottom: 0;
+}
+
+hr {
+    background-color: grey;
+    margin: 1px 30px;
+    height: 1px;
+}
+
+.footer .social-network {
+    margin: 0px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    font-size: 18px;
+}
+
+.quick-links {
+    margin: 20px 30px;
+}
+
+.quick-links ul {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.quick-links ul li {
+    display: flex;
+    flex-direction: column;
+    margin: 0x auto;
+    text-align: center;
+}
+
+.quick-links ul li h2 {
+    margin-bottom: 10px;
+}
+
+.quick-links ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+p {
+    display: inline;
+}
+
+ul {
+    display: inline-flex;
+    gap: 10px;
+}
+
+ul li img {
+    width: 30px;
+    background-color: white;
+    border-radius: 50%;
+    padding: 1px;
+    cursor: pointer;
+}

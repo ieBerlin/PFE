@@ -284,3 +284,11 @@ label::first-letter {
     color: red;
     padding-left: 20px;
 }
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline;
+}
