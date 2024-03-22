@@ -1,0 +1,10 @@
+const express = require("express");
+const router = express.Router();
+const getUserProfile = require("../controllers/userProfile/getUserProfile.js");
+const updateUserProfile = require("../controllers/userProfile/updateUserProfile.js");
+const deleteUserProfile = require("../controllers/userProfile/deleteUserProfile.js");
+const verifyToken = require("../middlewares/auth/authJWT.js");
+router.get("/", verifyToken, getUserProfile);
+router.put("/", verifyToken, updateUserProfile);
+router.delete("/", verifyToken, deleteUserProfile);
+module.exports = router;

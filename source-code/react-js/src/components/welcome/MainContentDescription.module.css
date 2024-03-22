@@ -1,0 +1,38 @@
+.main {
+    width: 100%;
+    background-color: white;
+}
+
+.main h2 {
+    color: #3f3cef;
+}
+
+.main h1 span {
+    color: red;
+}
+
+.images {
+    padding: 30px 60px 0px 60px;
+    display: grid;
+    width: 100%;
+    gap: 15px;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.images li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.images li p {
+    text-align: center;
+    font-weight: 600;
+    margin-top: 20px;
+    color: black;
+}
+
+.images img {
+    width: 100px;
+}

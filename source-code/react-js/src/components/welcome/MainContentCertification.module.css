@@ -1,0 +1,63 @@
+.main h1 {
+    margin-bottom: 20px;
+}
+
+.ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ul li {
+    position: relative;
+}
+
+.ul li img {
+    width: 100%;
+    overflow: hidden;
+    color: #ffffff;
+}
+
+.elementor-background-overlay h1 {
+    color: white;
+}
+
+.elementor-background-overlay a {
+    cursor: pointer;
+    font-family: "Montserrat", Sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    fill: #CA0000;
+    color: #CA0000;
+    background-color: white;
+    border-radius: 0px 0px 0px 0px;
+    padding: 22px 65px 22px 65px;
+}
+
+.elementor-background-overlay a:hover {
+    background-color: #CA0000;
+    transition: background 0.4s, border-radius 0.3s, opacity 0.4s;
+    color: white;
+}
+
+.elementor-background-overlay {
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    background-color: rgba(32, 51, 91, 0.63);
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+}
+
+.elementor-background-overlay:hover {
+    background-color: #CA00005b;
+    transition: background 0.4s, border-radius 0.3s, opacity 0.4s;
+}

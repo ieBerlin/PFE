@@ -1,0 +1,2239 @@
+(function(){!function(e,t){return"undefined"!=typeof module&&module.exports?module.exports=t():"function"==typeof define&&define.amd?void define([],function(){return e.TimeMe=t()}):e.TimeMe=t()}(this,function(){var e={startStopTimes:{},idleTimeoutMs:6e4,currentIdleTimeMs:0,checkStateRateMs:250,active:!1,idle:!1,currentPageName:"default-page-name",timeElapsedCallbacks:[],userLeftCallbacks:[],userReturnCallbacks:[],startTimer:function(){var t=e.currentPageName;if(void 0===e.startStopTimes[t])e.startStopTimes[t]=[];else{var n=e.startStopTimes[t],i=n[n.length-1];if(void 0!==i&&void 0===i.stopTime)return}e.startStopTimes[t].push({startTime:new Date,stopTime:void 0}),e.active=!0},stopTimer:function(){var t=e.currentPageName,n=e.startStopTimes[t];void 0!==n&&0!==n.length&&(void 0===n[n.length-1].stopTime&&(n[n.length-1].stopTime=new Date),e.active=!1)},getTimeOnCurrentPageInSeconds:function(){return e.getTimeOnPageInSeconds(e.currentPageName)},getTimeOnPageInSeconds:function(t){var n=e.getTimeOnPageInMilliseconds(t);return void 0===n?void 0:e.getTimeOnPageInMilliseconds(t)/1e3},getTimeOnCurrentPageInMilliseconds:function(){return e.getTimeOnPageInMilliseconds(e.currentPageName)},getTimeOnPageInMilliseconds:function(t){var n=0,i=e.startStopTimes[t];if(void 0!==i){for(var s=0,o=0;o<i.length;o++){var a=i[o].startTime,r=i[o].stopTime;void 0===r&&(r=new Date);var d=r-a;s+=d}return n=Number(s)}},getTimeOnAllPagesInSeconds:function(){for(var t=[],n=Object.keys(e.startStopTimes),i=0;i<n.length;i++){var s=n[i],o=e.getTimeOnPageInSeconds(s);t.push({pageName:s,timeOnPage:o})}return t},setIdleDurationInSeconds:function(t){var n=parseFloat(t);if(isNaN(n)!==!1)throw{name:"InvalidDurationException",message:"An invalid duration time ("+t+") was provided."};return e.idleTimeoutMs=1e3*t,this},setCurrentPageName:function(t){return e.currentPageName=t,this},resetRecordedPageTime:function(t){delete e.startStopTimes[t]},resetAllRecordedPageTimes:function(){for(var t=Object.keys(e.startStopTimes),n=0;n<t.length;n++)e.resetRecordedPageTime(t[n])},resetIdleCountdown:function(){e.idle&&e.triggerUserHasReturned(),e.idle=!1,e.currentIdleTimeMs=0},callWhenUserLeaves:function(e,t){this.userLeftCallbacks.push({callback:e,numberOfTimesToInvoke:t})},callWhenUserReturns:function(e,t){this.userReturnCallbacks.push({callback:e,numberOfTimesToInvoke:t})},triggerUserHasReturned:function(){if(!e.active)for(var t=0;t<this.userReturnCallbacks.length;t++){var n=this.userReturnCallbacks[t],i=n.numberOfTimesToInvoke;(isNaN(i)||void 0===i||i>0)&&(n.numberOfTimesToInvoke-=1,n.callback())}e.startTimer()},triggerUserHasLeftPage:function(){if(e.active)for(var t=0;t<this.userLeftCallbacks.length;t++){var n=this.userLeftCallbacks[t],i=n.numberOfTimesToInvoke;(isNaN(i)||void 0===i||i>0)&&(n.numberOfTimesToInvoke-=1,n.callback())}e.stopTimer()},callAfterTimeElapsedInSeconds:function(t,n){e.timeElapsedCallbacks.push({timeInSeconds:t,callback:n,pending:!0})},checkState:function(){for(var t=0;t<e.timeElapsedCallbacks.length;t++)e.timeElapsedCallbacks[t].pending&&e.getTimeOnCurrentPageInSeconds()>e.timeElapsedCallbacks[t].timeInSeconds&&(e.timeElapsedCallbacks[t].callback(),e.timeElapsedCallbacks[t].pending=!1);e.idle===!1&&e.currentIdleTimeMs>e.idleTimeoutMs?(e.idle=!0,e.triggerUserHasLeftPage()):e.currentIdleTimeMs+=e.checkStateRateMs},visibilityChangeEventName:void 0,hiddenPropName:void 0,listenForVisibilityEvents:function(){"undefined"!=typeof document.hidden?(e.hiddenPropName="hidden",e.visibilityChangeEventName="visibilitychange"):"undefined"!=typeof doc.mozHidden?(e.hiddenPropName="mozHidden",e.visibilityChangeEventName="mozvisibilitychange"):"undefined"!=typeof document.msHidden?(e.hiddenPropName="msHidden",e.visibilityChangeEventName="msvisibilitychange"):"undefined"!=typeof document.webkitHidden&&(e.hiddenPropName="webkitHidden",e.visibilityChangeEventName="webkitvisibilitychange"),document.addEventListener(e.visibilityChangeEventName,function(){document[e.hiddenPropName]?e.triggerUserHasLeftPage():e.triggerUserHasReturned()},!1),window.addEventListener("blur",function(){e.triggerUserHasLeftPage()}),window.addEventListener("focus",function(){e.triggerUserHasReturned()}),document.addEventListener("mousemove",function(){e.resetIdleCountdown()}),document.addEventListener("keyup",function(){e.resetIdleCountdown()}),document.addEventListener("touchstart",function(){e.resetIdleCountdown()}),window.addEventListener("scroll",function(){e.resetIdleCountdown()}),setInterval(function(){e.checkState()},e.checkStateRateMs)},websocket:void 0,websocketHost:void 0,setUpWebsocket:function(t){if(window.WebSocket&&t){var n=t.websocketHost;try{e.websocket=new WebSocket(n),window.onbeforeunload=function(n){e.sendCurrentTime(t.appId)},e.websocket.onopen=function(){e.sendInitWsRequest(t.appId)},e.websocket.onerror=function(e){console&&console.log("Error occurred in websocket connection: "+e)},e.websocket.onmessage=function(e){console&&console.log(e.data)}}catch(i){console&&console.error("Failed to connect to websocket host.  Error:"+i)}}return this},websocketSend:function(t){e.websocket.send(JSON.stringify(t))},sendCurrentTime:function(t){var n=e.getTimeOnCurrentPageInMilliseconds(),i={type:"INSERT_TIME",appId:t,timeOnPageMs:n,pageName:e.currentPageName};e.websocketSend(i)},sendInitWsRequest:function(t){var n={type:"INIT",appId:t};e.websocketSend(n)},initialize:function(t){var n=e.idleTimeoutMs||30,i=e.currentPageName||"default-page-name",s=void 0;t&&(n=t.idleTimeoutInSeconds||n,i=t.currentPageName||i,s=t.websocktOptions),e.setIdleDurationInSeconds(n).setCurrentPageName(i).setUpWebsocket(s).listenForVisibilityEvents(),e.startTimer()}};return e})}).call(this);
+(function (jQuery) {
+    const SCRIPT_VERSION = '1.59';
+
+    // Prevent complications from double loading of this script
+    if (window._ucaloaded) {
+        console.log("UC Analytics already loaded on this page.");
+        return;
+    }
+    window._ucaloaded = true;
+
+    // Publish out version for easier troubleshooting
+    window._ucav = SCRIPT_VERSION;
+
+    // Polyfills
+    if (!Element.prototype.matches) {
+        Element.prototype.matches =
+            Element.prototype.msMatchesSelector ||
+            Element.prototype.webkitMatchesSelector;
+    }
+
+    if (!Element.prototype.closest) {
+        Element.prototype.closest = function (s) {
+            let el = this;
+
+            do {
+                if (Element.prototype.matches.call(el, s)) return el;
+                el = el.parentElement || el.parentNode;
+            } while (el !== null && el.nodeType === 1);
+            return null;
+        };
+    }
+
+    if(!Array.prototype.includes){
+        console.log("Polyfill array includes");
+        Array.prototype.includes = function(search){
+            return this.indexOf(search) >= 0;
+        }
+    }
+
+    // setup send beacon
+    let _sendBeacon = navigator.sendBeacon && navigator.sendBeacon.bind(navigator);
+
+    // Functions that help us remove the jQuery dependency
+
+    function attrCalc(elem, attrName) {
+        if (!elem) return null;
+        return elem.getAttribute(attrName);
+    }
+
+    function inputValue(elem) {
+        if (!elem) return null;
+
+        // console.log("inputValue from element with tagName", elem.tagName);
+
+        if (elem.tagName === "SELECT") {
+            // console.log("selectedIndex", elem.selectedIndex);
+            if (elem.selectedIndex === -1) {
+                // console.log("returning null.");
+                return null;
+            }
+            // console.log("returning", elem.options[elem.selectedIndex].value);
+            return elem.options[elem.selectedIndex].value || elem.options[elem.selectedIndex].text;
+        }
+
+        return elem.value;
+    }
+
+    function getCssSelectorShort(el) {
+        const path = [];
+        let parent;
+        // noinspection JSAssignmentUsedAsCondition
+        while (parent = el.parentNode) {
+            const tag = el.tagName;
+            let siblings;
+            path.unshift(
+                el.getAttribute('id') ? ('#' + el.getAttribute('id')) : (
+                    siblings = parent.children,
+                        [].filter.call(siblings, function (sibling) {
+                            return sibling.tagName === tag;
+                        }).length === 1 ? tag.toLowerCase() :
+                            (tag.toLowerCase() + ':nth-child(' + ([].indexOf.call(siblings, el) + 1) + ')')
+                )
+            );
+            if (el.getAttribute('id')) break;
+            el = parent;
+        }
+
+        return path.join(' > ');
+    }
+
+    // Export for easier debugging
+    window.ucGetCssSelectorShort = getCssSelectorShort;
+
+    function docReady(fn) {
+        // If jQuery is available then use it's ready
+        if (jQuery) {
+            // console.log("UCA ready with jQuery");
+            jQuery(document).ready(fn);
+        } else {
+            // see if DOM is already available
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                fn();
+            } else {
+                document.addEventListener("DOMContentLoaded", fn);
+            }
+        }
+    }
+
+    function parentsCalc(elem, selector) {
+        const elements = [];
+        const ishaveselector = selector !== undefined;
+
+        while ((elem = elem.parentElement) !== null) {
+            if (elem.nodeType !== Node.ELEMENT_NODE) {
+                continue;
+            }
+
+            if (!ishaveselector || elem.matches(selector)) {
+                elements.push(elem);
+            }
+        }
+
+        return elements;
+    }
+
+    // Export for debugging
+    window.ucParentsCalc = parentsCalc;
+
+    function elemEach(elements, func) {
+        for (let i = 0; i < elements.length; i++) {
+            const result = func(i, elements[i]);
+            if (result === false) break;
+        }
+    }
+
+    function removeAll(elements) {
+        for (let i = 0; i < elements.length; i++) {
+            const el = elements[i];
+            el.parentNode.removeChild(el);
+        }
+    }
+
+    function offsetCalc(el) {
+        const rect = el.getBoundingClientRect();
+
+        return {
+            top: rect.top + document.body.scrollTop,
+            left: rect.left + document.body.scrollLeft
+        };
+    }
+
+    // function parentQueryChildren(parent, selector) {
+    //     const children = parent.children;
+    //
+    //     const result = [];
+    //     for (let i = 0; i < children.length; i++) {
+    //         if (children[i].matches(selector)) {
+    //             result.push(children[i]);
+    //         }
+    //     }
+    //
+    //     return result;
+    // }
+
+    function addClassToAllElements(elements, className) {
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].classList.add(className);
+        }
+    }
+
+    function index(el) {
+        if (!el) return -1;
+        let i = 0;
+        // noinspection JSAssignmentUsedAsCondition
+        do {
+            i++;
+        } while (el = el.previousElementSibling);
+        // Return a zero based index
+        return i - 1;
+    }
+
+    function wisePopsHook() {
+        let timer = setInterval(function () {
+            // Is Wisepops on the page yet?
+            if (window.wisepops) {
+                clearInterval(timer);
+
+                // Register our event handlers
+                let events = ["before-popup-display", "after-form-submit", "after-popup-close", "after-tracked-click"];
+
+                for (let i = 0; i < events.length; i++) {
+                    window.wisepops('listen', events[i], function (event) {
+                        const pageViewEvent = {
+                            "name": "wisepop " + event.type,
+                            "params": {
+                                "popupId": event.detail.popup.id
+                            },
+                            "ts": new Date().getTime()
+                        };
+
+                        window.ucaPushPageEvent(pageViewEvent);
+                    });
+                }
+            }
+        }, 1000);
+    }
+
+    function monitorAlertConfirm() {
+
+        let pageViewEvent;
+
+        // Save off the old alert
+        let oldAlert = window.alert;
+
+        // Replace it with a new function
+        window.alert = function (message) {
+            // Call the old function
+            oldAlert(message);
+
+            // Push an event
+            pageViewEvent = {
+                "name": "window alert",
+                "params": {
+                    "message": message || null
+                },
+                "ts": new Date().getTime()
+            };
+
+            window.ucaPushPageEvent(pageViewEvent);
+        }
+
+        // Save off the old confirm
+        let oldConfirm = window.confirm;
+
+        // Replace it with a new function
+        window.confirm = function (message) {
+            // Call the old function
+            const result = oldConfirm(message);
+
+            // Push an event
+            pageViewEvent = {
+                "name": "window confirm",
+                "params": {
+                    "message": message || null,
+                    "result": result
+                },
+                "ts": new Date().getTime()
+            };
+
+            window.ucaPushPageEvent(pageViewEvent);
+
+            return result;
+        }
+    }
+
+    function youtubeHooks() {
+        // Listen to events triggered by postMessage.
+        const youtubePlayerData = {};
+        window.addEventListener("message", function (event) {
+            try { // console.log("event.origin", event.origin);
+                if (event.origin === "https://www.youtube-nocookie.com" || event.origin === "https://www.youtube.com") {
+                    const eventData = JSON.parse(event.data);
+                    if (eventData.event === "infoDelivery" && eventData.info) {
+                        const playerId = eventData.id;
+
+                        let pageViewEvent;
+                        const playerDetails = youtubePlayerData[playerId] || {
+                            lastProgressPoint: 0
+                        };
+                        youtubePlayerData[playerId] = playerDetails;
+
+                        if (eventData.info.duration > 0) {
+                            playerDetails.duration = eventData.info.duration;
+                        }
+                        if (eventData.info.currentTime > 0 && playerDetails.duration > 0) {
+                            playerDetails.currentTime = eventData.info.currentTime;
+
+                            playerDetails.percentage = parseFloat(((playerDetails.currentTime / playerDetails.duration) * 100).toFixed(1));
+
+                            if (playerDetails.percentage > (playerDetails.lastProgressPoint + 10)) {
+                                playerDetails.lastProgressPoint = Math.floor(playerDetails.percentage / 10) * 10;
+                                // console.log("New progress point: ", playerDetails.percentage, " setting lastProgressPoint to", playerDetails.lastProgressPoint);
+                                if (playerDetails.lastProgressPoint >= 10 && playerDetails.lastProgressPoint <= 90) {
+                                    pageViewEvent = {
+                                        "name": "YouTube Progress",
+                                        "params": {
+                                            "videoId": playerDetails.videoId || null,
+                                            "videoTitle": playerDetails.title || null,
+                                            "percentage": playerDetails.lastProgressPoint
+                                        },
+                                        "ts": new Date().getTime()
+                                    };
+
+                                    window.ucaPushPageEvent(pageViewEvent);
+                                }
+                            }
+                        }
+
+                        const info = eventData.info;
+                        if (info.hasOwnProperty('playerState')) {
+                            if (eventData.info.videoData) {
+                                playerDetails.videoId = eventData.info.videoData.video_id;
+                                playerDetails.author = eventData.info.videoData.author;
+                                playerDetails.title = eventData.info.videoData.title;
+                                playerDetails.videoQuality = eventData.info.videoData.video_quality;
+                            }
+                            switch (info.playerState) {
+                                case -1:
+                                    playerDetails.state = "unstarted";
+                                    break;
+                                case 0:
+                                    playerDetails.state = "ended";
+                                    playerDetails.lastProgressPoint = 100;
+                                    pageViewEvent = {
+                                        "name": "YouTube Ended",
+                                        "params": {
+                                            "videoId": playerDetails.videoId || null,
+                                            "videoTitle": playerDetails.title || null
+                                        },
+                                        "ts": new Date().getTime()
+                                    };
+
+                                    window.ucaPushPageEvent(pageViewEvent);
+                                    break;
+                                case 1:
+                                    playerDetails.state = "playing";
+                                    pageViewEvent = {
+                                        "name": "YouTube Playing",
+                                        "params": {
+                                            "videoId": playerDetails.videoId || null,
+                                            "videoTitle": playerDetails.title || null
+                                        },
+                                        "ts": new Date().getTime()
+                                    };
+
+                                    window.ucaPushPageEvent(pageViewEvent);
+                                    break;
+                                case 2:
+                                    playerDetails.state = "paused";
+                                    pageViewEvent = {
+                                        "name": "YouTube Paused",
+                                        "params": {
+                                            "videoId": playerDetails.videoId || null,
+                                            "videoTitle": playerDetails.title || null,
+                                            "percentage": playerDetails.percentage
+                                        },
+                                        "ts": new Date().getTime()
+                                    };
+
+                                    window.ucaPushPageEvent(pageViewEvent);
+                                    break;
+                                case 3:
+                                    playerDetails.state = "video cued";
+                                    break;
+                            }
+                        } // if playerState
+                    } // if youTube event
+                }
+            } catch (ignored) {
+            }
+        });
+    }
+
+    function liveChatHooks() {
+        let timerLiveChat = setInterval(function () {
+            // Is LiveChat on the page yet?
+            if (window.LiveChatWidget) {
+                console.log("LiveChat detected.");
+                clearInterval(timerLiveChat);
+
+                window.LiveChatWidget.on('customer_status_changed', function (data) {
+                    let pageViewEvent = {
+                        "name": "",
+                        "params": {},
+                        "ts": new Date().getTime()
+                    };
+
+                    switch (data.status) {
+                        case 'queued':
+                            pageViewEvent.name = "LiveChat customer queued";
+                            break;
+                        case 'chatting':
+                            pageViewEvent.name = "LiveChat customer chatting";
+                            break;
+                        case 'invited':
+                            pageViewEvent.name = "LiveChat customer invited";
+                            break;
+                    }
+
+                    if (pageViewEvent.name) window.ucaPushPageEvent(pageViewEvent);
+                });
+
+                window.LiveChatWidget.on('new_event', function onNewEvent(event) {
+                    let pageViewEvent = {
+                        "name": "",
+                        "params": {},
+                        "ts": new Date().getTime()
+                    };
+
+                    if (event.author && event.author.type) {
+                        pageViewEvent.params.authorType = event.author.type;
+                    }
+
+                    switch (event.type) {
+                        case 'message':
+                            pageViewEvent.name = "LiveChat message";
+                            break;
+                        case 'rich_message':
+                            pageViewEvent.name = "LiveChat rich message";
+                            break;
+                    }
+
+                    if (pageViewEvent.name) window.ucaPushPageEvent(pageViewEvent);
+                });
+
+                window.LiveChatWidget.on('form_submitted', function onNewEvent(event) {
+                    let pageViewEvent = {
+                        "name": "",
+                        "params": {},
+                        "ts": new Date().getTime()
+                    };
+
+                    switch (event.type) {
+                        case 'prechat':
+                            pageViewEvent.name = "LiveChat form submit prechat";
+                            break;
+
+                        case 'postchat':
+                            pageViewEvent.name = "LiveChat form submit postchat";
+                            break;
+
+                        case 'ticket':
+                            pageViewEvent.name = "LiveChat form submit ticket";
+                            break;
+                    }
+
+                    if (pageViewEvent.name) window.ucaPushPageEvent(pageViewEvent);
+                });
+
+                window.LiveChatWidget.on('rating_submitted', function onRatingSubmitted(value) {
+                    let pageViewEvent = {
+                        "name": "LiveChat rating",
+                        "params": {
+                            "rating": value
+                        },
+                        "ts": new Date().getTime()
+                    };
+
+                    window.ucaPushPageEvent(pageViewEvent);
+                });
+
+                console.log("Registered LiveChat event handlers");
+            }
+        }, 1000);
+    }
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start !== -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end === -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+
+        return undefined;
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        // If the domain is www.domain.com then set the cookie as .domain.com so we can see if on the SSL secure.domain.com hosted by UC
+        let domain = window.location.hostname;
+        if ((window.location.hostname.match(/\./g) || []).length === 2) {
+            domain = window.location.hostname.substring(window.location.hostname.indexOf('.'), window.location.hostname.length);
+        }
+
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        const expires = (exdays === 0) ? '' : "expires=" + d.toGMTString(); //if exdays is 0, remove "expires" so it is set to end of session
+        document.cookie = cname + "=" + cvalue + "; " + expires + ";domain=" + domain + "; path=/";
+    }
+
+    function _domainRoot(domain) {
+        if ((domain.match(/\./g) || []).length === 2) {
+            domain = domain.substring(domain.indexOf('.'), domain.length);
+        }
+
+        return domain;
+    }
+
+    const calculatedSelectorMap = new Map();
+
+    function calculateSelector(ele) {
+        try {
+            const nodes = [];
+            let $node;
+
+            // Have we determined it for this element yet?
+            if (calculatedSelectorMap.get(ele)) {
+                // console.log("selector cache hit.");
+                return calculatedSelectorMap.get(ele);
+            }
+
+            // If we don't have jQuery then use our shorter version
+            if (!jQuery) {
+                const shortSelector = getCssSelectorShort(ele);
+                if (shortSelector) {
+                    calculatedSelectorMap.set(ele, shortSelector);
+                }
+                return shortSelector;
+            }
+
+            const parents = parentsCalc(ele);
+            elemEach(parents, function (index, e) {
+                nodes.push(e);
+                // Stop at an element with an ID if it's truly unique on the page
+                if (e.getAttribute('id') && e.getAttribute('id').trim()) {
+                    if (document.querySelectorAll("#" + e.getAttribute('id')).length === 1) {
+                        return false;
+                    }
+                }
+                // Stop at and item index
+                $node = jQuery(e);
+                if (e && e.getAttribute('data-itemlist-index') && e.getAttribute('data-context-item-id')) {
+                    const uniqueCheck = e.tagName.toLowerCase() + "[data-context-item-id='" + e.getAttribute('data-context-item-id') + "'][data-itemlist-index='" + e.getAttribute('data-itemlist-index') + "']";
+                    if (jQuery(uniqueCheck).length === 1) {
+                        return false;
+                    }
+                }
+            });
+            nodes.reverse();
+            nodes.push(ele);
+
+            // console.log("nodes", nodes);
+
+            let selector = "";
+            for (let i = 0; i < nodes.length; i++) {
+                const node = nodes[i];
+                $node = jQuery(node);
+
+                const parent = i > 0 ? nodes[i - 1] : null;
+                if (i > 0) selector += " > ";
+                let selectorPart = node.tagName.toLowerCase();
+                let tagOnlyOk = false;
+
+                if (node.tagName.toLowerCase() === "html") {
+                    tagOnlyOk = true;
+                }
+
+                if (node && node.getAttribute('id') && document.querySelectorAll("#" + node.getAttribute('id')).length === 1) {
+                    selectorPart = "#" + node.getAttribute('id');
+                } else if (node && node.getAttribute('data-itemlist-index') && node.getAttribute('data-context-item-id')) {
+                    selectorPart += "[data-context-item-id='" + node.getAttribute('data-context-item-id') + "'][data-itemlist-index='" + node.getAttribute('data-itemlist-index') + "']"
+
+                    if (node && node.classList.contains("slick-active")) {
+                        selectorPart += ".slick-active";
+                    }
+                } else {
+                    if (parent) {
+                        const $parent = jQuery(parent);
+                        const selectorPartFindCount = $parent.find("> " + selectorPart).length;
+                        if (selectorPartFindCount > 1) {
+                            if (node.getAttribute('class')) {
+                                const classString = node.getAttribute('class').trim();
+                                const classes = classString.split(" ");
+
+                                let runningClassString = "";
+                                let match = false;
+                                for (let j = 0; j < classes.length; j++) {
+                                    // Protect against an empty class that will leave us with a trailing dot and a bad selector
+                                    if (!classes[j]) continue;
+                                    runningClassString += "." + classes[j];
+
+                                    const runningClassMatchCount = $parent.find("> " + selectorPart + runningClassString).length;
+                                    if (runningClassMatchCount === 1) {
+                                        selectorPart += runningClassString;
+                                        match = true;
+                                        break;
+                                        // } else {
+                                        //  console.log("Match on running class string", runningClassString, "is", runningClassMatchCount);
+                                    }
+                                }
+                                if (!match) {
+                                    selectorPart += ":nth-child(" + (index(node) + 1) + ")";
+                                }
+                            } else {
+                                selectorPart += ":nth-child(" + (index(node) + 1) + ")";
+                            }
+                        } else {
+                            tagOnlyOk = true;
+                        }
+                    }
+                }
+
+                // Do we still have just the tag?
+                if (selectorPart === node.tagName.toLowerCase() && !tagOnlyOk) {
+                    selectorPart += ":nth-child(" + (index(node) + 1) + ")";
+                }
+
+                selector += selectorPart;
+            }
+
+            const matchCount = jQuery(selector).length;
+
+            if (!matchCount) {
+                console.log("Invalid selector that matches nothing", selector);
+            } else if (matchCount <= 2) { // Allow for two because sometimes we get a clone from sticky stuff
+                // Store this string as a data attribute
+                calculatedSelectorMap.set(ele, selector);
+                return selector;
+            } else {
+                console.log("Calculated selector is not unique", selector, "matches", matchCount);
+            }
+
+            return null;
+        } catch (ex) {
+            console.log("Error calculating selector", ex);
+            return null;
+        }
+    }
+
+    // Export this so we can debug easier
+    window.ucCalculateSelector = calculateSelector;
+
+    let rrwebEvents = [];
+    let rrwebRecording = false;
+    let rrwebBundleIndex = 0;
+    let rrwebQueue = {};
+    let rrwebLog = "";
+    rrwebLog += "User Agent: " + navigator.userAgent + "\n";
+    try {
+        rrwebQueue = JSON.parse(window.sessionStorage.getItem("ucarrwebqueue") || '{}') || {};
+        rrwebLog += "rrwebQueue contained " + Object.keys(rrwebQueue).length + " entries at page load.\n";
+    } catch (e) {
+        rrwebLog += "error parsing rrwebQueue from session storage.  Error: " + e + "\n";
+    }
+    let rrwebStopFn = null;
+    let pageViewEvents = [];
+    let rrwebRecorderUuid = null;
+
+    // Send anything in the queue to start with from the prior page since the XHR was probably interrupted by navigation
+    for (var bundleQueueUuid in rrwebQueue) {
+        if (rrwebQueue.hasOwnProperty(bundleQueueUuid)) {
+            rrwebLog += "Calling _sendData on bundle " + bundleQueueUuid + " that exists in queue at page load.\n";
+            _sendData(bundleQueueUuid, rrwebQueue[bundleQueueUuid], false);
+        }
+    }
+
+    // Export a global function that the SFVB run-time can use to publish events
+    window.ucaPushPageEvent = function (event) {
+        // Assign a timestamp if one does not exist
+        if (!event.hasOwnProperty('ts')) {
+            event.ts = new Date().getTime();
+        }
+
+        pageViewEvents.push(event);
+    };
+
+    // Setup the global array if it doesn't already exist
+    window._uca = window._uca || [];
+
+    // Fire anything that might already exist in the array
+    for (let i = 0; i < window._uca.length; i++) {
+        window.ucaPushPageEvent(window._uca[i]);
+    }
+
+    // Monitor for wisepops
+    wisePopsHook();
+    // Monitor for LiveChat
+    liveChatHooks();
+    // Monitor YouTube videos
+    youtubeHooks();
+    // Monitor alert/confirm calls
+    monitorAlertConfirm();
+
+    // Change out the array for a proxy object that we can monitor
+    if (window.Proxy) {
+        window._uca = new Proxy(window._uca, {
+            "set": function(target, prop, val, rcvr) {
+                if (prop !== 'length') {
+                    window.ucaPushPageEvent(val);
+                }
+                return (target[prop] = val);
+            },
+            "get": function(target, prop) {
+                const val = target[prop];
+                if (typeof val === 'function') {
+                    if (['push', 'unshift'].includes(prop)) {
+                        return function (el) {
+
+                            for (var arg in arguments) {
+                                if (arguments.hasOwnProperty(arg)) {
+                                    window.ucaPushPageEvent(arguments[arg]);
+                                }
+                            }
+
+                            return Array.prototype[prop].apply(target, arguments);
+                        }
+                    }
+                    if (['pop'].includes(prop)) {
+                        return function () {
+                            return Array.prototype[prop].apply(target, arguments);
+                        }
+                    }
+                    return val.bind(target);
+                }
+                return val;
+            }
+        });
+    } else {
+        // Clear what we've already pushed
+        window._uca = [];
+
+        // Override push which is the most common method and directly add it
+        window._uca.push = function(event) {
+            window.ucaPushPageEvent(event);
+        };
+    }
+
+
+    const rageTrackingMap = new Map();
+
+    // Add a rage click tracker
+    const rageClickTracker = function (event) {
+        try {
+            const target = event.target;
+            const rageTrackingDataJson = rageTrackingMap.get(target);
+            let rageTrackingData = rageTrackingDataJson ? JSON.parse(rageTrackingDataJson) : null;
+
+            if (!rageTrackingData) {
+                rageTrackingData = {
+                    count: 0
+                };
+                rageTrackingMap.set(target, JSON.stringify(rageTrackingData));
+            }
+
+            if (rageTrackingData.reported) {
+                return;
+            }
+
+            if (!rageTrackingData.interval) {
+                rageTrackingData.interval = setInterval(function () {
+                    // Reset and clear the interval
+                    rageTrackingData.count = 0;
+                    clearInterval(rageTrackingData.interval);
+                    delete rageTrackingData.interval;
+                    rageTrackingMap.set(target, JSON.stringify(rageTrackingData));
+                }, 750);
+            }
+
+            rageTrackingData.count++;
+            rageTrackingMap.set(target, JSON.stringify(rageTrackingData));
+
+            // Three is the number of times you have to click to get text to highlight.  More than 3 and they are pissed
+            if (rageTrackingData.count > 3) {
+                const selector = calculateSelector(event.target);
+
+                // What is the text of what they were rage clicking on?
+                let text = (target.textContent || '').trim() || null;
+                const widget = attrCalc(target.closest('.widget'), 'data-widget-type') || null;
+
+                // Ignore itemimagegallery
+                if (widget && widget === "itemimagegallery") {
+                    return;
+                }
+
+                // Replace newline with a space and then trim
+                if (text) {
+                    text = text.replace(/\n/g, ' ').trim();
+                }
+
+                // Make sure the text isn't too long
+                if (text && text.length > 100) {
+                    text = text.substring(0, 100) + "...";
+                }
+
+                const pageViewEvent = {
+                    "name": "rage click",
+                    "params": {
+                        "selector": selector,
+                        "text": text
+                    },
+                    "ts": new Date().getTime()
+                };
+
+                if (widget) {
+                    pageViewEvent.params.elementType = widget;
+                }
+
+                pageViewEvents.push(pageViewEvent);
+
+                rageTrackingData.reported = true;
+                rageTrackingMap.set(target, JSON.stringify(rageTrackingData));
+            }
+        } catch (e) {
+            console.log("Error tracking rage click", e);
+        }
+    };
+
+    // Add a capturing click handler at the root to learn about all mouse moves
+    let heatmapMouseMoveIgnore = false;
+    let heatmapLastMouseMoveJson = null;
+    // These will be sent up with the last page bundle
+    const heatmapMouseMoveElementMap = {};
+    let heatmapMaxAmountSeen = null;
+    const heatmapMouseClicks = [];
+
+    document.addEventListener("mousemove", function (e) {
+        if (heatmapMouseMoveIgnore) return;
+        try {
+            // Get the element that was clicked
+            const clickedElement = e.target;
+
+            const rect = clickedElement.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Get the position of the clicked element relative to the viewport
+            const width = rect.width;
+            const height = rect.height;
+
+            // Calculate the percentage of x and y relative to the element's width and height
+            let xp = 0;
+            let yp = 0;
+            if (width > 0) {
+                xp = (x / width);
+                xp = Math.round(xp * 20.0) / 20.0
+                xp = Math.round(xp * 100);
+            }
+            if (height > 0) {
+                yp = (y / height);
+                yp = Math.round(yp * 20.0) / 20.0
+                yp = Math.round(yp * 100);
+            }
+
+            const selector = calculateSelector(e.target);
+
+            if (selector) {
+                const heatmapMove = {
+                    "xp": xp,
+                    "yp": yp
+                };
+
+                if (!heatmapMouseMoveElementMap.hasOwnProperty(selector)) {
+                    heatmapMouseMoveElementMap[selector] = [];
+                }
+
+                const heatmapMoveJson = JSON.stringify(heatmapMove);
+                if (heatmapLastMouseMoveJson !== heatmapMoveJson) {
+                    heatmapMouseMoveElementMap[selector].push(heatmapMove);
+                }
+                heatmapLastMouseMoveJson = heatmapMoveJson;
+            }
+        } catch (e) {
+            console.log("Error processing click event", e);
+        }
+
+        // Prevent multiple movement collection within 100ms
+        heatmapMouseMoveIgnore = true;
+        setTimeout(function () {
+            heatmapMouseMoveIgnore = false;
+        }, 100);
+    }, true);
+
+    // Add a capturing click handler at the root to learn about all mouse clicks
+    document.addEventListener("click", function (e) {
+        try {
+            // Get the element that was clicked
+            const clickedElement = e.target;
+
+            const rect = clickedElement.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Get the position of the clicked element relative to the viewport
+            const width = rect.width;
+            const height = rect.height;
+
+            // Calculate the percentage of x and y relative to the element's width and height
+            let xp = 0;
+            let yp = 0;
+            if (width > 0) {
+                xp = (x / width);
+                xp = Math.round(xp * 20.0) / 20.0
+                xp = Math.round(xp * 100);
+            }
+            if (height > 0) {
+                yp = (y / height);
+                yp = Math.round(yp * 20.0) / 20.0
+                yp = Math.round(yp * 100);
+            }
+
+            const selector = calculateSelector(e.target);
+
+            // console.log("click - selector", selector, "xp", xp, "yp", yp);
+
+            if (selector) {
+                const heatmapClick = {
+                    "selector": selector,
+                    "xp": xp,
+                    "yp": yp
+                };
+
+                heatmapMouseClicks.push(heatmapClick);
+            }
+        } catch (e) {
+            console.log("Error processing click event", e);
+        }
+    }, true);
+
+    // Track scroll percentage
+    window.addEventListener("scroll", function () {
+        try {
+            if (document.body.scrollHeight) {
+                const amountSeen = Math.round(((document.documentElement.clientHeight + document.documentElement.scrollTop) / document.body.scrollHeight) * 100);
+
+                if (!heatmapMaxAmountSeen || amountSeen > heatmapMaxAmountSeen) {
+                    heatmapMaxAmountSeen = amountSeen;
+                }
+            }
+        } catch (e) {
+        }
+    });
+
+    // Use capturing events to better track this
+    document.addEventListener("click", rageClickTracker, true);
+
+    function _stopRecording(analyticsData) {
+        try {
+            if (rrwebRecorderUuid && rrwebRecording && _sendBeacon) {
+                rrwebLog += "_stopRecording called.\n";
+
+                // Clear the flag in case this is called twice
+                rrwebRecording = false;
+
+                // Clone the analyticsData object so we can change it however we like locally
+                const _localAnalyticsData = JSON.parse(JSON.stringify(analyticsData));
+
+                // Assign the recorder id
+                _localAnalyticsData.ruuid = rrwebRecorderUuid;
+                _localAnalyticsData.sr = SCRIPT_VERSION;
+
+                // Send anything in the queue that might be lost if we don't try sending it with beacon now
+                for (let bundleQueueUuid in rrwebQueue) {
+                    if (rrwebQueue.hasOwnProperty(bundleQueueUuid)) {
+                        rrwebLog += "_stopRecording - queue contains: " + bundleQueueUuid + "\n";
+                        if (_sendBeacon) {
+                            try {
+                                if (_sendBeacon('https://d3qkzaurmhh8fa.cloudfront.net/collect', rrwebQueue[bundleQueueUuid])) {
+                                    rrwebLog += "_stopRecording - queue sendBeacon for: " + bundleQueueUuid + " returned true.\n";
+                                } else {
+                                    rrwebLog += "_stopRecording - queue sendBeacon for: " + bundleQueueUuid + " returned false.  Data size: " + rrwebQueue[bundleQueueUuid].length + "\n";
+                                    // If we failed on the beacon, don't delay the page with an XHR
+                                }
+                            } catch (e) {
+                                rrwebLog += "_stopRecording - queue sendBeacon for: " + bundleQueueUuid + " returned error.  Data size: " + rrwebQueue[bundleQueueUuid].length + "\n";
+                            }
+                        }
+                    }
+                }
+
+                _pushEvents(_localAnalyticsData, true);
+
+                rrwebRecorderUuid = null;
+                // Add this to the log so we can see that stopping finished in case we're seeing this fire multiple times.
+                rrwebLog += "_stopRecording finished\n";
+            }
+        } catch (e) {
+            rrwebLog += "_stopRecording - Unexpected exception: " + e + "\n";
+            throw e;
+        }
+    }
+
+    function _pushEvents(_localAnalyticsData, forceSync) {
+        try {
+            const _localEvents = rrwebEvents;
+            const _localPageViewEvents = pageViewEvents;
+            rrwebEvents = [];
+            pageViewEvents = [];
+
+            rrwebLog += new Date().toISOString() + " _pushEvents - _localEvents.length: " + _localEvents.length + " forceSync: " + forceSync + " bundleIndex: " + rrwebBundleIndex + ".\n";
+
+            if (_localEvents.length || forceSync) {
+                delete _localAnalyticsData.events;
+                delete _localAnalyticsData.pageViewEvents;
+
+                _localAnalyticsData.events = _localEvents;
+                _localAnalyticsData.pageViewEvents = _localPageViewEvents;
+                _localAnalyticsData.bundleIndex = rrwebBundleIndex;
+                _localAnalyticsData.rrwebVersion = '0.9.14';
+                _localAnalyticsData.user_agent = navigator.userAgent;
+                _localAnalyticsData.language = window.navigator.userLanguage || window.navigator.language;
+
+                // Send up the log every time (only the last 20K if it's large)
+                _localAnalyticsData.rrwebLog = rrwebLog.slice(-20000);
+                // If we're doing a sync then mark it as the final bundle
+                if (forceSync) {
+                    _localAnalyticsData.finalBundle = true;
+                    // These will be sent up with the last page bundle
+                    _localAnalyticsData.heatmapMouseMoveElementMap = JSON.stringify(heatmapMouseMoveElementMap);
+                    if (heatmapMaxAmountSeen) {
+                        _localAnalyticsData.heatmapMaxAmountSeen = heatmapMaxAmountSeen;
+                    }
+                    _localAnalyticsData.heatmapMouseClicks = JSON.stringify(heatmapMouseClicks);
+                }
+                _localAnalyticsData.package_dts = new Date().toISOString();
+
+                // See if the _fbp cookie has been set by the facebook code
+                _localAnalyticsData.fbp = getCookie('_fbp');
+                _localAnalyticsData.fbc = getCookie('_fbc');
+
+                // If this is not the first bundle, delete the referrer
+                if (_localAnalyticsData.bundleIndex > 0) {
+                    delete _localAnalyticsData.r;
+                }
+
+                // Capture timing (new and old)
+                if (window.performance && window.performance.getEntriesByType) {
+                    let perfEntries = performance.getEntriesByType("navigation");
+
+                    if (perfEntries.length) {
+                        let p = perfEntries[0];
+
+                        _localAnalyticsData.timing_dom_content_loaded = p.domContentLoadedEventStart - p.fetchStart;
+                        _localAnalyticsData.timing_loaded = p.loadEventEnd - p.fetchStart;
+                    }
+                } else if (window.performance && window.performance.timing) {
+                    _localAnalyticsData.timing_dom_content_loaded = performance.timing.domContentLoadedEventStart - performance.timing.fetchStart;
+                    _localAnalyticsData.timing_loaded = performance.timing.loadEventEnd - performance.timing.fetchStart;
+                }
+
+                // For now we're going to disable the log
+                delete _localAnalyticsData.rrwebLog;
+
+                rrwebBundleIndex++;
+
+                const data = btoa(rrweb.pack(_localAnalyticsData));
+
+                rrwebLog += "_pushEvents - bundleIndex: " + _localAnalyticsData.bundleIndex + " data length: " + data.length + ".\n";
+
+                // Use beacon if available and we're asked to do things synchronously
+                try {
+                    if (forceSync && _sendBeacon && _sendBeacon('https://d3qkzaurmhh8fa.cloudfront.net/collect' + (rrwebRecorderUuid ? ('/' + rrwebRecorderUuid + '/' + _localAnalyticsData.bundleIndex) : ''), data)) {
+                        return;
+                    }
+                } catch (e) {
+                    console.log("send beacon error", e);
+                }
+
+                // Store a record in the queue until we are successful
+                const bundleQueueUuid = uuidv4();
+                rrwebQueue[bundleQueueUuid] = data;
+                rrwebLog += "_pushEvents - bundleIndex: " + _localAnalyticsData.bundleIndex + " bundleQueueUuid: " + bundleQueueUuid + ".\n";
+                try {
+                    window.sessionStorage.setItem("ucarrwebqueue", JSON.stringify(rrwebQueue));
+                    rrwebLog += "_pushEvents - saved queue to session storage.\n";
+                } catch (e) {
+                    rrwebLog += "_pushEvents - error saving queue to session storage.  Error: " + e + "\n";
+                }
+
+                // Send the data
+                _sendData(bundleQueueUuid, data, forceSync, _localAnalyticsData.bundleIndex);
+            }
+        } catch (e) {
+            rrwebLog += "_pushEvents - Unexpected exception: " + e + "\n";
+            throw e;
+        }
+    }
+
+    function _sendData(bundleQueueUuid, data, forceSync, bundleIndex) {
+        try {
+            if (bundleIndex === undefined) {
+                bundleIndex = "unknown";
+            }
+
+            if (jQuery) {
+                // Use XHR async with retry
+                jQuery.ajax({
+                    url: 'https://d3qkzaurmhh8fa.cloudfront.net/collect' + (rrwebRecorderUuid ? ('/' + rrwebRecorderUuid + '/' + bundleIndex) : ''),
+                    type: 'POST',
+                    async: !(forceSync || false),
+                    data: data,
+                    tryCount: 0,
+                    retryLimit: 10,
+                    contentType: "text/plain",
+                    processData: false,
+                    dataType: "json",
+                    timeout: 30000,
+                    success: function (response) {
+                        this.tryCount++;
+                        rrwebLog += "_sendData - success sending bundleQueueUuid: " + bundleQueueUuid + "  Attempt: " + this.tryCount + " Response: " + response + "\n";
+                        // Delete the record now that it's successful
+                        delete rrwebQueue[bundleQueueUuid];
+                        try {
+                            if (Object.keys(rrwebQueue).length) {
+                                window.sessionStorage.setItem("ucarrwebqueue", JSON.stringify(rrwebQueue));
+                                rrwebLog += "_sendData - saved queue to session storage after success with " + Object.keys(rrwebQueue).length + " entries remaining.\n";
+                            } else {
+                                window.sessionStorage.removeItem("ucarrwebqueue");
+                                rrwebLog += "_sendData - removed queue from session storage after success because queue is empty.\n";
+                            }
+                        } catch (e) {
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // "this" refers to the object that is passed to the original ajax call
+                        const that = this;
+
+                        rrwebLog += "_sendData - error sending bundleQueueUuid: " + bundleQueueUuid + ".  textStatus: " + textStatus + " Error: " + errorThrown + "\n";
+
+                        this.tryCount++;
+                        if (this.tryCount <= this.retryLimit) {
+                            // On the first failure, go ahead and queue a beacon request as a backup.
+                            if (this.tryCount === 1 && _sendBeacon) {
+                                try {
+                                    _sendBeacon('https://d3qkzaurmhh8fa.cloudfront.net/collect' + (rrwebRecorderUuid ? ('/' + rrwebRecorderUuid + '/' + bundleIndex) : ''), data);
+                                } catch (e) {
+                                    console.log("send beacon error", e);
+                                }
+                            }
+                            // Delay by one second per attempt
+                            setTimeout(function () {
+                                // try again
+                                rrwebLog += "_sendData - retrying bundleQueueUuid: " + bundleQueueUuid + " for the " + that.tryCount + " time.\n";
+                                // TODO: VanillaJS
+                                jQuery.ajax(that);
+                            }, this.tryCount * 1000);
+                        } else {
+                            // Final attempt will be with a beacon
+                            if (_sendBeacon) {
+                                try {
+                                    if (_sendBeacon('https://d3qkzaurmhh8fa.cloudfront.net/collect' + (rrwebRecorderUuid ? ('/' + rrwebRecorderUuid + '/' + bundleIndex) : ''), data)) {
+                                        rrwebLog += "_sendData - used sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".\n";
+                                    } else {
+                                        rrwebLog += "_sendData - unable to sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".  Data size: " + data.length + "\n";
+                                    }
+                                } catch (e) {
+                                    console.log("send beacon error", e);
+                                    rrwebLog += "_sendData - unable to sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".  Data size: " + data.length + "\n";
+                                }
+                            }
+                        }
+                    } // error handler
+                });
+            } else {
+                // XHR w/ on failure just use beacon simplicity
+                const client = new XMLHttpRequest();
+                client.open("POST", 'https://d3qkzaurmhh8fa.cloudfront.net/collect' + (rrwebRecorderUuid ? ('/' + rrwebRecorderUuid + '/' + bundleIndex) : ''), true);
+                client.setRequestHeader("Content-type", "text/plain");
+                client.onload = function () {
+                    if (client.status < 300) {
+                        rrwebLog += "_sendData - success sending bundleQueueUuid: " + bundleQueueUuid + "\n";
+                        // Delete the record now that it's successful
+                        delete rrwebQueue[bundleQueueUuid];
+                        try {
+                            if (Object.keys(rrwebQueue).length) {
+                                window.sessionStorage.setItem("ucarrwebqueue", JSON.stringify(rrwebQueue));
+                                rrwebLog += "_sendData - saved queue to session storage after success with " + Object.keys(rrwebQueue).length + " entries remaining.\n";
+                            } else {
+                                window.sessionStorage.removeItem("ucarrwebqueue");
+                                rrwebLog += "_sendData - removed queue from session storage after success because queue is empty.\n";
+                            }
+                        } catch (e) {
+                        }
+                    } else {
+                        // Final attempt will be with a beacon
+                        if (_sendBeacon) {
+                            try {
+                                if (_sendBeacon('https://d3qkzaurmhh8fa.cloudfront.net/collect' + (rrwebRecorderUuid ? ('/' + rrwebRecorderUuid + '/' + bundleIndex) : ''), data)) {
+                                    rrwebLog += "_sendData - used sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".\n";
+                                } else {
+                                    rrwebLog += "_sendData - unable to sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".  Data size: " + data.length + "\n";
+                                }
+                            } catch (e) {
+                                console.log("send beacon error", e);
+                                rrwebLog += "_sendData - unable to sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".  Data size: " + data.length + "\n";
+                            }
+                        }
+                    }
+                };
+                client.onerror = function () {
+                    // Final attempt will be with a beacon
+                    if (_sendBeacon) {
+                        try {
+                            if (_sendBeacon('https://d3qkzaurmhh8fa.cloudfront.net/collect' + (rrwebRecorderUuid ? ('/' + rrwebRecorderUuid + '/' + bundleIndex) : ''), data)) {
+                                rrwebLog += "_sendData - used sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".\n";
+                            } else {
+                                rrwebLog += "_sendData - unable to sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".  Data size: " + data.length + "\n";
+                            }
+                        } catch (e) {
+                            console.log("send beacon error", e);
+                            rrwebLog += "_sendData - unable to sendBeacon for final retry of bundleQueueUuid: " + bundleQueueUuid + ".  Data size: " + data.length + "\n";
+                        }
+                    }
+                }
+                client.send(data);
+            }
+
+        } catch (e) {
+            rrwebLog += "_sendData - Unexpected exception: " + e + "\n";
+            throw e;
+        }
+    }
+
+    function _ucaGetParamsArrayFromUrl(url) {
+        if (!url) url = location.href;
+        const question = url.indexOf("?");
+        let hash = url.indexOf("#");
+        if (hash === -1 && question === -1) return [];
+        if (hash === -1) hash = url.length;
+        const query = question === -1 || hash === question + 1 ? url.substring(hash) :
+            url.substring(question + 1, hash);
+        const result = [];
+        query.split("&").forEach(function (part) {
+            if (!part) return;
+            part = part.split("+").join(" "); // replace every + with space, regexp-free version
+            const eq = part.indexOf("=");
+            const key = eq > -1 ? part.substr(0, eq) : part;
+            const val = eq > -1 ? decodeURIComponent(part.substr(eq + 1)) : "";
+
+            result.push({
+                "name": cleanKey(key),
+                "value": val
+            });
+        });
+        return result;
+    }
+
+    function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    function _startRecording(analyticsData) {
+        const that = this;
+
+        // Clone the analyticsData object so we can change it however we like locally
+        const _localAnalyticsData = JSON.parse(JSON.stringify(analyticsData));
+
+        // Add rr-ignore to anything we know should be blocked based upon other recorders that are annotated
+        addClassToAllElements(document.querySelectorAll("#creditCardVerificationNumber, #creditCardNumber, .inspectletIgnore, .fs-exclude, .data-hj-suppress"), "rr-ignore");
+
+        // Remove noscript tags since they obviously have script if this is running.
+        // The reason we want to remove this because of the replay.
+        removeAll(document.querySelectorAll("noscript"));
+
+        // Collect the parameters & referrer data on the URL
+        _localAnalyticsData.params = _ucaGetParamsArrayFromUrl(document.location.href);
+        _localAnalyticsData.r = document.referrer;
+        rrwebRecorderUuid = uuidv4();
+        _localAnalyticsData.ruuid = rrwebRecorderUuid;
+        _localAnalyticsData.sr = SCRIPT_VERSION;
+
+
+        // Do we have rrweb available, we know we're not recording locally or recording globally
+        if (window.rrweb && !rrwebRecording && !window.ucaRecording) {
+            rrwebRecording = true;
+            window.ucaRecording = true;
+
+            // Start recording and push the events into the queue
+            var rrwebConfig = {
+                emit(event) {
+                    rrwebEvents.push(event);
+
+                    // If we have more than 100 events then go ahead and push events right now
+                    if (rrwebEvents.length >= 100) {
+                        if (rrwebRecording) {
+                            rrwebLog += "Call _pushEvent because event count has reached 100.\n";
+                            _pushEvents(_localAnalyticsData);
+                        } else {
+                            rrwebEvents = [];
+                            rrwebLog += "No longer recording so clearing rrwebEvents\n";
+                        }
+                    }
+                },
+                recordLog: {
+                    level: ["info", "log", "warn", "error"],
+                    lengthThreshold: 10000,
+                    stringifyOptions: {
+                        stringLengthLimit: 1000,
+                        numOfKeysLimit: 100,
+                    },
+                    logger: window.console,
+                },
+                sampling: {
+                    // set the interval of scrolling event
+                    scroll: 150, // do not emit twice in 150ms
+                    // set the timing of record input
+                    // input: 'last' // When input multiple characters, only record the final input
+                }
+            };
+
+
+            rrwebStopFn = rrweb.record(rrwebConfig);
+            // console.log("rrweb.record called.  document.readyState", document.readyState);
+
+            // Add capturing change handler at the root to listen for all input changes
+            document.addEventListener("change", function (e) {
+                try {
+                    // if (_localAnalyticsData.mid === "TJ20") console.log("change event:", e);
+
+                    // is this a user-triggered event?
+                    const target = e.target;
+
+                    // Ignore untrusted events that are not caused by users
+                    if (!e.isTrusted) {
+                        return;
+                    }
+                    // Ignore password inputs implicitly.
+                    const targetType = target.getAttribute('type');
+                    if (e.target.tagName === "INPUT" && targetType === "password") {
+                        return;
+                    }
+                    // Ignore hidden inputs implicitly.
+                    if (e.target.tagName === "INPUT" && targetType === "hidden") {
+                        return;
+                    }
+                    // Only capture the radio button that is checked on the target
+                    if (e.target.tagName === "INPUT" && targetType === "radio" && !target.checked) {
+                        return;
+                    }
+                    // Ignore things with rr-block or rr-ignore or inspectletIgnore
+                    if (target.classList.contains('rr-block') || target.classList.contains('rr-ignore') || target.classList.contains('inspectletIgnore')) {
+                        return;
+                    }
+
+                    const selector = calculateSelector(e.target);
+                    const val = inputValue(target);
+                    const name = target.getAttribute('name') || null;
+                    const widget = attrCalc(target.closest('.widget'), 'data-widget-type') || null;
+
+                    if (selector) {
+                        const pageViewEvent = {
+                            "name": "input change",
+                            "params": {
+                                "selector": selector,
+                                "value": val
+                            },
+                            "ts": new Date().getTime()
+                        };
+
+                        // These might be available on the input change
+                        if (name) {
+                            pageViewEvent.params.name = name;
+                        }
+                        if (widget) {
+                            pageViewEvent.params.elementType = widget;
+                        }
+
+                        pageViewEvents.push(pageViewEvent);
+                    }
+                } catch (e) {
+                    console.log("Error processing change event", e);
+                }
+            }, true);
+
+            // Add handler for hosted fields that are triggered via jQuery
+            if (jQuery) {
+
+                // Handler for programmatic changing of inputs after 3 seconds.  That way we don't get a lot of
+                // the programmatic initialization
+                setTimeout(function () {
+                    jQuery(document).on("change", "input, select", function (e) {
+                        if (!e.originalEvent || !e.originalEvent.isTrusted) {
+
+                            const target = e.target;
+                            const selector = calculateSelector(e.target);
+                            const val = inputValue(target);
+                            const name = target.getAttribute('name') || null;
+                            const widget = attrCalc(target.closest('.widget'), 'data-widget-type') || null;
+
+                            if (selector) {
+                                const pageViewEvent = {
+                                    "name": "input change",
+                                    "params": {
+                                        "selector": selector,
+                                        "value": val
+                                    },
+                                    "ts": new Date().getTime()
+                                };
+
+                                // These might be available on the input change
+                                if (name) {
+                                    pageViewEvent.params.name = name;
+                                }
+                                if (widget) {
+                                    pageViewEvent.params.elementType = widget;
+                                }
+
+                                pageViewEvents.push(pageViewEvent);
+                            }
+                        }
+                    });
+                }, 3000);
+
+                // jQuery(document).on('change', '.widget-checkoutcreditcardnumber input, .widget-checkoutcreditcardcvv2 input', function (e) {
+                //     // This should be a programmatically generated event
+                //     if (!e.originalEvent) {
+                //         var target = e.target;
+                //         var selector = calculateSelector(e.target);
+                //         var val = inputValue(target);
+                //         var name = target.getAttribute('name') || null;
+                //         var widget = attrCalc(target.closest('.widget'), 'data-widget-type') || null;
+                //
+                //         if (selector) {
+                //             var pageViewEvent = {
+                //                 "name": "input change",
+                //                 "params": {
+                //                     "selector": selector,
+                //                     "value": val
+                //                 },
+                //                 "ts": new Date().getTime()
+                //             };
+                //
+                //             // These might be available on the input change
+                //             if (name) {
+                //                 pageViewEvent.params.name = name;
+                //             }
+                //             if (widget) {
+                //                 pageViewEvent.params.elementType = widget;
+                //             }
+                //
+                //             pageViewEvents.push(pageViewEvent);
+                //         }
+                //     }
+                // });
+            }
+
+            // Add a capturing click handler at the root to learn about all mouse clicks
+            document.addEventListener("click", function (e) {
+                try {
+                    const target = e.target;
+
+                    // Ignore clicks on inputs other than submit or button
+                    const targetType = target.getAttribute('type');
+                    if (target.tagName === "INPUT" &&
+                        targetType !== "submit" &&
+                        targetType !== "button") {
+                        return;
+                    }
+                    // Ignore clicks on select/textarea inputs
+                    if (target.tagName === "SELECT" ||
+                        target.tagName === "TEXTAREA") {
+                        return;
+                    }
+
+                    const selector = calculateSelector(target);
+                    const widget = attrCalc(target.closest('.widget'), 'data-widget-type') || null;
+
+                    // What is the HREF clicked
+                    const href = attrCalc(target.closest("a, .widget-faux-a"), 'href') || null;
+
+                    // What is the text of the button?
+                    let text = null;
+                    if (href || widget === "button") {
+                        text = (target.textContent || '').trim() || null;
+                    }
+
+                    // Replace newline with a space and then trim
+                    if (text) {
+                        text = text.replace(/\n/g, ' ').trim();
+                    }
+
+                    // Make sure the text isn't too long
+                    if (text && text.length > 100) {
+                        text = text.substring(0, 100) + "...";
+                    }
+
+                    if (selector) {
+                        const pageViewEvent = {
+                            "name": "click",
+                            "params": {
+                                "selector": selector
+                            },
+                            "ts": new Date().getTime()
+                        };
+
+                        // If there is an href then it's a link click
+                        if (href) {
+                            pageViewEvent.name = "link click";
+                            pageViewEvent.params.link = href;
+
+                            // Was this an outbound link?
+                            if (href.indexOf("http") === 0 && href.indexOf(window.location.origin) !== 0) {
+                                pageViewEvent.name = "outbound link click";
+                            }
+                        }
+
+                        // Don't collect clicks on the background container or section widgets
+                        if (widget === "container" || widget === "section") {
+                            return;
+                        }
+
+                        if (widget) {
+                            pageViewEvent.params.elementType = widget;
+                        }
+                        if (text) {
+                            pageViewEvent.params.text = text;
+                        }
+
+                        pageViewEvents.push(pageViewEvent);
+                    }
+                } catch (e) {
+                    console.log("Error processing click event", e);
+                }
+            }, true);
+
+            // Push every 10 seconds if we have at least 30 events or it's the first timed push
+            let firstTimedPush = true;
+            setInterval(function () {
+                if (rrwebEvents.length > 30 || firstTimedPush) {
+                    if (firstTimedPush) {
+                        rrwebLog += "Call _pushEvent because of first time push after 10 seconds.\n";
+                    } else {
+                        rrwebLog += "Call _pushEvent because event count for last 10 seconds is more than 30.\n";
+                    }
+                    _pushEvents(_localAnalyticsData);
+                    firstTimedPush = false;
+                }
+            }, 10000);
+        } else if (rrwebRecording || window.ucaRecording) {
+            console.log("Recording already running on page.  A second recording can not be started.");
+        } else {
+            console.log("Recording started, but rrweb object not present.");
+        }
+    }
+
+    function cleanKey(key) {
+        if (!key) return key;
+        if (key.indexOf("__proto__") === 0 || key.indexOf("constructor") === 0 || key.indexOf("prototype") === 0) {
+            return key.toUpperCase();
+        }
+        return key && ["__proto__", "constructor", "prototype"].includes(key.toLowerCase()) ? key.toUpperCase() : key;
+    }
+
+    function _ucaGetJsonFromUrl(url) {
+        if (!url) url = location.href;
+        const question = url.indexOf("?");
+        let hash = url.indexOf("#");
+        if (hash === -1 && question === -1) return {};
+        if (hash === -1) hash = url.length;
+        const query = question === -1 || hash === question + 1 ? url.substring(hash) :
+            url.substring(question + 1, hash);
+        const result = Object.create(null);
+        query.split("&").forEach(function (part) {
+            if (!part) return;
+            part = part.split("+").join(" "); // replace every + with space, regexp-free version
+            const eq = part.indexOf("=");
+            let key = eq > -1 ? part.substr(0, eq) : part;
+            const val = eq > -1 ? decodeURIComponent(part.substr(eq + 1)) : "";
+            const from = key.indexOf("[");
+            if (from === -1) result[cleanKey(decodeURIComponent(key))] = val;
+            else {
+                const to = key.indexOf("]", from);
+                const index = parseInt(decodeURIComponent(key.substring(from + 1, to)));
+                key = cleanKey(decodeURIComponent(key.substring(0, from)));
+                if (!result[key]) result[key] = [];
+                if (!index) result[key].push(val);
+                else result[key][index] = val;
+            }
+        });
+        return result;
+    }
+
+    // Parse the parameters
+    let params = _ucaGetJsonFromUrl(document.location.href);
+
+    // If the browser supports document.currentScript then copy data attributes
+    let crossLinkDomains = [];
+    if (document.currentScript && document.currentScript.getAttribute('data-crosslink')) {
+        console.log("Script contains cross link data attribute.", document.currentScript.getAttribute('data-crosslink'));
+        try {
+            crossLinkDomains = JSON.parse(document.currentScript.getAttribute('data-crosslink'));
+            console.log("Parsed crosslink domains", crossLinkDomains);
+            if (!crossLinkDomains) {
+                crossLinkDomains = [];
+            }
+        } catch (e) {
+            console.log("Error parsing crosslink domains", e);
+        }
+    } else {
+        if (document.currentScript && document.currentScript.src) {
+            const scriptParams = _ucaGetJsonFromUrl(document.currentScript.src);
+
+            if (scriptParams && scriptParams.crosslink) {
+                crossLinkDomains = scriptParams.crosslink.split(",");
+            }
+        }
+    }
+    // console.log("crosslink", crossLinkDomains);
+
+    // Are we recording
+    let record = false;
+    if (document.currentScript && document.currentScript.getAttribute('data-record')) {
+        if ("true" === document.currentScript.getAttribute('data-record')) record = true;
+    }
+
+    function makeRequest(method, url, callback) {
+        let xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.onload = function () {
+            if (this.status >= 200 && this.status < 300) {
+                callback(xhr.response);
+            } else {
+                callback(null, {
+                    status: this.status,
+                    statusText: xhr.statusText
+                });
+            }
+        };
+        xhr.onerror = function () {
+            callback(null, {
+                status: this.status,
+                statusText: xhr.statusText
+            });
+        };
+        xhr.send();
+    }
+
+    function getUcacid(channel, callback) {
+        let ucacid = getCookie("ucacid") || params.ucacid || null
+
+        // console.log("getUcacid initial", ucacid);
+
+        // If we have a ucacid parameter, but don't have a cookie then persist it
+        if (ucacid && !getCookie("ucacid")) {
+            setCookie("ucacid", ucacid, 365);
+            if (window.localStorage) {
+                window.localStorage.setItem('ucacid', ucacid);
+            }
+        }
+
+        // If we have a ucacid id, but it's not in local storage then add it.
+        if (ucacid) {
+            if (window.localStorage && !window.localStorage.getItem('ucacid')) {
+                window.localStorage.setItem('ucacid', ucacid);
+            }
+        }
+
+        // If we don't have a cookie, then we need to assign one
+        if (!ucacid) {
+            // Check local storage.  If we have a value there then set a cookie
+            if (window.localStorage && window.localStorage.getItem('ucacid')) {
+                ucacid = window.localStorage.getItem('ucacid');
+                if (ucacid) {
+                    setCookie("ucacid", ucacid, 365);
+                }
+            }
+        }
+        if (!ucacid) {
+            // console.log("generate ucacid");
+            // Are we dealing with a crosslink situation?
+            // console.log("!ucacid crossLinkDomains.length", crossLinkDomains.length, "channel", channel);
+            if ((crossLinkDomains.length && channel) || (channel && channel !== window.location.hostname)) {
+                try {
+                    makeRequest("GET", "https://d1pqvb2h9xgm7r.cloudfront.net/v1/id?channel=" + encodeURIComponent(channel || ''), function (responseJson, error) {
+                        if (responseJson) {
+                            ucacid = JSON.parse(responseJson).ucacid;
+                        } else {
+                            console.log("Failed to obtain ucacid", error);
+                        }
+
+                        // If we don't have a ucacid then go ahead and do a new one
+                        if (!ucacid) {
+                            ucacid = "" + (Math.random() * 2147483647).toFixed(6);
+                        }
+                        setCookie("ucacid", ucacid, 365);
+                        if (window.localStorage) {
+                            window.localStorage.setItem('ucacid', ucacid);
+                        }
+
+                        callback(ucacid);
+                    });
+                } catch (e) {
+                    console.log("Error fetching ucacid", e);
+                }
+                // Let the callback happen after the async stuff
+                return;
+            }
+        }
+
+        // If we don't have a ucacid then go ahead and do a new one
+        if (!ucacid) {
+            ucacid = "" + (Math.random() * 2147483647).toFixed(6);
+        }
+        setCookie("ucacid", ucacid, 365);
+        if (window.localStorage) {
+            window.localStorage.setItem('ucacid', ucacid);
+        }
+
+        if (callback) {
+            callback(ucacid);
+        }
+    }
+
+    var analyticsData = {
+        "top": 0,
+        "url": window.location.protocol + "//" + window.location.hostname + window.location.pathname,
+        "w": window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+        "h": window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+        "ua": navigator.userAgent,
+        "ucapv": parseInt(getCookie("ucapv")) || null
+    };
+
+    // If the browser supports document.currentScript then copy data attributes
+    if (document.currentScript && document.currentScript.getAttribute('data-channel')) {
+        analyticsData.channel = document.currentScript.getAttribute('data-channel');
+    }
+    if (document.currentScript && document.currentScript.getAttribute('data-mid')) {
+        analyticsData.mid = document.currentScript.getAttribute('data-mid');
+    }
+
+    // If we don't have the mid and channel then they might be using GTM and we have to look at parameters
+    if (!analyticsData.channel && document.currentScript && document.currentScript.src) {
+        params = _ucaGetJsonFromUrl(document.currentScript.src);
+
+        analyticsData.channel = params.channel;
+
+        if ("true" === params.record) {
+            record = true;
+        }
+    }
+    if (!analyticsData.mid && document.currentScript && document.currentScript.src) {
+        params = _ucaGetJsonFromUrl(document.currentScript.src);
+
+        analyticsData.mid = params.mid;
+
+        if ("true" === params.record) {
+            record = true;
+        }
+    }
+
+    // Backup ucaconfig element
+    const ucaconfig = document.querySelector("ucaconfig");
+
+    if (ucaconfig) {
+        if (ucaconfig.getAttribute("data-crosslink")) {
+            crossLinkDomains = JSON.parse(ucaconfig.getAttribute("data-crosslink"));
+        }
+        record = ucaconfig.getAttribute('data-record') === "true";
+        analyticsData.mid = ucaconfig.getAttribute('data-mid');
+
+        // console.log("Process ucaconfig ", crossLinkDomains, " record ", record, " mid", analyticsData.mid);
+    }
+
+    // Don't record for IE 11
+    if (navigator.userAgent.indexOf("Trident") >= 0) {
+        record = false;
+    }
+
+    analyticsData.rec = record;
+
+    // Save some bytes
+    if (!analyticsData.mid) delete analyticsData.mid;
+
+    // Stub this out so that nothing blows up if we're taking time to get the ucacid
+    window.ucaEvent = function (eventOps) {
+    }
+
+    let rt = false;
+    let realSafari = false;
+
+    function isSearchCrawler(userAgent) {
+        if (!userAgent) userAgent = navigator.userAgent;
+        if (!userAgent) return false;
+        var userAgentLower = userAgent.toLowerCase();
+
+        return userAgentLower.indexOf("google") >= 0 ||
+            userAgent.indexOf("Googlebot") >= 0 ||
+            userAgent.indexOf("bingbot") >= 0 ||
+            userAgentLower.indexOf("bing") >= 0 ||
+            userAgent.indexOf("DuckDuckBot") >= 0 ||
+            userAgent.indexOf("pinterest.com/bot.html") >= 0 ||
+            userAgent.indexOf("Baiduspider") >= 0 ||
+            userAgent.indexOf("Yahoo! Slurp") >= 0 ||
+            userAgent.indexOf("Yandex") >= 0 ||
+            userAgent.indexOf("semrush") >= 0 ||
+            userAgent.indexOf("AhrefsBot") >= 0 ||
+            userAgent.indexOf("SiteSearch360") >= 0 ||
+            userAgent.indexOf("RSiteAuditor") >= 0;
+    }
+
+    function postUcacid() {
+
+        // console.log("postUcacid");
+        // If we don't have a ucapv value then we need to create one.  If we're already seen this ucapv value then we need to create a new one
+        if (!analyticsData.ucapv) {
+            analyticsData.ts = new Date().getTime();
+            analyticsData.ucapv = analyticsData.ts;
+        }
+        // Keep track of last 10 so we don't duplicate things
+        if (window.sessionStorage) {
+            let ucapvhist = JSON.parse(window.sessionStorage.getItem('ucapvhist') || '[]');
+            if (ucapvhist.includes(analyticsData.ucapv)) {
+                analyticsData.ts = new Date().getTime();
+                analyticsData.ucapv = analyticsData.ts;
+            }
+            ucapvhist.push(analyticsData.ucapv);
+            ucapvhist = ucapvhist.slice(-10);
+            window.sessionStorage.setItem('ucapvhist', JSON.stringify(ucapvhist));
+        }
+
+        // If we have crosslink domains then find all the a href links and modify them
+        try {
+            if (crossLinkDomains.length) {
+                params = _ucaGetJsonFromUrl(document.location.href);
+
+                const linkTags = document.querySelectorAll("a[href], .widget-faux-a[href]");
+                elemEach(linkTags, function (index, a) {
+                    let href = a.getAttribute('href');
+                    if (href) {
+                        for (let i = 0; i < crossLinkDomains.length; i++) {
+                            // Does this link contain a crosslink domain?
+                            if (href.indexOf(crossLinkDomains[i]) >= 0) {
+                                if (href.indexOf("ucacid=") === -1 && !isSearchCrawler()) {
+                                    if (href.indexOf("?") >= 0) {
+                                        href += "&ucacid=" + analyticsData.ucacid;
+                                    } else {
+                                        href += "?ucacid=" + analyticsData.ucacid;
+                                    }
+                                }
+                                if (params.gclid && href.indexOf("gclid=") === -1) {
+                                    // Pass along the gclid in the crosslink so we can capture it for offline conversion
+                                    href += "&gclid=" + encodeURIComponent(params.gclid);
+                                }
+                                if (params.gbraid && href.indexOf("gbraid=") === -1) {
+                                    // Pass along the gbraid in the crosslink so we can capture it for offline conversion
+                                    href += "&gbraid=" + encodeURIComponent(params.gbraid);
+                                }
+                                if (params.wbraid && href.indexOf("wbraid=") === -1) {
+                                    // Pass along the wbraid in the crosslink so we can capture it for offline conversion
+                                    href += "&wbraid=" + encodeURIComponent(params.wbraid);
+                                }
+                                if (params.msclkid && href.indexOf("msclkid=") === -1) {
+                                    // Pass along the msclkid in the crosslink so we can capture it for offline conversion
+                                    href += "&msclkid=" + encodeURIComponent(params.msclkid);
+                                }
+                                if (params.fbclid && href.indexOf("fbclid=") === -1) {
+                                    // Pass along the fbclid in the crosslink so we can capture it
+                                    href += "&fbclid=" + encodeURIComponent(params.fbclid);
+                                }
+                                if (params.twclid && href.indexOf("twclid=") === -1) {
+                                    // Pass along the twclid in the crosslink so we can capture it
+                                    href += "&twclid=" + encodeURIComponent(params.twclid);
+                                }
+                                if (params._kx && href.indexOf("_kx=") === -1) {
+                                    // Pass along the _kx in the crosslink so we can capture it
+                                    href += "&_kx=" + encodeURIComponent(params._kx);
+                                }
+                                const cbSplitUserId = getCookie("user_id");
+                                if (cbSplitUserId && href.indexOf("cbsuid=") === -1) {
+                                    href += "&cbsuid=" + encodeURIComponent(cbSplitUserId);
+                                    href += "&cbshost=" + encodeURIComponent(window.location.host);
+                                }
+
+                                a.setAttribute('href', href);
+                            }
+                        }
+                    }
+                });
+
+                // Wait 5 seconds and attempt to pickup other cookie values we need to server side tracking
+                setTimeout(function () {
+                    const fbp = getCookie("_fbp");
+                    const fbc = getCookie("_fbc");
+
+                    if (fbp || fbc) {
+                        elemEach(linkTags, function (index, a) {
+                            let href = a.getAttribute('href');
+                            if (href) {
+                                for (let i = 0; i < crossLinkDomains.length; i++) {
+                                    // Does this link contain a crosslink domain?
+                                    if (href.indexOf(crossLinkDomains[i]) >= 0) {
+                                        if (fbp && href.indexOf("fbp=") === -1) {
+                                            if (href.indexOf("?") >= 0) {
+                                                href += "&fbp=" + encodeURIComponent(fbp);
+                                            } else {
+                                                href += "?fbp=" + encodeURIComponent(fbp);
+                                            }
+                                        }
+                                        if (fbc && href.indexOf("fbc=") === -1) {
+                                            if (href.indexOf("?") >= 0) {
+                                                href += "&fbc=" + encodeURIComponent(fbc);
+                                            } else {
+                                                href += "?fbc=" + encodeURIComponent(fbc);
+                                            }
+                                        }
+
+                                        a.setAttribute('href', href);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }, 5000);
+            }
+        } catch (e) {
+            console.log("Error processing crosslink", e);
+        }
+
+        // Monitor UCEditor URLs and apply attributes
+        let updateLinks = function(){
+            const linkTags = document.querySelectorAll("a[href], .widget-faux-a[href]");
+            elemEach(linkTags, function (index, a) {
+                let href = a.getAttribute('href');
+                if (href && href.indexOf("UCEditor") !== -1 && href.indexOf("ucacid") === -1 && !isSearchCrawler()) {
+                    if (href.indexOf("?") >= 0) {
+                        href += "&ucacid=" + analyticsData.ucacid;
+                    } else {
+                        href += "?ucacid=" + analyticsData.ucacid;
+                    }
+
+                    a.setAttribute('href', href);
+
+                    // Attach a context menu handler to remove the ucacid value if they right click to copy
+                    a.addEventListener('contextmenu', function(event){
+                        try {
+                            event.target.setAttribute("href", event.target.getAttribute('href').replace(/(\?|&)ucacid=[^&]+/, ''));
+                        } catch (e) {
+                            console.log("Error adjusting URL", e);
+                        }
+                    }, true);
+                }
+            });
+        };
+        setInterval(updateLinks, 100);
+
+        // Set a capturing handler so when a something is clicked we can make sure the links are appropriate
+        document.addEventListener('click', updateLinks, true);
+
+        // If we have a channel then we are being used externally.
+        if (analyticsData.channel) {
+            analyticsData.q = document.location.search;
+            analyticsData.r = document.referrer;
+            analyticsData.ts = new Date().getTime(); // Timestamp of when the page loaded
+            analyticsData.ucapv = analyticsData.ts; // The page view id needs to also be the same as the hit timestamp
+
+            // Do we need to be real-time due to the domain difference?
+            if (_domainRoot(analyticsData.channel) !== _domainRoot(window.location.hostname)) {
+                rt = true;
+            }
+            // For true Safari, let's go real
+            if (!rt && analyticsData.ua && analyticsData.ua.indexOf("Safari") > 0 && analyticsData.ua.indexOf("Chrome") === -1) {
+                realSafari = true;
+            }
+        }
+
+        // Global method to publish a pageevent
+        window.ucaEvent = function (eventOps) {
+            // Make sure the object is not null
+            eventOps = eventOps || {};
+
+            // Fire an event with this information
+            const hit = {
+                "event": eventOps.event || "pageevent",
+                "url": window.location.protocol + "//" + window.location.hostname + window.location.pathname,
+                "w": window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                "h": window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+                "ucacid": analyticsData.ucacid,
+                "cartid": getCookie("UltraCartShoppingCartID") || null,
+                "channel": analyticsData.channel || null,
+                "mid": analyticsData.mid || null,
+                "peEvent": eventOps.event || null,
+                "peCategory": eventOps.category || null,
+                "peLabel": eventOps.label || null,
+                "peValue": eventOps.value || null,
+                "items": eventOps.items || null
+            };
+
+            if (hit.ucacid) {
+                // Push the hit ASYNC through the API Gateway
+                if (jQuery) {
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "https://d1pqvb2h9xgm7r.cloudfront.net/v1/rt",
+                        async: true,
+                        data: JSON.stringify(hit),
+                        contentType: 'application/json'
+                    });
+                } else {
+                    const client = new XMLHttpRequest();
+                    client.open("POST", "https://d1pqvb2h9xgm7r.cloudfront.net/v1/rt", true);
+                    client.setRequestHeader("Content-type", "application/json");
+                    client.send(JSON.stringify(hit));
+                }
+            }
+        };
+
+        // Legacy checkout identity (required jQuery)
+        if (jQuery) {
+            jQuery("#ucSingle .js-store-email, #ucShipping #email").on("change", function () {
+                const email = jQuery(this).val();
+
+                if (email && /@/.test(email)) {
+
+                    const hit = {
+                        "event": "identify",
+                        "url": window.location.protocol + "//" + window.location.hostname + window.location.pathname,
+                        "w": window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                        "h": window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+                        "ucacid": analyticsData.ucacid,
+                        "e": email,
+                        "cartid": getCookie("UltraCartShoppingCartID") || null,
+                        "channel": analyticsData.channel || null,
+                        "mid": analyticsData.mid || null
+                    };
+
+                    if (hit.ucacid) {
+                        // Push the hit ASYNC through the API Gateway
+                        if (jQuery) {
+                            jQuery.ajax({
+                                type: "POST",
+                                url: "https://d1pqvb2h9xgm7r.cloudfront.net/v1/rt",
+                                async: true,
+                                data: JSON.stringify(hit),
+                                contentType: 'application/json'
+                            });
+                        } else {
+                            const client = new XMLHttpRequest();
+                            client.open("POST", "https://d1pqvb2h9xgm7r.cloudfront.net/v1/rt", true);
+                            client.setRequestHeader("Content-type", "application/json");
+                            client.send(JSON.stringify(hit));
+                        }
+                    }
+                }
+            });
+        }
+
+        // Look for facebook
+        if ((window.location.search || '').indexOf('fbclid') > 0) {
+            params = _ucaGetJsonFromUrl(document.location.href);
+
+            const fbclid = params.fbclid;
+            if (fbclid) {
+                var fbp = null;
+                var fbc = null;
+                let fbpMonitorLoop = 0;
+                var timer = setInterval(function () {
+                    fbpMonitorLoop++;
+                    // See if the _fbp cookie has been set by the facebook code
+                    fbp = getCookie('_fbp');
+                    fbc = getCookie('_fbc');
+                    // Did we find the value or wait 3 seconds?
+                    if (fbp || fbpMonitorLoop > 30) {
+                        clearInterval(timer);
+
+                        // Fire an event with this information
+                        const hit = {
+                            "event": "facebook",
+                            "url": window.location.protocol + "//" + window.location.hostname + window.location.pathname,
+                            "w": window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                            "h": window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+                            "ucacid": analyticsData.ucacid,
+                            "cartid": getCookie("UltraCartShoppingCartID") || null,
+                            "channel": analyticsData.channel || null,
+                            "mid": analyticsData.mid || null,
+                            "fbp": fbp,
+                            "fbc": fbc || null,
+                            "fbclid": fbclid
+                        };
+
+                        if (hit.ucacid) {
+                            // Push the hit ASYNC through the API Gateway
+                            if (jQuery) {
+                                jQuery.ajax({
+                                    type: "POST",
+                                    url: "https://d1pqvb2h9xgm7r.cloudfront.net/v1/rt",
+                                    async: true,
+                                    data: JSON.stringify(hit),
+                                    contentType: 'application/json'
+                                });
+                            } else {
+                                let client = new XMLHttpRequest();
+                                client.open("POST", "https://d1pqvb2h9xgm7r.cloudfront.net/v1/rt", true);
+                                client.setRequestHeader("Content-type", "application/json");
+                                client.send(JSON.stringify(hit));
+                            }
+                        }
+                    }
+                }, 100);
+            }
+        }
+    } // postUcacid logic
+
+    let lastPingbackFlagged = false;
+
+    function recordTimeOnPage(lastPingback, event) {
+        // If we just reported for a click then don't do it again on the unload
+        if (lastPingbackFlagged) return;
+
+        if (lastPingback) {
+            lastPingbackFlagged = true;
+        }
+
+        analyticsData.top = TimeMe.getTimeOnCurrentPageInSeconds();
+        analyticsData.event = event;
+        analyticsData.t = document.title || null;
+
+        if (analyticsData.ucacid) {
+
+            // Determine the collector URL.  If we're external then we have to use a full URL
+            let collectUrl = "https://d1pqvb2h9xgm7r.cloudfront.net/v1";
+            const collectUrlRt = "https://d1pqvb2h9xgm7r.cloudfront.net/v1/rt";
+            // If we're real-time then add this to the path so that we proxy immediately.
+            if (rt || realSafari) {
+                collectUrl = collectUrlRt;
+            }
+
+            // Use beacon whenever possible except for the init which we want to happen immediately with normal XHR
+            if (_sendBeacon && "init" !== event) {
+                // console.log("send beacon");
+                try {
+                    _sendBeacon(collectUrl, JSON.stringify(analyticsData));
+                } catch (e) {
+                    console.log("send beacon error", e);
+                }
+            } else if (jQuery) {
+                jQuery.ajax({
+                    type: "POST",
+                    url: collectUrlRt,
+                    async: "init" === event, // Run async on init
+                    data: JSON.stringify(analyticsData),
+                    contentType: 'application/json'
+                });
+                // console.log("send AJAX");
+            } else {
+                const client = new XMLHttpRequest();
+                client.open("POST", collectUrlRt, "init" === event); // third parameter indicates sync xhr.  Run async on init
+                client.setRequestHeader("Content-type", "application/json");
+                client.send(JSON.stringify(analyticsData));
+                // console.log("send XHR");
+            }
+        } else {
+            console.log("no ucacid");
+        }
+    }
+
+    // Determine the ucacid
+    getUcacid(analyticsData.channel, function (ucacid) {
+        analyticsData.ucacid = ucacid;
+
+        // Call all the other logic
+        postUcacid();
+
+        // If we're external and just assigned a ucacid, then push that up immediately
+        if (analyticsData.channel) {
+            recordTimeOnPage(false, "init");
+        }
+    });
+
+    // Let's handle the inclusion multiple times gracefully by tracking init
+    // If we see that the privacy.js is loaded then, do this init as a callback after statistics is approved
+    const init = function () {
+        if (!window.ucaInit) {
+            // Register the unload handler
+            window.addEventListener("unload", function () {
+                recordTimeOnPage(true, "unload")
+
+                // If we have a stop function for RRWeb call it.
+                try {
+                    if (rrwebStopFn) {
+                        rrwebStopFn();
+                    }
+                } catch (e) {
+                    console.log("Error stopping recording", e);
+                }
+
+                _stopRecording(analyticsData);
+            }, false);
+            window.addEventListener("pagehide", function () {
+                recordTimeOnPage(true, "pagehide")
+                _stopRecording(analyticsData);
+            }, false);
+
+            // If we have jQuery, but dont have sent beacon support then let's register a click handler
+            if (jQuery && !_sendBeacon) {
+                // Use a single delegate handler to make it run fast
+                jQuery(document).on("click", "a", function () {
+                    recordTimeOnPage(true, "click");
+                    console.log("Record top for non-beacon browser.");
+                });
+            }
+
+            // Start the time tracking plugin
+            TimeMe.initialize({
+                currentPageName: "current-page", // current page
+                idleTimeoutInSeconds: 30 // seconds
+            });
+
+            window.ucaInit = true;
+
+            // Perform pings every 5 minutes for up to 2 hours
+            var pingCount = 0;
+            var pingInterval = setInterval(function(){
+                recordTimeOnPage(false, "ping");
+
+                pingCount++;
+                if (pingCount >= 24) clearInterval(pingInterval);
+            }, 300000);
+
+            // Are we recording?
+            if (record) {
+                // Is the script already on the page
+                if (window.rrweb) {
+                    _startRecording(analyticsData);
+                } else {
+                    // Dynamically load in the dependency and then once it loads engage
+                    const script = document.createElement('script');
+                    script.onload = function () {
+                        _startRecording(analyticsData);
+                    };
+                    script.src = 'https://d9i5ve8f04qxt.cloudfront.net/UC/62/uca/0.1.0/vendor/rrweb-0.9.14/rrweb-all.min-g.js';
+
+                    document.head.appendChild(script);
+                }
+            }
+        }
+    };
+
+    // When should init run?
+    if (window.ucpRegisterStatistics) {
+        // Privacy is loaded so let's run this after statistics are approved
+        window.ucpRegisterStatistics(init);
+    } else {
+        // console.log("ucaDocReady");
+        // Run it right now
+        docReady(function () {
+            // console.log("UCA init");
+            init();
+        });
+    }
+
+})(window.jQuery);

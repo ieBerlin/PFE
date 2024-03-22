@@ -65,7 +65,7 @@ const loginUser = async(req, res) => {
             const token = jwt.sign({
                 username: username
             }, SECRET_KEY, {
-                expiresIn: 200
+                expiresIn: 2400
             })
             console.log("token :" + token)
                 // Password matched, send success response
