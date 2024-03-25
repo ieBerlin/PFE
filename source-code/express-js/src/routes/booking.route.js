@@ -1,19 +1,31 @@
 const express = require("express");
 const router = express.Router();
-// const getBooking = require("../controllers/booking/getBooking.js");
+const getAllBooking = require("../controllers/booking/getAllBooking.js");
 const getSingleBooking = require("../controllers/booking/getSingleBooking.js");
 const bookEquipment = require("../controllers/booking/bookEquipment.js");
-const modifyEquipmentBooking = require("../controllers/booking/modifyEquipmentBooking.js");
 const confirmEquipmentBooking = require("../controllers/booking/confirmEquipmentBooking.js");
-// const deleteBooking = require("../controllers/booking/deleteBooking.js");
+const cancelEquipmentBooking = require("../controllers/booking/cancelEquipmentBooking.js");
+const rejectEquipmentBooking = require("../controllers/booking/rejectEquipmentBooking.js");
 const verifyToken = require("../middlewares/auth/authJWT.js");
 const authAdminOrManager = require("../middlewares/auth/authAdminOrManager.js");
+const authUserRole = require('../middlewares/auth/authUserRole.js');
 
-// router.get("/", getBooking);
-router.get("/:bookingId", getSingleBooking);
-router.post("/", bookEquipment);
+// Get single booking by ID
+router.get("/:bookingId", authUserRole, getSingleBooking);
+
+// Get all bookings (for admin or manager)
+router.get("/", authAdminOrManager, getAllBooking);
+
+// Book equipment
+router.post("/", authUserRole, bookEquipment);
+
+// Confirm equipment booking request (for admin or manager)
 router.post("/confirm-request/:bookingId", verifyToken, authAdminOrManager, confirmEquipmentBooking);
-// router.put("/:bookingId", verifyToken, authAdmin, updateBooking);
-// router.delete("/:bookingId", verifyToken, authAdmin, deleteBooking);
+
+// Cancel equipment booking request (for users)
+router.post("/cancel-request/:bookingId", verifyToken, authUserRole, cancelEquipmentBooking);
+
+// Reject equipment booking request (for admin or manager)
+router.post("/reject-request/:bookingId", verifyToken, authAdminOrManager, rejectEquipmentBooking);
 
 module.exports = router;

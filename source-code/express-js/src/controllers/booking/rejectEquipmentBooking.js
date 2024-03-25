@@ -1,6 +1,6 @@
 const { pool } = require("../../models/db/connect.js");
 
-const cancelBooking = async(req, res) => {
+const rejectBooking = async(req, res) => {
     try {
         const { bookingId } = req.params;
 
@@ -14,25 +14,23 @@ const cancelBooking = async(req, res) => {
             return res.status(404).json({ message: 'Booking not found.' });
         }
 
-
         // Check if the booking is pending
         const booking = result[0];
         if (booking.status !== 'pending') {
-            return res.status(400).json({ message: "The booking cannot be cancelled as it's not in pending status." });
+            return res.status(400).json({ message: "The booking cannot be rejected as it's not in pending status." });
         }
 
-
-        // Update the booking status to cancelled
-        const status = 'cancelled';
+        // Update the booking status to rejected
+        const status = 'rejected';
         const sql = "UPDATE bookings SET status = ? WHERE bookingId = ?";
         const values = [status, bookingId];
         await pool.query(sql, values);
 
-        return res.status(200).json({ message: "The booking has been cancelled successfully." });
+        return res.status(200).json({ message: "The booking has been rejected successfully." });
     } catch (error) {
-        console.error("Error cancelling booking:", error);
-        return res.status(500).json({ message: "Internal Server Error. Failed to cancel booking." });
+        console.error("Error rejecting booking:", error);
+        return res.status(500).json({ message: "Internal Server Error. Failed to reject booking." });
     }
 };
 
-module.exports = cancelBooking;
+module.exports = rejectBooking;

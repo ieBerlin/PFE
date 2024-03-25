@@ -19,6 +19,27 @@ A user-friendly interface allows members to select equipment, specify booking da
 Real-time availability checking ensures that selected equipment is free during the chosen time slot.
 Upon successful booking, members receive confirmation notifications via email or app push notifications.
 Members can also cancel bookings if needed, freeing up equipment for others.
+Booking Status : pending, confirmed, cancelled, completed,rejected.
+
+Pending:
+The booking request has been submitted but has not yet been confirmed.
+
+Confirmed:
+The booking request has been approved and confirmed by the system or an authorized user.
+
+Cancelled:
+The booking has been cancelled either by the user who made the booking or by an authorized staff member.
+
+Completed:
+The booking has been successfully fulfilled, and the user has utilized the reserved slot or equipment as scheduled.
+
+Expired:
+The booking request was not confirmed within a specified time frame or the booking period has elapsed without the user utilizing the reservation.
+
+Rejected:
+The booking request has been denied or rejected by the system or an authorized user.
+
+
 Attendance Tracking:
 
 Members have the option to check in and check out using various methods, such as QR code scanning via a mobile app or manual check-in at the gym reception.
