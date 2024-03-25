@@ -13,7 +13,7 @@ const createEquipment = async(req, res) => {
             return res
                 .status(400)
                 .json({
-                    message: "Unauthorized request",
+                    message: "The booking request has been rejected by the system.",
                 });
         }
         const sql =
