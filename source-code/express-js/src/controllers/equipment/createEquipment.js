@@ -2,7 +2,7 @@ const { pool } = require("../../models/db/connect.js");
 const getCurrentDateTime = require("../../utils/getCurrentDateTime.js");
 const createEquipment = async(req, res) => {
     const { userRole } = req;
-    if (!userRole || !userRole === "admin") {
+    if (!userRole || !userRole === "admin" || !userRole === "manager") {
         res.status(401).json({ message: "Unauthorized!" });
     }
     try {
@@ -25,13 +25,14 @@ const createEquipment = async(req, res) => {
                 });
         }
         const sql =
-            "INSERT INTO equipment(name,description,quantity,max_quantity,created_at) VALUES(?,?,?,?,?)";
+            "INSERT INTO equipment(name,description,quantity,max_quantity,created_at,availableQuantity) VALUES(?,?,?,?,?,?)";
         const values = [
             name,
             description,
             quantity,
             max_quantity,
-            getCurrentDateTime()
+            getCurrentDateTime(),
+            quantity
 
         ];
         await pool.query(sql, values);

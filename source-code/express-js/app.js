@@ -7,6 +7,7 @@ const userProfileRouter = require("./src/routes/user-profile.route.js");
 const membershipPlansRouter = require("./src/routes/membership-plan.route.js");
 const feedbackRouter = require("./src/routes/feedback.route.js");
 const equipmentsRouter = require("./src/routes/equipment.route.js");
+const bookingsRouter = require("./src/routes/booking.route.js");
 const { pool } = require("./src/models/db/connect.js");
 const cors = require("./src/middlewares/cors/corsConfig.js");
 // Middlewares
@@ -22,6 +23,7 @@ app.use("/equipments", equipmentsRouter);
 app.use("/user/profile", userProfileRouter);
 app.use("/membership-plans", membershipPlansRouter);
 app.use('/feedback', feedbackRouter)
+app.use('/booking', bookingsRouter)
 const port = process.env.PORT || 8080;
 
 // Start the server

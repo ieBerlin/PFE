@@ -3,10 +3,9 @@ const { pool } = require("../../models/db/connect.js");
 const deleteEquipment = async(req, res) => {
     try {
         const { userRole } = req;
-        if (!userRole || userRole !== "admin") {
-            return res.status(401).json({ message: "Unauthorized!" });
+        if (!userRole || !userRole === "admin" || !userRole === "manager") {
+            res.status(401).json({ message: "Unauthorized!" });
         }
-
         const equipmentId = parseInt(req.params.equipmentId);
         if (isNaN(equipmentId)) {
             return res.status(400).json({ message: 'Invalid equipment id parameter' });
