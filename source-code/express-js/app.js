@@ -7,6 +7,7 @@ const userProfileRouter = require("./src/routes/user-profile.route.js");
 const membershipPlansRouter = require("./src/routes/membership-plan.route.js");
 const feedbackRouter = require("./src/routes/feedback.route.js");
 const equipmentsRouter = require("./src/routes/equipment.route.js");
+const sportsRouter = require('./src/routes/sport.route.js');
 const bookingsRouter = require("./src/routes/booking.route.js");
 const classesRouter = require("./src/routes/class.route.js");
 const { pool } = require("./src/models/db/connect.js");
@@ -25,7 +26,8 @@ app.use("/user/profile", userProfileRouter);
 app.use("/membership-plans", membershipPlansRouter);
 app.use('/feedback', feedbackRouter)
 app.use('/booking', bookingsRouter)
-app.use('/class', classesRouter)
+app.use('/class', classesRouter);
+app.use('/sport', sportsRouter);
 const port = process.env.PORT || 8080;
 
 // Start the server

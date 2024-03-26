@@ -1,4 +1,5 @@
 different sports :
+so we're going to create a table called sports that contains different sports in the gym.
 Weightlifting and Strength Training.
 Cardiovascular Exercise
 Group Fitness Classes
