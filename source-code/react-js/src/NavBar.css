@@ -1,0 +1,69 @@
+/* NavbarContainer.css */
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+}
+
+
+/* Greeting.css */
+
+.greeting {
+    margin-right: 20px;
+    font-size: 18px;
+}
+
+
+/* NotificationIcon.css */
+
+.notification-icon {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+
+/* UserAvatar.css */
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+
+/* UserName.css */
+
+.user-name {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification-bell {
+    height: 24px;
+    margin-right: 20px;
+}
+
+.dropdown-menu {
+    cursor: pointer;
+}
+
+.dropdown-menu .angle-down {
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
