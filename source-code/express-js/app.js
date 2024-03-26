@@ -18,7 +18,7 @@ app.use(cors);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 // Authentication router
-app.use("/auth/users", usersRouter);
+app.use("/user/auth", usersRouter);
 app.use("/equipments", equipmentsRouter);
 app.use("/user/profile", userProfileRouter);
 app.use("/membership-plans", membershipPlansRouter);
