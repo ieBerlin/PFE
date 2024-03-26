@@ -12,7 +12,7 @@ const deleteEquipment = async(req, res) => {
         const sql = `DELETE FROM equipment WHERE id = ?`;
         const values = [equipmentId];
 
-        const result = await pool.query(sql, values);
+        const [result] = await pool.query(sql, values);
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: "Equipment not found" });

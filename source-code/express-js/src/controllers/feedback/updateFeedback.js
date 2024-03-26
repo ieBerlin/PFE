@@ -24,7 +24,7 @@ const updateFeedback = async(req, res) => {
             return res.status(400).json(errors);
         }
 
-        const result = await pool.query(
+        const [result] = await pool.query(
             'UPDATE feedback SET memberId = ?, feedbackType = ?, feedbackDate = ?, feedbackMessage = ?, ratings = ? WHERE feedbackId = ?', [memberId, feedbackType, getCurrentDateTime(), feedbackMessage, ratings, feedbackId]
         );
 

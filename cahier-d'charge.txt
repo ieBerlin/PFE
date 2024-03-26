@@ -39,6 +39,8 @@ The booking request was not confirmed within a specified time frame or the booki
 Rejected:
 The booking request has been denied or rejected by the system or an authorized user.
 
+Feedback :
+Create endpoints to retrieve feedback data for different purposes, such as viewing all feedback, filtering feedback by type, or fetching feedback for a specific user.
 
 Attendance Tracking:
 
@@ -57,6 +59,14 @@ Users schedule sessions/classes based on their availability and preferences, con
 Users may subscribe to specific packages or services offered by the gym, which may include access to classes, personal training sessions, etc.
 The system tracks user attendance for classes or sessions they've signed up for.
 Users provide feedback on sessions, classes, and overall experience, which can be used for improving services.
+
+different classes status :
+
+Scheduled: The class is scheduled to occur at a future date and time.
+Ongoing: The class is currently in progress.
+Completed: The class has finished.
+Cancelled: The class has been cancelled and will not take place.
+
 For Coaches:
 
 Profile Management:

@@ -8,7 +8,7 @@ const deleteMembershipPlan = async(req, res) => {
             return res.status(400).json({ message: 'Invalid planId parameter' });
         }
 
-        const result = await pool.query('DELETE FROM membership WHERE planId = ?', [planId]);
+        const [result] = await pool.query('DELETE FROM membership WHERE planId = ?', [planId]);
 
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: 'Membership plan deleted successfully' });

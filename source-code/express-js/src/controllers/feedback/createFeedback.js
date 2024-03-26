@@ -20,7 +20,7 @@ const createFeedback = async(req, res) => {
             return res.status(400).json(errors);
         }
 
-        const result = await pool.query(
+        const [result] = await pool.query(
             'INSERT INTO feedback (memberId, feedbackType, feedbackDate, feedbackMessage, ratings) VALUES (?, ?, ?, ?, ?)', [memberId, feedbackType, getCurrentDateTime(), feedbackMessage, ratings]
         );
 

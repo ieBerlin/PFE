@@ -17,7 +17,6 @@ async function verifyToken(req, res, next) {
         }
         req.userRole = await fetchUserRole({ email: decoded.email });
         req.userEmail = decoded.email;
-        console.log('from authjwt' + req.userRole)
         next();
     } catch (error) {
         return res.status(401).send({

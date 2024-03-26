@@ -6,7 +6,7 @@ const deleteFeedback = async(req, res) => {
         if (isNaN(feedbackId)) {
             return res.status(400).json({ message: 'Invalid feedbackId parameter' });
         }
-        const result = await pool.query('DELETE FROM feedback WHERE feedbackId = ?', [feedbackId]);
+        const [result] = await pool.query('DELETE FROM feedback WHERE feedbackId = ?', [feedbackId]);
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: 'Feedback deleted successfully' });
         } else {
