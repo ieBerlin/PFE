@@ -1,41 +1,41 @@
 const { pool } = require("../../models/db/connect.js");
 const getCurrentDateTime = require("../../utils/getCurrentDateTime.js");
+
 const createEquipment = async(req, res) => {
-    const { userRole } = req;
-    if (!userRole || !userRole === "admin" || !userRole === "manager") {
-        res.status(401).json({ message: "Unauthorized!" });
-    }
     try {
-        const {
-            name,
-            description,
-            quantity,
-            max_quantity
-        } = req.body;
-        if (!name ||
-            !description ||
-            !quantity ||
-            !max_quantity
+        const { name, description, quantity, max_quantity, category, availableQuantity, image } = req.body;
+        let errors = {};
 
-        ) {
-            return res
-                .status(400)
-                .json({
-                    message: "name, description, quantity, max_quantity are required",
-                });
+        if (!name) {
+            errors.name = "No provided name.";
         }
-        const sql =
-            "INSERT INTO equipment(name,description,quantity,max_quantity,created_at,availableQuantity) VALUES(?,?,?,?,?,?)";
-        const values = [
-            name,
-            description,
-            quantity,
-            max_quantity,
-            getCurrentDateTime(),
-            quantity
+        if (!description) {
+            errors.description = "No provided description.";
+        }
+        if (!quantity) {
+            errors.quantity = "No provided quantity.";
+        }
+        if (!max_quantity) {
+            errors.max_quantity = "No provided max quantity.";
+        }
+        if (!category) {
+            errors.category = "No provided category.";
+        }
+        if (!availableQuantity) {
+            errors.availableQuantity = "No provided available quantity.";
+        }
+        if (!image) {
+            errors.image = "No provided image.";
+        }
 
-        ];
+        if (Object.keys(errors).length) {
+            return res.status(400).json(errors);
+        }
+
+        const sql = "INSERT INTO equipment(name, description, quantity, max_quantity, created_at, availableQuantity, image, category) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        const values = [name, description, quantity, max_quantity, getCurrentDateTime(), availableQuantity, image, category];
         await pool.query(sql, values);
+
         return res.status(201).json({ message: "Equipment created successfully" });
     } catch (error) {
         console.error("Error creating equipment record:", error);

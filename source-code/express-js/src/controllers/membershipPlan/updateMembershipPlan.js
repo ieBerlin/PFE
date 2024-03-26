@@ -44,7 +44,7 @@ const updateMembershipPlan = async(req, res) => {
 
         updateFields = updateFields.slice(0, -2);
 
-        const result = await pool.query(`UPDATE membershipplans SET ${updateFields} WHERE planId = ?`, [...updateValues, planId]);
+        const result = await pool.query(`UPDATE membership SET ${updateFields} WHERE planId = ?`, [...updateValues, planId]);
 
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: 'Membership plan updated successfully' });

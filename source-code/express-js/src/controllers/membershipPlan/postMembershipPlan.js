@@ -12,7 +12,7 @@ const createMembershipPlan = async(req, res) => {
 
         // Insert the new membership plan into the database
         const result = await pool.query(
-            'INSERT INTO membershipplans (planName, description, price, duration, features, availabilityStatus) VALUES (?, ?, ?, ?, ?, ?)', [planName, description, price, duration, features, availabilityStatus]
+            'INSERT INTO membership (planName, description, price, duration, features, availabilityStatus) VALUES (?, ?, ?, ?, ?, ?)', [planName, description, price, duration, features, availabilityStatus]
         );
 
         // Check if the plan was successfully inserted

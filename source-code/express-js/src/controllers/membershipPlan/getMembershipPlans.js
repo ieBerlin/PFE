@@ -3,7 +3,7 @@ const { pool } = require('../../models/db/connect.js');
 const getMembershipPlans = async(req, res) => {
     try {
         // Query the database to fetch all membership plans
-        const [result] = await pool.query('SELECT * FROM membershipplans');
+        const [result] = await pool.query('SELECT * FROM membership');
 
         // Check if any plans were found
         if (result.length > 0) {

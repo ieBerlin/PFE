@@ -9,7 +9,7 @@ const getMembershipPlan = async(req, res) => {
         }
 
         // Query the database to fetch the membership plan
-        const [result] = await pool.query('SELECT * FROM membershipplans WHERE planId = ?', [planId]);
+        const [result] = await pool.query('SELECT * FROM membership WHERE planId = ?', [planId]);
 
         // Check if a plan was found
         if (result.length > 0) {

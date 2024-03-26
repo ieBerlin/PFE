@@ -3,31 +3,46 @@ const getCurrentDateTime = require("../../utils/getCurrentDateTime.js");
 
 const updateEquipment = async(req, res) => {
     try {
-        const { userRole } = req;
-        if (!userRole || !userRole === "admin" || !userRole === "manager") {
-            res.status(401).json({ message: "Unauthorized!" });
-        }
         const equipmentId = parseInt(req.params.equipmentId);
         if (isNaN(equipmentId)) {
             return res.status(400).json({ message: 'Invalid equipment id parameter' });
         }
 
-        const { name, description, quantity, max_quantity, availableQuantity } = req.body;
-        if (!name || !description || !quantity || !max_quantity) {
-            return res.status(400).json({ message: "name, description, quantity, max_quantity,available quantity are required" });
+        const { name, description, quantity, max_quantity, category, availableQuantity, image } = req.body;
+        let errors = {};
+
+        if (!name) {
+            errors.name = "No provided name.";
+        }
+        if (!description) {
+            errors.description = "No provided description.";
+        }
+        if (!quantity) {
+            errors.quantity = "No provided quantity.";
+        }
+        if (!max_quantity) {
+            errors.max_quantity = "No provided max quantity.";
+        }
+        if (!category) {
+            errors.category = "No provided category.";
+        }
+        if (!availableQuantity) {
+            errors.availableQuantity = "No provided available quantity.";
+        }
+        if (!image) {
+            errors.image = "No provided image.";
+        }
+
+        if (Object.keys(errors).length) {
+            return res.status(400).json(errors);
         }
 
         const sql = `
             UPDATE equipment 
-            SET name = ?, 
-                description = ?, 
-                quantity = ?, 
-                max_quantity = ?, 
-                updated_at = ?,
-                availableQuantity
+            SET name = ?, description = ?, quantity = ?, max_quantity = ?, availableQuantity = ?, image = ?, category = ?,updated_at =?
             WHERE id = ?
         `;
-        const values = [name, description, quantity, max_quantity, getCurrentDateTime(), availableQuantity, equipmentId];
+        const values = [name, description, quantity, max_quantity, availableQuantity, image, category, getCurrentDateTime(), equipmentId];
 
         await pool.query(sql, values);
 

@@ -1,6 +1,6 @@
 const { pool } = require('../../models/db/connect.js');
 
-const getFeedback = async(req, res) => {
+const getAllEquipments = async(req, res) => {
     try {
         const [result] = await pool.query('SELECT * FROM equipment');
         if (result.length > 0) {
@@ -14,4 +14,4 @@ const getFeedback = async(req, res) => {
     }
 };
 
-module.exports = getFeedback;
+module.exports = getAllEquipments;
