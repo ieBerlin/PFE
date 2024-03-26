@@ -1,14 +1,29 @@
 const { pool } = require('../../models/db/connect.js');
+const getCurrentDateTime = require('../../utils/getCurrentDateTime.js');
 
 const createFeedback = async(req, res) => {
     try {
-        const { memberId, feedbackType, feedbackDate, comments, ratings } = req.body;
-        if (!memberId || !feedbackType || !feedbackDate) {
-            return res.status(400).json({ message: 'Member ID, feedback type, and feedback date are required' });
+        const { memberId, feedbackType, feedbackMessage, ratings } = req.body;
+        const errors = {};
+
+        if (!memberId) {
+            errors.memberId = "No provided member ID.";
         }
+        if (!feedbackType) {
+            errors.feedbackType = "No provided feedback type.";
+        }
+        if (!ratings) {
+            errors.ratings = "No provided ratings.";
+        }
+
+        if (Object.keys(errors).length) {
+            return res.status(400).json(errors);
+        }
+
         const result = await pool.query(
-            'INSERT INTO feedback (memberId, feedbackType, feedbackDate, comments, ratings) VALUES (?, ?, ?, ?, ?)', [memberId, feedbackType, feedbackDate, comments, ratings]
+            'INSERT INTO feedback (memberId, feedbackType, feedbackDate, feedbackMessage, ratings) VALUES (?, ?, ?, ?, ?)', [memberId, feedbackType, getCurrentDateTime(), feedbackMessage, ratings]
         );
+
         if (result.affectedRows > 0) {
             return res.status(201).json({ message: 'Feedback created successfully', feedbackId: result.insertId });
         } else {
