@@ -1,0 +1,44 @@
+Routing Section :
+
+::User Authentication :
+
+/login
+/register
+/forgot-password
+/reset-password/:token
+/logout
+
+::User Profile :
+/profile
+/profile/edit
+/profile/:userId
+
+::Class management :
+
+/classes
+/classes/create
+/classes/:classId
+/classes/:classId/edit
+/classes/:classId/book
+/classes/filter
+
+::Sports Management:
+
+/sports
+/sports/create
+/sports/:name
+/sports/:name/edit
+/sports/:sportId/delete
+
+::Dashboard (Admin/Manager):
+
+/dashboard
+/dashboard/classes
+/dashboard/sports
+/dashboard/users
+
+::Additional Paths:
+
+/home: Route to the home page.
+/about: Route to the about page.
+/contact: Route to the contact page.
