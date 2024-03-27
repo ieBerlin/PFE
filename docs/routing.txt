@@ -11,7 +11,7 @@ Routing Section :
 ::User Profile :
 /profile
 /profile/edit
-/profile/:userId
+/user/:userId
 
 ::Class management :
 

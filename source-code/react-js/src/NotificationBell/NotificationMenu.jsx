@@ -6,7 +6,7 @@ const NotificationMenu = ({ notifications }) => {
     <div className="notification-menu">
       <div className="notifications-header">
        <strong>Notifications</strong>
-        <a href="">See All</a>
+        <a to="/">See All</a>
       </div>
       {notifications.length > 0 ? (
         notifications.map((notification, index) => (

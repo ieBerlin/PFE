@@ -1,0 +1,39 @@
+Navigation:
+
+Navbar
+Header
+Footer
+Sidebar
+Tabs
+Breadcrumbs
+Dropdown Menu
+Mega Menu
+Interactive Elements:
+
+Button
+Form
+Slider
+Toggle Switch
+Progress Bar
+Notification Bell
+Content Presentation:
+
+Landing Page
+Carousel
+Card
+Slideshow
+Pagination
+Tag Cloud
+Accordions
+User Interaction:
+
+Pop-up
+Pop-down
+Tooltip
+Modal
+User Interface Controls:
+
+Scrollbar
+Toggle Switch
+Progress Bar
+Notification Bell
