@@ -2,10 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import "./NotificationBell.css";
 import { useState, useRef, useEffect } from "react";
-import NotificationMenu from "./NotificationMenu";
+import NotificationMenu from "./NotificationMenu/NotificationMenu";
 
 function NotificationBell() {
   const [showNotifications, setShowNotifications] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [notifications, setNotifications] = useState([
     "dasda",
     "this is Berlin here",

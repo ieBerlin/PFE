@@ -1,7 +1,6 @@
 
 import "./app.css";
-import Sidebar from "./Sidebar/Sidebar.jsx";
-
+import Sidebar from "./components/Sidebar/Sidebar.jsx"
 const App = () => {
   return <Sidebar />;
 };

@@ -1,7 +1,7 @@
 import "./Navbar.css";
-import NotificationBell from "../NotificationBell/NotificationBell.jsx";
-import avatar from "../../public/kilter.jpg";
-import ProfileDropdownMenu from "../ProfileDropdownMenu/ProfileDropDownMenu.jsx";
+import NotificationBell from "./NotificationBell/NotificationBell.jsx";
+import avatar from "/kilter.jpg";
+import ProfileDropdownMenu from "./ProfileDropdownMenu/ProfileDropDownMenu.jsx";
 function Navbar({ width }) {
   return (
     <nav
