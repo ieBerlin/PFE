@@ -2,3 +2,8 @@ body {
     background-color: lightblue;
     min-height: 150vh;
 }
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../src/assets//fonts/Poppins/Poppins-Bold.ttf');
+}

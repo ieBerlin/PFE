@@ -4,6 +4,8 @@ import menuSvg from "../assets/menu-svgrepo-com.svg";
 import menuAltRight from "../assets/menu-alt-right-svgrepo-com.svg";
 import searchSvg from "../assets/search-alt-2-svgrepo-com.svg";
 import Navbar from "../Navbar/Navbar.jsx";
+import rocketSvg from "../assets/rocket-svgrepo-com.svg";
+import logoutSvg from "../assets/log-out-svgrepo-com.svg"
 const Sidebar = () => {
   const [isMenuBarOpen, setIsMenuBarOpen] = useState(true);
   const toggleMenu = () => {
@@ -17,7 +19,7 @@ const Sidebar = () => {
     <>
       <div className={sideBarClasses}>
         <div className="logo-details">
-          <img src={menuSvg} alt="menu svg" className="icon icon-i" />
+          <img src={rocketSvg} alt="menu svg" className="icon icon-i" />
           <div className="logo_name">HousesGym</div>
           <div id="btn">
             {!isMenuBarOpen ? (
@@ -93,7 +95,7 @@ const Sidebar = () => {
                 <div className="job">Web designer</div>
               </div>
             </div>
-            <img src={searchSvg} id="log_out" alt="" />
+            <img src={logoutSvg} id="log_out" alt="" />
           </div>
         </ul>
       </div>
