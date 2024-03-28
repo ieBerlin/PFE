@@ -42,3 +42,6 @@ Routing Section :
 /home: Route to the home page.
 /about: Route to the about page.
 /contact: Route to the contact page.
+
+::notifications :
+All notifications : /user/all-notifications

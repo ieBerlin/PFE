@@ -24,6 +24,10 @@ const router = createBrowserRouter([
         path: ":userId",
         element: <UserProfileByIdPage />,
       },
+      {
+        path: "all-notifications",
+        element: <AllUserNotifications />,
+      },
     ],
   },
   {

@@ -10,6 +10,7 @@ const equipmentsRouter = require("./src/routes/equipment.route.js");
 const sportsRouter = require('./src/routes/sport.route.js');
 const bookingsRouter = require("./src/routes/booking.route.js");
 const classesRouter = require("./src/routes/class.route.js");
+const notificationRouter = require("./src/routes/notification.route.js");
 const { pool } = require("./src/models/db/connect.js");
 const cors = require("./src/middlewares/cors/corsConfig.js");
 // Middlewares
@@ -28,6 +29,7 @@ app.use('/feedback', feedbackRouter)
 app.use('/booking', bookingsRouter)
 app.use('/class', classesRouter);
 app.use('/sport', sportsRouter);
+app.use('/notification', notificationRouter);
 const port = process.env.PORT || 8080;
 
 // Start the server
