@@ -1,6 +1,10 @@
 .notification-menu {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     position: absolute;
-    top: 100% + 200px;
+    top: 100%;
+    transform: translateY(20px);
     right: 0;
     background-color: white;
     border-radius: 4px;
@@ -8,6 +12,12 @@
     z-index: 1000;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notification-menu.open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .notifications-header {

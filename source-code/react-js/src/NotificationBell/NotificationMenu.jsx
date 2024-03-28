@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import "./NotificationMenu.css";
 
-const NotificationMenu = ({ notifications }) => {
+const NotificationMenu = ({ notifications ,notificationMenuClasses}) => {
   return (
-    <div className="notification-menu">
+    <div className={notificationMenuClasses}>
       <div className="notifications-header">
        <strong>Notifications</strong>
         <a to="/">See All</a>

@@ -11,10 +11,6 @@
     transition: 0.3s;
 }
 
-.bell:hover {
-    color: #ef476f;
-}
-
 .badge {
     position: absolute;
     top: -5px;

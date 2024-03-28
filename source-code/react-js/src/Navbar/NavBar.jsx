@@ -15,7 +15,7 @@ function Navbar({ width }) {
         <p>Welcome again</p>
       </div>
       <div className="user-info">
-        <NotificationBell />
+        <NotificationBell  />
         <img className="user-avatar" src={avatar} alt="User Avatar" />
         <div className="user-name">Username</div>
         <ProfileDropdownMenu />
