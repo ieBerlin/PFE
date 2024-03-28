@@ -2,11 +2,14 @@ import "./Navbar.css";
 import NotificationBell from "../NotificationBell/NotificationBell.jsx";
 import avatar from "../../public/kilter.jpg";
 import ProfileDropdownMenu from "../ProfileDropdownMenu/ProfileDropDownMenu.jsx";
-import Sidebar from "../Sidebar/Sidebar.jsx";
-function Navbar() {
+function Navbar({ margin }) {
   return (
-    <nav className="navbar-container">
-      <Sidebar />
+    <nav
+      className="navbar-container"
+      style={{
+        margin: margin,
+      }}
+    >
       <div className="greeting">
         <h2>Good Morning, User</h2>
         <p>Welcome again</p>

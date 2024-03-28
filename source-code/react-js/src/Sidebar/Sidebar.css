@@ -25,8 +25,6 @@
 .sidebar .logo-details img {
     height: 28px;
     font-size: 28px;
-    text-align: center;
-    line-height: 60px;
 }
 
 .sidebar .logo-details {
@@ -77,11 +75,121 @@
     width: inherit;
 }
 
-.sidebar .icon-i {
+.sidebar img {
+    width: 28px;
+    width: 28px;
+}
+
+.sidebar .nav-list {
+    margin-top: 20px;
+    height: 100%;
+}
+
+.sidebar li {
+    position: relative;
+    margin: 8px 0;
+    list-style: none;
+    border-radius: 12px;
+}
+
+.sidebar li .tooltip {
+    position: absolute;
+    top: -20px;
+    left: calc(100% + 15px);
+    z-index: 3;
+    background: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: 0s;
+}
+
+.sidebar li:hover .tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    transition: all 0.4s ease;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.sidebar.open li .tooltip {
+    display: none;
+}
+
+.sidebar input {
+    font-size: 15px;
     color: #fff;
-    height: 26px;
-    min-width: 23px;
+    font-weight: 400;
+    outline: none;
+    height: 50px;
+    width: 50px;
+    border: none;
+    border-radius: 12px;
+    transition: all 0.5s ease;
+    background: #1d1b31;
+}
+
+.sidebar.open input {
+    padding: 0 20px 0 50px;
+    width: 100%;
+}
+
+.sidebar .bx-search img {
+    height: 28px;
     font-size: 28px;
     text-align: center;
     line-height: 60px;
+}
+
+.sidebar .bx-search {
+    border-radius: 12px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #1d1b31;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 22px;
+    color: #fff;
+}
+
+.img-container {
+    padding: 11px;
+    width: 50px;
+    height: 50px;
+}
+
+.sidebar li a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.sidebar .links_name {
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.sidebar.open .links_name {
+    opacity: 1;
+    color: white;
+    transition: all 0.4s ease;
+}
+
+.nav-list li a {
+    border-radius: 12px;
+}
+
+.nav-list li a:hover {
+    background-color: #1d1b31;
 }

@@ -5,13 +5,14 @@
 }
 
 .navbar-container {
+    transition: all 0.5s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
     background-color: white;
     color: black;
-    box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .2);
+    box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.2);
 }
 
 .greeting {
