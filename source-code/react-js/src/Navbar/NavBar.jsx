@@ -2,12 +2,12 @@ import "./Navbar.css";
 import NotificationBell from "../NotificationBell/NotificationBell.jsx";
 import avatar from "../../public/kilter.jpg";
 import ProfileDropdownMenu from "../ProfileDropdownMenu/ProfileDropDownMenu.jsx";
-function Navbar({ margin }) {
+function Navbar({ width }) {
   return (
     <nav
       className="navbar-container"
       style={{
-        margin: margin,
+        width: width,
       }}
     >
       <div className="greeting">

@@ -32,6 +32,7 @@
     display: flex;
     align-items: center;
     position: relative;
+    gap: 10px;
 }
 
 .sidebar .logo-details .icon {
@@ -193,3 +194,137 @@
 .nav-list li a:hover {
     background-color: #1d1b31;
 }
+
+.sidebar.open .profile {
+    width: 250px;
+}
+
+.sidebar .profile {
+    min-height: 100px;
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    width: 78px;
+    left: 0;
+    bottom: 0;
+    padding: 10px 14px;
+    background: #1d1b31;
+    transition: all 0.5s ease;
+}
+
+.sidebar.open .profile-details {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    color: white;
+}
+
+.sidebar .profile-details {
+    display: none;
+    margin: auto 0;
+    transition: all 0.5s ease;
+}
+
+.sidebar .name,
+.sidebar .job {
+    font-weight: 400;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.sidebar .profile #log_out {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: #1d1b31;
+    width: 100%;
+    height: 40px;
+    line-height: 60px;
+    border-radius: 0px;
+    transition: all 0.5s ease;
+}
+
+.sidebar.open .profile #log_out {
+    width: 50px;
+    background: none;
+}
+
+
+/* 
+.sidebar.open .profile-details:not(.sidebar) {
+    opacity: 1;
+} */
+
+
+/* .sidebar .profile .profile-details {
+    gap: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+} */
+
+
+/* 
+
+
+
+.sidebar li .profile-details {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.sidebar li.profile .name,
+.sidebar li.profile .job {
+    font-size: 15px;
+    font-weight: 400;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.sidebar li.profile .job {
+    font-size: 12px;
+}
+
+.sidebar .profile #log_out {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: #1d1b31;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 0px;
+    transition: all 0.5s ease;
+}
+
+.sidebar.open .profile #log_out {
+    width: 50px;
+    background: none;
+}
+
+.home-section {
+    position: relative;
+    background: #e4e9f7;
+    min-height: 100vh;
+    top: 0;
+    left: 78px;
+    width: calc(100% - 78px);
+    transition: all 0.5s ease;
+    z-index: 2;
+}
+
+.sidebar.open~.home-section {
+    left: 250px;
+    width: calc(100% - 250px);
+}
+
+.home-section .text {
+    display: inline-block;
+    color: #11101d;
+    font-size: 25px;
+    font-weight: 500;
+    margin: 18px;
+} */

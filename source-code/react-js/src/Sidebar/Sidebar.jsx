@@ -60,21 +60,24 @@ const Sidebar = () => {
               </div>
               <span className="links_name">User</span>
             </a>
-          </li> <li>
+          </li>{" "}
+          <li>
             <a href="">
               <div className="img-container">
                 <img src={searchSvg} alt="" />
               </div>
               <span className="links_name">User</span>
             </a>
-          </li> <li>
+          </li>{" "}
+          <li>
             <a href="">
               <div className="img-container">
                 <img src={searchSvg} alt="" />
               </div>
               <span className="links_name">User</span>
             </a>
-          </li> <li>
+          </li>{" "}
+          <li>
             <a href="">
               <div className="img-container">
                 <img src={searchSvg} alt="" />
@@ -82,10 +85,20 @@ const Sidebar = () => {
               <span className="links_name">User</span>
             </a>
           </li>
+          <div className="profile">
+            <div className="profile-details">
+            <img src={searchSvg} alt="" />
+              <div className="name_job">
+                <div className="name">Stella Army</div>
+                <div className="job">Web designer</div>
+              </div>
+            </div>
+            <img src={searchSvg} id="log_out" alt="" />
+          </div>
         </ul>
       </div>
       <Navbar
-        margin={!isMenuBarOpen ? "0px 0px 0px 78px" : "0px 0px 0px 250px"}
+        width={!isMenuBarOpen ? "calc(100% - 78px)" : "calc(100% - 250px)"}
       />
     </>
   );
