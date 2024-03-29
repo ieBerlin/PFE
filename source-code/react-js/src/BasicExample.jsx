@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import "./BasicExample.css";
-import { SidebarContext } from "./assets/store/sidebar-context";
+import { SidebarContext } from "./components/store/sidebar-context";
 const App = () => {
   const { isOpen } = useContext(SidebarContext);
   let mainContentMargin = "70px 0 0";

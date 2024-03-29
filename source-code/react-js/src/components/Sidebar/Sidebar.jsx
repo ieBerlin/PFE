@@ -4,7 +4,7 @@ import menuAltRight from "../../assets/menu-alt-right-svgrepo-com.svg";
 import rocketSvg from "../../assets/rocket-svgrepo-com.svg";
 import SidebarNavList from "./SidebarNavList.jsx";
 import { useContext } from "react";
-import { SidebarContext } from "../../assets/store/sidebar-context.jsx";
+import { SidebarContext } from "../store/sidebar-context.jsx";
 export default function Sidebar() {
   const { isOpen, onToggleMenu } = useContext(SidebarContext);
   let sideBarClasses = "sidebar";

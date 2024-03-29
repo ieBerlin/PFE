@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import "./MainNavigation.css";
-import { SidebarContext } from "../../assets/store/sidebar-context";
+import { SidebarContext } from "../store/sidebar-context";
 export default function MainNavigation() {
   // const [isMenuBarOpen, setIsMenuBarOpen] = useState(true);
 
