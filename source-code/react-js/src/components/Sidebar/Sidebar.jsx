@@ -1,17 +1,14 @@
 import "./Sidebar.css";
-import { useState } from "react";
 import menuSvg from "../../assets/menu-svgrepo-com.svg";
 import menuAltRight from "../../assets/menu-alt-right-svgrepo-com.svg";
-import Navbar from "../Navbar/Navbar.jsx";
 import rocketSvg from "../../assets/rocket-svgrepo-com.svg";
 import SidebarNavList from "./SidebarNavList.jsx";
-const Sidebar = () => {
-  const [isMenuBarOpen, setIsMenuBarOpen] = useState(true);
-  const toggleMenu = () => {
-    setIsMenuBarOpen((prevState) => !prevState);
-  };
+import { useContext } from "react";
+import { SidebarContext } from "../../assets/store/sidebar-context.jsx";
+export default function Sidebar() {
+  const { isOpen, onToggleMenu } = useContext(SidebarContext);
   let sideBarClasses = "sidebar";
-  if (isMenuBarOpen) {
+  if (isOpen) {
     sideBarClasses += " open";
   }
   return (
@@ -21,30 +18,25 @@ const Sidebar = () => {
           <img src={rocketSvg} alt="menu svg" className="icon icon-i" />
           <div className="logo_name">HousesGym</div>
           <div id="btn">
-            {!isMenuBarOpen ? (
+            {!isOpen ? (
               <img
                 src={menuSvg}
                 className="icon-i"
                 alt="menu svg"
-                onClick={toggleMenu}
+                onClick={onToggleMenu}
               />
             ) : (
               <img
                 src={menuAltRight}
                 className="icon-i"
                 alt="menu svg"
-                onClick={toggleMenu}
+                onClick={onToggleMenu}
               />
             )}
           </div>
         </div>
         <SidebarNavList />
       </div>
-      <Navbar
-        width={!isMenuBarOpen ? "calc(100% - 78px)" : "calc(100% - 250px)"}
-      />
     </>
   );
-};
-
-export default Sidebar;
+}
