@@ -3,7 +3,8 @@ import "./app.css";
 import BasicExample from "./BasicExample.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./components/RootLayout.jsx";
-import SideBarContextProvider from "./components/store/sidebar-context.jsx";
+import store from "./app/store.js"
+import { Provider } from "react-redux";
 
 const root = createRoot(document.getElementById("root"));
 const routes = createBrowserRouter([
@@ -20,7 +21,7 @@ const routes = createBrowserRouter([
 ]);
 
 root.render(
-  <SideBarContextProvider>
+  <Provider store={store}>
     <RouterProvider router={routes} />
-  </SideBarContextProvider>
+  </Provider>
 );

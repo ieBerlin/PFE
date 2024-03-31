@@ -3,10 +3,11 @@ import menuSvg from "../../assets/menu-svgrepo-com.svg";
 import menuAltRight from "../../assets/menu-alt-right-svgrepo-com.svg";
 import rocketSvg from "../../assets/rocket-svgrepo-com.svg";
 import SidebarNavList from "./SidebarNavList.jsx";
-import { useContext } from "react";
-import { SidebarContext } from "../store/sidebar-context.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMenu } from "../../features/sidebar/sidebarSlice.js";
 export default function Sidebar() {
-  const { isOpen, onToggleMenu } = useContext(SidebarContext);
+  const isOpen = useSelector((state) => state.sidebar.isOpen);
+  const dispatch = useDispatch();
   let sideBarClasses = "sidebar";
   if (isOpen) {
     sideBarClasses += " open";
@@ -23,14 +24,14 @@ export default function Sidebar() {
                 src={menuSvg}
                 className="icon-i"
                 alt="menu svg"
-                onClick={onToggleMenu}
+                onClick={() => dispatch(toggleMenu())}
               />
             ) : (
               <img
                 src={menuAltRight}
                 className="icon-i"
                 alt="menu svg"
-                onClick={onToggleMenu}
+                onClick={() => dispatch(toggleMenu())}
               />
             )}
           </div>

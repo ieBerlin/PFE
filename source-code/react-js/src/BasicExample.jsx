@@ -1,8 +1,7 @@
-import { useContext } from "react";
 import "./BasicExample.css";
-import { SidebarContext } from "./components/store/sidebar-context";
+import { useSelector } from "react-redux";
 const App = () => {
-  const { isOpen } = useContext(SidebarContext);
+  const isOpen = useSelector((state) => state.sidebar.isOpen);
   let mainContentMargin = "70px 0 0";
   if (isOpen) {
     mainContentMargin += " 250px";
