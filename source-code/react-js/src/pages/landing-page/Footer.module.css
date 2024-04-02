@@ -1,3 +1,7 @@
+.footerBorder {
+    height: 500px;
+}
+
 .footer {
     padding: 80px 30px 20px 30px;
     display: flex;

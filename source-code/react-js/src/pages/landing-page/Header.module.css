@@ -1,5 +1,5 @@
 body {
-    background-color: #120425;
+    background-image: radial-gradient( circle farthest-corner at 10% 20%, #120425 0%, #161616 90%);
 }
 
 a {

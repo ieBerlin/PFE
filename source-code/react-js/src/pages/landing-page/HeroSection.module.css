@@ -1,0 +1,57 @@
+body {
+    position: relative;
+}
+
+.heroSection {
+    margin-top: 50px;
+    padding: 0 20%;
+}
+
+.heroSection h1 {
+    color: white;
+    font-weight: 600;
+    font-size: 50px;
+    text-align: center;
+}
+
+.heroSection p {
+    color: #969799;
+    text-align: center;
+    font-size: 30px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.buttons a {
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.buttons button {
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border: solid 1px transparent;
+    background-color: transparent;
+}
+
+.buttons a:first-of-type {
+    background-color: #8C33FF;
+}
+
+.buttons a:last-of-type {
+    border: 1px solid white;
+}
+
+a img {
+    height: 13px;
+}
