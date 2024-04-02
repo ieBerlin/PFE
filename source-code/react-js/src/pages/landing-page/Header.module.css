@@ -1,0 +1,68 @@
+body {
+    background-color: #120425;
+}
+
+a {
+    text-decoration: none;
+}
+
+.header {
+    padding: 10px 30px 10px 30px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    align-items: center;
+    gap: 15px;
+    font-size: 23px;
+}
+
+.logo img {
+    height: 50px;
+    filter: brightness(0) invert(1);
+}
+
+.authentication {
+    display: flex;
+    gap: 10px;
+}
+
+.authentication button {
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    border: solid 1px transparent;
+}
+
+.authentication button:hover {
+    border: solid 1px white;
+    border-radius: 1rem;
+    color: white;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.navbar ul a {
+    color: white;
+}
+
+.navbar ul a:hover {
+    color: #4b4b4b;
+}

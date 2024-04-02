@@ -1,0 +1,280 @@
+.main-background {
+    background-color: white;
+    border-radius: 2rem;
+    box-shadow: 0 4px 8px grey;
+    min-height: 100vh;
+    position: relative;
+}
+
+.footer {
+    border-radius: 0rem 0rem 2rem 2rem;
+    width: 100%;
+    background-color: crimson;
+    padding: 0px 30px 5px;
+    position: absolute;
+    bottom: 0;
+}
+
+hr {
+    background-color: #3f3e4c;
+    margin: 1px 30px;
+    height: 1px;
+}
+
+.footer .social-network {
+    margin: 0px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    font-size: 18px;
+}
+
+.quick-links {
+    margin: 20px 30px;
+}
+
+.quick-links ul {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.quick-links ul li {
+    display: flex;
+    flex-direction: column;
+    margin: 0x auto;
+    text-align: center;
+}
+
+.quick-links ul li h2 {
+    margin-bottom: 10px;
+}
+
+.quick-links ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+p {
+    display: inline;
+}
+
+.networks {
+    display: inline-flex;
+    gap: 10px;
+}
+
+.networks li img {
+    width: 30px;
+    background-color: white;
+    border-radius: 50%;
+    padding: 1px;
+    cursor: pointer;
+}
+
+.membership h5 {
+    color: #3f3e4c;
+    margin: 10px 0px;
+}
+
+.membership h2 {
+    color: crimson;
+}
+
+.main {
+    padding-bottom: 400px;
+    text-align: center;
+}
+
+
+/* The switch - the box around the slider */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    /* Updated width */
+    height: 20px;
+    /* Updated height */
+}
+
+
+/* Hide default HTML checkbox */
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+
+/* The slider */
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    /* Adjusted height */
+    width: 16px;
+    /* Adjusted width */
+    left: 2px;
+    /* Adjusted left position */
+    bottom: 2px;
+    /* Adjusted bottom position */
+    background-color: white;
+    transition: 0.4s;
+}
+
+
+/* Focus and Checked styles */
+
+.switch input:checked+.slider {
+    background-color: crimson;
+}
+
+.switch input:focus+.slider {
+    box-shadow: 0 0 1px crimson;
+}
+
+.switch input:checked+.slider:before {
+    transform: translateX(15px);
+    /* Adjusted translation */
+}
+
+
+/* Rounded sliders */
+
+.slider.round {
+    border-radius: 10px;
+    /* Adjusted border-radius */
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.packages {
+    margin: 30px 0px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    text-align: start;
+    /* margin: 40px 0px; */
+}
+
+.duration {
+    display: flex;
+    align-items: center;
+    font-size: 16;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #3f3e4c;
+}
+
+.packages h3 {
+    color: black;
+    font-size: 25px;
+}
+
+.packages hr {
+    background-color: crimson;
+    height: 1px;
+    margin: 40px 10px 20px;
+    border: 0px;
+}
+
+.item {
+    background-color: #f8f8f8;
+    padding: 20px 10px 0px 20px;
+    border: 1px solid #e7e7e7;
+    border-radius: 2px;
+}
+
+.item li {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #3f3e4c;
+    margin: 5px 0px;
+}
+
+.item li img {
+    height: 30px;
+}
+
+.item h3 {
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.item h3 img {
+    width: 40px;
+}
+
+.packages li p {
+    align-items: center;
+    gap: 7px;
+    display: flex;
+}
+
+.packages li p span {
+    font-weight: bold;
+    color: black;
+    margin: 0px;
+    padding: 0px;
+    font-size: 30px;
+}
+
+.packages li p {
+    font-size: 20px;
+    color: #3f3e4c;
+}
+
+.packages ul {
+    display: flex;
+    flex-direction: column;
+}
+
+.arrow {
+    cursor: pointer;
+    background-color: crimson;
+    height: 40px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    outline: 0;
+    border: 0;
+    padding: 5px 10px;
+    margin: 20px;
+    color: white;
+}
+
+.arrow span {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.arrow img {
+    transform: rotate(180deg);
+    margin: 0px;
+    padding: 0px;
+    height: 30px;
+    filter: brightness(0) invert(1);
+}

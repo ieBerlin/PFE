@@ -1,22 +1,15 @@
 import { createRoot } from "react-dom/client";
 import "./app.css";
-import BasicExample from "./BasicExample.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import RootLayout from "./components/RootLayout.jsx";
-import store from "./app/store.js"
+import store from "./app/store.js";
 import { Provider } from "react-redux";
+import LandingPage from "./pages/landing-page/LandingPage.jsx";
 
 const root = createRoot(document.getElementById("root"));
 const routes = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <BasicExample />,
-      },
-    ],
+    element: <LandingPage />,
   },
 ]);
 
