@@ -32,6 +32,7 @@ body {
     display: flex;
     align-items: center;
     padding-right: 10px;
+    cursor: pointer;
 }
 
 .buttons button {
@@ -42,6 +43,7 @@ body {
     border: none;
     border: solid 1px transparent;
     background-color: transparent;
+    cursor: pointer;
 }
 
 .buttons a:first-of-type {

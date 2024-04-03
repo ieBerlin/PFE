@@ -1,57 +1,57 @@
-.featureCardContainer {
-    /* background-color: red; */
-    width: 500px;
-    height: 400px;
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
+ul {
+    list-style: none;
+}
+
+.featuresSectionContainer {
+    background-color: #a89bff;
+    padding: 40px 30px;
+    width: 70%;
     margin: 0 auto;
-    margin-top: 50px;
-}
-
-.featureCardContainer button {
-    text-decoration: none;
-    outline: 0;
-    border: 0;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-.featureCardContainer button img {
-    height: 30px;
-    background-color: transparent;
-}
-
-.featureCardContainer button:first-child {
-    rotate: 180deg;
-}
-
-.featureCard {
+    margin-top: 100px;
     border-radius: 1rem;
-    padding: 20px 20px;
-    color: white;
-    background-color: #1b191d;
-    box-shadow: 0 1px 1px black;
+    box-shadow: 0px 1px 1px 1px white;
 }
 
-.featureCard h3 {
-    letter-spacing: 1px;
+.featuresSectionContainer h3 {
+    color: orangered;
     font-weight: bold;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.featureCard p {
     letter-spacing: 1px;
-    font-weight: 600;
-    color: #98969f;
+    padding-left: 40px;
+    font-size: 30px;
 }
 
-.featureCard img {
-    padding: 2px;
+.featuresSectionContainer h1 {
+    color: black;
+    font-size: 40px;
+    margin: 20px 0px;
+}
+
+.featuresSectionContainer p {
+    color: #343434;
+    font-weight: 600;
+    padding: 20px 0px;
+}
+
+.featureItemIcon {
     height: 40px;
+    margin-top: 30px;
     border-radius: 50%;
-    border: 1px solid white;
+    border: 1px solid #343434;
+    padding: 3px;
+}
+
+.item {
+    padding: 10px 20px;
+    display: flex;
+    gap: 30px;
+}
+
+.item h2 {
+    font-weight: bold;
+    font-size: 30px;
+    text-transform: capitalize;
+}
+
+.item p {
+    color: #343434;
 }

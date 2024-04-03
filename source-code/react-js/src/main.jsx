@@ -4,13 +4,22 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import store from "./app/store.js";
 import { Provider } from "react-redux";
 import LandingPage from "./pages/landing-page/LandingPage.jsx";
-
+import LoginPage from "./components/Auth/Login.jsx"
+import SignUpPage from "./components/Auth/SignUp.jsx"
 const root = createRoot(document.getElementById("root"));
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <LandingPage />,
   },
+  {
+    path:"login",
+    element:<LoginPage/>
+  },
+  {
+    path:"login",
+    element:<SignUpPage/>
+  }
 ]);
 
 root.render(
