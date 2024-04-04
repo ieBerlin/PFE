@@ -1,0 +1,170 @@
+.mainBackground {
+    padding: 10px 20px;
+}
+
+.formWrapper {
+    background-color: white;
+    border-radius: 2rem;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 11px;
+}
+
+.signUpSection {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 6px;
+    width: 100%;
+}
+
+.signUpSection img {
+    width: 70px;
+}
+
+.signUpWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.signUpWrapper p {
+    color: grey;
+}
+
+.enrollNow,
+.loginButton {
+    cursor: pointer;
+    background-color: white;
+    outline: none;
+    font-size: 17px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 1px solid grey;
+}
+
+.enrollNow {
+    color: lightgreen;
+}
+
+.loginButton {
+    width: 100%;
+    padding: 10px 0px;
+    font-size: 20px;
+    background-color: lightgreen;
+    color: white;
+    border-radius: 3rem;
+    margin-top: 20px;
+}
+
+.mainSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.mainSection h1 {
+    color: black;
+    font-size: 40px;
+    margin: 0px 0px 5px;
+}
+
+.mainSection h4 {
+    margin: 0px 0px 20px 0px;
+    color: grey;
+}
+
+.formInput {
+    position: relative;
+    border-radius: 1rem;
+    padding: 10px 20px;
+    margin: 10px 0px;
+    display: flex;
+    gap: 2px;
+    width: 100%;
+    border: 1px solid grey;
+    flex-direction: column;
+}
+
+.formInput input {
+    border: none;
+    font-size: 20px;
+}
+
+.formInput input:focus {
+    outline: none;
+}
+
+.passwordInput {
+    display: flex;
+    flex-direction: column;
+}
+
+.passwordInputWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.passwordInputWrapper button {
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    font-size: 14px;
+    padding: 2px 4px;
+    font-weight: bold;
+    color: grey;
+}
+
+
+/* Remember me checkbox */
+
+.rememberMe {
+    display: flex;
+    margin: 0 auto;
+    color: black;
+    gap: 10px;
+    margin: 20px 0px;
+}
+
+.rememberMe input {
+    color: red;
+}
+
+.label {
+    color: grey;
+    font-weight: 600;
+}
+
+.label::first-letter {
+    text-transform: uppercase;
+}
+
+.gymPicture {
+    align-items: center;
+    display: flex;
+}
+
+.gymPicture img {
+    border-radius: 2rem;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.inputNotValid {
+    color: red;
+    padding-left: 20px;
+}

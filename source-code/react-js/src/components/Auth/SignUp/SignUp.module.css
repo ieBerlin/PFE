@@ -1,0 +1,22 @@
+.inputValidator {
+    margin: 0px 3px 0px;
+    display: inline-flex;
+    align-items: center;
+    background-color: rgb(220, 246, 226);
+    color: black;
+    border-radius: 10px;
+    padding: 8px 13px;
+    box-sizing: border-box;
+    font-weight: 600;
+    font-size: 13px;
+    gap: 5px;
+}
+
+.inputValidator img {
+    width: 20px;
+}
+
+.inputValidator img,
+.inputValidator p {
+    display: inline;
+}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import imgLogo from "../../assets/logoImage.png";
 import classes from "./Header.module.css";
 export default function Header() {
@@ -32,12 +33,12 @@ export default function Header() {
         </ul>
       </nav>
       <div className={classes.authentication}>
-        <a href="">
+        <Link to="/login">
           <button>Login</button>
-        </a>
-        <a href="">
+        </Link>
+        <Link to="/signup">
           <button>Sign Up</button>
-        </a>
+        </Link>
       </div>
     </header>
   );
