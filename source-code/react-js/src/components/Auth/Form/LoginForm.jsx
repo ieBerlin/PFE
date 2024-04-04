@@ -3,9 +3,12 @@ import isValidPassword from "../../../utils/validation/passwordValidation.js";
 import FormInput from "./FormInput.jsx";
 import PasswordFormInput from "./PasswordFormInput";
 import classes from "../Login/Login.module.css";
+import { useNavigate } from "react-router-dom";
 export default function LoginForm() {
+  const navigate = useNavigate();
   function handleFormSubmit(e) {
     e.preventDefault();
+    navigate("/dashboard");
   }
   return (
     <form onSubmit={handleFormSubmit}>

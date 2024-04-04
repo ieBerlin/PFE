@@ -11,7 +11,9 @@ export default function LoginPage() {
       <div className={classes.formWrapper}>
         <div className={classes.formSection}>
           <section className={classes.signUpSection}>
-            <img src={logoImage} alt="Logo" />
+            <Link to="/">
+              <img src={logoImage} alt="Logo" />
+            </Link>
             <div className={classes.signUpWrapper}>
               <p>New here?</p>
               <Link

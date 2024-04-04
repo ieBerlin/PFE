@@ -3,8 +3,3 @@
     padding: 0px;
     box-sizing: border-box;
 }
-
-@font-face {
-    font-family: 'Poppins';
-    src: url('../src/assets//fonts/Poppins/Poppins-Bold.ttf');
-}

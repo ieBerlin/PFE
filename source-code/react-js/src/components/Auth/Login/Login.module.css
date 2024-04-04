@@ -26,8 +26,12 @@
     width: 100%;
 }
 
+.signUpSection a img {
+    height: 50px;
+}
+
 .signUpSection img {
-    width: 70px;
+    cursor: pointer;
 }
 
 .signUpWrapper {
@@ -54,16 +58,16 @@
 }
 
 .enrollNow {
-    color: lightgreen;
+    color: #8C33FF;
 }
 
 .loginButton {
     width: 100%;
     padding: 10px 0px;
     font-size: 20px;
-    background-color: lightgreen;
+    background-color: #8C33FF;
     color: white;
-    border-radius: 3rem;
+    border-radius: 1rem;
     margin-top: 20px;
 }
 
