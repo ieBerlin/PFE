@@ -30,9 +30,8 @@
     color: rgb(49, 49, 49);
 }
 
-.notifications-header a {
+.notifications-header p {
     font-weight: 19px;
-    text-decoration: none;
     color: #3165fe;
 }
 

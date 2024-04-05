@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import classes from "./RootLayout.module.css";
 export default function RootLayout() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
-  let mainContentPadding = "70px 0 0";
+  let mainContentPadding = "60px 0 0";
   if (isOpen) {
     mainContentPadding += " 250px";
   } else {

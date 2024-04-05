@@ -7,9 +7,7 @@ const NotificationMenu = ({ notifications, notificationMenuClasses }) => {
     <div className={notificationMenuClasses}>
       <div className="notifications-header">
         <strong>Notifications</strong>
-        <Link to="/user/new-notifications" className="new-notification">
-          3 New
-        </Link>
+        <p className="new-notification">3 New</p>
       </div>
       {notifications && notifications.length > 0 ? (
         notifications.map((notification, index) => (

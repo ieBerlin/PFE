@@ -7,7 +7,6 @@ import ClassesPage from "./components/classes/ClassesPage.jsx";
 import EquipmentsPage from "./components/equipments/EquipmentsPage.jsx";
 import UserDetailsPage from "./components/user/UserDetailsPage.jsx";
 import AllUserPage from "./components/user/AllUserPage.jsx";
-import NewNotications from "./components/user/notifications/NewNotifications.jsx";
 import AllNotifications from "./components/user/notifications/AllNotifications.jsx";
 import CreateSportCategoriePage from "./components/sports/CreateSportCategoriePage.jsx";
 import SportCategoriePage from "./components/sports/SportCategoriePage.jsx";
@@ -16,7 +15,7 @@ import DeleteSportCategorie from "./components/sports/DeleteSportCategorie.jsx";
 import ReportsPage from "./components/reports/ReportsPage.jsx";
 import UserProfil from "./components/user/UserProfil.jsx";
 import EditUserProfil from "./components/user/EditUserProfil.jsx";
-import CoachesPage from "./components/coaches/CoachesPage.jsx"
+import CoachesPage from "./components/coaches/CoachesPage.jsx";
 import EquipmentsBookings from "./components/equipments/EquipmentsBookings.jsx";
 import BookEquipmentPage from "./components/equipments/BookEquipmentPage.jsx";
 import BookClassPage from "./components/classes/BookClassPage.jsx";
@@ -24,7 +23,7 @@ import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./components/classes/EditClassPage.jsx";
 import CreateClassPage from "./components/classes/CreateClassPage.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
-import RootLayout from "./components/Layouts/Root/RootLayout.jsx"
+import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -133,7 +132,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <UserProfil/>,
+            element: <UserProfil />,
           },
           {
             path: "edit",
@@ -144,10 +143,6 @@ const router = createBrowserRouter([
       {
         path: "user",
         children: [
-          {
-            path: "new-notifications",
-            element: <NewNotications />,
-          },
           {
             path: "all-notifications",
             element: <AllNotifications />,
