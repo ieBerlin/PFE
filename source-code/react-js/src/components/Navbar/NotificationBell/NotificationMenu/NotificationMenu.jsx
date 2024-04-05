@@ -1,14 +1,15 @@
 import "./NotificationMenu.css";
 import NotificationItem from "./NotificationItem";
+import { Link } from "react-router-dom";
 
 const NotificationMenu = ({ notifications, notificationMenuClasses }) => {
   return (
     <div className={notificationMenuClasses}>
       <div className="notifications-header">
         <strong>Notifications</strong>
-        <a to="/" className="new-notification">
+        <Link to="/user/new-notifications" className="new-notification">
           3 New
-        </a>
+        </Link>
       </div>
       {notifications && notifications.length > 0 ? (
         notifications.map((notification, index) => (
@@ -23,7 +24,7 @@ const NotificationMenu = ({ notifications, notificationMenuClasses }) => {
         <div className="no-notification">No new notifications</div>
       )}
       <div className="all-notifications">
-        <a>All Notifications</a>
+        <Link to="/user/all-notifications">All Notifications</Link>
       </div>
     </div>
   );

@@ -16,11 +16,7 @@
     text-decoration: none;
 }
 
-.footer ul {
-    list-style: none;
-}
-
-hr {
+.hr {
     width: 100%;
     margin: 0 auto;
     margin-top: 50px;

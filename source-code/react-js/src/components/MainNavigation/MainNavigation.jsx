@@ -3,11 +3,6 @@ import Navbar from "../Navbar/Navbar";
 import "./MainNavigation.css";
 import { useSelector } from "react-redux";
 export default function MainNavigation() {
-  // const [isMenuBarOpen, setIsMenuBarOpen] = useState(true);
-
-  // const toggleMenu = () => {
-  //   setIsMenuBarOpen((prevState) => !prevState);
-  // };
   const isOpen = useSelector((state) => state.sidebar.isOpen);
   return (
     <>

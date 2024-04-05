@@ -1,4 +1,4 @@
-import "./Sidebar.css"
+import "./Sidebar.css";
 import menuSvg from "../../assets/menu-svgrepo-com.svg";
 import menuAltRight from "../../assets/menu-alt-right-svgrepo-com.svg";
 import rocketSvg from "../../assets/rocket-svgrepo-com.svg";
@@ -16,8 +16,10 @@ export default function Sidebar() {
     <>
       <div className={sideBarClasses}>
         <div className="logo-details">
-          <img src={rocketSvg} alt="menu svg" className="icon icon-i" />
-          <div className="logo_name">HousesGym</div>
+          <a href="/" className="go-to-home-page">
+            <img src={rocketSvg} alt="menu svg" className="icon icon-i" />
+            <div className="logo_name">HousesGym</div>
+          </a>
           <div id="btn">
             {!isOpen ? (
               <img

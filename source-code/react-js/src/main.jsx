@@ -7,7 +7,7 @@ import LandingPage from "./pages/landing-page/LandingPage.jsx";
 import LoginPage from "./components/Auth/Login/Login.jsx";
 import SignUpPage from "./components/Auth/SignUp/SignUp.jsx";
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
-import DashboardLayout from "./components/Dashboard/DashboardLayout.jsx";
+import RootLayout from "./components/Dashboard/RootLayout.jsx";
 const root = createRoot(document.getElementById("root"));
 const routes = createBrowserRouter([
   {
@@ -15,20 +15,75 @@ const routes = createBrowserRouter([
     element: <LandingPage />,
   },
   {
-    path: "login",
+    path: "/login",
     element: <LoginPage />,
   },
   {
-    path: "signup",
+    path: "/signup",
     element: <SignUpPage />,
   },
   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
+    path: "/",
+    element: <RootLayout />,
     children: [
       {
-        index: true,
+        path: "dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "sports",
+        element: <Dashboard />,
+      },
+      {
+        path: "classes",
+        element: <Dashboard />,
+      },
+      {
+        path: "coaches",
+        element: <Dashboard />,
+      },
+      {
+        path: "equipmentes",
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+          {
+            path: "bookings",
+            element: <Dashboard />,
+          },
+        ],
+      },
+      {
+        path: "reports",
+        element: <Dashboard />,
+      },
+      {
+        path: "profile",
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+          {
+            path: "edit",
+            element: <Dashboard />,
+          },
+        ],
+      },
+      {
+        path: "user",
+        children: [
+          {
+            path: "new-notifications",
+            element: <Dashboard />,
+          },
+          {
+            path: "all-notifications",
+            element: <Dashboard />,
+          },
+        ],
       },
     ],
   },

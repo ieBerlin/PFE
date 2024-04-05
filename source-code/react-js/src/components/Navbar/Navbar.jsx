@@ -2,6 +2,7 @@ import "./Navbar.css";
 import NotificationBell from "./NotificationBell/NotificationBell.jsx";
 import avatar from "/kilter.jpg";
 import ProfileDropdownMenu from "./ProfileDropdownMenu/ProfileDropDownMenu.jsx";
+import { Link } from "react-router-dom";
 function Navbar({ width }) {
   return (
     <nav
@@ -15,8 +16,10 @@ function Navbar({ width }) {
         <p>Welcome again</p>
       </div>
       <div className="user-info">
-        <NotificationBell  />
-        <img className="user-avatar" src={avatar} alt="User Avatar" />
+        <NotificationBell />
+        <Link to="/profile">
+          <img className="user-avatar" src={avatar} alt="User Avatar" />
+        </Link>
         <div className="user-name">Username</div>
         <ProfileDropdownMenu />
       </div>

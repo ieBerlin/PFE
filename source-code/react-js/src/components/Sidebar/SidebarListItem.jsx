@@ -1,12 +1,14 @@
-export default function SidebarListItem({label,imgSrc}) {
+import { NavLink } from "react-router-dom";
+
+export default function SidebarListItem({label,imgSrc,href}) {
   return (
     <li>
-      <a href="">
+      <NavLink to={href}>
         <div className="img-container">
           <img src={imgSrc} alt="" />
         </div>
-        <span className="links_name">label</span>
-      </a>
+        <span className="links_name">{label}</span>
+      </NavLink>
     </li>
   );
 }

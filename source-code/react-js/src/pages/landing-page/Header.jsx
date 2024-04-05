@@ -11,22 +11,22 @@ export default function Header() {
       <nav className={classes.navbar}>
         <ul className="nav-list">
           <li className="nav-item">
-            <a href="/about" className="nav-link">
+            <a href="/about" className={classes.headerAnchor}>
               About
             </a>
           </li>
           <li className="nav-item">
-            <a href="/services" className="nav-link">
+            <a href="/services" className={classes.headerAnchor}>
               Services
             </a>
           </li>
           <li className="nav-item">
-            <a href="/portfolio" className="nav-link">
+            <a href="/portfolio" className={classes.headerAnchor}>
               Portfolio
             </a>
           </li>
           <li className="nav-item">
-            <a href="/contact" className="nav-link">
+            <a href="/contact" className={classes.headerAnchor}>
               Contact
             </a>
           </li>

@@ -27,6 +27,12 @@
     gap: 10px;
 }
 
+.go-to-home-page {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
 .sidebar .logo-details .icon {
     opacity: 0;
     transition: all 0.5s ease;
@@ -69,7 +75,7 @@
 }
 
 .sidebar img {
-    width: 28px;
+    height: 28px;
     width: 28px;
 }
 
@@ -81,7 +87,6 @@
 .sidebar li {
     position: relative;
     margin: 8px 0;
-    list-style: none;
     border-radius: 12px;
 }
 

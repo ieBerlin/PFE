@@ -45,3 +45,4 @@ Routing Section :
 
 ::notifications :
 All notifications : /user/all-notifications
+New notifications : /user/new-notifications
