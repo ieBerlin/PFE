@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
-import MainNavigation from "../MainNavigation/MainNavigation";
+import MainNavigation from "../../MainNavigation/MainNavigation";
 import { Outlet } from "react-router-dom";
-import classes from "./Dashboard.module.css";
-export default function DashboardLayout() {
+import classes from "./RootLayout.module.css";
+export default function RootLayout() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
   let mainContentPadding = "70px 0 0";
   if (isOpen) {

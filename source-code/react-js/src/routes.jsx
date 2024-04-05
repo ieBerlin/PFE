@@ -1,131 +1,169 @@
 import { createBrowserRouter } from "react-router-dom";
-
+import LandingPage from "./pages/landing-page/LandingPage.jsx";
+import LoginPage from "./components/auth/Login/Login.jsx";
+import SignUpPage from "./components/auth/SignUp/SignUp.jsx";
+import SportsPage from "./components/sports/SportsPage.jsx";
+import ClassesPage from "./components/classes/ClassesPage.jsx";
+import EquipmentsPage from "./components/equipments/EquipmentsPage.jsx";
+import UserDetailsPage from "./components/user/UserDetailsPage.jsx";
+import AllUserPage from "./components/user/AllUserPage.jsx";
+import NewNotications from "./components/user/notifications/NewNotifications.jsx";
+import AllNotifications from "./components/user/notifications/AllNotifications.jsx";
+import CreateSportCategoriePage from "./components/sports/CreateSportCategoriePage.jsx";
+import SportCategoriePage from "./components/sports/SportCategoriePage.jsx";
+import EditSportCategorie from "./components/sports/EditSportCategorie.jsx";
+import DeleteSportCategorie from "./components/sports/DeleteSportCategorie.jsx";
+import ReportsPage from "./components/reports/ReportsPage.jsx";
+import UserProfil from "./components/user/UserProfil.jsx";
+import EditUserProfil from "./components/user/EditUserProfil.jsx";
+import CoachesPage from "./components/coaches/CoachesPage.jsx"
+import EquipmentsBookings from "./components/equipments/EquipmentsBookings.jsx";
+import BookEquipmentPage from "./components/equipments/BookEquipmentPage.jsx";
+import BookClassPage from "./components/classes/BookClassPage.jsx";
+import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
+import EditClassPage from "./components/classes/EditClassPage.jsx";
+import CreateClassPage from "./components/classes/CreateClassPage.jsx";
+import Dashboard from "./components/dashboard/Dashboard.jsx";
+import RootLayout from "./components/Layouts/Root/RootLayout.jsx"
 const router = createBrowserRouter([
   {
-    path: "login",
+    path: "/",
+    element: <LandingPage />,
+  },
+  {
+    path: "/login",
     element: <LoginPage />,
   },
   {
-    path: "register",
-    element: <RegisterPage />,
+    path: "/signup",
+    element: <SignUpPage />,
   },
   {
-    path: "profile",
+    path: "/",
+    element: <RootLayout />,
     children: [
       {
-        index: true,
-        element: <UserProfilePage />,
-      },
-      {
-        path: "edit",
-        element: <EditUserProfilePage />,
-      },
-      {
-        path: ":userId",
-        element: <UserProfileByIdPage />,
-      },
-      {
-        path: "all-notifications",
-        element: <AllUserNotifications />,
-      },
-    ],
-  },
-  {
-    path: "classes",
-    children: [
-      {
-        index: true,
-        element: <AllClassesPage />,
-      },
-      {
-        path: "create",
-        element: <CreateClassPage />,
-      },
-      {
-        path: ":classId",
-        children: [
-          {
-            index: true,
-            element: <ShowClassByIdPage />,
-          },
-          {
-            path: "edit",
-            element: <EditClassPage />,
-          },
-          {
-            path: "book",
-            element: <BookClassPage />,
-          },
-          {
-            path: "filter/:filteredClasses",
-            element: <FilteredClassesPage />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "sports",
-    children: [
-      {
-        index: true,
-        element: <AllSportsPage />,
-      },
-      {
-        path: "create",
-        element: <CreateSportPage />,
-      },
-      {
-        path: ":name",
-        children: [
-          {
-            index: true,
-            element: <ShowSportByNamePage />,
-          },
-          {
-            path: "edit",
-            element: <EditSportPage />,
-          },
-          {
-            path: ":sportId/delete",
-            element: <DeleteSportPage />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "dashboard",
-    children: [
-      {
-        index: true,
-        element: <DashboardPage />,
-      },
-      {
-        path: "classes",
-        element: <ClassDashboardPage />,
+        path: "dashboard",
+        element: <Dashboard />,
       },
       {
         path: "sports",
-        element: <SportDashboardPage />,
+        children: [
+          {
+            index: true,
+            element: <SportsPage />,
+          },
+          {
+            path: "create",
+            element: <CreateSportCategoriePage />,
+          },
+          {
+            path: ":categorie",
+            children: [
+              {
+                index: true,
+                element: <SportCategoriePage />,
+              },
+              {
+                path: "edit",
+                element: <EditSportCategorie />,
+              },
+              {
+                path: "delete",
+                element: <DeleteSportCategorie />,
+              },
+            ],
+          },
+        ],
       },
       {
-        path: "users",
-        element: <UserDashboardPage />,
+        path: "classes",
+        children: [
+          { index: true, element: <ClassesPage /> },
+          {
+            path: "create",
+            element: <CreateClassPage />,
+          },
+          {
+            path: ":classId",
+            children: [
+              {
+                index: true,
+                element: <ClassDetailsPage />,
+              },
+              {
+                path: "edit",
+                element: <EditClassPage />,
+              },
+              {
+                path: "book",
+                element: <BookClassPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "coaches",
+        element: <CoachesPage />,
+      },
+      {
+        path: "equipmentes",
+        children: [
+          {
+            index: true,
+            element: <EquipmentsPage />,
+          },
+          {
+            path: "book",
+            element: <BookEquipmentPage />,
+          },
+          {
+            path: "bookings",
+            element: <EquipmentsBookings />,
+          },
+        ],
+      },
+      {
+        path: "reports",
+        element: <ReportsPage />,
+      },
+      {
+        path: "profile",
+        children: [
+          {
+            index: true,
+            element: <UserProfil/>,
+          },
+          {
+            path: "edit",
+            element: <EditUserProfil />,
+          },
+        ],
+      },
+      {
+        path: "user",
+        children: [
+          {
+            path: "new-notifications",
+            element: <NewNotications />,
+          },
+          {
+            path: "all-notifications",
+            element: <AllNotifications />,
+          },
+          {
+            path: ":userId",
+            element: <UserDetailsPage />,
+          },
+          {
+            path: "all-users",
+            element: <AllUserPage />,
+          },
+        ],
       },
     ],
   },
-  {
-    path: "home",
-    element: <HomePage />,
-  },
-  {
-    path: "about",
-    element: <AboutPage />,
-  },
-  {
-    path: "contact",
-    element: <ContactPage />,
-  },
 ]);
+
 export default router;

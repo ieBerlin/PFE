@@ -8,10 +8,17 @@ Routing Section :
 /reset-password/:token
 /logout
 
-::User Profile :
+::Profile 
+
 /profile
 /profile/edit
+
+::User:
+
 /user/:userId
+/user/all-users
+/user/all-notifications
+/user/new-notifications
 
 ::Class management :
 
@@ -26,16 +33,13 @@ Routing Section :
 
 /sports
 /sports/create
-/sports/:name
-/sports/:name/edit
-/sports/:sportId/delete
+/sports/:categorie
+/sports/:categorie/edit
+/sports/:categorie/delete
 
 ::Dashboard (Admin/Manager):
 
 /dashboard
-/dashboard/classes
-/dashboard/sports
-/dashboard/users
 
 ::Additional Paths:
 

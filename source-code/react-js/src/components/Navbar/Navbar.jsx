@@ -4,6 +4,8 @@ import avatar from "/kilter.jpg";
 import ProfileDropdownMenu from "./ProfileDropdownMenu/ProfileDropDownMenu.jsx";
 import { Link } from "react-router-dom";
 function Navbar({ width }) {
+  const greetingMessage =
+    new Date().getHours() > 12 ? "Good evening" : "Good morning";
   return (
     <nav
       className="navbar-container"
@@ -12,7 +14,7 @@ function Navbar({ width }) {
       }}
     >
       <div className="greeting">
-        <h2>Good Morning, User</h2>
+        <h2>{greetingMessage}, User</h2>
         <p>Welcome again</p>
       </div>
       <div className="user-info">
