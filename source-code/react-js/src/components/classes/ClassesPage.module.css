@@ -1,0 +1,36 @@
+.sectionContainer {
+    background-color: white;
+    min-height: calc(100vh - 60px);
+    padding: 20px 30px;
+}
+
+.listOfSports {
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.sportItemDetails {
+    padding: 5px 20px;
+}
+
+.sportImg {
+    width: 100%;
+    border-radius: 1rem 1rem 0 0;
+}
+
+.itemTitle {
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.itemTitle img {
+    width: 30px;
+    height: 30px;
+}
