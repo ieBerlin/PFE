@@ -13,9 +13,11 @@
 
 .sportItemDetails {
     padding: 5px 20px;
+    color: black;
 }
 
 .sportImg {
+    height: auto;
     width: 100%;
     border-radius: 1rem 1rem 0 0;
 }

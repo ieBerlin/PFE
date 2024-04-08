@@ -1,0 +1,108 @@
+.sectionContainer {
+    background-color: white;
+    min-height: calc(100vh - 60px);
+}
+
+.notFoundContainer {
+    height: 100%;
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.notFoundContainer img {
+    width: 15%;
+}
+
+.notFoundContainer h1 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.notFoundContainer p {
+    font-size: 20px;
+}
+
+.backButton {
+    display: flex;
+    margin-top: 30px;
+    background-color: blueviolet;
+    color: white;
+    flex-direction: row;
+    padding: 10px 15px;
+    align-items: center;
+    border-radius: 5px;
+    gap: 10px;
+    align-items: center;
+}
+
+.backButton img {
+    width: 20px;
+    height: 20px;
+}
+
+.sportContainer {
+    height: 100%;
+    padding: 30px 30px;
+}
+
+.sportContainer img {
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.sportDetails {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 100px;
+}
+
+.sportDetails h1 {
+    font-size: 30px;
+    margin: 10px 0;
+}
+
+.sportDetails p {
+    padding-left: 10px;
+    letter-spacing: 1px;
+}
+
+.relatedClasses {
+    margin-top: 100px;
+    padding-left: 30px;
+}
+
+.relatedClasses h2 {
+    margin-bottom: 20px;
+}
+
+.relatedClasses ul {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.relatedClasses ul img {
+    width: 100%;
+}
+
+.allClassesButton {
+    display: flex;
+    justify-content: center;
+}
+
+.allClassesButton a {
+    margin-top: 30px;
+    background-color: tomato;
+    border-radius: 3px;
+    padding: 13px 30px;
+    color: white;
+    display: block;
+    border: 0;
+}
