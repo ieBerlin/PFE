@@ -1,0 +1,5 @@
+.sectionContainer {
+    background-color: white;
+    min-height: calc( 100vh - 60px);
+    padding: 20px 30px;
+}

@@ -55,6 +55,21 @@ export default function ClassDetailsPage() {
             <Link to="">See all classes</Link>
           </div>
         </div>
+        <div className={classes.relatedClasses}>
+        <h2>Related coaches</h2>
+          <ul>
+            {DUMMY_SUGGESTED_CLASSES.map((DUMMY_SUGGESTED_CLASS) => (
+              <SuggestedClassItem
+                key={DUMMY_SUGGESTED_CLASS.id}
+                title={DUMMY_SUGGESTED_CLASS.title}
+                description={DUMMY_SUGGESTED_CLASS.description}
+              />
+            ))}
+          </ul>
+          <div className={classes.allClassesButton}>
+            <Link to="">See all coaches</Link>
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,0 +1,81 @@
+.sectionContainer {
+    min-height: calc(100vh - 60px);
+    background-color: white;
+    padding: 20px 30px;
+}
+
+.sectionContainer h1 {
+    font-size: 30px;
+}
+
+.itemContainer {
+    padding: 5px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.itemContainer a {
+    color: black;
+}
+
+.coachLists {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.coachDetails {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.coachInfo {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.emailSection {
+    display: flex;
+    justify-content: space-between;
+    margin: 3px 0;
+}
+
+.emailSection span {
+    background-color: rgba(187, 187, 187, 1);
+    color: blue;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.coachInfo p {
+    font-size: 15px;
+}
+
+.coachDetails img {
+    height: 40px;
+    border-radius: 50%;
+}
+
+.itemContainer hr {
+    margin: 15px 0;
+}
+
+.coachCareer img {
+    height: 20px;
+}
+
+.coachCareer span {
+    font-weight: bold;
+    color: black;
+}
+
+.coachCareer div {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
