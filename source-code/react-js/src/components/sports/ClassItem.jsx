@@ -1,15 +1,23 @@
-import classes from "../classes/ClassesPage.module.css";
-import arrowSvg from "../../assets/arrow-ios-forward-svgrepo-com.svg";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import kilter from "/kilter.jpg";
+import classes from "../classes/ClassesPage.module.css";
 
 export default function ClassItem({ id, name, description }) {
   const navigate = useNavigate();
+  const [isDropDownActive, setIsDropDownActive] = useState(false);
 
-  const handleInstructorButtonClick = (event) => {
-    event.preventDefault(); 
-    navigate("/fds");
+  const handleInstructorDropDown = (value) => {
+    setIsDropDownActive(value);
   };
 
+  const handleInsctructorButtonClick = (e) => {
+    e.preventDefault();
+  };
+  let instructorDropDownMenuClasses = classes.instructorDropDownMenu ;
+  if(isDropDownActive){
+    instructorDropDownMenuClasses += ` ${classes.active}`
+  }
   return (
     <Link to={`/classes/${id}`} className={classes.classItem}>
       <div className={classes.classImageContainer}>
@@ -22,16 +30,37 @@ export default function ClassItem({ id, name, description }) {
         <span className={classes.classDuration}>15 min</span>
       </div>
       <div className={classes.classItemDetails}>
-        <div className={classes.itemTitle}>
-          {name}
-          <span>20-10-2024 / 14:00</span>
+        <p className={classes.itemTitle}>
+          {name} <span>20-10-2024 / 14:00</span>
+        </p>
+        <div className={classes.instructorDropDownMenuContainer}>
+          <button
+            className={classes.instructor}
+            onClick={handleInsctructorButtonClick}
+            onMouseOver={() => handleInstructorDropDown(true)}
+            onMouseLeave={() => handleInstructorDropDown(false)}
+          >
+            INSTRUCTOR NAME
+          </button>
+          {isDropDownActive && (
+            <div
+              className={instructorDropDownMenuClasses}
+              onMouseOver={() => handleInstructorDropDown(true)}
+              onMouseLeave={() => handleInstructorDropDown(false)}
+            >
+              <div className={classes.coachInfos}>
+                <img src={kilter} alt="user avatar" />
+                <div className={classes.coachContact}>
+                  <h2>COACH NAME</h2>
+                  <h4>COACH_EMAIL</h4>
+                </div>
+              </div>
+              <div className={classes.coachExtraDetails}>
+                <p>TOTAL TRAINED MEMEBERS</p>
+              </div>
+            </div>
+          )}
         </div>
-        <button
-          className={classes.instructor}
-          onClick={handleInstructorButtonClick}
-        >
-          INSTRUCTOR NAME
-        </button>
         <p className={classes.classDescription}>{description}</p>
       </div>
     </Link>

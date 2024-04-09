@@ -8,15 +8,22 @@
     margin: 20px 0;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-}
-
-.classItem:hover {
-    box-shadow: rgba(0, 0, 0, 1) 0px 5px 15px;
 }
 
 .classItem {
+    margin: 20px 15px;
     position: relative;
+    transition: all 0.3s ease;
+}
+
+.classItem:hover {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+}
+
+.classItem:hover {
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-bottom: 0px;
 }
 
 .classItem:hover .classDescription {
@@ -40,6 +47,11 @@
     justify-content: space-between;
     width: 100%;
     align-items: center;
+}
+
+.itemTitle span {
+    font-weight: normal;
+    font-size: small;
 }
 
 .itemTitle img {
@@ -96,6 +108,54 @@
     z-index: 502;
     width: 100%;
     left: 0;
-    box-shadow: rgba(0, 0, 0, 1) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
     /* Bottom shadow */
+}
+
+.instructorDropDownMenuContainer {
+    position: relative;
+}
+
+.instructorDropDownMenu img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.instructorDropDownMenu {
+    min-width: 200px;
+    background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 504;
+    left: calc(50% - 50px);
+    transform: translateX(-50%);
+    top: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.instructorDropDownMenu.active {
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.coachInfos {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 29px;
+}
+
+.coachInfos h2 {
+    font-size: 13px;
+}
+
+.coachInfos h4 {
+    font-size: 11px;
 }
