@@ -4,19 +4,19 @@
     padding: 20px 30px;
 }
 
-.listOfSports {
+.listOfClasses {
     margin: 20px 0;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
 }
 
-.sportItemDetails {
+.classItemDetails {
     padding: 5px 20px;
     color: black;
 }
 
-.sportImg {
+.classImg {
     height: auto;
     width: 100%;
     border-radius: 1rem 1rem 0 0;

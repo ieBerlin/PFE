@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { DUMMY_SPORTS } from "../../dummy_data/dummy_sports.js";
+import { DUMMY_CLASSES } from "../../dummy_data/dummy_classes.js";
 import { DUMMY_SUGGESTED_CLASSES } from "../../dummy_data/dummy_suggested_classes.js";
 import classes from "./ClassDetailPage.module.css";
 import brokenLinkSvg from "../../assets/broken-link-svgrepo-com.svg";
@@ -7,7 +7,7 @@ import arrowSvg from "../../assets/arrow-ios-forward-svgrepo-com.svg";
 import SuggestedClassItem from "./SuggestedClassItem.jsx";
 export default function ClassDetailsPage() {
   const { classId } = useParams();
-  const sport = DUMMY_SPORTS.find((sport) => sport.id === +classId);
+  const sport = DUMMY_CLASSES.find((sport) => sport.id === +classId);
 
   let content;
   if (!sport) {
@@ -56,7 +56,7 @@ export default function ClassDetailsPage() {
           </div>
         </div>
         <div className={classes.relatedClasses}>
-        <h2>Related coaches</h2>
+          <h2>Related coaches</h2>
           <ul>
             {DUMMY_SUGGESTED_CLASSES.map((DUMMY_SUGGESTED_CLASS) => (
               <SuggestedClassItem

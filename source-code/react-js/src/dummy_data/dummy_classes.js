@@ -1,4 +1,4 @@
-export const DUMMY_SPORTS = [{
+export const DUMMY_CLASSES = [{
         id: 1,
         name: "Fitness",
         description: "Fitness encompasses various physical activities aimed at improving overall health, strength, flexibility, and endurance. It includes exercises such as cardio, strength training, and flexibility workouts.",

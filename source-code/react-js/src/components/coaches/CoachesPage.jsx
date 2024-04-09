@@ -4,10 +4,24 @@ import calenderSvg from "../../assets/event-calender-date-note-svgrepo-com.svg";
 import levelSvg from "../../assets/level-two-svgrepo-com.svg";
 import peopleSvg from "../../assets/friend-group-members-svgrepo-com.svg";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function CoachesPage() {
   const [isDropDownVisible, setIsDropDownVisible] = useState(false);
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropDownVisible(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   const toggleButtonClick = () => {
     setIsDropDownVisible((prevState) => !prevState);
@@ -21,8 +35,10 @@ export default function CoachesPage() {
     <section className={classes.sectionContainer}>
       <h1>All coaches</h1>
       <div className={classes.filterSection}>
-        <button onClick={toggleButtonClick}>Recent</button>
-        <div className={dropdownMenuStyles}>
+        <button onClick={toggleButtonClick} className={classes.filterButton}>
+          Filter
+        </button>
+        <div ref={dropdownRef} className={dropdownMenuStyles}>
           <h3>All categories</h3>
           <ul>
             <li>
@@ -51,6 +67,10 @@ export default function CoachesPage() {
               <input type="checkbox" name="experience-level" id="" />
             </li>
           </ul>
+          <div className={classes.dropDownMenuButtons}>
+            <button onClick={toggleButtonClick}>Cancel</button>
+            <button onClick={toggleButtonClick}>Apply</button>
+          </div>
         </div>
       </div>
       <ul className={classes.coachLists}>
