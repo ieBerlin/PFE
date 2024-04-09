@@ -16,6 +16,14 @@ export default function ClassesPage() {
             description={dummy_class.description}
           />
         ))}
+        {DUMMY_CLASSES.map((dummy_class) => (
+          <ClassItem
+            key={dummy_class.id}
+            id={dummy_class.id}
+            name={dummy_class.name}
+            description={dummy_class.description}
+          />
+        ))}
       </ul>
     </section>
   );

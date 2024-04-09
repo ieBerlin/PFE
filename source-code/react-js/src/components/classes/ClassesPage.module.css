@@ -1,7 +1,7 @@
 .sectionContainer {
     background-color: white;
     min-height: calc(100vh - 60px);
-    padding: 20px 30px;
+    padding: 20px 30px 200px 30px;
 }
 
 .listOfClasses {
@@ -9,6 +9,18 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
+}
+
+.classItem:hover {
+    box-shadow: rgba(0, 0, 0, 1) 0px 5px 15px;
+}
+
+.classItem {
+    position: relative;
+}
+
+.classItem:hover .classDescription {
+    display: inherit;
 }
 
 .classItemDetails {
@@ -19,7 +31,6 @@
 .classImg {
     height: auto;
     width: 100%;
-    border-radius: 1rem 1rem 0 0;
 }
 
 .itemTitle {
@@ -29,10 +40,62 @@
     justify-content: space-between;
     width: 100%;
     align-items: center;
-    margin-bottom: 10px;
 }
 
 .itemTitle img {
     width: 30px;
     height: 30px;
+}
+
+.instructor {
+    color: grey;
+    padding: 10px 0;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.instructor:hover {
+    text-decoration: underline;
+}
+
+.classImageContainer {
+    position: relative;
+}
+
+.classCategory {
+    letter-spacing: 1px;
+    top: 0;
+    left: 0;
+    margin: 10px 0 0 10px;
+    position: absolute;
+    z-index: 500;
+    background-color: rgb(255, 0, 0, 0.2);
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+}
+
+.classDuration {
+    position: absolute;
+    z-index: 501;
+    bottom: 0;
+    left: 0;
+    margin: 0 0 10px 10px;
+    color: white;
+    padding: 3px;
+    border-radius: 5px;
+    background-color: rgba(49, 104, 166, 0.8);
+}
+
+.classDescription {
+    background-color: white;
+    padding: 10px 20px 10px;
+    display: none;
+    position: absolute;
+    z-index: 502;
+    width: 100%;
+    left: 0;
+    box-shadow: rgba(0, 0, 0, 1) 0px 5px 15px;
+    /* Bottom shadow */
 }
