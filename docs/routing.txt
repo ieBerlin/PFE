@@ -8,17 +8,10 @@ Routing Section :
 /reset-password/:token
 /logout
 
-::Profile 
-
+::User Profile :
 /profile
 /profile/edit
-
-::User:
-
 /user/:userId
-/user/all-users
-/user/all-notifications
-/user/new-notifications
 
 ::Class management :
 
@@ -33,13 +26,21 @@ Routing Section :
 
 /sports
 /sports/create
-/sports/:categorie
-/sports/:categorie/edit
-/sports/:categorie/delete
+/sports/:name
+/sports/:name/edit
+/sports/:sportId/delete
+
+::equipments :
+
+/equipment: Page to view available gym equipment and make bookings.
+/equipment/bookings: Page to view current and past equipment bookings.
 
 ::Dashboard (Admin/Manager):
 
 /dashboard
+/dashboard/classes
+/dashboard/sports
+/dashboard/users
 
 ::Additional Paths:
 
@@ -49,4 +50,3 @@ Routing Section :
 
 ::notifications :
 All notifications : /user/all-notifications
-New notifications : /user/new-notifications

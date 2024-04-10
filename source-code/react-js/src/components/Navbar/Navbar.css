@@ -42,3 +42,11 @@
     align-items: center;
     gap: 5px;
 }
+
+.no-results-found {
+    color: white;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}

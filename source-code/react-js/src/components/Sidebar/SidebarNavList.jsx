@@ -1,27 +1,42 @@
 import searchSvg from "../../assets/search-alt-2-svgrepo-com.svg";
-import dashboardSvg from "../../assets/dashboard-2-svgrepo-com.svg";
-import classesSvg from "../../assets/class-management-svgrepo-com.svg";
-import coachesSvg from "../../assets/trainer-svgrepo-com.svg";
-import equipmentsSvg from "../../assets/dumbbells-2-svgrepo-com.svg";
-import reportsSvg from "../../assets/report-linechart-svgrepo-com.svg";
 import logoutSvg from "../../assets/log-out-svgrepo-com.svg";
 import SidebarListItem from "./SidebarListItem.jsx";
-
+import { useDispatch, useSelector } from "react-redux";
+import { filterSideBarNavListElements } from "../../features/userRole/userRoleSlice.js";
 export default function NavList() {
+  const sideBarNavListElements = useSelector(
+    (state) => state.userRole.currentSidebarNavList
+  );
+  const dispatch = useDispatch();
+  const toggleSearchInputChange = (e) => {
+    const inputVal = e.target.value;
+    dispatch(filterSideBarNavListElements(inputVal));
+  };
   return (
     <ul className="nav-list">
       <li>
         <div className="bx bx-search">
           <img src={searchSvg} className="icon-i" alt="" />
         </div>
-        <input type="text" placeholder="Search..." />
+        <input
+          onKeyUp={toggleSearchInputChange}
+          type="text"
+          placeholder="Search..."
+        />
         <span className="tooltip">Search</span>
       </li>
-      <SidebarListItem label="Dashboard" imgSrc={dashboardSvg} href="dashboard" />
-      <SidebarListItem label="Classes" imgSrc={classesSvg} href="classes" />
-      <SidebarListItem label="Coaches" imgSrc={coachesSvg} href="coaches" />
-      <SidebarListItem label="Equipments" imgSrc={equipmentsSvg} href="equipmentes" />
-      <SidebarListItem label="Reports" imgSrc={reportsSvg} href="reports" />
+      {sideBarNavListElements.length > 0 ? (
+        sideBarNavListElements.map((element) => (
+          <SidebarListItem
+            key={element.id}
+            label={element.label}
+            href={element.href}
+            imgSrc={element.labelSvg}
+          />
+        ))
+      ) : (
+        <p className="no-results-found">Nothing results found!</p>
+      )}
       <div className="profile">
         <div className="profile-details">
           <img src={searchSvg} alt="" />
