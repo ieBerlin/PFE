@@ -11,15 +11,15 @@ export default function ProfileDropDownMenu() {
       {({ open }) => {
         return (
           <>
-            <div>
-              <Menu.Button className=" rounded-md bg-white p-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            <div className="h-5">
+              <Menu.Button className="text-sm font-semibold text-gray-900 ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className={`h-5 w-5 text-gray-400 transition-transform ${
+                  className={`h-5 w-5 text-gray-400 transition-transform hover:text-grey-50 ${
                     !open ? "rotate-90" : "rotate-0"
                   }`}
                 >
@@ -69,7 +69,7 @@ export default function ProfileDropDownMenu() {
                         </svg>
 
                         <span
-                          className={active ? "text-gray-900" : "text-gray-700"}
+                          className={active ? "text-black" : "text-gray-900"}
                         >
                           Profile
                         </span>
@@ -105,7 +105,7 @@ export default function ProfileDropDownMenu() {
                         </svg>
 
                         <span
-                          className={active ? "text-gray-900" : "text-gray-700"}
+                          className={active ? "text-black" : "text-gray-900"}
                         >
                           My classes
                         </span>
@@ -139,7 +139,7 @@ export default function ProfileDropDownMenu() {
                         </svg>
 
                         <span
-                          className={active ? "text-gray-900" : "text-gray-700"}
+                          className={active ? "text-black" : "text-gray-900"}
                         >
                           My coaches
                         </span>
@@ -172,7 +172,7 @@ export default function ProfileDropDownMenu() {
                           />
                         </svg>
                         <span
-                          className={active ? "text-gray-900" : "text-gray-700"}
+                          className={active ? "text-black" : "text-gray-900"}
                         >
                           My equipments
                         </span>
@@ -208,9 +208,8 @@ export default function ProfileDropDownMenu() {
                           />
                         </svg>
                         <span
-                          className={active ? "text-gray-900" : "text-gray-700"}
+                          className={active ? "text-black" : "text-gray-900"}
                         >
-                       
                           Sign out
                         </span>
                       </a>

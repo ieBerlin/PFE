@@ -5,7 +5,7 @@ import {
 } from "../../dummy_data/dummy_payments_data.js";
 import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
-
+import { Transition as ItemTransition } from "react-transition-group";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -44,6 +44,10 @@ export default function PaymentsPage() {
     incomeDate: DUMMY_DATES[0].time,
     expenseDate: DUMMY_DATES[0].time,
   });
+  const [selectedTransactions, setSelectedTransactions] = useState({
+    income: true,
+    expense: true,
+  });
   const handleCurrentDateSelect = (type, value) => {
     if (type === "income") {
       setCurrentSelectedDate((prevState) => ({
@@ -57,6 +61,25 @@ export default function PaymentsPage() {
       }));
     }
   };
+  console.log(selectedTransactions);
+  const handleTransactionsChecksChange = (type) => {
+    setSelectedTransactions((prevState) => ({
+      ...prevState,
+      [type]: !prevState[type],
+    }));
+  };
+  let FILTERED_DUMMY_TRANSACTIONS;
+  if (selectedTransactions.income && selectedTransactions.expense) {
+    FILTERED_DUMMY_TRANSACTIONS = DUMMY_TRANSACTIONS;
+  } else if (selectedTransactions.income) {
+    FILTERED_DUMMY_TRANSACTIONS = DUMMY_TRANSACTIONS.filter(
+      (transaction) => transaction.type === "income"
+    );
+  } else if (selectedTransactions.expense) {
+    FILTERED_DUMMY_TRANSACTIONS = DUMMY_TRANSACTIONS.filter(
+      (transaction) => transaction.type === "expense"
+    );
+  }
   return (
     <main className="bg-white w-full px-5 pt-4 pb-10">
       <h1 className="text-4xl">Payments</h1>
@@ -366,6 +389,10 @@ export default function PaymentsPage() {
                       >
                         <h3>Income</h3>
                         <input
+                          onChange={() =>
+                            handleTransactionsChecksChange("income")
+                          }
+                          checked={selectedTransactions.income}
                           id="default-checkbox"
                           type="checkbox"
                           value=""
@@ -386,7 +413,10 @@ export default function PaymentsPage() {
                       >
                         <h3>Expense</h3>
                         <input
-                          checked
+                          checked={selectedTransactions.expense}
+                          onChange={() =>
+                            handleTransactionsChecksChange("expense")
+                          }
                           id="default-checkbox"
                           type="checkbox"
                           value=""
@@ -400,64 +430,98 @@ export default function PaymentsPage() {
             </Transition>
           </Menu>
         </div>
-        {DUMMY_TRANSACTIONS.map((transactionItem) => (
-          <div
-            className=" grid grid-cols-2 mt-3"
-            key={`transaction-${transactionItem.id}`}
+        {!FILTERED_DUMMY_TRANSACTIONS ? (
+          <Transition
+            show
+            enter="transition-opacity duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
-            <div className="flex flex-row items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="3"
-                stroke="currentColor"
-                className={`w-10 h-10 ${
-                  transactionItem.type === "income"
-                    ? "bg-green-300"
-                    : "bg-red-300"
-                } p-2 rounded-xl ${
-                  transactionItem.type === "income"
-                    ? "text-green-700"
-                    : "text-red-700"
-                }`}
+            {(ref) => (
+              <p
+                ref={ref}
+                className="text-black text-center text-xl font-semibold my-16"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.25 6.75 12 3m0 0 3.75 3.75M12 3v18"
-                />
-              </svg>
-              <div className="pl-4">
-                <h1 className="text-blue text-lg font-semibold">
-                  {transactionItem.title}
-                </h1>
-                <p className="text-sm text-stone-500">{transactionItem.date}</p>
-              </div>
-            </div>
-            <div className="flex flex-column justify-between items-center">
-              <div className="flex flex-row items-center gap-5">
-                <img
-                  className=" w-14 h-14 fill object-cover rounded-full"
-                  src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
-                  alt=""
-                />
-                <h1 className=" text-sm font-semibold">
-                  {transactionItem.username}
-                </h1>
-              </div>
-              <h1
-                className={`text-2xl   ${
-                  transactionItem.type === "income"
-                    ? "text-green-500"
-                    : "text-red-500"
-                } font-bold`}
-              >
-                {transactionItem.amount}
-              </h1>
-            </div>
-          </div>
-        ))}
+                Nothing to show
+              </p>
+            )}
+          </Transition>
+        ) : (
+          FILTERED_DUMMY_TRANSACTIONS.map((transactionItem) => (
+            <ItemTransition
+              key={`transaction-${transactionItem.id}`}
+              in={true}
+              timeout={300}
+              mountOnEnter
+              unmountOnExit
+            >
+              {(state) => (
+                <div
+                  className={`grid grid-cols-2 mt-3 transition-opacity duration-300 ${
+                    state === "entered" ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <div className="flex flex-row items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="3"
+                      stroke="currentColor"
+                      className={`w-10 h-10 ${
+                        transactionItem.type === "income"
+                          ? "bg-green-300"
+                          : "bg-red-300"
+                      } p-2 rounded-xl ${
+                        transactionItem.type === "income"
+                          ? "text-green-700"
+                          : "text-red-700"
+                      }`}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.25 6.75 12 3m0 0 3.75 3.75M12 3v18"
+                      />
+                    </svg>
+                    <div className="pl-4">
+                      <h1 className="text-blue text-lg font-semibold">
+                        {transactionItem.title}
+                      </h1>
+                      <p className="text-sm text-stone-500">
+                        {transactionItem.date}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-column justify-between items-center">
+                    <div className="flex flex-row items-center gap-5">
+                      <img
+                        className=" w-14 h-14 fill object-cover rounded-full"
+                        src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
+                        alt=""
+                      />
+                      <h1 className=" text-sm font-semibold">
+                        {transactionItem.username}
+                      </h1>
+                    </div>
+                    <h1
+                      className={`text-2xl   ${
+                        transactionItem.type === "income"
+                          ? "text-green-500"
+                          : "text-red-500"
+                      } font-bold`}
+                    >
+                      {transactionItem.amount}
+                    </h1>
+                  </div>
+                </div>
+              )}
+            </ItemTransition>
+          ))
+        )}
       </section>
     </main>
   );

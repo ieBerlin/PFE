@@ -23,7 +23,8 @@ import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./components/classes/EditClassPage.jsx";
 import CreateClassPage from "./components/classes/CreateClassPage.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
-import PaymentsPage from "./components/payments/PaymentsPage.jsx"
+import Users from "./components/user/AllUserPage.jsx"
+import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
 const router = createBrowserRouter([
   {
@@ -106,6 +107,10 @@ const router = createBrowserRouter([
       {
         path: "coaches",
         element: <CoachesPage />,
+      },
+      {
+        path: "users",
+        element: <Users />,
       },
       {
         path: "payments",
