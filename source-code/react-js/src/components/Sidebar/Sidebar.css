@@ -92,6 +92,11 @@
     position: relative;
     margin: 8px 0;
     border-radius: 12px;
+    transition: all 0.4s ease;
+}
+
+.sidebar li:hover .img-hover {
+    filter: grayscale(100%) brightness(0%);
 }
 
 .sidebar li .tooltip {

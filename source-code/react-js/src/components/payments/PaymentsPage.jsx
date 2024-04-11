@@ -1,11 +1,64 @@
 import {
-  DUMMY_WEEKLY_INCOME,
+  DUMMY_DAILY_INCOME,
   DUMMY_TRANSACTIONS,
-  DUMMY_EXPENSES,
+  DUMMY_DAILY_EXPENSES,
 } from "../../dummy_data/dummy_payments_data.js";
+import { Fragment, useState } from "react";
+import { Menu, Transition } from "@headlessui/react";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+const currentDate = (date, offset = 0) => {
+  const currentDate = new Date(date);
+  currentDate.setDate(currentDate.getDate() - offset);
+
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Adding 1 because January is 0
+  const day = String(currentDate.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
+const DUMMY_DATES = [
+  {
+    id: 1,
+    time: "Today", // Current date
+  },
+  {
+    id: 2,
+    time: currentDate(new Date(), 1), // Subtract 1 day
+  },
+  {
+    id: 3,
+    time: currentDate(new Date(), 2), // Subtract 2 days
+  },
+  {
+    id: 4,
+    time: currentDate(new Date(), 3), // Subtract 3 days
+  },
+];
 export default function PaymentsPage() {
+  const [currentSelectedDate, setCurrentSelectedDate] = useState({
+    incomeDate: DUMMY_DATES[0].time,
+    expenseDate: DUMMY_DATES[0].time,
+  });
+  const handleCurrentDateSelect = (type, value) => {
+    if (type === "income") {
+      setCurrentSelectedDate((prevState) => ({
+        ...prevState,
+        incomeDate: value,
+      }));
+    } else {
+      setCurrentSelectedDate((prevState) => ({
+        ...prevState,
+        expenseDate: value,
+      }));
+    }
+  };
   return (
-    <main className="bg-white w-full px-5 py-4">
+    <main className="bg-white w-full px-5 pt-4 pb-10">
       <h1 className="text-4xl">Payments</h1>
       {/* Analytics */}
       <div className="grid grid-cols-2 gap-9">
@@ -14,23 +67,64 @@ export default function PaymentsPage() {
         <div className="bg-white shadow-xl px-5 py-4  rounded-lg">
           <div className="flex flex-row justify-between  items-center mb-3">
             <strong className="font-bold text-xl">Income</strong>
-            <button className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2.5}
-                stroke="currentColor"
-                className="w-6 h-6 text-green-500 inline mr-2"
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  {currentSelectedDate.incomeDate}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className={`h-5 w-5 text-gray-400 transition-transform ${
+                      !open ? "rotate-90" : "rotate-0"
+                    }`}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </Menu.Button>
+              </div>
+
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                />
-              </svg>
-              fev 2023
-            </button>
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-28 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    {DUMMY_DATES.map((date) => (
+                      <Menu.Item key={date.id}>
+                        {({ active }) => (
+                          <button
+                            onClick={() =>
+                              handleCurrentDateSelect("income", date.time)
+                            }
+                            href="#"
+                            className={classNames(
+                              active
+                                ? "bg-gray-100 text-gray-900"
+                                : "text-gray-700",
+                              " px-4 py-2 text-sm flex w-full"
+                            )}
+                          >
+                            {date.time}
+                          </button>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
           </div>
           <div className="flex flex-row items-center justify-between">
             <p className=" text-stone-400">
@@ -69,55 +163,98 @@ export default function PaymentsPage() {
                   minHeight: "250px",
                 }}
               >
-                {DUMMY_WEEKLY_INCOME.map((weeklyIncome) => (
+                {DUMMY_DAILY_INCOME.map((dailyIncome) => (
                   <div
-                    key={`income-${weeklyIncome.id}`}
+                    key={`income-${dailyIncome.id}`}
                     className=" w-10 bg bg-green-500 mx-auto my-0 rounded-t-md text-center text-sm text-white font-semibold"
                     style={{
-                      height: `${Math.round(weeklyIncome.income * 0.25)}px`,
+                      height: `${Math.round(dailyIncome.income * 0.25)}px`,
                       verticalAlign: "middle",
-                      lineHeight: `${Math.round(weeklyIncome.income * 0.25)}px`,
+                      lineHeight: `${Math.round(dailyIncome.income * 0.25)}px`,
                     }}
                   >
-                    ${weeklyIncome.income}
+                    ${dailyIncome.income}
                   </div>
                 ))}
               </div>
             </div>
           </div>
           <div className="grid grid-cols-4 text-center py-2 text-black font-medium text-sm ml-14">
-            <h1>Week 1</h1>
-            <h1>Week 2</h1>
-            <h1>Week 3</h1>
-            <h1>Week 4</h1>
+            <h1>Day 1</h1>
+            <h1>Day 2</h1>
+            <h1>Day 3</h1>
+            <h1>Day 4</h1>
           </div>
         </div>
         {/* Expense */}
         <div className="bg-white shadow-xl px-5 py-4  rounded-lg">
           <div className="flex flex-row justify-between  items-center mb-3">
             <strong className="font-bold text-xl">Expense</strong>
-            <button className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2.5}
-                stroke="currentColor"
-                className="w-6 h-6 text-red-500 inline mr-2"
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  {currentSelectedDate.expenseDate}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className={`h-5 w-5 text-gray-400 transition-transform ${
+                      !open ? "rotate-90" : "rotate-0"
+                    }`}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </Menu.Button>
+              </div>
+
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                />
-              </svg>
-              fev 2023
-            </button>
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-28 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    {DUMMY_DATES.map((date) => (
+                      <Menu.Item key={date.id}>
+                        {({ active }) => (
+                          <button
+                            onClick={() =>
+                              handleCurrentDateSelect("expense", date.time)
+                            }
+                            href="#"
+                            className={classNames(
+                              active
+                                ? "bg-gray-100 text-gray-900"
+                                : "text-gray-700",
+                              " px-4 py-2 text-sm flex w-full"
+                            )}
+                          >
+                            {date.time}
+                          </button>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
           </div>
           <div className="flex flex-row items-center justify-between">
             <p className=" text-stone-400">
               last updated 1m ago
-              <button>
+              <button
+              // onClick={() => handleCurrentDateSelect("expense", date.time)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -151,37 +288,118 @@ export default function PaymentsPage() {
                   minHeight: "250px",
                 }}
               >
-                {DUMMY_EXPENSES.map((weeklyExpense) => (
+                {DUMMY_DAILY_EXPENSES.map((dailyExpense) => (
                   <div
-                    key={`expense-${weeklyExpense.id}`}
+                    key={`expense-${dailyExpense.id}`}
                     className=" w-10 bg bg-red-500 mx-auto my-0 rounded-t-md text-center text-sm text-white font-semibold "
                     style={{
-                      height: `${Math.round(weeklyExpense.expense * 0.25)}px`,
+                      height: `${Math.round(dailyExpense.expense * 0.25)}px`,
                       verticalAlign: "middle",
                       lineHeight: `${Math.round(
-                        weeklyExpense.expense * 0.25
+                        dailyExpense.expense * 0.25
                       )}px`,
                     }}
                   >
-                    ${weeklyExpense.expense}
+                    ${dailyExpense.expense}
                   </div>
                 ))}
               </div>
             </div>
           </div>
           <div className="grid grid-cols-4 text-center py-2 text-black font-medium text-sm ml-14">
-            <h1>Week 1</h1>
-            <h1>Week 2</h1>
-            <h1>Week 3</h1>
-            <h1>Week 4</h1>
+            <h1>Day 1</h1>
+            <h1>Day 2</h1>
+            <h1>Day 3</h1>
+            <h1>Day 4</h1>
           </div>
         </div>
       </div>
       {/*Transactions */}
-      <section className="bg-white shadow-2xl p-4 rounded-md mt-10">
-        <h1 className="text-black font-semibold text-xl mb-4">
-          All Transactions
-        </h1>
+      <section className="bg-white shadow-2xl p-4 rounded-md mt-10  ">
+        <div className="flex flex-row justify-between items-center  mb-4 px-3">
+          <h1 className="text-black font-semibold text-xl">All Transactions</h1>
+          <Menu as="div" className="relative inline-block text-left">
+            <div>
+              <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                Filter
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="-mr-1 h-5 w-5 text-gray-400"
+                  aria-hidden
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                  />
+                </svg>
+              </Menu.Button>
+            </div>
+
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1">
+                  <h2 className=" text-sm font-medium px-4 py-2">
+                    Transaction Type
+                  </h2>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <div
+                        className={classNames(
+                          active
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "px-4 py-2 text-sm flex flex-row items-center justify-between"
+                        )}
+                      >
+                        <h3>Income</h3>
+                        <input
+                          id="default-checkbox"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                      </div>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <div
+                        className={classNames(
+                          active
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "px-4 py-2 text-sm flex flex-row items-center justify-between"
+                        )}
+                      >
+                        <h3>Expense</h3>
+                        <input
+                          checked
+                          id="default-checkbox"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                      </div>
+                    )}
+                  </Menu.Item>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
+        </div>
         {DUMMY_TRANSACTIONS.map((transactionItem) => (
           <div
             className=" grid grid-cols-2 mt-3"

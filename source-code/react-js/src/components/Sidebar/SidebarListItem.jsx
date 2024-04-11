@@ -1,15 +1,13 @@
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 export default function SidebarListItem({ label, imgSrc, href }) {
-  const isSidebarOpen = useSelector((state) => state.sidebar.isOpen);
-  console.log(isSidebarOpen)
   return (
-    <li>
+    <li className="group hover:bg-white">
       <NavLink to={href}>
         <div className="img-container">
-          <img src={imgSrc} alt="" />
+          <img src={imgSrc} alt="" className="img-hover" />
         </div>
-      <span className="item-link">{label}</span>
+        <span className="item-link group-hover:text-black">{label}</span>
       </NavLink>
     </li>
   );

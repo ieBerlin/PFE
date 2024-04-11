@@ -10,7 +10,6 @@ import signUpClasses from "../SignUp/SignUp.module.css"
 export default function SignUpForm() {
   function handleFormSubmit(e) {
     e.preventDefault();
-    console.log(e.target);
     const fd = new FormData(e.target);
     console.log(Object.fromEntries(fd.entries()));
   }
