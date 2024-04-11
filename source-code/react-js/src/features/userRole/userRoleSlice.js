@@ -54,7 +54,7 @@ export const userRoleSlice = createSlice({
                 label: "Reports",
                 href: "/reports",
                 labelSvg: reportsSvg,
-            },
+            }
         ],
         currentSidebarNavList: [{
                 id: 1,
@@ -98,7 +98,8 @@ export const userRoleSlice = createSlice({
                 label: "Reports",
                 href: "/reports",
                 labelSvg: reportsSvg,
-            },
+            }
+
         ],
     },
     reducers: {
@@ -251,6 +252,9 @@ export const userRoleSlice = createSlice({
                             href: "/reports",
                             labelSvg: reportsSvg,
                         },
+
+
+
                     ];
 
             }

@@ -1,9 +1,9 @@
 .sidebar {
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
-    height: 100%;
     width: 78px;
+    height: 100%;
     background: #11101d;
     padding: 6px 14px;
     z-index: 1000;
@@ -81,7 +81,6 @@
 
 .sidebar .nav-list {
     margin-top: 20px;
-    height: 100%;
 }
 
 .sidebar li {
