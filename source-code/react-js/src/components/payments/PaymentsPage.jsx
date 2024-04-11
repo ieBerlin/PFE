@@ -71,7 +71,7 @@ export default function PaymentsPage() {
               >
                 {DUMMY_WEEKLY_INCOME.map((weeklyIncome) => (
                   <div
-                    key={`income-${weeklyIncome.week}`}
+                    key={`income-${weeklyIncome.id}`}
                     className=" w-10 bg bg-green-500 mx-auto my-0 rounded-t-md text-center text-sm text-white font-semibold"
                     style={{
                       height: `${Math.round(weeklyIncome.income * 0.25)}px`,
@@ -178,7 +178,7 @@ export default function PaymentsPage() {
         </div>
       </div>
       {/*Transactions */}
-      <section className="bg-white shadow-xl p-4 rounded-md mt-10">
+      <section className="bg-white shadow-2xl p-4 rounded-md mt-10">
         <h1 className="text-black font-semibold text-xl mb-4">
           All Transactions
         </h1>

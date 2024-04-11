@@ -1,13 +1,18 @@
 .sidebar {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     width: 78px;
-    height: 100%;
+    height: calc(100% - 85px);
+    overflow: scroll;
     background: #11101d;
     padding: 6px 14px;
     z-index: 1000;
     transition: all 0.5s ease;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar.open {
@@ -167,17 +172,30 @@
 
 .sidebar li a {
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    transition: all 0.4s ease;
+    position: relative;
 }
 
-.sidebar .links_name {
+.sidebar li a span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 50px;
     opacity: 0;
     transition: all 0.4s ease;
 }
 
-.sidebar.open .links_name {
+.sidebar.open li a span {
+    opacity: 1;
+    transition: all 0.4s ease;
+}
+
+.item-link {
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.item-link {
     opacity: 1;
     color: white;
     transition: all 0.4s ease;
@@ -191,64 +209,74 @@
     background-color: #1d1b31;
 }
 
+.sidebar .profile {
+    height: 85px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 78px;
+    background-color: #1d1b31;
+    padding: 10px 14px;
+    color: white;
+    display: flex;
+    align-items: center;
+    transition: all 0.5s ease;
+}
+
 .sidebar.open .profile {
     width: 250px;
 }
 
-.sidebar .profile {
-    min-height: 100px;
-    display: flex;
-    justify-content: space-between;
-    position: fixed;
-    width: 78px;
-    left: 0;
-    bottom: 0;
-    padding: 10px 14px;
-    background: #1d1b31;
-    transition: all 0.5s ease;
-}
-
-.sidebar.open .profile-details {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    color: white;
-}
-
 .sidebar .profile-details {
-    display: none;
-    margin: auto 0;
+    display: flex;
+    position: relative;
+    align-items: center;
+    gap: 10px;
+    height: 85px;
+}
+
+.sidebar .profile-details-container {
+    opacity: 0;
+    position: relative;
     transition: all 0.5s ease;
 }
 
-.sidebar .name,
-.sidebar .job {
-    font-weight: 400;
-    color: #fff;
-    white-space: nowrap;
-}
-
-.sidebar.open .profile #log_out {
-    margin-right: 10px;
-}
-
-.sidebar .profile #log_out {
+.profile-details {
     position: absolute;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%) scaleX(-1);
-    background: #1d1b31;
-    width: 100%;
-    height: 35px;
-    line-height: 35px;
-    border-radius: 0px;
+    width: 250px;
+}
+
+.sidebar.open .profile-details-container {
+    opacity: 1;
     transition: all 0.5s ease;
 }
 
-.sidebar.open .profile #log_out {
-    transform: translateY(-50%) rotate(180deg) scaleX(-1);
-    rotate: (180);
-    width: 30px;
-    height: 30px;
-    background: none;
+.sidebar .log-out-container {
+    width: 50px;
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    transition: all 0.5s ease;
+}
+
+.sidebar.open .log-out-container {
+    width: calc(100% - 28px);
+    grid-template-columns: 1fr auto;
+    transition: all 0.5s ease;
+}
+
+.sidebar .log-out-container #log-out {
+    transition: all 1s ease;
+    margin-left: 11px;
+    display: flex;
+}
+
+.sidebar.open .log-out-container #log-out {
+    transition: all 0.5s ease;
+    transform: rotate(180deg);
+}
+
+.log-out-container button {
+    cursor: pointer;
+    height: 100%;
 }

@@ -1,5 +1,5 @@
 import searchSvg from "../../assets/search-alt-2-svgrepo-com.svg";
-import logoutSvg from "../../assets/log-out-svgrepo-com.svg";
+import logoutSvg from "../../assets/logout-3-svgrepo-com.svg";
 import SidebarListItem from "./SidebarListItem.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { filterSideBarNavListElements } from "../../features/userRole/userRoleSlice.js";
@@ -38,14 +38,21 @@ export default function NavList() {
         <p className="no-results-found">Nothing results found!</p>
       )}
       <div className="profile">
-        <div className="profile-details">
-          <img src={searchSvg} alt="" />
-          <div className="name_job">
-            <div className="name">Stella Army</div>
-            <div className="job">Web designer</div>
+        <div className="profile-details-container">
+          <div className="profile-details">
+            <img src={searchSvg} alt="" />
+            <div className="name-job">
+              <div className="name">Stella Army</div>
+              <div className="job">Web designer</div>
+            </div>
           </div>
         </div>
-        <img src={logoutSvg} id="log_out" alt="" />
+        <div className="log-out-container">
+          <span />
+          <button>
+            <img src={logoutSvg} id="log-out" alt="" />
+          </button>
+        </div>
       </div>
     </ul>
   );
