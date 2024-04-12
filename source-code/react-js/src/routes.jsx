@@ -23,7 +23,7 @@ import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./components/classes/EditClassPage.jsx";
 import CreateClassPage from "./components/classes/CreateClassPage.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
-import Users from "./components/user/AllUserPage.jsx"
+import Users from "./components/user/AllUserPage.jsx";
 import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
 const router = createBrowserRouter([
@@ -117,12 +117,13 @@ const router = createBrowserRouter([
         element: <PaymentsPage />,
       },
       {
-        path: "equipmentes",
+        path: "equipments",
         children: [
           {
             index: true,
             element: <EquipmentsPage />,
           },
+
           {
             path: "book",
             element: <BookEquipmentPage />,

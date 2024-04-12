@@ -40,7 +40,7 @@ export const userRoleSlice = createSlice({
             {
                 id: 5,
                 label: "Equipments",
-                href: "/equipments",
+                href: "/equipments/page",
                 labelSvg: equipmentsSvg,
             },
             {
@@ -84,7 +84,7 @@ export const userRoleSlice = createSlice({
             {
                 id: 5,
                 label: "Equipments",
-                href: "/equipments",
+                href: "/equipments/page",
                 labelSvg: equipmentsSvg,
             },
             {
@@ -129,7 +129,7 @@ export const userRoleSlice = createSlice({
                     {
                         id: 4,
                         label: "Equipments",
-                        href: "/equipmentes",
+                        href: "/equipmentes/page",
                         labelSvg: equipmentsSvg,
                     },
                 ];
@@ -191,7 +191,7 @@ export const userRoleSlice = createSlice({
                         {
                             id: 5,
                             label: "Equipments",
-                            href: "/equipments",
+                            href: "/equipments/page",
                             labelSvg: equipmentsSvg,
                         },
                         {
@@ -237,7 +237,7 @@ export const userRoleSlice = createSlice({
                         {
                             id: 5,
                             label: "Equipments",
-                            href: "/equipments",
+                            href: "/equipments/page",
                             labelSvg: equipmentsSvg,
                         },
                         {
