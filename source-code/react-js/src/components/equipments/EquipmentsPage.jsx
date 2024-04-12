@@ -9,7 +9,7 @@ export default function EquipmentsPage() {
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const maxItemsPerPage = 10;
   const maxPage = Math.ceil(DUMMY_EQUIPMENTS.length / maxItemsPerPage);
-  
+
   if (currentPage > 0 && currentPage <= maxPage) {
     content = (
       <section className={classes.sectionContainer}>
@@ -24,5 +24,5 @@ export default function EquipmentsPage() {
     content = <p>Sorry, nothing found.</p>;
   }
 
-  return content;
+  return content ;
 }
