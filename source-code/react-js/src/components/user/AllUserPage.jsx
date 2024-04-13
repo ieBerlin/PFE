@@ -311,7 +311,7 @@ export default function AllUserPage() {
                 <div className="flex flex-row gap-2 items-center justify-end">
                   <button
                     onClick={() => setCurrentModalType("reset-password")}
-                    className="flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm"
+                    className="outline-none flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -333,7 +333,7 @@ export default function AllUserPage() {
                     onClick={() => {
                       setCurrentModalType("delete-user");
                     }}
-                    className="flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm"
+                    className=" outline-none flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

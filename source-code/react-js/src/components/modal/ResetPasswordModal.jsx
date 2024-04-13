@@ -4,9 +4,9 @@ export default function ResetPasswordModal({ onClose,onConfirm }) {
     <>
       <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
         <div className="sm:flex sm:items-start">
-          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-cyan-100 sm:mx-0 sm:h-10 sm:w-10">
+          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 sm:mx-0 sm:h-10 sm:w-10">
             <ExclamationTriangleIcon
-              className="h-6 w-6 text-cyan-600"
+              className="h-6 w-6 text-emerald-600"
               aria-hidden="true"
             />
           </div>
@@ -29,7 +29,7 @@ export default function ResetPasswordModal({ onClose,onConfirm }) {
       <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
         <button
           type="button"
-          className="inline-flex w-full justify-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 sm:ml-3 sm:w-auto"
+          className="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto"
           onClick={()=>{
             onClose();
             onConfirm();
