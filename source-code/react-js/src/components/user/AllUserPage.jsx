@@ -1,18 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Transition } from "@headlessui/react";
 import { DUMMY_USERS, filterUsers } from "../../dummy_data/dummy_users.js";
 import Modal from "../modal/Modal";
 export default function AllUserPage() {
-  const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef();
   const dropDownMenuRef = useRef();
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const handleCloseModal = () => {
-    setModalIsOpen(false);
-  };
-  const handleOpenModal = () => {
-    setModalIsOpen(true);
-  };
+  const [currentModalType, setCurrentModalType] = useState(undefined);
+  const [filterDropDownMenuOpen, setFilterDropDownMenuOpen] = useState(false);
   const [currentSelectedUsers, setCurrentSelectedUsers] = useState({
     userRole: {
       admin: true,
@@ -25,6 +18,7 @@ export default function AllUserPage() {
       blocked: true,
     },
   });
+
   const FILTRED_DUMMY_USERS = filterUsers(DUMMY_USERS, currentSelectedUsers);
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -36,7 +30,7 @@ export default function AllUserPage() {
       ) {
         return;
       }
-      setIsOpen(false);
+      setFilterDropDownMenuOpen(false);
     };
 
     document.addEventListener("mousedown", handleOutsideClick);
@@ -56,7 +50,12 @@ export default function AllUserPage() {
   };
   return (
     <>
-      <Modal open={modalIsOpen} onClose={handleCloseModal} type="create-user" />
+      <Modal
+        type={currentModalType}
+        onClose={() => setCurrentModalType(undefined)}
+        open={currentModalType !== undefined}
+        onChangeType={setCurrentModalType}
+      />
 
       <main className="bg-gray-100 min-h-screen px-8 py-4 pb-8">
         <div className="flex flex-row justify-between">
@@ -72,11 +71,10 @@ export default function AllUserPage() {
                 data-dropdown-toggle="dropdownDefaultCheckbox"
                 className=" text-stone-900 bg-white hover:bg-gray-50 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
                 type="button"
+                ref={buttonRef}
                 onClick={() => {
-                  setIsOpen(!isOpen);
-                  buttonRef.current.blur();
+                  setFilterDropDownMenuOpen((prevState) => !prevState);
                 }}
-                ref={(node) => (buttonRef.current = node)}
               >
                 <p> Filter</p>
                 <svg
@@ -96,166 +94,153 @@ export default function AllUserPage() {
                 </svg>
               </button>
 
-              <Transition
-                show={isOpen}
-                enter="transition ease-out duration-100 transform"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="transition ease-in duration-75 transform"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                {(ref) => (
-                  <div
-                    ref={ref}
-                    id="dropdownDefaultCheckbox"
-                    className="ring-1 ring-inset ring-gray-300 z-10 absolute left-0 mt-1 w-48  bg-white divide-y divide-gray-100 rounded-lg shadow"
-                    style={{
-                      top: "calc(100% + 5px)",
-                    }}
+              {filterDropDownMenuOpen && (
+                <div
+                  id="dropdownDefaultCheckbox"
+                  className="ring-1 ring-inset ring-gray-300 z-10 absolute left-0 mt-1 w-48  bg-white divide-y divide-gray-100 rounded-lg shadow"
+                  style={{
+                    top: "calc(100% + 5px)",
+                  }}
+                >
+                  <p className=" text-black font-semibold pl-3 py-2">
+                    User Role
+                  </p>
+                  <ul
+                    className="p-3 space-y-3 text-sm "
+                    aria-labelledby="dropdownCheckboxButton"
                   >
-                    <p className=" text-black font-semibold pl-3 py-2">
-                      User Role
-                    </p>
-                    <ul
-                      className="p-3 space-y-3 text-sm "
-                      aria-labelledby="dropdownCheckboxButton"
-                    >
-                      <li>
-                        <div className="flex items-center">
-                          <input
-                            onChange={() =>
-                              toggleFilteredUsersChange("admin", "userRole")
-                            }
-                            checked={currentSelectedUsers.userRole.admin}
-                            id="checkbox-item-1"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
-                          />
-                          <label
-                            htmlFor="checkbox-item-1"
-                            className="ms-2 text-sm font-medium text-gray-600"
-                          >
-                            Admin
-                          </label>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex items-center">
-                          <input
-                            onChange={() =>
-                              toggleFilteredUsersChange("coach", "userRole")
-                            }
-                            checked={currentSelectedUsers.userRole.coach}
-                            id="checkbox-item-1"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
-                          />
-                          <label
-                            htmlFor="checkbox-item-1"
-                            className="ms-2 text-sm font-medium text-gray-600"
-                          >
-                            Coach
-                          </label>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex items-center">
-                          <input
-                            onChange={() =>
-                              toggleFilteredUsersChange("member", "userRole")
-                            }
-                            checked={currentSelectedUsers.userRole.member}
-                            id="checkbox-item-1"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
-                          />
-                          <label
-                            htmlFor="checkbox-item-1"
-                            className="ms-2 text-sm font-medium text-gray-600"
-                          >
-                            Member
-                          </label>
-                        </div>
-                      </li>
-                    </ul>
-                    <p className=" text-black font-semibold pl-3 py-2">
-                      Status
-                    </p>
-                    <ul
-                      className="p-3 space-y-3 text-sm "
-                      aria-labelledby="dropdownCheckboxButton"
-                    >
-                      <li>
-                        <div className="flex items-center">
-                          <input
-                            onChange={() =>
-                              toggleFilteredUsersChange("active", "status")
-                            }
-                            checked={currentSelectedUsers.status.active}
-                            id="checkbox-item-1"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
-                          />
-                          <label
-                            htmlFor="checkbox-item-1"
-                            className="ms-2 text-sm font-medium text-gray-600"
-                          >
-                            active
-                          </label>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex items-center">
-                          <input
-                            onChange={() =>
-                              toggleFilteredUsersChange("pending", "status")
-                            }
-                            checked={currentSelectedUsers.status.pending}
-                            id="checkbox-item-1"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
-                          />
-                          <label
-                            htmlFor="checkbox-item-1"
-                            className="ms-2 text-sm font-medium text-gray-600"
-                          >
-                            Pending
-                          </label>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex items-center">
-                          <input
-                            onChange={() =>
-                              toggleFilteredUsersChange("blocked", "status")
-                            }
-                            checked={currentSelectedUsers.status.blocked}
-                            id="checkbox-item-1"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
-                          />
-                          <label
-                            htmlFor="checkbox-item-1"
-                            className="ms-2 text-sm font-medium text-gray-600"
-                          >
-                            Blocked
-                          </label>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </Transition>
+                    <li>
+                      <div className="flex items-center">
+                        <input
+                          onChange={() =>
+                            toggleFilteredUsersChange("admin", "userRole")
+                          }
+                          checked={currentSelectedUsers.userRole.admin}
+                          id="checkbox-item-1"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                        />
+                        <label
+                          htmlFor="checkbox-item-1"
+                          className="ms-2 text-sm font-medium text-gray-600"
+                        >
+                          Admin
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="flex items-center">
+                        <input
+                          onChange={() =>
+                            toggleFilteredUsersChange("coach", "userRole")
+                          }
+                          checked={currentSelectedUsers.userRole.coach}
+                          id="checkbox-item-1"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                        />
+                        <label
+                          htmlFor="checkbox-item-1"
+                          className="ms-2 text-sm font-medium text-gray-600"
+                        >
+                          Coach
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="flex items-center">
+                        <input
+                          onChange={() =>
+                            toggleFilteredUsersChange("member", "userRole")
+                          }
+                          checked={currentSelectedUsers.userRole.member}
+                          id="checkbox-item-1"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                        />
+                        <label
+                          htmlFor="checkbox-item-1"
+                          className="ms-2 text-sm font-medium text-gray-600"
+                        >
+                          Member
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                  <p className=" text-black font-semibold pl-3 py-2">Status</p>
+                  <ul
+                    className="p-3 space-y-3 text-sm "
+                    aria-labelledby="dropdownCheckboxButton"
+                  >
+                    <li>
+                      <div className="flex items-center">
+                        <input
+                          onChange={() =>
+                            toggleFilteredUsersChange("active", "status")
+                          }
+                          checked={currentSelectedUsers.status.active}
+                          id="checkbox-item-1"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                        />
+                        <label
+                          htmlFor="checkbox-item-1"
+                          className="ms-2 text-sm font-medium text-gray-600"
+                        >
+                          active
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="flex items-center">
+                        <input
+                          onChange={() =>
+                            toggleFilteredUsersChange("pending", "status")
+                          }
+                          checked={currentSelectedUsers.status.pending}
+                          id="checkbox-item-1"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                        />
+                        <label
+                          htmlFor="checkbox-item-1"
+                          className="ms-2 text-sm font-medium text-gray-600"
+                        >
+                          Pending
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="flex items-center">
+                        <input
+                          onChange={() =>
+                            toggleFilteredUsersChange("blocked", "status")
+                          }
+                          checked={currentSelectedUsers.status.blocked}
+                          id="checkbox-item-1"
+                          type="checkbox"
+                          value=""
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                        />
+                        <label
+                          htmlFor="checkbox-item-1"
+                          className="ms-2 text-sm font-medium text-gray-600"
+                        >
+                          Blocked
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
             <button
-              onClick={handleOpenModal}
+              onClick={() => setCurrentModalType("create-user")}
               className="font-semibold bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm ring-1 ring-inset ring-gray-300"
             >
               Add user
@@ -324,7 +309,10 @@ export default function AllUserPage() {
                   {user.status}
                 </h1>
                 <div className="flex flex-row gap-2 items-center justify-end">
-                  <button className="flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm">
+                  <button
+                    onClick={() => setCurrentModalType("reset-password")}
+                    className="flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -341,7 +329,12 @@ export default function AllUserPage() {
                     </svg>
                     reset password
                   </button>
-                  <button className="flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm">
+                  <button
+                    onClick={() => {
+                      setCurrentModalType("delete-user");
+                    }}
+                    className="flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
