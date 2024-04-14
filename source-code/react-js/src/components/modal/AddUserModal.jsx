@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
-import { Form } from "react-router-dom";
 import { CameraIcon } from "@heroicons/react/24/outline";
-export default function AddUserModal({ onClose, onConfirm }) {
+export default function AddUserModal({ onClose, onConfirm, isAdmin }) {
   const [currentImageSrc, setCurrentImageSrc] = useState(
     "https://www.femalefirst.co.uk/image-library/square/500/t/thehurtlocker.jpg"
   );
@@ -57,11 +56,13 @@ export default function AddUserModal({ onClose, onConfirm }) {
               />
             </button>
           </div>
-          <select className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
-            <option>Member</option>
-            <option>Coach</option>
-            <option>Admin</option>
-          </select>
+          {isAdmin && (
+            <select className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
+              <option>Member</option>
+              <option>Coach</option>
+              <option>Admin</option>
+            </select>
+          )}
         </div>
         {/* Other input fields */}
         <div className="mt-10">
@@ -214,7 +215,7 @@ function PhoneNumberInput() {
               />
             </g>
           </svg>
-          <p style={{marginLeft:"1px"}}>+213</p>
+          <p style={{ marginLeft: "1px" }}>+213</p>
         </div>
         <div className="relative w-full">
           <input

@@ -4,33 +4,38 @@ import ResetPasswordModal from "./ResetPasswordModal.jsx";
 import ConfirmResetPasswordModal from "./ConfirmResetPasswordModal.jsx";
 import AddUserModal from "./AddUserModal.jsx";
 import { useEffect, useRef } from "react";
-export default function Modal({ open, onClose, type, onChangeType }) {
+import { useSelector, useDispatch } from "react-redux";
+import { setModalType } from "../../features/modal/modalSlice.js";
+export default function Modal() {
   const dialog = useRef();
+  const type = useSelector((state) => state.modal.type);
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (open) {
+    if (type) {
       dialog.current.showModal();
     } else {
       dialog.current.close();
     }
-  }, [open, dialog]);
+  }, [type, dialog]);
+  function closeModal() {
+    dispatch(setModalType());
+  }
   let modalContent = (
     <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-10">
       <p className="font-semibold"> Nothing to show !</p>
       <button
-        onClick={onClose}
+        onClick={() => dispatch(setModalType())}
         className=" bg-indigo-700 text-white py-2 rounded-md font-semibold "
       >
         Okay
       </button>
     </div>
   );
-  function onConfirm(confirmType) {
-    onChangeType(confirmType);
-  }
+
   if (type === "create-user") {
     modalContent = (
       <AddUserModal
-        onClose={onClose}
+        onClose={closeModal}
         onConfirm={() => onConfirm("confirm-add-user")}
       />
     );
@@ -38,13 +43,13 @@ export default function Modal({ open, onClose, type, onChangeType }) {
     modalContent = (
       <DeleteUserModal
         onConfirm={() => onConfirm("confirm-delete-user")}
-        onClose={onClose}
+        onClose={closeModal}
       />
     );
   } else if (type === "reset-password") {
     modalContent = (
       <ResetPasswordModal
-        onClose={onClose}
+        onClose={closeModal}
         onConfirm={() => onConfirm("confirm-reset-password")}
       />
     );
@@ -54,7 +59,7 @@ export default function Modal({ open, onClose, type, onChangeType }) {
         color="green"
         title="Password reset confirmation sent"
         description="The user's password has been successfully reset. An email has been sent to the user with instructions on how to set up a new password"
-        onClose={onClose}
+        onClose={closeModal}
       />
     );
   } else if (type === "confirm-delete-user") {
@@ -63,30 +68,33 @@ export default function Modal({ open, onClose, type, onChangeType }) {
         color="red"
         title="User Deleted Successfully"
         description="User has been successfully deleted."
-        onClose={onClose}
+        onClose={closeModal}
       />
     );
   } else if (type === "confirm-add-user") {
     modalContent = (
       <ConfirmResetPasswordModal
-        color="cyan"
+        color="blue"
         title="User Added Successfully"
         description="User has been successfully added."
-        onClose={onClose}
+        onClose={closeModal}
       />
     );
+  }
+  function onConfirm(confirmType) {
+    dispatch(setModalType(confirmType));
   }
   return createPortal(
     <dialog
       ref={dialog}
-      onClose={onClose}
+      onClose={closeModal}
       style={{
         zIndex: "205",
-        position: "relative",
       }}
+      className="relative "
     >
       <div className=" bg-transparent  flex w-full items-center justify-center flex-col overflow-y-auto h-screen backdrop-blur-sm  top-0 fixed transform rounded-lg px-36 py-10 text-left shadow-xl transition-all ">
-        <div className="fixed top-1/2 pt-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2   max-h-screen  ">
+        <div className="fixed top-1/2 left-1/2 pt-6 transform -translate-x-1/2 -translate-y-1/2   max-h-screen  ">
           {modalContent}
         </div>
       </div>

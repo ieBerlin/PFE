@@ -4,14 +4,12 @@ export default function ConfirmResetPasswordModal({
   onClose,
   title,
   description,
-  color
+  color = "blue",
 }) {
-  console.log(color)
   const iconColorClass = `text-${color}-600`;
   const iconBgClass = `bg-${color}-100`;
   const buttonBgClass = `bg-${color}-500`;
   const buttonHoverBgClass = `hover:bg-${color}-600`;
-
   return (
     <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
       <div className="flex flex-col w-full h-full items-center justify-center px-4">

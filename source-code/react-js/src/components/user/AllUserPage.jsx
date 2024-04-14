@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { DUMMY_USERS, filterUsers } from "../../dummy_data/dummy_users.js";
 import Modal from "../modal/Modal";
+import { useDispatch } from "react-redux";
+import { setModalType } from "../../features/modal/modalSlice.js";
 export default function AllUserPage() {
+  const dispatch = useDispatch();
   const buttonRef = useRef();
   const dropDownMenuRef = useRef();
-  const [currentModalType, setCurrentModalType] = useState(undefined);
   const [filterDropDownMenuOpen, setFilterDropDownMenuOpen] = useState(false);
   const [currentSelectedUsers, setCurrentSelectedUsers] = useState({
     userRole: {
@@ -50,12 +52,7 @@ export default function AllUserPage() {
   };
   return (
     <>
-      <Modal
-        type={currentModalType}
-        onClose={() => setCurrentModalType(undefined)}
-        open={currentModalType !== undefined}
-        onChangeType={setCurrentModalType}
-      />
+      <Modal />
 
       <main className="bg-gray-100 min-h-screen px-8 py-4 pb-8">
         <div className="flex flex-row justify-between">
@@ -240,7 +237,7 @@ export default function AllUserPage() {
               )}
             </div>
             <button
-              onClick={() => setCurrentModalType("create-user")}
+              onClick={() => dispatch(setModalType("create-user"))}
               className="font-semibold bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm ring-1 ring-inset ring-gray-300"
             >
               Add user
@@ -310,7 +307,7 @@ export default function AllUserPage() {
                 </h1>
                 <div className="flex flex-row gap-2 items-center justify-end">
                   <button
-                    onClick={() => setCurrentModalType("reset-password")}
+                    onClick={() => dispatch(setModalType("reset-password"))}
                     className="outline-none flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm"
                   >
                     <svg
@@ -331,7 +328,7 @@ export default function AllUserPage() {
                   </button>
                   <button
                     onClick={() => {
-                      setCurrentModalType("delete-user");
+                      dispatch(setModalType("delete-user"));
                     }}
                     className=" outline-none flex items-center flex-row gap-2 text-gray-400 hover:text-blue-600 font-bold text-sm"
                   >

@@ -32,12 +32,8 @@ const router = createBrowserRouter([
     element: <LandingPage />,
   },
   {
-    path: "/login",
+    path: "auth",
     element: <LoginPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignUpPage />,
   },
   {
     path: "/",
@@ -120,7 +116,7 @@ const router = createBrowserRouter([
         path: "equipments",
         children: [
           {
-            index: true,
+            path: "page",
             element: <EquipmentsPage />,
           },
 

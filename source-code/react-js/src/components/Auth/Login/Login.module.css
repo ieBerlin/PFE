@@ -12,13 +12,6 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
-.formSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0px 11px;
-}
-
 .signUpSection {
     display: flex;
     justify-content: space-between;
@@ -48,30 +41,34 @@
 .enrollNow,
 .loginButton {
     cursor: pointer;
-    background-color: white;
+    background-color: #9333ea;
     outline: none;
     font-size: 17px;
     padding: 5px 10px;
     border-radius: 20px;
     font-weight: 600;
     border: 1px solid grey;
+    color: white;
 }
 
-.enrollNow {
-    color: #8C33FF;
+.enrollNow:hover,
+.loginButton:hover {
+    background-color: #a855f7;
 }
 
 .loginButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     padding: 10px 0px;
     font-size: 20px;
-    background-color: #8C33FF;
     color: white;
     border-radius: 1rem;
-    margin-top: 20px;
 }
 
 .mainSection {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -82,6 +79,8 @@
     color: black;
     font-size: 40px;
     margin: 0px 0px 5px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .mainSection h4 {
@@ -137,15 +136,13 @@
 /* Remember me checkbox */
 
 .rememberMe {
+    width: 100%;
     display: flex;
-    margin: 0 auto;
+    margin: 20px auto;
     color: black;
     gap: 10px;
-    margin: 20px 0px;
-}
-
-.rememberMe input {
-    color: red;
+    font-size: 15px;
+    padding-left: 20px;
 }
 
 .label {

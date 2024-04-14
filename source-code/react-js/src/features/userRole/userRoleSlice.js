@@ -103,8 +103,8 @@ export const userRoleSlice = createSlice({
         ],
     },
     reducers: {
-        toggleUserChanged: (state, payload) => {
-            state.currentUserRole = payload;
+        toggleUserChanged: (state, action) => {
+            state.currentUserRole = action;
         },
         sideBarNavListElements: (state) => {
             switch (state.currentUserRole) {
