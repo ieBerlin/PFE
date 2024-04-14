@@ -31,7 +31,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
 
   return (
     <>
-      <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+      <div className=" bg-transparent px-8 pb-4 pt-5 rounded-md bg-white">
         <h3 className="text-black font-semibold text-xl mb-4">
           User information
         </h3>
@@ -70,7 +70,6 @@ export default function AddUserModal({ onClose, onConfirm }) {
           <Input label="First Name" placeholder="Enter Your First Name" />
           <Input label="Last Name" placeholder="Enter Your Last Name" />
           <DateInput label="Date" placeholder="Enter Your Birth Day" />
-          <Input label="Phone Number" placeholder="Enter Your Phone Number" />
           <PhoneNumberInput />
           <GenderInput />
           <TextAreaInput />
@@ -103,7 +102,7 @@ function Input({ label, placeholder, type = "text" }) {
       <label className="block text-sm font-medium my-2">{label}</label>
       <input
         type={type}
-        className="py-3 px-4 block w-full border-gray-200 border-2 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+        className="py-3 px-4 block border-gray-200 border-2  w-96 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
         placeholder={placeholder}
       />
     </>
@@ -170,10 +169,10 @@ function TextAreaInput() {
 function PhoneNumberInput() {
   return (
     <>
-      <label className="block text-sm font-medium my-2">Address</label>
+      <label className="block text-sm font-medium my-2">Phone Number</label>
       <div className="flex">
         <div
-          className="flex-shrink-0 z-10 inline-flex items-center py-2 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 "
+          className="flex-shrink-0 z-10 inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 "
           type="button"
         >
           <svg
@@ -215,14 +214,14 @@ function PhoneNumberInput() {
               />
             </g>
           </svg>
-          <p className="ml-1">+213</p>
+          <p style={{marginLeft:"1px"}}>+213</p>
         </div>
         <div className="relative w-full">
           <input
             type="text"
             id="phone-input"
             aria-describedby="helper-text-explanation"
-            className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg   border-gray-300 border-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+            className="block p-2.5 w-full z-20 text-sm text-gray-900 rounded-e-lg   border-gray-300 border-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             placeholder="699-213-213"
             required

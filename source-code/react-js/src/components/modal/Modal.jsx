@@ -6,13 +6,13 @@ import AddUserModal from "./AddUserModal.jsx";
 import { useEffect, useRef } from "react";
 export default function Modal({ open, onClose, type, onChangeType }) {
   const dialog = useRef();
-  // useEffect(() => {
-  //   if (open) {
-  //     dialog.current.showModal();
-  //   } else {
-  //     dialog.current.close();
-  //   }
-  // }, [open, dialog]);
+  useEffect(() => {
+    if (open) {
+      dialog.current.showModal();
+    } else {
+      dialog.current.close();
+    }
+  }, [open, dialog]);
   let modalContent = (
     <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-10">
       <p className="font-semibold"> Nothing to show !</p>
@@ -69,7 +69,7 @@ export default function Modal({ open, onClose, type, onChangeType }) {
   } else if (type === "confirm-add-user") {
     modalContent = (
       <ConfirmResetPasswordModal
-        color="blue"
+        color="cyan"
         title="User Added Successfully"
         description="User has been successfully added."
         onClose={onClose}
@@ -78,15 +78,17 @@ export default function Modal({ open, onClose, type, onChangeType }) {
   }
   return createPortal(
     <dialog
-      open={open}
+      ref={dialog}
       onClose={onClose}
       style={{
         zIndex: "205",
+        position: "relative",
       }}
-      className="fixed overflow-y-scroll bg-transparent w-full min-h-full backdrop-blur-sm top-0 left-0"
     >
-      <div className="fixed transform rounded-lg  text-left shadow-xl transition-all  items-center w-full">
-        {modalContent}
+      <div className=" bg-transparent  flex w-full items-center justify-center flex-col overflow-y-auto h-screen backdrop-blur-sm  top-0 fixed transform rounded-lg px-36 py-10 text-left shadow-xl transition-all ">
+        <div className="fixed top-1/2 pt-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2   max-h-screen  ">
+          {modalContent}
+        </div>
       </div>
     </dialog>,
     document.getElementById("modal")
