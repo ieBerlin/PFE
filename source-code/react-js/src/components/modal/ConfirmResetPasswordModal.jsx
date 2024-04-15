@@ -5,6 +5,7 @@ export default function ConfirmResetPasswordModal({
   title,
   description,
   color = "blue",
+  confirmButtonLabel="Go Back",
 }) {
   const iconColorClass = `text-${color}-600`;
   const iconBgClass = `bg-${color}-100`;
@@ -23,7 +24,7 @@ export default function ConfirmResetPasswordModal({
           onClick={onClose}
           className={`mt-4 ${buttonBgClass} text-white font-semibold rounded-md px-32 py-1 ${buttonHoverBgClass}`}
         >
-          Go back
+          {confirmButtonLabel}
         </button>
       </div>
     </div>

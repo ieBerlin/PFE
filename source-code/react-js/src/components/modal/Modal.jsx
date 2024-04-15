@@ -8,6 +8,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
 export default function Modal() {
   const dialog = useRef();
+  const modalContentRef = useRef();
+
   const type = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -17,6 +19,23 @@ export default function Modal() {
       dialog.current.close();
     }
   }, [type, dialog]);
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (
+        !modalContentRef.current ||
+        modalContentRef.current.contains(e.target)
+      ) {
+        return;
+      } else {
+        // dispatch(setModalType());
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [dispatch]);
   function closeModal() {
     dispatch(setModalType());
   }
@@ -60,6 +79,7 @@ export default function Modal() {
         title="Password reset confirmation sent"
         description="The user's password has been successfully reset. An email has been sent to the user with instructions on how to set up a new password"
         onClose={closeModal}
+
       />
     );
   } else if (type === "confirm-delete-user") {
@@ -69,6 +89,7 @@ export default function Modal() {
         title="User Deleted Successfully"
         description="User has been successfully deleted."
         onClose={closeModal}
+
       />
     );
   } else if (type === "confirm-add-user") {
@@ -78,6 +99,17 @@ export default function Modal() {
         title="User Added Successfully"
         description="User has been successfully added."
         onClose={closeModal}
+
+      />
+    );
+  } else if (type === "confirm-sign-out") {
+    modalContent = (
+      <ConfirmResetPasswordModal
+        color="blue"
+        title="Are You Sure You Want to Sign Out?"
+        description="Are you sure you want to sign out of your account? Click 'Confirm' to sign out."
+        onClose={closeModal}
+        confirmButtonLabel="Sign Out"
       />
     );
   }
@@ -94,7 +126,10 @@ export default function Modal() {
       className="relative "
     >
       <div className=" bg-transparent  flex w-full items-center justify-center flex-col overflow-y-auto h-screen backdrop-blur-sm  top-0 fixed transform rounded-lg px-36 py-10 text-left shadow-xl transition-all ">
-        <div className="fixed top-1/2 left-1/2 pt-6 transform -translate-x-1/2 -translate-y-1/2   max-h-screen  ">
+        <div
+          ref={modalContentRef}
+          className="fixed top-1/2 left-1/2 pt-6 transform -translate-x-1/2 -translate-y-1/2   max-h-screen  "
+        >
           {modalContent}
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import LandingPage from "./pages/landing-page/LandingPage.jsx";
 import LoginPage from "./components/auth/Login/Login.jsx";
-import SignUpPage from "./components/auth/SignUp/SignUp.jsx";
 import SportsPage from "./components/sports/SportsPage.jsx";
 import ClassesPage from "./components/classes/ClassesPage.jsx";
 import EquipmentsPage from "./components/equipments/EquipmentsPage.jsx";
@@ -26,10 +25,12 @@ import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Users from "./components/user/AllUserPage.jsx";
 import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
+import NotFoundPage from "./pages/not-found/NotFoundPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <LandingPage />,
+    errorElement: <NotFoundPage />,
   },
   {
     path: "auth",

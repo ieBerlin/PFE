@@ -3,14 +3,20 @@ import logoutSvg from "../../assets/logout-3-svgrepo-com.svg";
 import SidebarListItem from "./SidebarListItem.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { filterSideBarNavListElements } from "../../features/userRole/userRoleSlice.js";
+import { setModalType } from "../../features/modal/modalSlice.js";
+
 export default function NavList() {
   const sideBarNavListElements = useSelector(
     (state) => state.userRole.currentSidebarNavList
   );
   const dispatch = useDispatch();
+
   const toggleSearchInputChange = (e) => {
     const inputVal = e.target.value;
     dispatch(filterSideBarNavListElements(inputVal));
+  };
+  const signOutHandler = () => {
+    dispatch(setModalType("confirm-sign-out"));
   };
   return (
     <ul className="nav-list">
@@ -49,7 +55,7 @@ export default function NavList() {
         </div>
         <div className="log-out-container">
           <span />
-          <button>
+          <button onClick={signOutHandler}>
             <img src={logoutSvg} id="log-out" alt="" />
           </button>
         </div>
