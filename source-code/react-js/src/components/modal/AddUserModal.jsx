@@ -1,20 +1,30 @@
 import { useState, useRef } from "react";
 import { CameraIcon } from "@heroicons/react/24/outline";
-export default function AddUserModal({ onClose, onConfirm, isAdmin }) {
-  const [currentImageSrc, setCurrentImageSrc] = useState(
-    "https://www.femalefirst.co.uk/image-library/square/500/t/thehurtlocker.jpg"
-  );
-  const imageRef = useRef();
+import { Form } from "react-router-dom";
+import { useFetch } from "../../hooks/http";
+import PasswordInput from "./PasswordInput.jsx";
 
+import defaultUserImage from "../../assets/default-user.webp";
+import { useSelector } from "react-redux";
+async function postReq() {}
+
+export default function AddUserModal({ onClose, onConfirm }) {
+  const isAdmin =
+    useSelector((state) => state.userRole.currentUserRole) === "admin";
+  const { isFetching, errors, fetchData } = useFetch(postReq);
+
+  const [currentImageSrc, setCurrentImageSrc] = useState(defaultUserImage);
+  const imageRef = useRef();
+  const submitButtonRef = useRef();
   const pickImage = () => {
     if (imageRef.current) {
       imageRef.current.click();
     }
   };
-
-  const toggleSubmit = () => {
-    onClose();
-    onConfirm();
+  const toggleSubmit = (e) => {
+    e.preventDefault();
+    fetchData();
+    console.log('clicked')
   };
 
   const handleImageChange = (e) => {
@@ -30,7 +40,10 @@ export default function AddUserModal({ onClose, onConfirm, isAdmin }) {
 
   return (
     <>
-      <div className=" bg-transparent px-8 pb-4 pt-5 rounded-md bg-white">
+      <Form
+        className=" bg-transparent px-8 pb-4 pt-5 rounded-md bg-white"
+        onSubmit={toggleSubmit}
+      >
         <h3 className="text-black font-semibold text-xl mb-4">
           User information
         </h3>
@@ -68,26 +81,88 @@ export default function AddUserModal({ onClose, onConfirm, isAdmin }) {
         <div className="mt-10">
           <Input label="Email" placeholder="Enter Your Email" type="email" />
           <Input label="Username" placeholder="Enter Your Username" />
+          <PasswordInput label="Password" placeholder="Enter Your Password" />
+          <PasswordInput
+            label="Confirm Password"
+            placeholder="Confirm Your Password"
+          />
           <Input label="First Name" placeholder="Enter Your First Name" />
           <Input label="Last Name" placeholder="Enter Your Last Name" />
           <DateInput label="Date" placeholder="Enter Your Birth Day" />
           <PhoneNumberInput />
           <GenderInput />
           <TextAreaInput />
-          <button type="submit" className="hidden" />
+          <button type="submit" className="hidden" ref={submitButtonRef} />
         </div>
-      </div>
+      </Form>
+      <ul className="bg-white px-8 flex flex-col gap-2">
+        {!isFetching &&
+          errors &&
+          errors.map((error, index) => (
+            <li key={index}>
+              <div
+                className="bg-red-100 border-s-4 border-red-500 p-4 "
+                role="alert"
+              >
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <span className="inline-flex justify-center items-center size-8 rounded-full border-4 border-red-100 bg-red-200 text-red-800 ">
+                      <svg
+                        className="flex-shrink-0 size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                      </svg>
+                    </span>
+                  </div>
+                  <div className="ms-3">
+                    <h3 className="text-gray-800 font-semibold capitalize">
+                      {error.title || "An error occurred"}
+                    </h3>
+                    <p className="text-sm text-gray-700 capitalize">
+                      {error.description ||
+                        "An error occurred while processing your request."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </li>
+          ))}
+      </ul>
       <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
         <button
+          disabled={isFetching}
           type="button"
-          className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-          onClick={toggleSubmit}
+          className={`${isFetching ? "bg-gray-200" : "bg-blue-600 "}   ${
+            isFetching ? "text-gray-500 " : "text-white"
+          } outline-none inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${
+            !isFetching && "hover:bg-blue-500"
+          } sm:ml-3 sm:w-auto`}
+          onClick={() => {
+            if (submitButtonRef) {
+              submitButtonRef.current.click();
+            }
+          }}
         >
-          Add User
+          {isFetching ? "Loading..." : "Add user"}
         </button>
         <button
+          disabled={isFetching}
           type="button"
-          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+          className={` outline-none  mt-3 inline-flex w-full justify-center rounded-md ${
+            isFetching ? "bg-gray-100" : "bg-white"
+          } px-3 py-2 text-sm font-semibold ${
+            isFetching ? "text-gray-400" : "text-gray-900"
+          } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
           onClick={onClose}
         >
           Cancel
@@ -102,6 +177,7 @@ function Input({ label, placeholder, type = "text" }) {
     <>
       <label className="block text-sm font-medium my-2">{label}</label>
       <input
+        required
         type={type}
         className="py-3 px-4 block border-gray-200 border-2  w-96 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
         placeholder={placeholder}
@@ -115,6 +191,7 @@ function DateInput({ label, placeholder }) {
     <>
       <label className="block text-sm font-medium my-2">{label}</label>
       <input
+        required
         type="date"
         className="py-2 px-4 block w-full border-gray-200 border-2 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
         placeholder={placeholder}
@@ -130,6 +207,7 @@ function GenderInput() {
       <div className="flex gap-x-6 border-gray-200 border-2 w-min px-4 py-2 rounded-lg">
         <div className="flex items-center">
           <input
+            defaultChecked
             id="male-radio"
             type="radio"
             name="gender-group"
@@ -160,6 +238,7 @@ function TextAreaInput() {
     <>
       <label className="block text-sm font-medium my-2">Address</label>
       <textarea
+        required
         className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm border-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
         rows="3"
         placeholder="Enter your address"

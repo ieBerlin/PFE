@@ -46,7 +46,7 @@ export default function PasswordFormInput({
     "w-5 h-5 absolute bottom-1/2 right-2 translate-y-1/2 text-gray-400 cursor-pointer";
   return (
     <>
-      <div className="relative">
+      <div className="relative ">
         <input
           type={isShown ? "text" : "password"}
           onFocus={handleInputFocus}
