@@ -10,7 +10,9 @@ export function useFetch(fetchFn, initialValue) {
         try {
             const data = await fetchFn();
 
-            setTimeout(() => setIsFetching(false), 5000)
+            setTimeout(() => {
+                setIsFetching(false)
+            }, 5000)
 
             setFetchedData(data);
         } catch (error) {
@@ -26,7 +28,6 @@ export function useFetch(fetchFn, initialValue) {
         fetchData
     };
 }
-
 /**
  * const errorsMayHappend = [{
         description: "Invalid email value",

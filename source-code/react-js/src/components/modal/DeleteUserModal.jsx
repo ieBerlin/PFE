@@ -1,5 +1,18 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useDispatch } from "react-redux";
+import { setModalType } from "../../features/modal/modalSlice";
+import LoadingIndicator from "../LoadingIndicator";
+import { useFetch } from "../../hooks/http";
+
 export default function DeleteUserModal({ onClose, onConfirm }) {
+  const dispatch = useDispatch();
+  const { isFetching, fetchData } = useFetch(() => {});
+
+  function handleDeleteButtonClick() {
+    fetchData().then();
+  }
+
+
   return (
     <>
       <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
@@ -23,21 +36,18 @@ export default function DeleteUserModal({ onClose, onConfirm }) {
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
         <button
           type="button"
           className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-          onClick={() => {
-            onClose();
-            onConfirm();
-          }}
+          onClick={handleDeleteButtonClick}
         >
-          Delete
+          {isFetching ? <LoadingIndicator fill="gray-500" /> : "Delete"}
         </button>
         <button
           type="button"
           className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-          onClick={onClose}
+          onClick={() => dispatch(setModalType())}
         >
           Cancel
         </button>

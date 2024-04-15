@@ -11,7 +11,6 @@ function classNames(...classes) {
 export default function ProfileDropDownMenu() {
   const dispatch = useDispatch();
   const signOutHandler = () => {
-    console.log("Clicked");
     dispatch(setModalType("confirm-sign-out"));
   };
   return (

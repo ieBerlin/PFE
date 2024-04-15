@@ -24,7 +24,6 @@ export default function AddUserModal({ onClose, onConfirm }) {
   const toggleSubmit = (e) => {
     e.preventDefault();
     fetchData();
-    console.log('clicked')
   };
 
   const handleImageChange = (e) => {
@@ -64,7 +63,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
             />
             <button onClick={pickImage}>
               <CameraIcon
-                className="absolute w-10 h-10 text-black-500 bg-gray-200 hover:bg-gray-300 p-2 rounded-full"
+                className=" outline-none absolute w-10 h-10 text-black-500 bg-gray-200 hover:bg-gray-300 p-2 rounded-full"
                 style={{ bottom: "-16px", right: "-16px" }}
               />
             </button>
@@ -213,9 +212,7 @@ function GenderInput() {
             name="gender-group"
             className="mr-2 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="male-radio" className="text-sm text-gray-500">
-            Male
-          </label>
+          <label className="text-sm text-gray-500">Male</label>
         </div>
         <div className="flex items-center">
           <input
@@ -224,9 +221,7 @@ function GenderInput() {
             name="gender-group"
             className="mr-2 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500"
           />
-          <label htmlFor="female-radio" className="text-sm text-gray-500">
-            Female
-          </label>
+          <label className="text-sm text-gray-500">Female</label>
         </div>
       </div>
     </>
@@ -252,7 +247,7 @@ function PhoneNumberInput() {
       <label className="block text-sm font-medium my-2">Phone Number</label>
       <div className="flex">
         <div
-          className="flex-shrink-0 z-10 inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 "
+          className=" outline-none flex-shrink-0 z-10 inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 "
           type="button"
         >
           <svg

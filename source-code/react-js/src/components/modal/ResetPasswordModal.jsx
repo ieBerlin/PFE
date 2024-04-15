@@ -1,5 +1,17 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-export default function ResetPasswordModal({ onClose,onConfirm }) {
+import { useDispatch } from "react-redux";
+import { setModalType } from "../../features/modal/modalSlice.js";
+import { useFetch } from "../../hooks/http.js";
+import LoadingIndicator from "../LoadingIndicator.jsx";
+export default function ResetPasswordModal() {
+  const dispatch = useDispatch();
+  const { isFetching, fetchData } = useFetch(() => {});
+  // onClose={closeModal}
+  // onConfirm={() => onConfirm("confirm-reset-password")}
+  function handleButtonClick() {
+    fetchData().then();
+  }
+
   return (
     <>
       <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
@@ -11,9 +23,7 @@ export default function ResetPasswordModal({ onClose,onConfirm }) {
             />
           </div>
           <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-            <h3
-              className="text-base font-semibold leading-6 text-gray-900"
-            >
+            <h3 className="text-base font-semibold leading-6 text-gray-900">
               Reset User Password
             </h3>
             <div className="mt-2">
@@ -26,21 +36,24 @@ export default function ResetPasswordModal({ onClose,onConfirm }) {
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
         <button
+          disabled={isFetching}
           type="button"
-          className="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto"
-          onClick={()=>{
-            onClose();
-            onConfirm();
-          }}
+          className={` justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto`}
+          onClick={handleButtonClick}
         >
-          Reset Password
+          {isFetching ? <LoadingIndicator fill="gray-600" /> : "Reset Password"}
         </button>
         <button
+          disabled={isFetching}
           type="button"
-          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-          onClick={onClose}
+          className={` outline-none  mt-3 flex h-min rounded-md ${
+            isFetching ? "bg-gray-100" : "bg-white"
+          } px-3 py-2 text-sm font-semibold ${
+            isFetching ? "text-gray-400" : "text-gray-900"
+          } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
+          onClick={() => dispatch(setModalType())}
         >
           Cancel
         </button>

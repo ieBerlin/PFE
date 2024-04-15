@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import DeleteUserModal from "./DeleteUserModal.jsx";
 import ResetPasswordModal from "./ResetPasswordModal.jsx";
-import ConfirmResetPasswordModal from "./ConfirmResetPasswordModal.jsx";
+import ConfirmModal from "./ConfirmModal.jsx";
 import AddUserModal from "./AddUserModal.jsx";
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,7 +9,6 @@ import { setModalType } from "../../features/modal/modalSlice.js";
 export default function Modal() {
   const dialog = useRef();
   const modalContentRef = useRef();
-
   const type = useSelector((state) => state.modal.type);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -39,6 +38,7 @@ export default function Modal() {
   function closeModal() {
     dispatch(setModalType());
   }
+  function signOutFun() {}
   let modalContent = (
     <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-10">
       <p className="font-semibold"> Nothing to show !</p>
@@ -68,48 +68,45 @@ export default function Modal() {
   } else if (type === "reset-password") {
     modalContent = (
       <ResetPasswordModal
-        onClose={closeModal}
-        onConfirm={() => onConfirm("confirm-reset-password")}
+       
       />
     );
   } else if (type === "confirm-reset-password") {
     modalContent = (
-      <ConfirmResetPasswordModal
+      <ConfirmModal
         color="green"
         title="Password reset confirmation sent"
         description="The user's password has been successfully reset. An email has been sent to the user with instructions on how to set up a new password"
         onClose={closeModal}
-
       />
     );
   } else if (type === "confirm-delete-user") {
     modalContent = (
-      <ConfirmResetPasswordModal
+      <ConfirmModal
         color="red"
         title="User Deleted Successfully"
         description="User has been successfully deleted."
         onClose={closeModal}
-
       />
     );
   } else if (type === "confirm-add-user") {
     modalContent = (
-      <ConfirmResetPasswordModal
+      <ConfirmModal
         color="blue"
         title="User Added Successfully"
         description="User has been successfully added."
         onClose={closeModal}
-
       />
     );
   } else if (type === "confirm-sign-out") {
     modalContent = (
-      <ConfirmResetPasswordModal
+      <ConfirmModal
         color="blue"
         title="Are You Sure You Want to Sign Out?"
         description="Are you sure you want to sign out of your account? Click 'Confirm' to sign out."
         onClose={closeModal}
         confirmButtonLabel="Sign Out"
+        onConfirm={signOutFun}
       />
     );
   }
