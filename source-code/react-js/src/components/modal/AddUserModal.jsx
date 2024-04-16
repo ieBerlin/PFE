@@ -170,8 +170,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
     </>
   );
 }
-
-function Input({ label, placeholder, type = "text" }) {
+export function Input({ label, placeholder, type = "text", ...props }) {
   return (
     <>
       <label className="block text-sm font-medium my-2">{label}</label>
@@ -180,12 +179,12 @@ function Input({ label, placeholder, type = "text" }) {
         type={type}
         className="py-3 px-4 block border-gray-200 border-2  w-96 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
         placeholder={placeholder}
+        {...props}
       />
     </>
   );
 }
-
-function DateInput({ label, placeholder }) {
+export function DateInput({ label, placeholder, ...props }) {
   return (
     <>
       <label className="block text-sm font-medium my-2">{label}</label>
@@ -194,12 +193,12 @@ function DateInput({ label, placeholder }) {
         type="date"
         className="py-2 px-4 block w-full border-gray-200 border-2 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
         placeholder={placeholder}
+        {...props}
       />
     </>
   );
 }
-
-function GenderInput() {
+export function GenderInput() {
   return (
     <>
       <label className="block text-sm font-medium my-2">Gender</label>
@@ -227,8 +226,7 @@ function GenderInput() {
     </>
   );
 }
-
-function TextAreaInput() {
+export function TextAreaInput({ ...props }) {
   return (
     <>
       <label className="block text-sm font-medium my-2">Address</label>
@@ -237,11 +235,12 @@ function TextAreaInput() {
         className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm border-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
         rows="3"
         placeholder="Enter your address"
+        {...props}
       ></textarea>
     </>
   );
 }
-function PhoneNumberInput() {
+export function PhoneNumberInput({ ...props }) {
   return (
     <>
       <label className="block text-sm font-medium my-2">Phone Number</label>
@@ -297,9 +296,9 @@ function PhoneNumberInput() {
             id="phone-input"
             aria-describedby="helper-text-explanation"
             className="block p-2.5 w-full z-20 text-sm text-gray-900 rounded-e-lg   border-gray-300 border-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             placeholder="699-213-213"
             required
+            {...props}
           />
         </div>
       </div>

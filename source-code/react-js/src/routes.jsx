@@ -9,11 +9,9 @@ import AllUserPage from "./components/user/AllUserPage.jsx";
 import AllNotifications from "./components/user/notifications/AllNotifications.jsx";
 import CreateSportCategoriePage from "./components/sports/CreateSportCategoriePage.jsx";
 import SportCategoriePage from "./components/sports/SportCategoriePage.jsx";
-import EditSportCategorie from "./components/sports/EditSportCategorie.jsx";
 import DeleteSportCategorie from "./components/sports/DeleteSportCategorie.jsx";
 import ReportsPage from "./components/reports/ReportsPage.jsx";
 import UserProfil from "./components/user/UserProfil.jsx";
-import EditUserProfil from "./components/user/EditUserProfil.jsx";
 import CoachesPage from "./components/coaches/CoachesPage.jsx";
 import EquipmentsBookings from "./components/equipments/EquipmentsBookings.jsx";
 import BookEquipmentPage from "./components/equipments/BookEquipmentPage.jsx";
@@ -26,6 +24,7 @@ import Users from "./components/user/AllUserPage.jsx";
 import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
 import NotFoundPage from "./pages/not-found/NotFoundPage.jsx";
+import UpdateUserPasswordPage from "./components/user/UpdateUserPasswordPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -62,10 +61,7 @@ const router = createBrowserRouter([
                 index: true,
                 element: <SportCategoriePage />,
               },
-              {
-                path: "edit",
-                element: <EditSportCategorie />,
-              },
+
               {
                 path: "delete",
                 element: <DeleteSportCategorie />,
@@ -142,9 +138,10 @@ const router = createBrowserRouter([
             index: true,
             element: <UserProfil />,
           },
+
           {
-            path: "edit",
-            element: <EditUserProfil />,
+            path: "update-password",
+            element: <UpdateUserPasswordPage />,
           },
         ],
       },

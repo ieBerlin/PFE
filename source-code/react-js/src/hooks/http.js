@@ -28,13 +28,27 @@ export function useFetch(fetchFn, initialValue) {
         fetchData
     };
 }
-/**
- * const errorsMayHappend = [{
-        description: "Invalid email value",
-    },
-    {
-        title: "Invalid password",
-        description: "Invalid password value",
-    },
-];
- */
+export function useSubmit(fetchFn, initialValue) {
+    const [isFetching, setIsFetching] = useState(false);
+    const [error, setError] = useState(null);
+    const [fetchedData, setFetchedData] = useState(initialValue);
+
+    function fetchFuncCaller() {
+        try {
+            setIsFetching(true)
+            setTimeout(() => {
+                setIsFetching(false)
+            }, 5000)
+        } catch (error) {
+            setError(true)
+            setIsFetching(false)
+
+        }
+    }
+    return {
+        isFetching,
+        fetchedData,
+        error,
+        fetchFuncCaller
+    };
+}
