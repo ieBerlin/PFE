@@ -66,7 +66,7 @@ export default function AllUserPage() {
               <button
                 id="dropdownCheckboxButton"
                 data-dropdown-toggle="dropdownDefaultCheckbox"
-                className=" outline-none text-stone-900 bg-white hover:bg-gray-50 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+                className="  text-stone-900 bg-white hover:bg-gray-50 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
                 type="button"
                 ref={buttonRef}
                 onClick={() => {
@@ -238,7 +238,7 @@ export default function AllUserPage() {
             </div>
             <button
               onClick={() => dispatch(setModalType("create-user"))}
-              className=" outline-none font-semibold bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm ring-1 ring-inset ring-gray-300"
+              className="font-semibold bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm ring-1 ring-inset ring-gray-300"
             >
               Add user
             </button>

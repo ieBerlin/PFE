@@ -60,13 +60,16 @@ const UserProfil = () => {
       <h1 className="font-bold text-2xl mb-3">Edit Profile</h1>
       <main className="grid gap-6" style={{ gridTemplateColumns: "1fr auto" }}>
         <div className="bg-white shadow-lg">
-          <div className="flex flex-row gap-20 p-8">
+          <div className="flex flex-row gap-20 p-8 pl-12 mb-2">
             <div className="relative w-28 h-28 inline-block box-content">
               <img
                 className="object-cover w-28 h-28 rounded-full"
                 src={currentAvatar}
                 alt="User Avatar"
               />
+              <p className="text-center mt-2 font-semibold text-xl text-emerald-800 bg-emerald-200 rounded-md">
+                {userData.role}
+              </p>
               <input
                 ref={imagePickerButtonRef}
                 type="file"
@@ -80,7 +83,7 @@ const UserProfil = () => {
             </div>
             <div>
               <button
-                onClick={handleImagePicker}
+                onClick={() => imagePickerButtonRef.current.click()}
                 type="button"
                 className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
               >
@@ -98,7 +101,12 @@ const UserProfil = () => {
                 <h1 className="font-bold text-gray-900 text-lg">
                   Personal info
                 </h1>
-                <Link to="update-password" className="text-white bg-blue-600 px-4 py-2 rounded-md font-semibold">Update Password</Link>
+                <Link
+                  to="update-password"
+                  className="text-white bg-blue-600 px-4 py-2 rounded-md font-semibold"
+                >
+                  Update Password
+                </Link>
               </div>
 
               <div className="flex w-full h-full flex-col mt-2 px-5 py-2">
@@ -114,14 +122,7 @@ const UserProfil = () => {
                     label="Username"
                     placeholder="Enter Your Username"
                   />
-                  {/* <PasswordInput
-                    label="Password"
-                    placeholder="Enter Your Password"
-                  />
-                  <PasswordInput
-                    label="Confirm Password"
-                    placeholder="Confirm Your Password"
-                  /> */}
+
                   <Input
                     defaultValue={userData.first_name || ""}
                     label="First Name"

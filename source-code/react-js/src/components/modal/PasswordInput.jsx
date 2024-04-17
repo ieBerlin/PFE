@@ -6,7 +6,7 @@ export default function PasswordInput({ label, placeholder }) {
     setIsShown((prevState) => !prevState);
   };
   const eyeStyle =
-    "w-5 h-5 absolute bottom-1/2 right-2 translate-y-1/2 text-gray-400 cursor-pointer";
+    "w-5 h-5 absolute bg-white bottom-1/2 right-2 translate-y-1/2 text-gray-400 cursor-pointer";
   return (
     <>
       <label className="block text-sm font-medium my-2">{label}</label>
