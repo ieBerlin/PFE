@@ -176,9 +176,9 @@ const UserProfil = () => {
             style={{
               backgroundImage: `conic-gradient(#2563eb ${completionPercentage}%, white ${completionPercentage}%)`,
             }}
-            className="w-36 h-36 rounded-full relative mx-auto border border-gray-900"
+            className="w-36 h-36 rounded-full relative mx-auto border border-blue-800"
           >
-            <div className="flex items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-28 h-28 rounded-full border border-gray-900">
+            <div className="flex items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-28 h-28 rounded-full border border-blue-800">
               <h1 className="font-bold text-2xl">{completionPercentage}%</h1>
             </div>
           </div>

@@ -12,7 +12,9 @@ import SportCategoriePage from "./components/sports/SportCategoriePage.jsx";
 import DeleteSportCategorie from "./components/sports/DeleteSportCategorie.jsx";
 import ReportsPage from "./components/reports/ReportsPage.jsx";
 import UserProfil from "./components/user/UserProfil.jsx";
-import CoachesPage from "./components/coaches/CoachesPage.jsx";
+import CoachesPage, {
+  loader as coachesPageLoader,
+} from "./components/coaches/CoachesPage.jsx";
 import EquipmentsBookings from "./components/equipments/EquipmentsBookings.jsx";
 import BookEquipmentPage from "./components/equipments/BookEquipmentPage.jsx";
 import BookClassPage from "./components/classes/BookClassPage.jsx";
@@ -25,7 +27,9 @@ import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
 import NotFoundPage from "./pages/not-found/NotFoundPage.jsx";
 import UpdateUserPasswordPage from "./components/user/UpdateUserPasswordPage.jsx";
-import CoachPageDetails, { loader } from "./components/coaches/CoachPageDetails.jsx";
+import CoachPageDetails, {
+  loader as coachPageDetailsLoader,
+} from "./components/coaches/CoachPageDetails.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -104,11 +108,14 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <CoachesPage />,
+            id: "coaches-page",
+            loader: coachesPageLoader,
           },
           {
             path: ":coachId",
             element: <CoachPageDetails />,
-            loader:loader
+            loader: coachPageDetailsLoader,
+            errorElement: <NotFoundPage />,
           },
         ],
       },

@@ -6,7 +6,8 @@ import AddUserModal from "./AddUserModal.jsx";
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
-export default function Modal() {
+import CertificationModal from "./CertificationModal.jsx";
+export default function Modal({imageSrc}) {
   const dialog = useRef();
   const modalContentRef = useRef();
   const type = useSelector((state) => state.modal.type);
@@ -66,11 +67,7 @@ export default function Modal() {
       />
     );
   } else if (type === "reset-password") {
-    modalContent = (
-      <ResetPasswordModal
-       
-      />
-    );
+    modalContent = <ResetPasswordModal />;
   } else if (type === "confirm-reset-password") {
     modalContent = (
       <ConfirmModal
@@ -109,6 +106,8 @@ export default function Modal() {
         onConfirm={signOutFun}
       />
     );
+  } else if (type === "view-certification") {
+    modalContent = <CertificationModal imageSrc={imageSrc} />;
   }
   function onConfirm(confirmType) {
     dispatch(setModalType(confirmType));
