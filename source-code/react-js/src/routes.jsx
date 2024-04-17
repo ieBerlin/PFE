@@ -25,6 +25,7 @@ import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
 import NotFoundPage from "./pages/not-found/NotFoundPage.jsx";
 import UpdateUserPasswordPage from "./components/user/UpdateUserPasswordPage.jsx";
+import CoachPageDetails, { loader } from "./components/coaches/CoachPageDetails.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -99,7 +100,17 @@ const router = createBrowserRouter([
       },
       {
         path: "coaches",
-        element: <CoachesPage />,
+        children: [
+          {
+            index: true,
+            element: <CoachesPage />,
+          },
+          {
+            path: ":coachId",
+            element: <CoachPageDetails />,
+            loader:loader
+          },
+        ],
       },
       {
         path: "users",

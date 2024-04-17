@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { current } from "@reduxjs/toolkit";
-import { AdminNavs, CoachNavs } from "./user-navs";
+import { AdminNavs, CoachNavs, MemberNavs } from "./user-navs";
 export const userRoleSlice = createSlice({
     name: "userRole",
     initialState: {
-        currentUserRole: "admin",
-        currentSidebarNavListItems: AdminNavs.sideBar,
-        currentSidebarNavList: AdminNavs.sideBar,
+        currentUserRole: "Member",
+        currentSidebarNavListItems: MemberNavs.sidebar,
+        currentSidebarNavList: MemberNavs.sidebar,
     },
     reducers: {
         toggleUserChanged: (state, action) => {

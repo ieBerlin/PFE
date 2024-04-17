@@ -33,11 +33,8 @@ export default function Header() {
         </ul>
       </nav>
       <div className={classes.authentication}>
-        <Link to="/login">
+        <Link to="/auth">
           <button>Login</button>
-        </Link>
-        <Link to="/signup">
-          <button>Sign Up</button>
         </Link>
       </div>
     </header>

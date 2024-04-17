@@ -67,7 +67,7 @@ const UserProfil = () => {
                 src={currentAvatar}
                 alt="User Avatar"
               />
-              <p className="text-center mt-2 font-semibold text-xl text-emerald-800 bg-emerald-200 rounded-md">
+              <p className="text-center mt-2 font-semibold text-xl text-sky-800 bg-sky-200 rounded-md">
                 {userData.role}
               </p>
               <input

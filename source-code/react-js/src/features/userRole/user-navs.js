@@ -39,7 +39,7 @@ export const AdminNavs = {
         {
             id: 6,
             label: "Equipments",
-            href: "/equipments/page",
+            href: "/equipments",
             labelSvg: equipmentsSvg,
         },
 
@@ -102,7 +102,7 @@ export const MemberNavs = {
         {
             id: 4,
             label: "Equipments",
-            href: "/equipmentes/page",
+            href: "/equipments",
             labelSvg: equipmentsSvg,
         },
     ],

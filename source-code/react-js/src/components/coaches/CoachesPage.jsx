@@ -1,19 +1,29 @@
 import classes from "./CoachesPage.module.css";
-import { DUMMY_COACHES } from "../../dummy_data/dummy_coaches.js";
+import {
+  DUMMY_COACHES,
+  filterCoaches,
+} from "../../dummy_data/dummy_coaches.js";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function CoachesPage() {
   const dropDownMenuRef = useRef(null);
   const [filterDropDownMenuOpen, setFilterDropDownMenuOpen] = useState(false);
   const buttonRef = useRef();
 
-  const [currentSelectedUsers, setCurrentSelectedUsers] = useState({
+  const [currentSelectedCoaches, setCurrentSelectedCoaches] = useState({
     coachCategory: {
       yoga: true,
       kickboxing: true,
       fitness: true,
       bodybuilding: true,
+    },
+    coachLevel: {
+      beginner: true,
+      intermediate: true,
+      advanced: true,
+      expert: true,
     },
   });
   useEffect(() => {
@@ -36,8 +46,8 @@ export default function CoachesPage() {
     };
   }, [dropDownMenuRef, buttonRef]);
 
-  function toggleFilteredUsersChange(field, type) {
-    setCurrentSelectedUsers((prevState) => ({
+  function toggleFilteredCoachesChange(field, type) {
+    setCurrentSelectedCoaches((prevState) => ({
       ...prevState,
       [type]: {
         ...prevState[type],
@@ -45,6 +55,10 @@ export default function CoachesPage() {
       },
     }));
   }
+  const FILTRED_DUMMY_COACHES = filterCoaches(
+    DUMMY_COACHES,
+    currentSelectedCoaches
+  );
   return (
     <section className={classes.sectionContainer}>
       <h1>All coaches</h1>
@@ -98,12 +112,14 @@ export default function CoachesPage() {
                     <div className="flex items-center">
                       <input
                         onChange={() =>
-                          toggleFilteredUsersChange(
+                          toggleFilteredCoachesChange(
                             "kickboxing",
                             "coachCategory"
                           )
                         }
-                        checked={currentSelectedUsers.coachCategory.kickboxing}
+                        checked={
+                          currentSelectedCoaches.coachCategory.kickboxing
+                        }
                         id="checkbox-item-1"
                         type="checkbox"
                         value=""
@@ -121,9 +137,12 @@ export default function CoachesPage() {
                     <div className="flex items-center">
                       <input
                         onChange={() =>
-                          toggleFilteredUsersChange("fitness", "coachCategory")
+                          toggleFilteredCoachesChange(
+                            "fitness",
+                            "coachCategory"
+                          )
                         }
-                        checked={currentSelectedUsers.coachCategory.fitness}
+                        checked={currentSelectedCoaches.coachCategory.fitness}
                         id="checkbox-item-1"
                         type="checkbox"
                         value=""
@@ -141,9 +160,9 @@ export default function CoachesPage() {
                     <div className="flex items-center">
                       <input
                         onChange={() =>
-                          toggleFilteredUsersChange("yoga", "coachCategory")
+                          toggleFilteredCoachesChange("yoga", "coachCategory")
                         }
-                        checked={currentSelectedUsers.coachCategory.yoga}
+                        checked={currentSelectedCoaches.coachCategory.yoga}
                         id="checkbox-item-1"
                         type="checkbox"
                         value=""
@@ -161,13 +180,13 @@ export default function CoachesPage() {
                     <div className="flex items-center">
                       <input
                         onChange={() =>
-                          toggleFilteredUsersChange(
+                          toggleFilteredCoachesChange(
                             "bodybuilding",
                             "coachCategory"
                           )
                         }
                         checked={
-                          currentSelectedUsers.coachCategory.bodybuilding
+                          currentSelectedCoaches.coachCategory.bodybuilding
                         }
                         id="checkbox-item-1"
                         type="checkbox"
@@ -183,6 +202,97 @@ export default function CoachesPage() {
                     </div>
                   </li>
                 </ul>
+                <p className=" text-black font-semibold pl-3 py-2">
+                  Coach Level
+                </p>
+                <ul
+                  className="p-3 space-y-3 text-sm "
+                  aria-labelledby="dropdownCheckboxButton"
+                >
+                  <li>
+                    <div className="flex items-center">
+                      <input
+                        onChange={() =>
+                          toggleFilteredCoachesChange("beginner", "coachLevel")
+                        }
+                        checked={currentSelectedCoaches.coachLevel.beginner}
+                        id="checkbox-item-1"
+                        type="checkbox"
+                        value=""
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                      />
+                      <label
+                        htmlFor="checkbox-item-1"
+                        className="ms-2 text-sm font-medium text-gray-600"
+                      >
+                        Beginner
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="flex items-center">
+                      <input
+                        onChange={() =>
+                          toggleFilteredCoachesChange(
+                            "intermediate",
+                            "coachLevel"
+                          )
+                        }
+                        checked={currentSelectedCoaches.coachLevel.intermediate}
+                        id="checkbox-item-1"
+                        type="checkbox"
+                        value=""
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                      />
+                      <label
+                        htmlFor="checkbox-item-1"
+                        className="ms-2 text-sm font-medium text-gray-600"
+                      >
+                        Intermediate
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="flex items-center">
+                      <input
+                        onChange={() =>
+                          toggleFilteredCoachesChange("advanced", "coachLevel")
+                        }
+                        checked={currentSelectedCoaches.coachLevel.advanced}
+                        id="checkbox-item-1"
+                        type="checkbox"
+                        value=""
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                      />
+                      <label
+                        htmlFor="checkbox-item-1"
+                        className="ms-2 text-sm font-medium text-gray-600"
+                      >
+                        Advanced
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="flex items-center">
+                      <input
+                        onChange={() =>
+                          toggleFilteredCoachesChange("expert", "coachLevel")
+                        }
+                        checked={currentSelectedCoaches.coachLevel.expert}
+                        id="checkbox-item-1"
+                        type="checkbox"
+                        value=""
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
+                      />
+                      <label
+                        htmlFor="checkbox-item-1"
+                        className="ms-2 text-sm font-medium text-gray-600"
+                      >
+                        Expert
+                      </label>
+                    </div>
+                  </li>
+                </ul>
               </div>
             )}
           </div>
@@ -194,56 +304,60 @@ export default function CoachesPage() {
             gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           }}
         >
-          {DUMMY_COACHES.map((coach) => (
-            <li
-              key={coach.coachId}
-              className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md"
-            >
-              <a
-                href="#"
-                className="relative mx-3 mt-3 flex h-60 overflow-hidden  rounded-xl bg-red-500"
+          {FILTRED_DUMMY_COACHES.length > 0 ? (
+            FILTRED_DUMMY_COACHES.map((coach) => (
+              <li
+                key={coach.coachId}
+                className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md"
               >
-                <img
-                  className="object-cover flex w-full h-full"
-                  src="https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTk2MTM1OTAwNDIyMzUwMzQx/main2-trainer2.jpg"
-                  alt="product image"
-                />
-                <span className="absolute top-0 left-0 m-2 rounded-xl bg-gray-700 p-[4px] text-center text-sm font-medium text-white">
-                  {coach.coachCategory}
-                </span>
-              </a>
-              <div className="mt-4 px-5 pb-5">
-                <a href="#">
-                  <h5 className="text-xl tracking-tight text-slate-900">
-                    {coach.coachName}
-                  </h5>
-                </a>
-                <div className="mt-2 mb-5 flex items-center justify-between">
-                  <p>
-                    {/* <span className="text-3xl font-bold text-slate-900">
+                <div className="relative mx-3 mt-3 flex h-60 overflow-hidden  rounded-xl bg-red-500">
+                  <img
+                    className="object-cover flex w-full h-full"
+                    src="https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTk2MTM1OTAwNDIyMzUwMzQx/main2-trainer2.jpg"
+                    alt="product image"
+                  />
+                  <span className="absolute top-0 left-0 m-2 rounded-xl bg-gray-700 p-[4px] text-center text-sm font-medium text-white">
+                    {coach.coachCategory}
+                  </span>
+                </div>
+                <div className="mt-4 px-5 pb-5">
+                  <Link to={`${coach.coachId}`}>
+                    <h5 className="text-xl tracking-tight text-slate-900">
+                      {coach.coachName}
+                    </h5>
+                  </Link>
+                  <div className="mt-2 mb-5 flex items-center justify-between">
+                    <p>
+                      {/* <span className="text-3xl font-bold text-slate-900">
                     $449
                   </span>
                   <span className="text-sm text-slate-900 line-through">
                     $699
                   </span> */}
-                  </p>
-                  <div className="flex items-center">
-                   
-                    <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
-                      {coach.coachLevel}
-                    </span>
+                    </p>
+                    <div className="flex items-center">
+                      <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
+                        {coach.coachLevel}
+                      </span>
+                    </div>
                   </div>
+                  <Link
+                    to={`${coach.coachId}`}
+                    className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                  >
+                    See more
+                    <ChevronRightIcon className="ml-2 h-6 w-6" />
+                  </Link>
                 </div>
-                <a
-                  href="#"
-                  className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-                >
-                  See more
-                  <ChevronRightIcon className="ml-2 h-6 w-6" />
-                </a>
-              </div>
-            </li>
-          ))}
+              </li>
+            ))
+          ) : (
+            <div className="mt-4 bg-white px-6 py-4 shadow-md mx-2">
+              <p className="text-stone-500 text-center font-bold text-xl">
+                No coaches found!
+              </p>
+            </div>
+          )}
         </ul>
       </div>
     </section>
