@@ -15,7 +15,3 @@ export default function Dashboard() {
     </div>
   );
 }
-export function loader() {
-  const userRole = localStorage.getItem("user-role");
-  return userRole;
-}

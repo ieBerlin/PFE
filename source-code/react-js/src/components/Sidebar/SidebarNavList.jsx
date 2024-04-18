@@ -2,22 +2,30 @@ import searchSvg from "../../assets/search-alt-2-svgrepo-com.svg";
 import logoutSvg from "../../assets/logout-3-svgrepo-com.svg";
 import SidebarListItem from "./SidebarListItem.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  filterSideBarNavListElements,
-} from "../../features/userRole/userRoleSlice.js";
 import { setModalType } from "../../features/modal/modalSlice.js";
-import { defineUserNavs } from "../../features/userRole/user-navs.js";
+import { defineUserNavs } from "../../features/userRole/user-navs.jsx";
+import { useEffect, useState } from "react";
 
 export default function NavList() {
   const { userRole } = useSelector((state) => state.userRole);
+  const [currentDrawerItemsState, setCurrentDrawerItems] = useState([]);
+  useEffect(() => {
+    setCurrentDrawerItems(defineUserNavs(userRole)?.sidebar);
+  }, [userRole]);
 
-  const currentDrawerItems = defineUserNavs(userRole).sidebar;
-  console.log(currentDrawerItems)
   const dispatch = useDispatch();
 
   const toggleSearchInputChange = (e) => {
     const inputVal = e.target.value;
-    dispatch(filterSideBarNavListElements(inputVal));
+    if (inputVal && inputVal.trim() !== "") {
+      setCurrentDrawerItems(
+        defineUserNavs(userRole)?.sidebar.filter((item) =>
+          item.label.toLowerCase().startsWith(inputVal.toLowerCase())
+        )
+      );
+    } else {
+      setCurrentDrawerItems(defineUserNavs(userRole)?.sidebar);
+    }
   };
   const signOutHandler = () => {
     dispatch(setModalType("confirm-sign-out"));
@@ -35,13 +43,13 @@ export default function NavList() {
         />
         <span className="tooltip">Search</span>
       </li>
-      {currentDrawerItems && currentDrawerItems.length > 0 ? (
-        currentDrawerItems.map((element) => (
+      {currentDrawerItemsState && currentDrawerItemsState.length > 0 ? (
+        currentDrawerItemsState.map((element) => (
           <SidebarListItem
             key={element.id}
             label={element.label}
             href={element.href}
-            imgSrc={element.labelSvg}
+            svg={element.labelSvg}
           />
         ))
       ) : (

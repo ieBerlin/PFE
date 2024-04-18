@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
 import MainNavigation from "../../MainNavigation/MainNavigation";
-import { Outlet } from "react-router-dom";
+import { Outlet, json } from "react-router-dom";
 import classes from "./RootLayout.module.css";
 export default function RootLayout() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
+
   let mainContentPadding = "60px 0 0";
   if (isOpen) {
     mainContentPadding += " 250px";
@@ -21,4 +22,13 @@ export default function RootLayout() {
       <Outlet />
     </nav>
   );
+}
+export function loader() {
+  const userRole = localStorage.getItem("user-role") || undefined;
+  const isValidUser =
+    userRole && ["admin", "member", "coach"].includes(userRole);
+  if (!isValidUser) {
+    throw json({ message: "Forbidden", status: 403 });
+  }
+  return userRole;
 }

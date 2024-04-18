@@ -4,6 +4,7 @@ import "./MainNavigation.css";
 import { useSelector } from "react-redux";
 export default function MainNavigation() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
+
   return (
     <>
       <Sidebar isMenuBarOpen={isOpen} onOpen={isOpen} />

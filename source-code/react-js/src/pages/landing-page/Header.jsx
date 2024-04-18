@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
 import imgLogo from "../../assets/logoImage.png";
 import classes from "./Header.module.css";
+import { HomeIcon } from "@heroicons/react/24/solid";
 export default function Header() {
+  const userRole = localStorage.getItem("user-role") || undefined;
+  const isValidUser =
+    userRole && ["admin", "member", "coach"].includes(userRole);
   return (
     <header className={classes.header}>
       <div className={classes.logo}>
         <img src={imgLogo} alt="image logo" />
-        <h2>GYM</h2>
       </div>
       <nav className={classes.navbar}>
         <ul className="nav-list">
@@ -20,11 +23,7 @@ export default function Header() {
               Services
             </a>
           </li>
-          <li className="nav-item">
-            <a href="/portfolio" className={classes.headerAnchor}>
-              Portfolio
-            </a>
-          </li>
+
           <li className="nav-item">
             <a href="/contact" className={classes.headerAnchor}>
               Contact
@@ -33,9 +32,15 @@ export default function Header() {
         </ul>
       </nav>
       <div className={classes.authentication}>
-        <Link to="/auth">
-          <button>Login</button>
-        </Link>
+        {!isValidUser ? (
+          <Link to="/auth">
+            <button>Login</button>
+          </Link>
+        ) : (
+          <a href="/dashboard">
+            <HomeIcon className="text-white w-7 h-7" />
+          </a>
+        )}
       </div>
     </header>
   );

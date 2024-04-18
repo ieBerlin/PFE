@@ -5,6 +5,7 @@ import rocketSvg from "../../assets/rocket-svgrepo-com.svg";
 import SidebarNavList from "./SidebarNavList.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../../features/sidebar/sidebarSlice.js";
+import { AcademicCapIcon, Bars3Icon } from "@heroicons/react/24/solid";
 export default function Sidebar() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
   const dispatch = useDispatch();
@@ -17,24 +18,24 @@ export default function Sidebar() {
       <div className={sideBarClasses}>
         <div className="logo-details">
           <a href="/" className="go-to-home-page">
-            <img src={rocketSvg} alt="menu svg" className="icon icon-i" />
+            <AcademicCapIcon className="text-gray-500 w-8 h-8" />
             <div className="logo_name">HousesGym</div>
           </a>
           <div id="btn">
             {!isOpen ? (
-              <img
-                src={menuSvg}
-                className="icon-i"
-                alt="menu svg"
+              <button
                 onClick={() => dispatch(toggleMenu())}
-              />
+                className=" flex w-full items-center justify-center"
+              >
+                <Bars3Icon className="text-gray-500 w-8 h-8" />
+              </button>
             ) : (
-              <img
-                src={menuAltRight}
-                className="icon-i"
-                alt="menu svg"
+              <button
                 onClick={() => dispatch(toggleMenu())}
-              />
+                className=" flex w-full items-center justify-center"
+              >
+                <Bars3Icon className="text-gray-500 w-8 h-8" />
+              </button>
             )}
           </div>
         </div>

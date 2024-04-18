@@ -1,6 +1,6 @@
 .mainBackground {
     padding: 30px;
-    background-color: #9333ea;
+    background-color: #1d4ed8;
 }
 
 .formWrapper {
@@ -45,15 +45,14 @@
     outline: none;
     font-size: 17px;
     padding: 5px 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     font-weight: 600;
 }
 
 .enrollNow,
 .loginButton {
-    border: 1px solid grey;
     color: white;
-    background-color: #9333ea;
+    background-color: #2563eb;
     cursor: pointer;
 }
 
@@ -64,7 +63,7 @@
 
 .enrollNow:hover,
 .loginButton:hover {
-    background-color: #a855f7;
+    background-color: #3b82f6;
 }
 
 .loginButton,

@@ -23,31 +23,23 @@ import BookClassPage from "./components/classes/BookClassPage.jsx";
 import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./components/classes/EditClassPage.jsx";
 import CreateClassPage from "./components/classes/CreateClassPage.jsx";
-import Dashboard, {
-  loader as tokenLoader,
-} from "./components/dashboard/Dashboard.jsx";
+import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Users from "./components/user/AllUserPage.jsx";
 import PaymentsPage from "./components/payments/PaymentsPage.jsx";
-import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
+import RootLayout, {
+  loader as tokenLoader,
+} from "./components/Layouts/Root/RootLayout.jsx";
 import NotFoundPage from "./pages/not-found/NotFoundPage.jsx";
 import UpdateUserPasswordPage from "./components/user/UpdateUserPasswordPage.jsx";
 import CoachPageDetails, {
   loader as coachPageDetailsLoader,
 } from "./components/coaches/CoachPageDetails.jsx";
+import ErrorPage from "./components/ErrorPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LandingPage />,
-    errorElement: <NotFoundPage />,
-  },
-  {
-    path: "auth",
-    element: <LoginPage />,
-    action: authAction,
-  },
-  {
-    path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     id: "root",
     loader: tokenLoader,
     children: [
@@ -188,6 +180,15 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+   index:true,
+    element: <LandingPage />,
+  },
+  {
+    path: "auth",
+    element: <LoginPage />,
+    action: authAction,
   },
 ]);
 
