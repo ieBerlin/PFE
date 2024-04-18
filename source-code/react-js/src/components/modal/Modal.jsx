@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import DeleteUserModal from "./DeleteUserModal.jsx";
+import ConfirmationModal from "./ConfirmationModal.jsx";
 import ResetPasswordModal from "./ResetPasswordModal.jsx";
 import ConfirmModal from "./ConfirmModal.jsx";
 import AddUserModal from "./AddUserModal.jsx";
@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import CertificationModal from "./CertificationModal.jsx";
-export default function Modal({imageSrc}) {
+export default function Modal({ imageSrc }) {
   const dialog = useRef();
   const modalContentRef = useRef();
   const type = useSelector((state) => state.modal.type);
@@ -61,7 +61,11 @@ export default function Modal({imageSrc}) {
     );
   } else if (type === "delete-user") {
     modalContent = (
-      <DeleteUserModal
+      <ConfirmationModal
+        title="Delete User"
+        description=" Are you sure you want to delete this account? All of the data will be permanently removed. This action cannot be undone."
+        confirmActionLabel="Delete"
+        cancelActionLabel="Cancel"
         onConfirm={() => onConfirm("confirm-delete-user")}
         onClose={closeModal}
       />
@@ -98,7 +102,7 @@ export default function Modal({imageSrc}) {
   } else if (type === "confirm-sign-out") {
     modalContent = (
       <ConfirmModal
-        color="blue"
+        // color="blue"
         title="Are You Sure You Want to Sign Out?"
         description="Are you sure you want to sign out of your account? Click 'Confirm' to sign out."
         onClose={closeModal}
@@ -108,6 +112,17 @@ export default function Modal({imageSrc}) {
     );
   } else if (type === "view-certification") {
     modalContent = <CertificationModal imageSrc={imageSrc} />;
+  } else if (type === "delete-notification") {
+    modalContent = (
+      <ConfirmationModal
+        title="Delete Notification"
+        description="Are you sure you want to delete this notification? Once deleted, it cannot be recovered."
+        cancelActionLabel="Cancel"
+        onClose={closeModal}
+        confirmActionLabel="Delete"
+        onConfirm={() => {}}
+      />
+    );
   }
   function onConfirm(confirmType) {
     dispatch(setModalType(confirmType));

@@ -1,31 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { current } from "@reduxjs/toolkit";
-import { AdminNavs, CoachNavs, MemberNavs } from "./user-navs";
+import { createSlice, current } from "@reduxjs/toolkit";
+
 export const userRoleSlice = createSlice({
     name: "userRole",
     initialState: {
-        currentUserRole: "Member",
-        currentSidebarNavListItems: MemberNavs.sidebar,
-        currentSidebarNavList: MemberNavs.sidebar,
+        userRole: undefined,
     },
     reducers: {
-        toggleUserChanged: (state, action) => {
-            state.currentUserRole = action;
-        },
-        sideBarNavListElements: (state) => {
-            switch (state.currentUserRole) {
-                case "coach":
-                    return state.currentSidebarNavList = CoachNavs.sidebar;
-                case "admin":
-                    return state.currentSidebarNavList = AdminNavs.sideBar;
-                default:
-                    state.currentSidebarNavList = CoachNavs.sidebar;
-            }
-        },
-        filterSideBarNavListElements: (state, action) => {
+
+
+        filterSideBarNavListElements(state, action) {
             if (action.payload && action.payload.trim() !== "") {
                 state.currentSidebarNavList = current(
-                    state.currentSidebarNavListItems
+                    state.defineUserNavs(state.userRole)
                 ).filter((item) =>
                     item.label.toLowerCase().startsWith(action.payload.toLowerCase())
                 );
@@ -35,6 +21,8 @@ export const userRoleSlice = createSlice({
         },
     },
 });
-export const { toggleUserChanged, filterSideBarNavListElements } =
-userRoleSlice.actions;
+export const {
+    getCurrentDrawerItems,
+    filterSideBarNavListElements,
+} = userRoleSlice.actions;
 export default userRoleSlice.reducer;

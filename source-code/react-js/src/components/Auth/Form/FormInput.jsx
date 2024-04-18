@@ -24,7 +24,6 @@ export default function FormInput({
       ? "text-red-400"
       : undefined
   }`;
-
   const handleInputFocus = () => {
     setIsFocused(true);
   };
@@ -35,7 +34,6 @@ export default function FormInput({
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
-
   return (
     <>
       <div className="relative">
@@ -43,7 +41,7 @@ export default function FormInput({
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           onChange={handleInputChange}
-          className={`border-2 peer py-3 px-4 ps-11 w-full bg-gray-100 border-transparent rounded-lg text-smdisabled:opacity-50 disabled:pointer-events-none outline-none ${formInputStyle} focus:bg-white`}
+          className={`border-2 peer py-3 px-4 ps-11 w-full bg-gray-100 rounded-lg text-smdisabled:opacity-50 disabled:pointer-events-none outline-none ${formInputStyle} focus:bg-white`}
           placeholder={`Enter ${label}`}
           {...props}
         />

@@ -2,13 +2,17 @@ import searchSvg from "../../assets/search-alt-2-svgrepo-com.svg";
 import logoutSvg from "../../assets/logout-3-svgrepo-com.svg";
 import SidebarListItem from "./SidebarListItem.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { filterSideBarNavListElements } from "../../features/userRole/userRoleSlice.js";
+import {
+  filterSideBarNavListElements,
+} from "../../features/userRole/userRoleSlice.js";
 import { setModalType } from "../../features/modal/modalSlice.js";
+import { defineUserNavs } from "../../features/userRole/user-navs.js";
 
 export default function NavList() {
-  const sideBarNavListElements = useSelector(
-    (state) => state.userRole.currentSidebarNavList
-  );
+  const { userRole } = useSelector((state) => state.userRole);
+
+  const currentDrawerItems = defineUserNavs(userRole).sidebar;
+  console.log(currentDrawerItems)
   const dispatch = useDispatch();
 
   const toggleSearchInputChange = (e) => {
@@ -31,8 +35,8 @@ export default function NavList() {
         />
         <span className="tooltip">Search</span>
       </li>
-      {sideBarNavListElements.length > 0 ? (
-        sideBarNavListElements.map((element) => (
+      {currentDrawerItems && currentDrawerItems.length > 0 ? (
+        currentDrawerItems.map((element) => (
           <SidebarListItem
             key={element.id}
             label={element.label}

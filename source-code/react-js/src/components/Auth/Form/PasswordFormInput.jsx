@@ -52,7 +52,7 @@ export default function PasswordFormInput({
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           onChange={handleInputChange}
-          className={`  relative border-2 peer py-3 px-4 ps-11 block w-full bg-gray-100 border-transparent rounded-lg text-smdisabled:opacity-50 disabled:pointer-events-none outline-none ${formInputStyle} focus:bg-white`}
+          className={`  relative border-2 peer py-3 px-4 ps-11 block w-full bg-gray-100  rounded-lg text-smdisabled:opacity-50 disabled:pointer-events-none outline-none ${formInputStyle} focus:bg-white`}
           placeholder={`Enter ${label}`}
           {...props}
         />

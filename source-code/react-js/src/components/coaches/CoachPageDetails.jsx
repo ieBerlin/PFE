@@ -164,7 +164,7 @@ export default function App() {
                                 <h2 className="font-semibold my-1 text-ellipsis w-full text-nowrap overflow-hidden">
                                   {coach.title}
                                 </h2>
-                                <p className="font-medium text-sm text-gray-500 text-nowrap text-ellipsis overflow-hidden">
+                                <p className="font-medium  text-sm text-gray-500 text-nowrap text-ellipsis overflow-hidden">
                                   {coach.description}
                                 </p>
                               </a>
@@ -243,7 +243,7 @@ export default function App() {
                       </div>
                     </div>
 
-                    <div className="  bg-white ml-2 rounded-lg shadow-md">
+                    <div className="  bg-white ml-2 rounded-lg shadow-md py-5">
                       <ul className="flex justify-center py-1 text-sm font-medium text-center text-gray-500 ">
                         <li className="me-2">
                           <button

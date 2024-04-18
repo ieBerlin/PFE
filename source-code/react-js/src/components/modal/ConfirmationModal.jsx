@@ -4,7 +4,14 @@ import { setModalType } from "../../features/modal/modalSlice";
 import LoadingIndicator from "../LoadingIndicator";
 import { useFetch } from "../../hooks/http";
 
-export default function DeleteUserModal({ onClose, onConfirm }) {
+export default function ConfirmationModal({
+  confirmActionLabel,
+  cancelActionLabel,
+  title,
+  description,
+  onClose,
+  onConfirm,
+}) {
   const dispatch = useDispatch();
   const { isFetching, fetchData } = useFetch(() => {});
 
@@ -24,13 +31,10 @@ export default function DeleteUserModal({ onClose, onConfirm }) {
           </div>
           <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
             <h3 className="text-base font-semibold leading-6 text-gray-900">
-              Delete User
+              {title}
             </h3>
             <div className="mt-2">
-              <p className="text-sm text-gray-500">
-                Are you sure you want to delete this account? All of the data
-                will be permanently removed. This action cannot be undone.
-              </p>
+              <p className="text-sm text-gray-500">{description}</p>
             </div>
           </div>
         </div>
@@ -42,7 +46,11 @@ export default function DeleteUserModal({ onClose, onConfirm }) {
           className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
           onClick={handleDeleteButtonClick}
         >
-          {isFetching ? <LoadingIndicator fill="gray-500" /> : "Delete"}
+          {isFetching ? (
+            <LoadingIndicator fill="gray-500" />
+          ) : (
+            confirmActionLabel
+          )}
         </button>
         <button
           disabled={isFetching}
@@ -54,7 +62,7 @@ export default function DeleteUserModal({ onClose, onConfirm }) {
           } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
           onClick={() => dispatch(setModalType())}
         >
-          Cancel
+          {cancelActionLabel}
         </button>
       </div>
     </>

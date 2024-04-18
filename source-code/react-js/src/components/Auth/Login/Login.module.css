@@ -1,5 +1,6 @@
 .mainBackground {
     padding: 30px;
+    background-color: #9333ea;
 }
 
 .formWrapper {
@@ -39,16 +40,26 @@
 }
 
 .enrollNow,
-.loginButton {
-    cursor: pointer;
-    background-color: #9333ea;
+.loginButton,
+.submittingLoginButton {
     outline: none;
     font-size: 17px;
     padding: 5px 10px;
     border-radius: 20px;
     font-weight: 600;
+}
+
+.enrollNow,
+.loginButton {
     border: 1px solid grey;
     color: white;
+    background-color: #9333ea;
+    cursor: pointer;
+}
+
+.submittingLoginButton {
+    background-color: #e5e7eb;
+    color: #6b7280;
 }
 
 .enrollNow:hover,
@@ -56,14 +67,14 @@
     background-color: #a855f7;
 }
 
-.loginButton {
+.loginButton,
+.submittingLoginButton {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     padding: 10px 0px;
     font-size: 20px;
-    color: white;
     border-radius: 1rem;
 }
 

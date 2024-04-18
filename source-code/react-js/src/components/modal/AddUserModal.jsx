@@ -1,18 +1,18 @@
 import { useState, useRef } from "react";
 import { CameraIcon } from "@heroicons/react/24/outline";
-import { Form } from "react-router-dom";
-import { useFetch } from "../../hooks/http";
+import { useActionData, useFetcher } from "react-router-dom";
 import PasswordInput from "./PasswordInput.jsx";
 
 import defaultUserImage from "../../assets/default-user.webp";
 import { useSelector } from "react-redux";
-async function postReq() {}
-
 export default function AddUserModal({ onClose, onConfirm }) {
   const isAdmin =
     useSelector((state) => state.userRole.currentUserRole) === "admin";
-  const { isFetching, errors, fetchData } = useFetch(postReq);
-
+  const { state, data, Form } = useFetcher();
+  console.log(state);
+  console.log(data);
+  const isLoading = state === "submitting";
+  useActionData();
   const [currentImageSrc, setCurrentImageSrc] = useState(defaultUserImage);
   const imageRef = useRef();
   const submitButtonRef = useRef();
@@ -21,11 +21,6 @@ export default function AddUserModal({ onClose, onConfirm }) {
       imageRef.current.click();
     }
   };
-  const toggleSubmit = (e) => {
-    e.preventDefault();
-    fetchData();
-  };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -40,9 +35,10 @@ export default function AddUserModal({ onClose, onConfirm }) {
   return (
     <>
       <Form
+        method="post"
         className=" bg-transparent px-8 pb-4 pt-5 rounded-md bg-white"
-        onSubmit={toggleSubmit}
       >
+        <input name="form-type" defaultValue="sign-up-form" hidden />
         <h3 className="text-black font-semibold text-xl mb-4">
           User information
         </h3>
@@ -95,9 +91,10 @@ export default function AddUserModal({ onClose, onConfirm }) {
         </div>
       </Form>
       <ul className="bg-white px-8 flex flex-col gap-2">
-        {!isFetching &&
-          errors &&
-          errors.map((error, index) => (
+        {!isLoading &&
+          data &&
+          data.errors &&
+          data.errors.map((error, index) => (
             <li key={index}>
               <div
                 className="bg-red-100 border-s-4 border-red-500 p-4 "
@@ -139,12 +136,12 @@ export default function AddUserModal({ onClose, onConfirm }) {
       </ul>
       <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
         <button
-          disabled={isFetching}
+          disabled={isLoading}
           type="button"
-          className={`${isFetching ? "bg-gray-200" : "bg-blue-600 "}   ${
-            isFetching ? "text-gray-500 " : "text-white"
+          className={`${isLoading ? "bg-gray-200" : "bg-blue-600 "}   ${
+            isLoading ? "text-gray-500 " : "text-white"
           } outline-none inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${
-            !isFetching && "hover:bg-blue-500"
+            !isLoading && "hover:bg-blue-500"
           } sm:ml-3 sm:w-auto`}
           onClick={() => {
             if (submitButtonRef) {
@@ -152,15 +149,15 @@ export default function AddUserModal({ onClose, onConfirm }) {
             }
           }}
         >
-          {isFetching ? "Loading..." : "Add user"}
+          {isLoading ? "Loading..." : (isAdmin ? "Add user" : "Sign Up")}
         </button>
         <button
-          disabled={isFetching}
+          disabled={isLoading}
           type="button"
           className={` outline-none  mt-3 inline-flex w-full justify-center rounded-md ${
-            isFetching ? "bg-gray-100" : "bg-white"
+            isLoading ? "bg-gray-100" : "bg-white"
           } px-3 py-2 text-sm font-semibold ${
-            isFetching ? "text-gray-400" : "text-gray-900"
+            isLoading ? "text-gray-400" : "text-gray-900"
           } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
           onClick={onClose}
         >

@@ -14,7 +14,6 @@ function NotificationBell() {
 
   const notificationBellRef = useRef(null);
   const notificationMenuRef = useRef(null);
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -25,10 +24,10 @@ function NotificationBell() {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -47,8 +46,11 @@ function NotificationBell() {
       <span className="badge">5</span>
       <div ref={notificationMenuRef}>
         <NotificationMenu
+        onClose={()=>setShowNotifications(false)}
           notifications={notifications}
-          notificationMenuClasses={showNotifications ? "notification-menu open" : "notification-menu"}
+          notificationMenuClasses={
+            showNotifications ? "notification-menu open" : "notification-menu"
+          }
         />
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import LandingPage from "./pages/landing-page/LandingPage.jsx";
-import LoginPage from "./components/auth/Login/Login.jsx";
+import LoginPage, {
+  action as authAction,
+} from "./components/auth/Login/Login.jsx";
 import SportsPage from "./components/sports/SportsPage.jsx";
 import ClassesPage from "./components/classes/ClassesPage.jsx";
 import EquipmentsPage from "./components/equipments/EquipmentsPage.jsx";
@@ -21,7 +23,9 @@ import BookClassPage from "./components/classes/BookClassPage.jsx";
 import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./components/classes/EditClassPage.jsx";
 import CreateClassPage from "./components/classes/CreateClassPage.jsx";
-import Dashboard from "./components/dashboard/Dashboard.jsx";
+import Dashboard, {
+  loader as tokenLoader,
+} from "./components/dashboard/Dashboard.jsx";
 import Users from "./components/user/AllUserPage.jsx";
 import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout from "./components/Layouts/Root/RootLayout.jsx";
@@ -39,10 +43,13 @@ const router = createBrowserRouter([
   {
     path: "auth",
     element: <LoginPage />,
+    action: authAction,
   },
   {
     path: "/",
     element: <RootLayout />,
+    id: "root",
+    loader: tokenLoader,
     children: [
       {
         path: "dashboard",

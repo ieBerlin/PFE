@@ -11,10 +11,10 @@ export default function ConfirmModal({
   onConfirm,
 }) {
   const { isFetching, fetchData } = useFetch(onConfirm);
-  const iconColorClass = `text-${color}-600`;
-  const iconBgClass = `bg-${color}-100`;
-  const buttonBgClass = `bg-${color}-500`;
-  const buttonHoverBgClass = `hover:bg-${color}-600`;
+  const iconColorClass = `text-blue-600`;
+  const iconBgClass = `bg-blue-100`;
+  const buttonBgClass = `bg-blue-500`;
+  const buttonHoverBgClass = `hover:bg-blue-600`;
 
   function handleButtonClick() {
     if (onConfirm) {
@@ -34,11 +34,16 @@ export default function ConfirmModal({
         />
         <h1 className="mt-2 mb-3 font-medium">{title}</h1>
         <p className="text-center text-sm text-slate-500">{description}</p>
+
         <button
           onClick={handleButtonClick}
           className={`mt-4 ${buttonBgClass} text-white font-semibold rounded-md px-32 py-1 ${buttonHoverBgClass}`}
         >
-          {onConfirm && isFetching ? <LoadingIndicator fill="gray-500" /> : confirmButtonLabel}
+          {onConfirm && isFetching ? (
+            <LoadingIndicator fill="gray-500" />
+          ) : (
+            confirmButtonLabel
+          )}
         </button>
       </div>
     </div>

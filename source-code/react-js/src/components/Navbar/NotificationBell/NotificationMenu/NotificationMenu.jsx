@@ -2,7 +2,11 @@ import "./NotificationMenu.css";
 import NotificationItem from "./NotificationItem";
 import { Link } from "react-router-dom";
 
-const NotificationMenu = ({ notifications, notificationMenuClasses }) => {
+const NotificationMenu = ({
+  notifications,
+  notificationMenuClasses,
+  onClose,
+}) => {
   return (
     <div className={notificationMenuClasses}>
       <div className="notifications-header">
@@ -22,7 +26,9 @@ const NotificationMenu = ({ notifications, notificationMenuClasses }) => {
         <div className="no-notification">No new notifications</div>
       )}
       <div className="all-notifications">
-        <Link to="/user/all-notifications">All Notifications</Link>
+        <Link to="/user/all-notifications" onClick={onClose}>
+          All Notifications
+        </Link>
       </div>
     </div>
   );

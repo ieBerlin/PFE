@@ -1,6 +1,9 @@
 import classes from "./AllNotifications.module.css";
 import closeSvg from "../../../assets/close-svgrepo-com.svg";
 import notificationItemSvg from "../../../assets/payment-svgrepo-com.svg";
+import { setModalType } from "../../../features/modal/modalSlice";
+import { useDispatch } from "react-redux";
+import Modal from "../../modal/Modal";
 const DUMMY_NOTIFICATIONS = [
   {
     id: 1,
@@ -87,6 +90,7 @@ const DUMMY_NOTIFICATIONS = [
 ];
 
 export default function AllNotifications() {
+  const dispatch = useDispatch();
   return (
     <section className={classes.allNotificationsSection}>
       <h1>All notifications</h1>
@@ -103,7 +107,10 @@ export default function AllNotifications() {
               <p>{notificationItem.message}</p>
             </div>
             <div className={classes.closeButton}>
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => dispatch(setModalType("delete-notification"))}
+              >
                 <img src={closeSvg} alt="Close" />
               </button>
             </div>

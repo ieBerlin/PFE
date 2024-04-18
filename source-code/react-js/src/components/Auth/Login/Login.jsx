@@ -46,3 +46,21 @@ export default function LoginPage() {
     </>
   );
 }
+export async function action({ request }) {
+  // const data = await request.formData();
+  // const formType = data.get("form-type");
+  // console.log("formType : " + formType);
+  // const formData = {
+  //   email: data.get("email"),
+  //   password: data.get("password"),
+  // };
+  // // console.log(formData);
+ await timeoutPromise();
+  return null;
+}
+
+async function timeoutPromise() {
+  return new Promise((resolve) => setTimeout(() => {
+    resolve('Hello World');
+  }, 5000));
+}

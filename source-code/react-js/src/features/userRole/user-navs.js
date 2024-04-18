@@ -5,8 +5,18 @@ import equipmentsSvg from "/icons/dumbbells-2-svgrepo-com.svg";
 import reportsSvg from "/icons/reports-svgrepo-com.svg";
 import usersSvg from "/icons/users-svgrepo-com.svg";
 import paymentsSvg from "/icons/payment-svgrepo-com.svg";
-export const AdminNavs = {
-    sideBar: [{
+export function defineUserNavs(type) {
+    switch (type) {
+        case 'admin':
+            return {...AdminNavs }
+        case 'coach':
+            return {...CoachNavs }
+        case 'member':
+            return {...MemberNavs }
+    }
+}
+const AdminNavs = {
+    sidebar: [{
             id: 1,
             label: "Dashboard",
             href: "/dashboard",
@@ -51,7 +61,7 @@ export const AdminNavs = {
         }
     ],
 };
-export const CoachNavs = {
+const CoachNavs = {
     sidebar: [{
             id: 1,
             label: "Dashboard",
@@ -80,7 +90,7 @@ export const CoachNavs = {
     ],
 };
 
-export const MemberNavs = {
+const MemberNavs = {
     sidebar: [{
             id: 1,
             label: "Dashboard",

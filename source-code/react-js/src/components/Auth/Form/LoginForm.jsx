@@ -3,16 +3,16 @@ import isValidPassword from "../../../utils/validation/passwordValidation.js";
 import FormInput from "./FormInput.jsx";
 import PasswordFormInput from "./PasswordFormInput";
 import classes from "../Login/Login.module.css";
-import { Form, useNavigate } from "react-router-dom";
+import { useFetcher } from "react-router-dom";
 import { UserIcon } from "@heroicons/react/24/solid";
 export default function LoginForm() {
-  const navigate = useNavigate();
-  function handleFormSubmit(e) {
-    e.preventDefault();
-  console.log(e.target)
-  }
+  const fetcher = useFetcher();
+  const { Form, state } = fetcher;
+  const isSubmitting = state === "submitting";
+  const submitButtonStyles = isSubmitting ? classes.submittingLoginButton : classes.loginButton;
+  console.log(state);
   return (
-    <Form onSubmit={handleFormSubmit} className="flex w-full flex-col px-24">
+    <Form method="POST" className="flex w-full flex-col px-24">
       <FormInput
         Icon={UserIcon}
         isNotValidInput="Email is not valid"
@@ -23,7 +23,9 @@ export default function LoginForm() {
         type="email"
         required
       />
-      <div className="mt-2"/>
+      <input name="form-type" defaultValue="login-form" hidden />
+
+      <div className="mt-2" />
       <PasswordFormInput
         id="password"
         name="password"
@@ -35,8 +37,12 @@ export default function LoginForm() {
         <input type="checkbox" name="remember-me" id="remember-me" />
         <p>Remember me</p>
       </div>
-      <button type="submit" className={classes.loginButton}>
-        Login
+      <button
+        disabled={isSubmitting}
+        type="submit"
+        className={submitButtonStyles}
+      >
+        {isSubmitting ? "Loading..." : "Login"}
       </button>
     </Form>
   );

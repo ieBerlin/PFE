@@ -6,7 +6,6 @@ import FormInput from "./FormInput";
 import { Form } from "react-router-dom";
 import PasswordFormInput from "./PasswordFormInput";
 import loginClasses from "../Login/Login.module.css"
-import signUpClasses from "../SignUp/SignUp.module.css"
 export default function SignUpForm() {
   function handleFormSubmit(e) {
     e.preventDefault();
