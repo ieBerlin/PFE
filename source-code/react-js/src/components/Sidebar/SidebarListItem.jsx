@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 
 export default function SidebarListItem({ label, svg, href }) {
-  console.log(svg)
   return (
     <li className="group hover:bg-blue-100">
       <NavLink to={href}>

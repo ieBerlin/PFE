@@ -10,7 +10,7 @@ const NotificationMenu = ({
   return (
     <div className={notificationMenuClasses}>
       <div className="notifications-header">
-        <strong>Notifications</strong>
+        <h1>Notifications</h1>
         <p className="new-notification">3 New</p>
       </div>
       {notifications && notifications.length > 0 ? (

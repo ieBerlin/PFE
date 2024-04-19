@@ -28,6 +28,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 11px 13px;
     color: rgb(49, 49, 49);
+    font-weight: bold;
 }
 
 .notifications-header p {
@@ -50,11 +51,13 @@
 }
 
 .notification-item .title {
-    color: #020a47;
+    color: #172554;
+    font-weight: 600;
 }
 
 .notification-item .description {
     font-size: 12px;
+    color: #111827;
 }
 
 .notification-item .description,

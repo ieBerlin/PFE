@@ -7,7 +7,9 @@ import SportsPage from "./components/sports/SportsPage.jsx";
 import ClassesPage from "./components/classes/ClassesPage.jsx";
 import EquipmentsPage from "./components/equipments/EquipmentsPage.jsx";
 import UserDetailsPage from "./components/user/UserDetailsPage.jsx";
-import AllUserPage from "./components/user/AllUserPage.jsx";
+import AllUserPage, {
+  loader as allUsersLoader,action as allUsersAction
+} from "./components/user/AllUserPage.jsx";
 import AllNotifications from "./components/user/notifications/AllNotifications.jsx";
 import CreateSportCategoriePage from "./components/sports/CreateSportCategoriePage.jsx";
 import SportCategoriePage from "./components/sports/SportCategoriePage.jsx";
@@ -24,7 +26,6 @@ import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./components/classes/EditClassPage.jsx";
 import CreateClassPage from "./components/classes/CreateClassPage.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
-import Users from "./components/user/AllUserPage.jsx";
 import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout, {
   loader as tokenLoader,
@@ -120,7 +121,10 @@ const router = createBrowserRouter([
       },
       {
         path: "users",
-        element: <Users />,
+        element: <AllUserPage />,
+        id: "all-users-id",
+        loader: allUsersLoader,
+        action:allUsersAction,
       },
       {
         path: "payments",
@@ -176,13 +180,14 @@ const router = createBrowserRouter([
           {
             path: "all-users",
             element: <AllUserPage />,
+ 
           },
         ],
       },
     ],
   },
   {
-   index:true,
+    index: true,
     element: <LandingPage />,
   },
   {

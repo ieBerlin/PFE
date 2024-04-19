@@ -193,7 +193,6 @@ export const DUMMY_COACHES = [{
 ];
 
 export const filterCoaches = (coaches, selectedCoaches) => {
-    console.log(selectedCoaches)
     return coaches.filter(coach => {
         const isCoachCategorySelected = Object.entries(selectedCoaches.coachCategory)
             .every(([coachCategory, isSelected]) => isSelected || coach.coachCategory.toLowerCase() !== coachCategory);

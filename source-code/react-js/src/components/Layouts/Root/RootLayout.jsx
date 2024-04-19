@@ -1,10 +1,13 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MainNavigation from "../../MainNavigation/MainNavigation";
-import { Outlet, json } from "react-router-dom";
+import { Outlet, json, useLoaderData } from "react-router-dom";
 import classes from "./RootLayout.module.css";
+import { changeUserRole } from "../../../features/userRole/userRoleSlice";
 export default function RootLayout() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
-
+  const userRole = useLoaderData("root");
+  const dispatch = useDispatch();
+  dispatch(changeUserRole(userRole));
   let mainContentPadding = "60px 0 0";
   if (isOpen) {
     mainContentPadding += " 250px";

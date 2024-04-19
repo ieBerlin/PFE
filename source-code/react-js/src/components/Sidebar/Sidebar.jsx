@@ -9,7 +9,7 @@ import { AcademicCapIcon, Bars3Icon } from "@heroicons/react/24/solid";
 export default function Sidebar() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
   const dispatch = useDispatch();
-  let sideBarClasses = "sidebar";
+  let sideBarClasses = "sidebar shadow-xl";
   if (isOpen) {
     sideBarClasses += " open";
   }

@@ -81,7 +81,7 @@ export default function PaymentsPage() {
     );
   }
   return (
-    <main className="bg-white w-full px-5 pt-4 pb-10">
+    <main className="bg-gray-50 w-full px-5 pt-4 pb-10">
       <h1 className="text-4xl">Payments</h1>
       {/* Analytics */}
       <div className="grid grid-cols-2 gap-9">
