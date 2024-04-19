@@ -4,7 +4,8 @@
     top: 0;
     width: 78px;
     height: calc(100% - 85px);
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     background: white;
     padding: 6px 14px;
     z-index: 200;
@@ -140,7 +141,7 @@
     border-radius: 12px;
     transition: all 0.2s ease;
     background: white;
-    border: 1px solid #a4a4a4;
+    border: 1px solid #9ca3af;
 }
 
 .sidebar.open input {
@@ -162,7 +163,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #6b7280;
+    background: #9ca3af;
     position: absolute;
     top: 50%;
     left: 0;

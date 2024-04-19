@@ -38,6 +38,6 @@ const timeOut = () => {
   return new Promise((resolve) =>
     setTimeout(() => {
       resolve(DUMMY_COACHES);
-    }, 5000)
+    }, 1000)
   );
 };

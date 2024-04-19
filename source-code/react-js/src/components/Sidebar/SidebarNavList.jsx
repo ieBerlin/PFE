@@ -43,7 +43,7 @@ export default function NavList() {
         />
         <span className="tooltip">Search</span>
       </li>
-      {currentDrawerItemsState && currentDrawerItemsState.length > 0 ? (
+      { currentDrawerItemsState && currentDrawerItemsState.length > 0 ? (
         currentDrawerItemsState.map((element) => (
           <SidebarListItem
             key={element.id}
@@ -53,7 +53,7 @@ export default function NavList() {
           />
         ))
       ) : (
-        <p className="no-results-found">Nothing results found!</p>
+        <p className="text-black font-semibold text-center text-nowrap text-ellipsis overflow-hidden">Nothing results found!</p>
       )}
       <div className="profile">
         <div className="profile-details-container">

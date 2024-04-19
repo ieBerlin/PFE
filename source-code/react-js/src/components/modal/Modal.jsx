@@ -65,9 +65,7 @@ export default function Modal({ imageSrc }) {
         title="Delete User"
         description=" Are you sure you want to delete this account? All of the data will be permanently removed. This action cannot be undone."
         confirmActionLabel="Delete"
-        cancelActionLabel="Cancel"
         onConfirm={() => onConfirm("confirm-delete-user")}
-        onClose={closeModal}
       />
     );
   } else if (type === "reset-password") {
@@ -78,7 +76,6 @@ export default function Modal({ imageSrc }) {
         color="green"
         title="Password reset confirmation sent"
         description="The user's password has been successfully reset. An email has been sent to the user with instructions on how to set up a new password"
-        onClose={closeModal}
       />
     );
   } else if (type === "confirm-delete-user") {
@@ -87,7 +84,6 @@ export default function Modal({ imageSrc }) {
         color="red"
         title="User Deleted Successfully"
         description="User has been successfully deleted."
-        onClose={closeModal}
       />
     );
   } else if (type === "confirm-add-user") {
@@ -96,18 +92,14 @@ export default function Modal({ imageSrc }) {
         color="blue"
         title="User Added Successfully"
         description="User has been successfully added."
-        onClose={closeModal}
       />
     );
   } else if (type === "confirm-sign-out") {
     modalContent = (
       <ConfirmModal
-        // color="blue"
         title="Are You Sure You Want to Sign Out?"
         description="Are you sure you want to sign out of your account? Click 'Confirm' to sign out."
-        onClose={closeModal}
         confirmButtonLabel="Sign Out"
-        onConfirm={signOutFun}
       />
     );
   } else if (type === "view-certification") {
@@ -117,8 +109,6 @@ export default function Modal({ imageSrc }) {
       <ConfirmationModal
         title="Delete Notification"
         description="Are you sure you want to delete this notification? Once deleted, it cannot be recovered."
-        cancelActionLabel="Cancel"
-        onClose={closeModal}
         confirmActionLabel="Delete"
         onConfirm={() => {}}
       />

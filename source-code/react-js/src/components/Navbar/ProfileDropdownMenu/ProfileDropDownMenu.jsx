@@ -3,6 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { useDispatch } from "react-redux";
 import { setModalType } from "../../../features/modal/modalSlice.js";
 import Modal from "../../modal/Modal.jsx";
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -20,26 +21,15 @@ export default function ProfileDropDownMenu() {
         {({ open }) => {
           return (
             <>
-              <div className="h-5">
-                <Menu.Button className="text-sm font-semibold text-gray-900 ">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className={`h-5 w-5 text-gray-400 transition-transform hover:text-grey-50 ${
-                      !open ? "rotate-90" : "rotate-0"
-                    }`}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
-                </Menu.Button>
-              </div>
+            <div className="h-5">
+            <Menu.Button className="text-sm font-semibold text-gray-900  ">
+                <ChevronLeftIcon
+                  className={`text-white w-5 h-5  transition-transform ${
+                    open ? "-rotate-90" : "rotate-0"
+                  }`}
+                />
+              </Menu.Button>
+            </div>
               <Transition
                 as={Fragment}
                 enter="transition ease-out duration-100"

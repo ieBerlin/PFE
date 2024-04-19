@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function useFetch(fetchFn, initialValue) {
     const [isFetching, setIsFetching] = useState(false);
@@ -9,7 +9,6 @@ export function useFetch(fetchFn, initialValue) {
             setIsFetching(true);
             try {
                 const data = await fetchFn();
-                console.log("data")
                 setTimeout(() => {
                     setIsFetching(false)
                 }, 5000)
@@ -54,4 +53,21 @@ export function useSubmit(fetchFn, initialValue) {
         error,
         fetchFuncCaller
     };
+}
+export const usePost = () => {
+    const [isFetching, setIsFetching] = useState(false);
+    const handlePost = useCallback(async() => {
+        setIsFetching(true)
+        try {
+            setTimeout(() => {
+                setIsFetching(false)
+            }, 5000)
+        } catch (error) {
+            setIsFetching(false)
+            console.log(error)
+        }
+    }, [])
+
+    return { isFetching, handlePost }
+
 }

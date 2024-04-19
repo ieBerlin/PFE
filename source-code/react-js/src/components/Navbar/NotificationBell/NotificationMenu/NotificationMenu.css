@@ -51,8 +51,9 @@
 }
 
 .notification-item .title {
-    color: #172554;
-    font-weight: 600;
+    color: black;
+    font-weight: 500;
+    text-transform: capitalize;
 }
 
 .notification-item .description {

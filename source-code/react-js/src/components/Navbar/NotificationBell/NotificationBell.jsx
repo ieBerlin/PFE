@@ -3,7 +3,7 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import "./NotificationBell.css";
 import { useState, useRef, useEffect } from "react";
 import NotificationMenu from "./NotificationMenu/NotificationMenu";
-
+import { BellIcon } from "@heroicons/react/24/solid";
 function NotificationBell() {
   const [showNotifications, setShowNotifications] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -37,16 +37,18 @@ function NotificationBell() {
 
   return (
     <div className="notifier red">
-      <FontAwesomeIcon
+      <button
+        ref={notificationBellRef}
         className="bell"
         onClick={toggleNotifications}
-        icon={faBell}
-        ref={notificationBellRef}
-      />
+      >
+        <BellIcon className="text-white w-7 h-7" />
+      </button>
+
       <span className="badge">5</span>
       <div ref={notificationMenuRef}>
         <NotificationMenu
-        onClose={()=>setShowNotifications(false)}
+          onClose={() => setShowNotifications(false)}
           notifications={notifications}
           notificationMenuClasses={
             showNotifications ? "notification-menu open" : "notification-menu"

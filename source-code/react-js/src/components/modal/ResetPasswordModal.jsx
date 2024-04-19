@@ -1,16 +1,11 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
-import { useFetch } from "../../hooks/http.js";
+import { usePost } from "../../hooks/http.js";
 import LoadingIndicator from "../LoadingIndicator.jsx";
 export default function ResetPasswordModal() {
   const dispatch = useDispatch();
-  const { isFetching, fetchData } = useFetch(() => {});
-  // onClose={closeModal}
-  // onConfirm={() => onConfirm("confirm-reset-password")}
-  function handleButtonClick() {
-    fetchData().then();
-  }
+  const { isFetching, handlePost } = usePost();
 
   return (
     <>
@@ -41,7 +36,7 @@ export default function ResetPasswordModal() {
           disabled={isFetching}
           type="button"
           className={` justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto`}
-          onClick={handleButtonClick}
+          onClick={handlePost}
         >
           {isFetching ? <LoadingIndicator fill="gray-600" /> : "Reset Password"}
         </button>
