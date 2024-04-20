@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
-import BrokenLink from "../../assets/broken-link-svgrepo-com.svg";
+import BrokenLink from "../assets/broken-link-svgrepo-com.svg"
+import ForbiddenPage from "./ForbiddenPage";
 export default function NotFoundPage() {
+  return <ForbiddenPage/>
   return (
     <div className="h-screen flex justify-center items-center bg-gray-100 ">
       <div className="flex flex-col">
@@ -10,7 +12,7 @@ export default function NotFoundPage() {
         </p>
         <Link
           to="/"
-          className=" mt-4 font-semibold tracking-widest  border rounded md py-4 px-8 text-center bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50"
+          className=" mt-4 font-semibold tracking-widest  border rounded md py-4 px-8 text-center bg-blue-700 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50"
         >
           Back to Home Page
         </Link>

@@ -30,7 +30,7 @@ import PaymentsPage from "./components/payments/PaymentsPage.jsx";
 import RootLayout, {
   loader as tokenLoader,
 } from "./components/Layouts/Root/RootLayout.jsx";
-import NotFoundPage from "./pages/not-found/NotFoundPage.jsx";
+import NotFoundPage from "./components/NotFoundPage.jsx"
 import UpdateUserPasswordPage from "./components/user/UpdateUserPasswordPage.jsx";
 import CoachPageDetails, {
   loader as coachPageDetailsLoader,

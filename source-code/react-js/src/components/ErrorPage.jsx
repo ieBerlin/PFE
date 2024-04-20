@@ -1,5 +1,5 @@
 import { useRouteError } from "react-router-dom";
-import NotFoundPage from "../pages/not-found/NotFoundPage";
+import NotFoundPage from "../components/NotFoundPage.jsx"
 
 export default function ErrorPage() {
   const error = useRouteError();
