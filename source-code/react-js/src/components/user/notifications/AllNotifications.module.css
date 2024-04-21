@@ -22,7 +22,7 @@
     display: grid;
     grid-template-columns: auto auto 1fr;
     gap: 30px;
-    background-color: #f5f5f5;
+    background-color: #f3f4f6;
     border: 1px solid #e3e3e3;
     border-radius: 1rem;
     padding: 20px 30px;
@@ -41,23 +41,33 @@
     font-weight: bold;
 }
 
-.closeButton {
+.actions {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
+    gap: 30px;
 }
 
-.closeButton button {
+.actions h2 {
+    font-weight: 600;
+    color: #7a7a7a;
+}
+
+.actions button {
     background-color: transparent;
     border: 0;
     cursor: pointer;
 }
 
-.closeButton img {
+.actions img {
     width: 20px;
     height: 20px;
 }
 
+.notificationItemDetails h3 {
+    color: #111827;
+}
+
 .notificationItemDetails p {
-    color: #6c6c6c;
+    color: #6b7280;
 }

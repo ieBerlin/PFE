@@ -6,11 +6,8 @@ import PasswordInput from "./PasswordInput.jsx";
 import defaultUserImage from "../../assets/default-user.webp";
 import { useSelector } from "react-redux";
 export default function AddUserModal({ onClose, onConfirm }) {
-  const isAdmin =
-    useSelector((state) => state.userRole.currentUserRole) === "admin";
+  const isAdmin = useSelector((state) => state.userRole.userRole === "admin");
   const { state, data, Form } = useFetcher();
-  console.log(state);
-  console.log(data);
   const isLoading = state === "submitting";
   useActionData();
   const [currentImageSrc, setCurrentImageSrc] = useState(defaultUserImage);
@@ -36,7 +33,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
     <>
       <Form
         method="post"
-        className=" bg-transparent px-8 pb-4 pt-5 rounded-md bg-white"
+        className="px-8 pb-4 pt-5 rounded-md bg-white"
       >
         <input name="form-type" defaultValue="sign-up-form" hidden />
         <h3 className="text-black font-semibold text-xl mb-4">
@@ -64,11 +61,16 @@ export default function AddUserModal({ onClose, onConfirm }) {
               />
             </button>
           </div>
-          {isAdmin && (
+          {isAdmin ? (
             <select className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
-              <option>Member</option>
-              <option>Coach</option>
-              <option>Admin</option>
+              <option value="member">Member</option>
+              <option value="coach">Coach</option>
+              <option value="admin">Admin</option>
+            </select>
+          ) : (
+            <select className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
+              <option value="member">Member</option>
+              <option value="coach">Coach</option>
             </select>
           )}
         </div>
@@ -149,7 +151,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
             }
           }}
         >
-          {isLoading ? "Loading..." : (isAdmin ? "Add user" : "Sign Up")}
+          {isLoading ? "Loading..." : isAdmin ? "Add user" : "Sign Up"}
         </button>
         <button
           disabled={isLoading}

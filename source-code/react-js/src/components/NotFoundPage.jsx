@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import BrokenLink from "../assets/broken-link-svgrepo-com.svg"
-import ForbiddenPage from "./ForbiddenPage";
 export default function NotFoundPage() {
-  return <ForbiddenPage/>
   return (
     <div className="h-screen flex justify-center items-center bg-gray-100 ">
       <div className="flex flex-col">

@@ -3,7 +3,6 @@ import closeSvg from "../../../assets/close-svgrepo-com.svg";
 import notificationItemSvg from "../../../assets/payment-svgrepo-com.svg";
 import { setModalType } from "../../../features/modal/modalSlice";
 import { useDispatch } from "react-redux";
-import Modal from "../../modal/Modal";
 const DUMMY_NOTIFICATIONS = [
   {
     id: 1,
@@ -106,7 +105,8 @@ export default function AllNotifications() {
               <h3>{notificationItem.title}</h3>
               <p>{notificationItem.message}</p>
             </div>
-            <div className={classes.closeButton}>
+            <div className={classes.actions}>
+              <h2>2024-10-21</h2>
               <button
                 type="button"
                 onClick={() => dispatch(setModalType("delete-notification"))}

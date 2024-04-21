@@ -10,10 +10,7 @@ export default function AllUserPage() {
       <Modal />
       <Suspense fallback={<FallbackText />}>
         <Await resolve={timeOut}>
-          {(resolvedData) => {
-            console.log(resolvedData);
-            return <AllUsersList users={resolvedData} />;
-          }}
+          {(resolvedData) => <AllUsersList users={resolvedData} />}
         </Await>
       </Suspense>
     </>
@@ -40,7 +37,7 @@ function FallbackText() {
     </section>
   );
 }
-export async function action({request}) {
-  const fd =await request.formData();
+export async function action({ request }) {
+  const fd = await request.formData();
   console.log(fd);
 }

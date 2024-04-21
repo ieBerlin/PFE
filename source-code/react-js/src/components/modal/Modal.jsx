@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import CertificationModal from "./CertificationModal.jsx";
+import AddTransactionModal from "./AddTransactionModal.jsx"
 export default function Modal({ imageSrc }) {
   const dialog = useRef();
   const modalContentRef = useRef();
@@ -113,6 +114,8 @@ export default function Modal({ imageSrc }) {
         onConfirm={() => {}}
       />
     );
+  } else if (type === "add-transaction") {
+    modalContent = <AddTransactionModal/>;
   }
   function onConfirm(confirmType) {
     dispatch(setModalType(confirmType));
