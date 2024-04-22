@@ -15,7 +15,9 @@ import AllNotifications from "./components/user/notifications/AllNotifications.j
 import CreateSportCategoriePage from "./components/sports/CreateSportCategoriePage.jsx";
 import SportCategoriePage from "./components/sports/SportCategoriePage.jsx";
 import DeleteSportCategorie from "./components/sports/DeleteSportCategorie.jsx";
-import ReportsPage, { loader as reportsLoader } from "./components/reports/ReportsPage.jsx";
+import ReportsPage, {
+  loader as reportsLoader,
+} from "./components/reports/ReportsPage.jsx";
 import UserProfil from "./components/user/UserProfil.jsx";
 import CoachesPage, {
   loader as coachesPageLoader,
@@ -28,6 +30,7 @@ import EditClassPage from "./components/classes/EditClassPage.jsx";
 import CreateClassPage from "./components/classes/CreateClassPage.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
 import PaymentsPage, {
+  action as paymentsAction,
   loader as paymentsLoader,
 } from "./components/payments/PaymentsPage.jsx";
 import RootLayout, {
@@ -134,6 +137,7 @@ const router = createBrowserRouter([
         element: <PaymentsPage />,
         id: "payments-loader",
         loader: paymentsLoader,
+        action: paymentsAction,
       },
       {
         path: "equipments",
@@ -156,8 +160,8 @@ const router = createBrowserRouter([
       {
         path: "reports",
         element: <ReportsPage />,
-        id:"reports-loader",
-        loader:reportsLoader
+        id: "reports-loader",
+        loader: reportsLoader,
       },
       {
         path: "profile",

@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { CameraIcon } from "@heroicons/react/24/outline";
-import { useActionData, useFetcher } from "react-router-dom";
+import { useFetcher } from "react-router-dom";
 import PasswordInput from "./PasswordInput.jsx";
 
 import defaultUserImage from "../../assets/default-user.webp";
@@ -9,7 +9,6 @@ export default function AddUserModal({ onClose, onConfirm }) {
   const isAdmin = useSelector((state) => state.userRole.userRole === "admin");
   const { state, data, Form } = useFetcher();
   const isLoading = state === "submitting";
-  useActionData();
   const [currentImageSrc, setCurrentImageSrc] = useState(defaultUserImage);
   const imageRef = useRef();
   const submitButtonRef = useRef();
@@ -31,10 +30,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
 
   return (
     <>
-      <Form
-        method="post"
-        className="px-8 pb-4 pt-5 rounded-md bg-white"
-      >
+      <Form method="post" className="px-8 pb-4 pt-5 rounded-md bg-white">
         <input name="form-type" defaultValue="sign-up-form" hidden />
         <h3 className="text-black font-semibold text-xl mb-4">
           User information

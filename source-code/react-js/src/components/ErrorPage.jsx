@@ -7,6 +7,7 @@ export default function ErrorPage() {
   if (error.status === 404) {
     return <NotFoundPage />;
   }
+  return <p>{error.status}</p>
   // if(
   // error.status==403
   // )
