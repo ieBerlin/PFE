@@ -11,18 +11,24 @@ import AllUserPage, {
   loader as allUsersLoader,
   action as allUsersAction,
 } from "./components/user/AllUserPage.jsx";
-import AllNotifications from "./components/user/notifications/AllNotifications.jsx";
+import AllNotifications, {
+  loader as notificationsLoader,
+} from "./components/user/notifications/AllNotifications.jsx";
 import CreateSportCategoriePage from "./components/sports/CreateSportCategoriePage.jsx";
 import SportCategoriePage from "./components/sports/SportCategoriePage.jsx";
 import DeleteSportCategorie from "./components/sports/DeleteSportCategorie.jsx";
 import ReportsPage, {
   loader as reportsLoader,
 } from "./components/reports/ReportsPage.jsx";
-import UserProfil from "./components/user/UserProfil.jsx";
+import UserProfil, {
+  loader as userProfileLoader,
+} from "./components/user/UserProfil.jsx";
 import CoachesPage, {
   loader as coachesPageLoader,
 } from "./components/coaches/CoachesPage.jsx";
-import EquipmentsBookings from "./components/equipments/EquipmentsBookings.jsx";
+import EquipmentsBookings, {
+  loader as equipmentsLoader,
+} from "./components/equipments/EquipmentsBookings.jsx";
 import BookEquipmentPage from "./components/equipments/BookEquipmentPage.jsx";
 import BookClassPage from "./components/classes/BookClassPage.jsx";
 import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
@@ -154,6 +160,8 @@ const router = createBrowserRouter([
           {
             path: "bookings",
             element: <EquipmentsBookings />,
+            id: "equipments-bookings-id",
+            loader: equipmentsLoader,
           },
         ],
       },
@@ -169,6 +177,8 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <UserProfil />,
+            id: "user-profile-id",
+            loader: userProfileLoader,
           },
 
           {
@@ -183,6 +193,8 @@ const router = createBrowserRouter([
           {
             path: "all-notifications",
             element: <AllNotifications />,
+            id: "notifications-id",
+            loader: notificationsLoader,
           },
           {
             path: ":userId",

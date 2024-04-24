@@ -15,20 +15,18 @@
     position: absolute;
     top: -5px;
     left: 24px;
-    padding: 0 5px;
-    height: 22px;
+    padding: 0 4px;
+    /* height: 22px; */
     background: #dc2626;
     color: #fff;
-    border-radius: 11px;
+    border-radius: 50%;
+    text-align: center;
     white-space: nowrap;
+    font-weight: 600;
 }
 
 .notifier.green .badge {
     background: red;
-}
-
-.notifier.green .bell:hover {
-    color: red;
 }
 
 .notifier.new .badge {

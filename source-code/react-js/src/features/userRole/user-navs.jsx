@@ -6,53 +6,90 @@ import {
   BanknotesIcon,
   Cog8ToothIcon,
   ChartBarIcon,
-} from "@heroicons/react/24/outline";
+  Cog6ToothIcon,
+} from "@heroicons/react/24/solid";
 
-const svgClasses = "w-7 h-7 text-gray-600 group-hover:text-blue-600";
-
+const sidebarSvgClasses = "w-7 h-7 text-gray-600 group-hover:text-blue-600";
+const profileDropDownMenuSvgClasses = "w-5 h-5";
 const AdminNavs = {
   sidebar: [
     {
       id: 1,
       label: "Dashboard",
       href: "/dashboard",
-      labelSvg: <ChartBarIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <ChartBarIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 2,
       label: "Classes",
       href: "/classes",
-      labelSvg: <Square3Stack3DIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <Square3Stack3DIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 3,
       label: "Users",
       href: "/users",
-      labelSvg: <UserGroupIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <UserGroupIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 4,
       label: "Coaches",
       href: "/coaches",
-      labelSvg: <ClipboardDocumentListIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <ClipboardDocumentListIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 5,
       label: "Payments",
       href: "/payments",
-      labelSvg: <BanknotesIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <BanknotesIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 6,
       label: "Equipments",
       href: "/equipments",
-      labelSvg: <Cog8ToothIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <Cog8ToothIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 7,
       label: "Reports",
       href: "/reports",
-      labelSvg: <DocumentArrowUpIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <DocumentArrowUpIcon className={sidebarSvgClasses} />, // Add svgClasses here
+    },
+  ],
+  dropDownMenu: [
+    {
+      id: 1,
+      label: "Dashboard",
+      href: "/dashboard",
+      labelSvg: <ChartBarIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 2,
+      label: "Coaches",
+      href: "/coaches",
+      labelSvg: (
+        <ClipboardDocumentListIcon className={profileDropDownMenuSvgClasses} />
+      ),
+    },
+    {
+      id: 3,
+      label: "Equipments",
+      href: "/equipments",
+      labelSvg: <Cog6ToothIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 4,
+      label: "Payments",
+      href: "/payments",
+      labelSvg: <BanknotesIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 5,
+      label: "Reports",
+      href: "/reports",
+      labelSvg: (
+        <DocumentArrowUpIcon className={profileDropDownMenuSvgClasses} />
+      ),
     },
   ],
 };
@@ -63,25 +100,60 @@ const CoachNavs = {
       id: 1,
       label: "Dashboard",
       href: "/dashboard",
-      labelSvg: <ChartBarIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <ChartBarIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 2,
       label: "My Classes",
       href: "/classes",
-      labelSvg: <Square3Stack3DIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <Square3Stack3DIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 3,
       label: "My Clients",
       href: "/clients",
-      labelSvg: <UserGroupIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <UserGroupIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 4,
       label: "Reports",
       href: "/reports",
-      labelSvg: <DocumentArrowUpIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <DocumentArrowUpIcon className={sidebarSvgClasses} />, // Add svgClasses here
+    },
+  ],
+  dropDownMenu: [
+    {
+      id: 1,
+      label: "Dashboard",
+      href: "/dashboard",
+      labelSvg: <ChartBarIcon className={profileDropDownMenuSvgClasses} />,
+    },
+
+    {
+      id: 2,
+      label: "Equipments",
+      href: "/equipments",
+      labelSvg: <Cog6ToothIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 3,
+      label: "My Payments",
+      href: "/payments",
+      labelSvg: <BanknotesIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 4,
+      label: "My students",
+      href: "/clients",
+      labelSvg: <BanknotesIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 5,
+      label: "Reports",
+      href: "/reports",
+      labelSvg: (
+        <DocumentArrowUpIcon className={profileDropDownMenuSvgClasses} />
+      ),
     },
   ],
 };
@@ -92,25 +164,52 @@ const MemberNavs = {
       id: 1,
       label: "Dashboard",
       href: "/dashboard",
-      labelSvg: <ChartBarIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <ChartBarIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 2,
       label: "Classes",
       href: "/classes",
-      labelSvg: <Square3Stack3DIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <Square3Stack3DIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 3,
       label: "Coaches",
       href: "/coaches",
-      labelSvg: <ClipboardDocumentListIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <ClipboardDocumentListIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
       id: 4,
       label: "Equipments",
       href: "/equipments",
-      labelSvg: <Cog8ToothIcon className={svgClasses} />, // Add svgClasses here
+      labelSvg: <Cog8ToothIcon className={sidebarSvgClasses} />, // Add svgClasses here
+    },
+  ],
+  dropDownMenu: [
+    {
+      id: 1,
+      label: "Dashboard",
+      href: "/dashboard",
+      labelSvg: <ChartBarIcon className={profileDropDownMenuSvgClasses} />,
+    },
+
+    {
+      id: 2,
+      label: "Classes",
+      href: "/classes",
+      labelSvg: <Cog6ToothIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 3,
+      label: "Coaches",
+      href: "/coaches",
+      labelSvg: <BanknotesIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 4,
+      label: "Reports",
+      href: "/reports",
+      labelSvg: <BanknotesIcon className={profileDropDownMenuSvgClasses} />,
     },
   ],
 };

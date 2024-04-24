@@ -16,6 +16,9 @@
     gap: 30px;
     width: 100%;
     list-style: none;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: white;
 }
 
 .notificationItem {
@@ -62,6 +65,10 @@
 .actions img {
     width: 20px;
     height: 20px;
+}
+
+.notificationItemDetails {
+    overflow-x: hidden;
 }
 
 .notificationItemDetails h3 {

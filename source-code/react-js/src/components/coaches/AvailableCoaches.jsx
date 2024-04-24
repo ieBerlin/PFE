@@ -1,141 +1,52 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { filterCoaches } from "../../dummy_data/dummy_coaches";
+import FilterDropdown from "../FilterDropdown";
+const selectedCoaches = {
+  coachCategory: {
+    yoga: true,
+    kickboxing: true,
+    fitness: true,
+    bodybuilding: true,
+  },
+  coachLevel: {
+    beginner: true,
+    intermediate: true,
+    advanced: true,
+    expert: true,
+  },
+};
 export default function AvailableCoaches({ coaches }) {
-  const dropDownMenuRef = useRef(null);
-  const buttonRef = useRef();
+  const [currentSelectedCoaches, setCurrentSelectedCoaches] =
+    useState(selectedCoaches);
 
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (
-        !buttonRef.current ||
-        buttonRef.current.contains(event.target) ||
-        !dropDownMenuRef.current ||
-        dropDownMenuRef.current.contains(event.target)
-      ) {
-        return;
-      }
-      setFilterDropDownMenuOpen(false);
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
-  const toggleFilterDropDownMenu = () => {
-    setFilterDropDownMenuOpen((prevState) => !prevState);
-  };
-
-  const [filterDropDownMenuOpen, setFilterDropDownMenuOpen] = useState(false);
-  const [currentSelectedCoaches, setCurrentSelectedCoaches] = useState({
-    coachCategory: {
-      yoga: true,
-      kickboxing: true,
-      fitness: true,
-      bodybuilding: true,
-    },
-    coachLevel: {
-      beginner: true,
-      intermediate: true,
-      advanced: true,
-      expert: true,
-    },
-  });
-  const toggleFilteredCoachesChange = (key, field) => {
-    setCurrentSelectedCoaches((prevState) => ({
-      ...prevState,
-      [key]: { ...prevState[key], [field]: !prevState[key][field] },
-    }));
-  };
   const filteredCoaches = filterCoaches(coaches, currentSelectedCoaches);
   return (
     <>
-      <div className="flex flex-row w-full px-4 pt-2 mt-2">
-        <div className="block w-full" />
-        <div className="relative" ref={dropDownMenuRef}>
-          <button
-            // disabled={isFetching}
-            className="text-stone-900 bg-white hover:bg-gray-50 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
-            type="button"
-            ref={buttonRef}
-            onClick={toggleFilterDropDownMenu}
-          >
-            <p>Filter</p>
-            <svg
-              className={`w-2.5 h-2.5 ms-3 transform transition-transform ${
-                filterDropDownMenuOpen ? "rotate-180" : ""
-              }`}
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 10 6"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 4 4 4-4"
-              />
-            </svg>
-          </button>
-          {filterDropDownMenuOpen && (
-            <div
-              className="ring-1 ring-inset ring-gray-300 z-10 absolute right-0 mt-1 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow"
-              style={{ top: "calc(100% + 5px)" }}
-            >
-              <FilterOptions
-                title="Coach Category"
-                options={["kickboxing", "fitness", "yoga", "bodybuilding"]}
-                selectedOptions={currentSelectedCoaches.coachCategory}
-                onChange={(field) =>
-                  toggleFilteredCoachesChange("coachCategory", field)
-                }
-              />
-              <FilterOptions
-                title="Coach Level"
-                options={["beginner", "intermediate", "advanced", "expert"]}
-                selectedOptions={currentSelectedCoaches.coachLevel}
-                onChange={(field) =>
-                  toggleFilteredCoachesChange("coachLevel", field)
-                }
-              />
-            </div>
-          )}
+      <div className="flex flex-row w-full px-4 pt-2 mt-2 justify-between items-center">
+        <div className="font-semibold text-2xl">
+          All coaches{" "}
+          <span className="text-gray-600 text-lg">
+            ({filteredCoaches.length})
+          </span>
         </div>
+        <FilterDropdown
+          currentSelectedData={currentSelectedCoaches}
+          setData={setCurrentSelectedCoaches}
+          filterOptionsData={[
+            {
+              title: "coach.Category",
+              options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
+            },
+            {
+              title: "coach.Level",
+              options: ["beginner", "intermediate", "advanced", "expert"],
+            },
+          ]}
+        />
       </div>
       <CoachList coaches={filteredCoaches} />
-    </>
-  );
-}
-
-function FilterOptions({ title, options, selectedOptions, onChange }) {
-  return (
-    <>
-      <p className="text-black font-semibold pl-3 py-2">{title}</p>
-      <ul className="p-3 space-y-3 text-sm">
-        {options.map((option) => (
-          <li key={option}>
-            <div className="flex items-center">
-              <input
-                onChange={() => onChange(option)}
-                checked={selectedOptions[option]}
-                id={`checkbox-${title}-${option}`}
-                type="checkbox"
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-              />
-              <label
-                htmlFor={`checkbox-${title}-${option}`}
-                className="ms-2 text-sm font-medium text-gray-600"
-              >
-                {option.charAt(0).toUpperCase() + option.slice(1)}
-              </label>
-            </div>
-          </li>
-        ))}
-      </ul>
     </>
   );
 }
