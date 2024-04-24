@@ -6,7 +6,9 @@ import LoginPage, {
 import SportsPage from "./components/sports/SportsPage.jsx";
 import ClassesPage from "./components/classes/ClassesPage.jsx";
 import EquipmentsPage from "./components/equipments/EquipmentsPage.jsx";
-import UserDetailsPage from "./components/user/UserDetailsPage.jsx";
+import UserDetailsPage, {
+  loader as userPageDetailsLoader,
+} from "./components/user/UserDetailsPage.jsx";
 import AllUserPage, {
   loader as allUsersLoader,
   action as allUsersAction,
@@ -199,10 +201,8 @@ const router = createBrowserRouter([
           {
             path: ":userId",
             element: <UserDetailsPage />,
-          },
-          {
-            path: "all-users",
-            element: <AllUserPage />,
+            id: "user-detail-id",
+            loader: userPageDetailsLoader,
           },
         ],
       },
