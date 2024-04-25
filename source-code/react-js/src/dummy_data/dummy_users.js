@@ -30,7 +30,7 @@ export const DUMMY_USERS = [{
         id: 5,
         name: "Sarah Wilson",
         role: "Member",
-        status: "Pending",
+        status: "Blocked",
         email: "sarah.wilson@example.com"
     },
     {

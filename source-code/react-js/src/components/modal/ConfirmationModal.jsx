@@ -33,25 +33,27 @@ export default function ConfirmationModal({
       </div>
       <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
         <button
-          disabled={isFetching}
-          type="button"
-          className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
           onClick={handlePost}
+          disabled={isFetching}
+          type="submit"
+          className={`${isFetching ? "bg-gray-200" : "bg-red-600"} ${
+            isFetching ? "text-gray-500" : "text-white"
+          } outline-none inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${
+            !isFetching && "hover:bg-red-500"
+          } sm:ml-3 sm:w-auto`}
         >
-          {isFetching ? (
-            <LoadingIndicator fill="gray-500" />
-          ) : (
-            confirmActionLabel
-          )}
+          {isFetching ? "Processing..." : confirmActionLabel}
         </button>
         <button
           disabled={isFetching}
           type="button"
-          className={` outline-none  mt-3 flex h-min rounded-md ${
+          className={`outline-none mt-3 inline-flex w-full justify-center rounded-md ${
             isFetching ? "bg-gray-100" : "bg-white"
           } px-3 py-2 text-sm font-semibold ${
             isFetching ? "text-gray-400" : "text-gray-900"
-          } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
+          } shadow-sm ${
+            !isFetching && "hover:bg-gray-50 ring-gray-300 ring-1 ring-inset  "
+          } sm:mt-0 sm:w-auto`}
           onClick={() => dispatch(setModalType())}
         >
           Cancel

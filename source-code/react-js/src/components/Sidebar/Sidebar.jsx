@@ -1,7 +1,4 @@
 import "./Sidebar.css";
-import menuSvg from "../../assets/menu-svgrepo-com.svg";
-import menuAltRight from "../../assets/menu-alt-right-svgrepo-com.svg";
-import rocketSvg from "../../assets/rocket-svgrepo-com.svg";
 import SidebarNavList from "./SidebarNavList.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../../features/sidebar/sidebarSlice.js";
@@ -18,7 +15,7 @@ export default function Sidebar() {
       <div className={sideBarClasses}>
         <div className="logo-details">
           <a href="/" className="go-to-home-page">
-            <AcademicCapIcon className="text-gray-500 w-8 h-8" />
+            <AcademicCapIcon className="text-gray-600 w-8 h-8" />
             <div className="logo_name">HousesGym</div>
           </a>
           <div id="btn">
@@ -27,14 +24,14 @@ export default function Sidebar() {
                 onClick={() => dispatch(toggleMenu())}
                 className=" flex w-full items-center justify-center"
               >
-                <Bars3Icon className="text-gray-500 w-8 h-8" />
+                <Bars3Icon className="text-gray-600 w-8 h-8" />
               </button>
             ) : (
               <button
                 onClick={() => dispatch(toggleMenu())}
                 className=" flex w-full items-center justify-center"
               >
-                <Bars3Icon className="text-gray-500 w-8 h-8" />
+                <Bars3Icon className="text-gray-600 w-8 h-8" />
               </button>
             )}
           </div>

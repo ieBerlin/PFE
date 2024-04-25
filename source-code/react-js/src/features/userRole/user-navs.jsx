@@ -31,26 +31,21 @@ const AdminNavs = {
       href: "/users",
       labelSvg: <UserGroupIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
+
     {
       id: 4,
-      label: "Coaches",
-      href: "/coaches",
-      labelSvg: <ClipboardDocumentListIcon className={sidebarSvgClasses} />, // Add svgClasses here
-    },
-    {
-      id: 5,
       label: "Payments",
       href: "/payments",
       labelSvg: <BanknotesIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
-      id: 6,
+      id: 5,
       label: "Equipments",
       href: "/equipments",
       labelSvg: <Cog8ToothIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
-      id: 7,
+      id: 6,
       label: "Reports",
       href: "/reports",
       labelSvg: <DocumentArrowUpIcon className={sidebarSvgClasses} />, // Add svgClasses here

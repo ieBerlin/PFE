@@ -61,7 +61,7 @@ function NotificationBell() {
             )}
           </Await>
         </Suspense>
-      )}
+      )} 
 
       <div ref={notificationMenuRef}>
         <div

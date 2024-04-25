@@ -15,7 +15,7 @@ export default function PaymentsPage() {
     <>
       <Modal />
       <main className="bg-gray-50 w-full px-5 pt-4 pb-10">
-        <h1 className="text-4xl mb-3">Payments</h1>
+        <h1 className="text-4xl mb-1">Payments</h1>
 
         <Suspense
           fallback={
@@ -23,7 +23,7 @@ export default function PaymentsPage() {
           }
         >
           <Await resolve={transactionLoader}>
-            <Transactions />
+            {(resolvedData) => <Transactions transactionsData={resolvedData} />}
           </Await>
         </Suspense>
       </main>

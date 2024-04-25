@@ -1,19 +1,25 @@
 import { Suspense } from "react";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import FallbackText from "../FallbackText";
-import UserPage from "./UserPage.jsx"
+import UserPage from "./UserPage.jsx";
+import Modal from "../modal/Modal.jsx";
 export default function UserDetailsPage() {
   const { timeOut: userTimeOut } = useRouteLoaderData("user-detail-id");
   return (
-    <Suspense
-      fallback={
-        <div className="px-5 py-7">
-          <FallbackText title="Fetching user data" />
-        </div>
-      }
-    >
-      <Await resolve={userTimeOut}>{(resolvedData) => <UserPage />}</Await>
-    </Suspense>
+    <>
+      <Modal />
+      <Suspense
+        fallback={
+          <div className="px-5 py-7">
+            <FallbackText title="Fetching user data" />
+          </div>
+        }
+      >
+        <Await resolve={userTimeOut}>
+          {(resolvedData) => <UserPage userData={resolvedData} />}
+        </Await>
+      </Suspense>
+    </>
   );
 }
 export function loader() {
@@ -25,20 +31,27 @@ function timeOut() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(userData);
-    }, 0);
+    }, 1000);
   });
 }
+export async function action() {
+  return new Promise(
+    (resolve) =>
+      setTimeout(() => {
+        resolve(userData);
+      }, 0),
+    4000
+  );
+}
 const userData = {
-  email: "user@example.com",
-  username: "coolUser123",
-  password: "securePassword123",
-  first_name: "John",
-  last_name: "Doe",
-  date_of_birth: "1990-01-01",
-  gender: "Male",
-  address: "123 Main St, Cityville",
-  phone_number: "699009900",
-  role: "Member",
-  image: "",
-  bio: "",
+  name: "User Name",
+  location: "Berlin, Germany",
+  phoneNumber: "+213 687-456-6456",
+  email: "aeourmassi@gmail.com",
+  avatarSrc:
+    "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
+  userRole: "Coach",
+  membershipInfo: {
+    membershipDaysLeft: 12,
+  },
 };

@@ -192,6 +192,28 @@ export const DUMMY_COACHES = [{
     }
 ];
 
+export const coachClasses = [{
+        image: "https://example.com/image1.jpg",
+        title: "Class 1",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis justo non tortor ultrices auctor.",
+    },
+    {
+        image: "https://example.com/image2.jpg",
+        title: "Class 2",
+        description: "Phasellus consequat feugiat nulla at pharetra. Nulla facilisi. Cras sagittis placerat nisl, at efficitur libero fermentum id.",
+    },
+    {
+        image: "https://example.com/image3.jpg",
+        title: "Class 3",
+        description: "Integer non dolor lacus. Vivamus at mi justo. Aliquam pretium diam et nulla accumsan, quis porttitor lacus placerat.",
+    },
+    {
+        image: "https://example.com/image4.jpg",
+        title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque at reiciendis voluptatibus accusamus temporibus dolor et facilis voluptatem commodi nihil tempore iste corrupti autem nobis ea, sint amet ducimus exercitationem.,",
+        description: "Fusce ut ligula eu quam aliquam malesuada. Sed vitae dolor sit amet est bibendum vestibulum.",
+    },
+];
+
 export const filterCoaches = (coaches, selectedCoaches) => {
     return coaches.filter(coach => {
         const isCoachCategorySelected = Object.entries(selectedCoaches.coachCategory)

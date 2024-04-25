@@ -5,8 +5,11 @@ import LoginPage, {
 } from "./components/auth/Login/Login.jsx";
 import SportsPage from "./components/sports/SportsPage.jsx";
 import ClassesPage from "./components/classes/ClassesPage.jsx";
-import EquipmentsPage from "./components/equipments/EquipmentsPage.jsx";
+import EquipmentsPage, {
+  laoder as equipmentsPageLoader,
+} from "./components/equipments/EquipmentsPage.jsx";
 import UserDetailsPage, {
+  action as userDetailAction,
   loader as userPageDetailsLoader,
 } from "./components/user/UserDetailsPage.jsx";
 import AllUserPage, {
@@ -29,7 +32,7 @@ import CoachesPage, {
   loader as coachesPageLoader,
 } from "./components/coaches/CoachesPage.jsx";
 import EquipmentsBookings, {
-  loader as equipmentsLoader,
+  loader as bookingsEquipmentsLoader,
 } from "./components/equipments/EquipmentsBookings.jsx";
 import BookEquipmentPage from "./components/equipments/BookEquipmentPage.jsx";
 import BookClassPage from "./components/classes/BookClassPage.jsx";
@@ -54,7 +57,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    errorElement: <ErrorPage />,
+    // errorElement: <ErrorPage />,
     id: "root",
     loader: tokenLoader,
     children: [
@@ -128,8 +131,8 @@ const router = createBrowserRouter([
           {
             path: ":coachId",
             element: <CoachPageDetails />,
+            id: "coach-details-id",
             loader: coachPageDetailsLoader,
-            errorElement: <NotFoundPage />,
           },
         ],
       },
@@ -153,6 +156,8 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <EquipmentsPage />,
+            id: "equipments-page-id",
+            loader: equipmentsPageLoader,
           },
 
           {
@@ -163,7 +168,7 @@ const router = createBrowserRouter([
             path: "bookings",
             element: <EquipmentsBookings />,
             id: "equipments-bookings-id",
-            loader: equipmentsLoader,
+            loader: bookingsEquipmentsLoader,
           },
         ],
       },
@@ -203,6 +208,7 @@ const router = createBrowserRouter([
             element: <UserDetailsPage />,
             id: "user-detail-id",
             loader: userPageDetailsLoader,
+            action: userDetailAction,
           },
         ],
       },

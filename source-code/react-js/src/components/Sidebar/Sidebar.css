@@ -141,7 +141,7 @@
     border-radius: 12px;
     transition: all 0.2s ease;
     background: white;
-    border: 1px solid #9ca3af;
+    border: 1px solid #4b5563;
 }
 
 .sidebar.open input {
@@ -163,7 +163,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #9ca3af;
+    background: #4b5563;
     position: absolute;
     top: 50%;
     left: 0;

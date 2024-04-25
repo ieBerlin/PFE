@@ -1,9 +1,9 @@
-export default function LoadingIndicator({ fill = "blue-600" }) {
+export default function LoadingIndicator({ fill = "blue-600",dimensions="w-8 h-8" }) {
   return (
     <div role="status">
       <svg
         aria-hidden="true"
-        className={`w-8 h-8 text-white animate-spin  fill-${fill}`}
+        className={`${dimensions} text-white animate-spin  fill-${fill}`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
