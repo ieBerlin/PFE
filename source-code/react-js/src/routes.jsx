@@ -1,8 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import LandingPage from "./pages/landing-page/LandingPage.jsx";
-import LoginPage, {
-  action as authAction,
-} from "./pages/auth/Login/Login.jsx";
+import LoginPage, { action as authAction } from "./pages/auth/Login/Login.jsx";
 import SportsPage from "./pages/sports/SportsPage.jsx";
 import ClassesPage from "./pages/classes/ClassesPage.jsx";
 import EquipmentsPage, {
@@ -34,7 +32,10 @@ import CoachesPage, {
 import EquipmentsBookings, {
   loader as bookingsEquipmentsLoader,
 } from "./pages/equipments/EquipmentsBookings.jsx";
-import BookEquipmentPage from "./pages/equipments/BookEquipmentPage.jsx";
+import BookEquipmentPage, {
+  action as bookEquipmentsAction,
+  loader as bookEquipmentLoader,
+} from "./pages/equipments/BookEquipmentPage.jsx";
 import BookClassPage from "./pages/classes/BookClassPage.jsx";
 import ClassDetailsPage from "./pages/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./pages/classes/EditClassPage.jsx";
@@ -160,7 +161,15 @@ const router = createBrowserRouter([
 
           {
             path: "book",
-            element: <BookEquipmentPage />,
+            children: [
+              {
+                path: ":equipmentId",
+                element: <BookEquipmentPage />,
+                id: "book-equipment-page",
+                loader: bookEquipmentLoader,
+                action: bookEquipmentsAction,
+              },
+            ],
           },
           {
             path: "bookings",

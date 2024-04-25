@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import classes from "./EquipmentsPage.module.css";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { useSelector } from "react-redux";
-import FilterDropdown from "../../components/FilterDropdown.jsx"
+import { useDispatch, useSelector } from "react-redux";
+import FilterDropdown from "../../components/FilterDropdown.jsx";
 import { useState } from "react";
+import Modal from "../../components/modal/Modal.jsx";
+import { setModalType } from "../../features/modal/modalSlice.js";
 const selectedEquipments = {
   category: {
     yoga: true,
@@ -15,6 +17,7 @@ const selectedEquipments = {
 export default function EquipmentsList({ data }) {
   const [currentSelectedEquipments, setCurrentSelectedEquipments] =
     useState(selectedEquipments);
+  const filteredEquipments = filterEquipements(data, currentSelectedEquipments);
   return (
     <section className={classes.sectionContainer}>
       <h1 className="font-semibold text-2xl mb-2">All Equipments</h1>
@@ -41,9 +44,17 @@ export default function EquipmentsList({ data }) {
             gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           }}
         >
-          {data.map((item) => (
-            <EquipmentItem key={item.id} equipmentData={item} />
-          ))}
+          {filteredEquipments && filteredEquipments.length > 0 ? (
+            filteredEquipments.map((item) => (
+              <EquipmentItem key={item.id} equipmentData={item} />
+            ))
+          ) : (
+            <div className="mt-4 bg-white px-6 py-4 shadow-md">
+              <p className="text-stone-500 text-center font-bold text-xl">
+                No users found!
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -52,6 +63,7 @@ export default function EquipmentsList({ data }) {
 
 function EquipmentItem({ equipmentData }) {
   const { userRole } = useSelector((state) => state.userRole);
+  const dispatch = useDispatch();
   return (
     <li
       key={"coach.coachId"}
@@ -60,7 +72,7 @@ function EquipmentItem({ equipmentData }) {
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">
         <img
           className="object-cover flex w-full h-full"
-          src="https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTk2MTM1OTAwNDIyMzUwMzQx/main2-trainer2.jpg"
+          src="https://akfit.com/cdn/shop/articles/107194-exercise-equipmentg1.png?v=1694789703"
           alt="Coach"
         />
         <span className="absolute top-0 left-0 m-2 rounded-xl  p-[4px] text-center text-sm  bg-amber-300 text-white font-semibold">
@@ -91,13 +103,17 @@ function EquipmentItem({ equipmentData }) {
             ${equipmentData.price}
           </h2>
           {userRole.toLowerCase() === "admin" ? (
-            <button className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-blue-300">
+            <button
+              onClick={() => dispatch(setModalType("edit-equipment"))}
+              className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-300"
+            >
               Edit Equipment <ChevronRightIcon className="ml-2 h-6 w-6" />
+              <Modal />
             </button>
           ) : (
             <Link
-              to={`${"coach.coachId"}`}
-              className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-blue-300"
+              to={`/equipments/book/${equipmentData.id}`}
+              className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-300"
             >
               See more <ChevronRightIcon className="ml-2 h-6 w-6" />
             </Link>
@@ -106,4 +122,15 @@ function EquipmentItem({ equipmentData }) {
       </div>
     </li>
   );
+}
+function filterEquipements(users, selectedUsers) {
+  return users.filter((user) => {
+    // Check if the user's role is selected
+    const isCategorySelected = Object.entries(selectedUsers.category).every(
+      ([category, isSelected]) =>
+        isSelected || user.category.toLowerCase() !== category
+    );
+
+    return isCategorySelected;
+  });
 }
