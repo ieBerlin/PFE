@@ -2,8 +2,8 @@ import Transactions from "./Transactions.jsx";
 import { Await, defer, json, useRouteLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 import { DUMMY_TRANSACTIONS } from "../../dummy_data/dummy_payments_data.js";
-import FallbackText from "../FallbackText.jsx";
-import Modal from "../modal/Modal.jsx";
+import FallbackText from  "../../components/FallbackText.jsx"
+import Modal from "../../components/modal/Modal.jsx";
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }

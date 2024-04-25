@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Menu } from "@headlessui/react";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
-import FilterDropdown from "../FilterDropdown.jsx";
+import FilterDropdown from "../../components/FilterDropdown.jsx";
 
 const initialSelectedTransactions = {
   options: {

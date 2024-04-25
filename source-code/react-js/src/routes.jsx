@@ -2,57 +2,55 @@ import { createBrowserRouter } from "react-router-dom";
 import LandingPage from "./pages/landing-page/LandingPage.jsx";
 import LoginPage, {
   action as authAction,
-} from "./components/auth/Login/Login.jsx";
-import SportsPage from "./components/sports/SportsPage.jsx";
-import ClassesPage from "./components/classes/ClassesPage.jsx";
+} from "./pages/auth/Login/Login.jsx";
+import SportsPage from "./pages/sports/SportsPage.jsx";
+import ClassesPage from "./pages/classes/ClassesPage.jsx";
 import EquipmentsPage, {
   loader as equipmentsPageLoader,
-} from "./components/equipments/EquipmentsPage.jsx";
+} from "./pages/equipments/EquipmentsPage.jsx";
 import UserDetailsPage, {
   action as userDetailAction,
   loader as userPageDetailsLoader,
-} from "./components/user/UserDetailsPage.jsx";
+} from "./pages/user/UserDetailsPage.jsx";
 import AllUserPage, {
   loader as allUsersLoader,
   action as allUsersAction,
-} from "./components/user/AllUserPage.jsx";
+} from "./pages/user/AllUserPage.jsx";
 import AllNotifications, {
   loader as notificationsLoader,
-} from "./components/user/notifications/AllNotifications.jsx";
-import CreateSportCategoriePage from "./components/sports/CreateSportCategoriePage.jsx";
-import SportCategoriePage from "./components/sports/SportCategoriePage.jsx";
-import DeleteSportCategorie from "./components/sports/DeleteSportCategorie.jsx";
+} from "./pages/user/notifications/AllNotifications.jsx";
+import CreateSportCategoriePage from "./pages/sports/CreateSportCategoriePage.jsx";
+import SportCategoriePage from "./pages/sports/SportCategoriePage.jsx";
+import DeleteSportCategorie from "./pages/sports/DeleteSportCategorie.jsx";
 import ReportsPage, {
   loader as reportsLoader,
-} from "./components/reports/ReportsPage.jsx";
+} from "./pages/reports/ReportsPage.jsx";
 import UserProfil, {
   loader as userProfileLoader,
-} from "./components/user/UserProfil.jsx";
+} from "./pages/user/UserProfil.jsx";
 import CoachesPage, {
   loader as coachesPageLoader,
-} from "./components/coaches/CoachesPage.jsx";
+} from "./pages/coaches/CoachesPage.jsx";
 import EquipmentsBookings, {
   loader as bookingsEquipmentsLoader,
-} from "./components/equipments/EquipmentsBookings.jsx";
-import BookEquipmentPage from "./components/equipments/BookEquipmentPage.jsx";
-import BookClassPage from "./components/classes/BookClassPage.jsx";
-import ClassDetailsPage from "./components/classes/ClassDetailsPage.jsx";
-import EditClassPage from "./components/classes/EditClassPage.jsx";
-import CreateClassPage from "./components/classes/CreateClassPage.jsx";
-import Dashboard from "./components/dashboard/Dashboard.jsx";
+} from "./pages/equipments/EquipmentsBookings.jsx";
+import BookEquipmentPage from "./pages/equipments/BookEquipmentPage.jsx";
+import BookClassPage from "./pages/classes/BookClassPage.jsx";
+import ClassDetailsPage from "./pages/classes/ClassDetailsPage.jsx";
+import EditClassPage from "./pages/classes/EditClassPage.jsx";
+import CreateClassPage from "./pages/classes/CreateClassPage.jsx";
+import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import PaymentsPage, {
   action as paymentsAction,
   loader as paymentsLoader,
-} from "./components/payments/PaymentsPage.jsx";
+} from "./pages/payments/PaymentsPage.jsx";
 import RootLayout, {
   loader as tokenLoader,
 } from "./components/Layouts/Root/RootLayout.jsx";
-import NotFoundPage from "./components/NotFoundPage.jsx";
-import UpdateUserPasswordPage from "./components/user/UpdateUserPasswordPage.jsx";
+import UpdateUserPasswordPage from "./pages/user/UpdateUserPasswordPage.jsx";
 import CoachPageDetails, {
   loader as coachPageDetailsLoader,
-} from "./components/coaches/CoachPageDetails.jsx";
-import ErrorPage from "./components/ErrorPage.jsx";
+} from "./pages/coaches/CoachPageDetails.jsx";
 const router = createBrowserRouter([
   {
     path: "/",

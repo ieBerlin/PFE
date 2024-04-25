@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import { DUMMY_BOOKINGS } from "../../dummy_data/dummy_bookings.js";
-import FallbackText from "../FallbackText.jsx";
-
+import FallbackText from "../../components/FallbackText.jsx"
 import EquipmentsTable from "./EquipmentsTable.jsx";
 import { Suspense } from "react";
 export default function EquipmentsBookings() {

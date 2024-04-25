@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import IncomeSide from "../payments/IncomeSide.jsx";
 import ExpenseSide from "../payments/ExpenseSide.jsx";
-import FallbackText from "../FallbackText.jsx";
+import FallbackText from "../../components/FallbackText.jsx";
 import {
   DUMMY_DAILY_INCOME,
   DUMMY_DAILY_EXPENSES,

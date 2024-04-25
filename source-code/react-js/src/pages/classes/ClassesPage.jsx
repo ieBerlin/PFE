@@ -1,5 +1,5 @@
 import classes from "./ClassesPage.module.css";
-import ClassItem from "../sports/ClassItem";
+import ClassItem from "../sports/ClassItem.jsx";
 import { DUMMY_CLASSES } from "../../dummy_data/dummy_classes.js";
 
 export default function ClassesPage() {

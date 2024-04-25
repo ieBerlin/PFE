@@ -2,7 +2,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { filterCoaches } from "../../dummy_data/dummy_coaches";
-import FilterDropdown from "../FilterDropdown";
+import FilterDropdown from "../../components/FilterDropdown.jsx"
 const selectedCoaches = {
   coachCategory: {
     yoga: true,

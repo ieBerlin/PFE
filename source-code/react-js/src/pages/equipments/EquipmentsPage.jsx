@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { DUMMY_EQUIPMENTS } from "../../dummy_data/dummy_equipments";
-import FallbackText from "../FallbackText.jsx";
+import FallbackText from "../../components/FallbackText.jsx"
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import EquipmentsList from "./EquipmentsList";
 

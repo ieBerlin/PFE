@@ -5,8 +5,8 @@ import {
   StarIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
-import Modal from "../modal/Modal";
-import CoachBio from "../CoachBio.jsx";
+import Modal from "../../components/modal/Modal.jsx";
+import CoachBio from "../coaches/CoachBio.jsx"
 
 export default function CoachesList({ data }) {
   const [imageSrc, setImageSrc] = useState(null);

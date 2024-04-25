@@ -2,7 +2,8 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { filterUsers } from "../../dummy_data/dummy_users.js";
 import { setModalType } from "../../features/modal/modalSlice.js";
-import FilterDropDown from "../FilterDropdown.jsx";
+import FilterDropdown from "../../components/FilterDropdown.jsx";
+
 const selectedUsers = {
   userRole: {
     admin: true,
@@ -33,7 +34,7 @@ export default function AllUsersList({ users }) {
         </div>
 
         <div className="flex items-center flex-row gap-3">
-          <FilterDropDown
+          <FilterDropdown
             currentSelectedData={currentSelectedUsers}
             filterOptionsData={[
               {

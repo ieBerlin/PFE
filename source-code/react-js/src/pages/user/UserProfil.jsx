@@ -1,7 +1,7 @@
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import UserProfileDetails from "./UserProfileDetails.jsx";
 import { Suspense } from "react";
-import FallbackText from "../FallbackText.jsx";
+import FallbackText from "../../components/FallbackText.jsx"
 
 const userData = {
   email: "user@example.com",

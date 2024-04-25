@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import classes from "./EquipmentsPage.module.css";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useSelector } from "react-redux";
-import FilterDropdown from "../FilterDropdown";
+import FilterDropdown from "../../components/FilterDropdown.jsx"
 import { useState } from "react";
 const selectedEquipments = {
   category: {

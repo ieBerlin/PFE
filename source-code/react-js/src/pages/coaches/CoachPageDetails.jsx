@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import { DUMMY_COACHES } from "../../dummy_data/dummy_coaches.js";
-import FallbackText from "../FallbackText.jsx";
+import FallbackText from "../../components/FallbackText.jsx";
 import CoachesList from "./CoachesList.jsx";
 export async function loader({ params }) {
   const { coachId } = params;

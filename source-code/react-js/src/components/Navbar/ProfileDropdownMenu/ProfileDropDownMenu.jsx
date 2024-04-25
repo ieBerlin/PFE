@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setModalType } from "../../../features/modal/modalSlice.js";
-import Modal from "../../modal/Modal.jsx";
+import Modal from "../../../components/modal/Modal.jsx";
 import {
   ArrowRightStartOnRectangleIcon,
   ChevronLeftIcon,

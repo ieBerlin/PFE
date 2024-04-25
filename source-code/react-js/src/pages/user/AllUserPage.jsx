@@ -1,4 +1,4 @@
-import Modal from "../modal/Modal";
+import Modal from "../../components/modal/Modal";
 import { DUMMY_USERS } from "../../dummy_data/dummy_users.js";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import AllUsersList from "./AllUsersList.jsx";

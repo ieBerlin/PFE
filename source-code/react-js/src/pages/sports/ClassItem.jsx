@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import kilter from "/kilter.jpg";
-import classes from "../classes/ClassesPage.module.css";
+import classes from "../../pages/classes/ClassesPage.module.css";
 
 export default function ClassItem({ id, name, description }) {
   const navigate = useNavigate();

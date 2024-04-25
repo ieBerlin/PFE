@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from "./modal/Modal";
+import Modal from "../../components/modal/Modal";
 export default function CoachBio({ coachData }) {
   const [currentTab, setCurrentTab] = useState(1);
   const [selectedCertification, setSelectedCertification] = useState(null);

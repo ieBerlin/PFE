@@ -4,7 +4,7 @@ import gymImage from "../../../assets/gymImage.jpg";
 import classes from "./Login.module.css";
 import { Link } from "react-router-dom";
 import { setModalType } from "../../../features/modal/modalSlice.js";
-import Modal from "../../modal/Modal.jsx";
+import Modal from "../../../components/modal/Modal.jsx";
 import { useDispatch } from "react-redux";
 export default function LoginPage() {
   const dispatch = useDispatch();

@@ -11,7 +11,7 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { Form, Link } from "react-router-dom";
-import FilterDropdown from "../FilterDropdown";
+import FilterDropdown from "../../components/FilterDropdown";
 const selectedBookings = {
   userType: {
     coach: true,

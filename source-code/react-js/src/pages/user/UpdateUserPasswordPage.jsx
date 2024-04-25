@@ -1,6 +1,6 @@
 import { LockClosedIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { Form } from "react-router-dom";
-import PasswordInput from "../modal/PasswordInput.jsx";
+import PasswordInput from  "../../components/modal/PasswordInput.jsx"
 import { useRef } from "react";
 import { useSubmit } from "../../hooks/http.js";
 export default function UpdateUserPasswordPage() {

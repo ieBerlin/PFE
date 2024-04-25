@@ -3,8 +3,8 @@ import { Button } from "@material-tailwind/react";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import CoachBio from "../CoachBio.jsx";
-import Modal from "../modal/Modal.jsx";
+import CoachBio from "../coaches/CoachBio.jsx";
+import Modal from "../../components/modal/Modal.jsx";
 export default function UserPage({ userData }) {
   const dispatch = useDispatch();
   const {

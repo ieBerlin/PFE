@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
-import FallbackText from "../FallbackText";
+import FallbackText from "../../components/FallbackText";
 import UserPage from "./UserPage.jsx";
 export default function UserDetailsPage() {
   const { timeOut: userTimeOut } = useRouteLoaderData("user-detail-id");

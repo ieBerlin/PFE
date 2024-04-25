@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { DUMMY_NOTIFICATIONS } from "../../../dummy_data/dummy_notifications.js";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
-import FallbackText from "../../FallbackText.jsx";
+import FallbackText from "../../../components/FallbackText.jsx";
 import NotificationsList from "./NotificationsList.jsx";
 export default function AllNotifications() {
   const { timeOut } = useRouteLoaderData("notifications-id");
