@@ -1,47 +1,57 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import classes from "./EquipmentsPage.module.css";
-import EquipmentsPagination from "./EquipmentsPagination";
-import {
-  AcademicCapIcon,
-  ChevronRightIcon,
-  StarIcon,
-  UserGroupIcon,
-} from "@heroicons/react/20/solid";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import { useSelector } from "react-redux";
+import FilterDropdown from "../FilterDropdown";
+import { useState } from "react";
+const selectedEquipments = {
+  category: {
+    yoga: true,
+    kickboxing: true,
+    fitness: true,
+    bodybuilding: true,
+  },
+};
 export default function EquipmentsList({ data }) {
-  const [searchParams] = useSearchParams();
-  let content;
-  const currentPage = parseInt(searchParams.get("page")) || 1;
-  const maxItemsPerPage = 10;
-  const maxPage = Math.ceil(data.length / maxItemsPerPage);
-
-  if (currentPage > 0 && currentPage <= maxPage) {
-    content = (
-      <section className={classes.sectionContainer}>
-        <div className="bg-gray-100 py-4 px-10">
-          <div
-            className="grid mt-4"
-            style={{
-              gridTemplateColumns: "auto 1fr",
-            }}
-          >
-            <EquipmentItem />
-          </div>
+  const [currentSelectedEquipments, setCurrentSelectedEquipments] =
+    useState(selectedEquipments);
+  return (
+    <section className={classes.sectionContainer}>
+      <h1 className="font-semibold text-2xl mb-2">All Equipments</h1>
+      <div className="bg-gray-100  rounded-lg p-4">
+        <div className="flex w-full items-center justify-end  mt-4 ">
+          <FilterDropdown
+            currentSelectedData={currentSelectedEquipments}
+            setData={setCurrentSelectedEquipments}
+            filterOptionsData={[
+              {
+                title: "category",
+                options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
+              },
+              // {
+              //   title: "equipment.Status",
+              //   options: ["new", "old"],
+              // },
+            ]}
+          />
         </div>
-        <EquipmentsPagination
-          currentPage={currentPage}
-          maxItems={data.length}
-          maxPage={maxPage}
-        />
-      </section>
-    );
-  } else {
-    content = <p>Sorry, nothing found.</p>;
-  }
-
-  return content;
+        <div
+          className=" gap-x-3 justify-center grid"
+          style={{
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          }}
+        >
+          {data.map((item) => (
+            <EquipmentItem key={item.id} equipmentData={item} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function EquipmentItem() {
+function EquipmentItem({ equipmentData }) {
+  const { userRole } = useSelector((state) => state.userRole);
   return (
     <li
       key={"coach.coachId"}
@@ -54,42 +64,46 @@ function EquipmentItem() {
           alt="Coach"
         />
         <span className="absolute top-0 left-0 m-2 rounded-xl  p-[4px] text-center text-sm  bg-amber-300 text-white font-semibold">
-          {equipmentCategory}
+          {equipmentData.category}
         </span>
       </div>
       <div className="mt-4 px-5 pb-5">
-        <div className="mt-2 mb-5 flex items-center justify-between">
-          <h5 className="text-xl tracking-tight text-purple-900">
-            {equipmentName}
-          </h5>
+        <div className="my-2 flex items-center justify-between">
+          <div className="overflow-hidden mr-2 text-ellipsis">
+            <h5 className="text-xl tracking-tight text-purple-900 text-nowrap ">
+              {equipmentData.name}
+            </h5>
+          </div>
           <div className="flex items-center gap-1">
             <span className=" rounded bg-amber-400 text-white  px-2.5 py-0.5 text-xs font-semibold">
-              {equipmentRating}
+              {equipmentData.rating ?? 0}
             </span>
-            <span className="text-gray-500 text-sm">({equipmentReviews})</span>
+            <span className="text-gray-500 text-sm">
+              ({equipmentData.rating ?? 0})
+            </span>
           </div>
         </div>
+        <h3 className="text-start font-semibold text-gray-500 mb-5">
+          ({equipmentData.availableQuantity}) Piece Left
+        </h3>
         <div className="flex items-center gap-5">
-          <h2 className="text-purple-800 font-semibold text-xl">$21</h2>
-          <Link
-            to={`${"coach.coachId"}`}
-            className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-blue-300"
-          >
-            See more <ChevronRightIcon className="ml-2 h-6 w-6" />
-          </Link>
+          <h2 className="text-purple-800 font-semibold text-xl">
+            ${equipmentData.price}
+          </h2>
+          {userRole.toLowerCase() === "admin" ? (
+            <button className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-blue-300">
+              Edit Equipment <ChevronRightIcon className="ml-2 h-6 w-6" />
+            </button>
+          ) : (
+            <Link
+              to={`${"coach.coachId"}`}
+              className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            >
+              See more <ChevronRightIcon className="ml-2 h-6 w-6" />
+            </Link>
+          )}
         </div>
       </div>
     </li>
   );
 }
-const equipmentName = "Treadmill";
-const equipmentCategory = "Cardio Equipment";
-const equipmentRating = 4.2;
-const equipmentReviews = 28;
-const totalAvailable = 10;
-const equipmentCondition = "New";
-const supplierEmail = "supplier@example.com";
-const supplierContact = {
-  phone: "+1234567890",
-  website: "https://example.com",
-};

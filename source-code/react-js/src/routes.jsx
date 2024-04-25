@@ -6,7 +6,7 @@ import LoginPage, {
 import SportsPage from "./components/sports/SportsPage.jsx";
 import ClassesPage from "./components/classes/ClassesPage.jsx";
 import EquipmentsPage, {
-  laoder as equipmentsPageLoader,
+  loader as equipmentsPageLoader,
 } from "./components/equipments/EquipmentsPage.jsx";
 import UserDetailsPage, {
   action as userDetailAction,

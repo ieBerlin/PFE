@@ -9,7 +9,7 @@ import { setModalType } from "../../features/modal/modalSlice";
 import RechargeUserMembership from "./RechargeUserMembership.jsx";
 import NotifyMembershipEnd from "./NotifyMembershipEnd.jsx";
 import SendCustomMessage from "./SendCustomMessage.jsx";
-export default function ModalContent({ imageSrc }) {
+export default function ModalContent({ remainingDay, imageSrc }) {
   const dispatch = useDispatch();
   const type = useSelector((state) => state.modal.type);
   function onConfirm(confirmType) {
@@ -91,7 +91,9 @@ export default function ModalContent({ imageSrc }) {
   } else if (type === "add-transaction") {
     modalContent = <AddTransactionModal />;
   } else if (type === "recharge-user-membership") {
-    return (modalContent = <RechargeUserMembership />);
+    return (modalContent = (
+      <RechargeUserMembership remainingDay={remainingDay} />
+    ));
   } else if (type === "notify-membership-end") {
     return (modalContent = <NotifyMembershipEnd />);
   } else if (type === "custom-message") {

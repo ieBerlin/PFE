@@ -9,20 +9,25 @@ export default function EquipmentsPage() {
   return (
     <Suspense fallback={<FallbackText title="Fetching available equipments" />}>
       <Await resolve={timeOutLoader}>
-        {(resolvedData) => <EquipmentsList data={resolvedData} />}
+        {(resolvedData) => {
+          console.log(resolvedData);
+          return <EquipmentsList data={resolvedData} />;
+        }}
       </Await>
     </Suspense>
   );
 }
+
+export function loader() {
+  return defer({
+    timeOut: timeOut(),
+  });
+}
+
 function timeOut() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(DUMMY_EQUIPMENTS);
-    }, 500);
-  });
-}
-export function laoder() {
-  return defer({
-    timeOut: timeOut(),
+    }, 3000);
   });
 }

@@ -1,58 +1,38 @@
-import { useDispatch } from "react-redux";
-import { coachClasses } from "../dummy_data/dummy_coaches";
-import { setModalType } from "../features/modal/modalSlice";
 import { useState } from "react";
 import Modal from "./modal/Modal";
-export default function CoachBio() {
-  const dispatch = useDispatch();
+export default function CoachBio({ coachData }) {
   const [currentTab, setCurrentTab] = useState(1);
-  const [imageSrc, setImageSrc] = useState(null);
+  const [selectedCertification, setSelectedCertification] = useState(null);
+
   const handleTabChange = (tab) => {
     setCurrentTab(tab);
   };
 
   const renderCertification = (imageUrl) => {
-    setImageSrc(imageUrl);
-    dispatch(setModalType("view-certification"));
+    setSelectedCertification(imageUrl);
   };
 
   return (
     <>
-      <Modal imageSrc={imageSrc} />
-      <Modal />
+      <Modal imageSrc={selectedCertification} />
       <div className="bg-white ml-2 rounded-lg shadow-md py-5">
         <ul className="flex justify-center py-1 text-sm font-medium text-center text-gray-500">
-          <li className="me-2">
-            <button
-              onClick={() => handleTabChange(1)}
-              className={`${
-                currentTab === 1 ? "bg-gray-700" : "bg-gray-400"
-              } uppercase inline-block px-4 py-3 text-white rounded-lg active`}
-            >
-              Introduction
-            </button>
-          </li>
-          <li className="me-2">
-            <button
-              onClick={() => handleTabChange(2)}
-              className={`${
-                currentTab === 2 ? "bg-gray-700" : "bg-gray-400"
-              } uppercase inline-block px-4 py-3 text-white rounded-lg active`}
-            >
-              Classes
-            </button>
-          </li>
+          <TabButton
+            index={1}
+            currentTab={currentTab}
+            onClick={() => handleTabChange(1)}
+            label="Introduction"
+            />
+          <TabButton
+            index={2}
+            currentTab={currentTab}
+            onClick={() => handleTabChange(2)}
+            label="Classes"
+          />
         </ul>
         {currentTab === 1 ? (
           <div className="px-4 font-medium text-gray-900 text-center mt-2 tracking-wide">
-            <p>
-              John Doe is a passionate fitness coach with 5 years of experience.
-              Specializing in fitness training, he creates personalized programs
-              to help clients achieve their goals. John's approach is holistic,
-              focusing on strength, cardio, flexibility, and nutrition. With his
-              supportive and motivating style, he guides clients towards a
-              healthier lifestyle.
-            </p>
+            <p>{coachData.bio}</p>
             <h1 className="text-start font-bold text-black ml-2 text-xl mt-2">
               Certification
             </h1>
@@ -62,42 +42,16 @@ export default function CoachBio() {
                 gridTemplateColumns: "repeat(auto-fill,200px)",
               }}
             >
-              <button
-                onClick={() =>
-                  renderCertification(
-                    "https://www.actfl.org/uploads/images/general/Opi-tester-certificate-sample.jpg"
+              {coachData.certificationsImages &&
+                coachData.certificationsImages.map(
+                  (certificationImage, index) => (
+                    <CertificationItem
+                      key={index}
+                      imageUrl={certificationImage}
+                      onClick={() => renderCertification(certificationImage)}
+                    />
                   )
-                }
-              >
-                <img
-                  src="https://www.actfl.org/uploads/images/general/Opi-tester-certificate-sample.jpg"
-                  alt=""
-                />
-              </button>
-              <button
-                onClick={() =>
-                  renderCertification(
-                    "https://international-hospitality-institute.myshopify.com/cdn/shop/products/CHGMCertificateSample.png?v=1613853914"
-                  )
-                }
-              >
-                <img
-                  src="https://international-hospitality-institute.myshopify.com/cdn/shop/products/CHGMCertificateSample.png?v=1613853914"
-                  alt=""
-                />
-              </button>
-              <button
-                onClick={() =>
-                  renderCertification(
-                    "https://docs.moodle.org/2x/pl/images_pl/f/f8/elis_coursecertificate_example.png"
-                  )
-                }
-              >
-                <img
-                  src="https://docs.moodle.org/2x/pl/images_pl/f/f8/elis_coursecertificate_example.png"
-                  alt=""
-                />
-              </button>
+                )}
             </div>
           </div>
         ) : (
@@ -108,19 +62,19 @@ export default function CoachBio() {
                 gridTemplateColumns: "repeat(auto-fill,200px)",
               }}
             >
-              {coachClasses.slice(0, 3).map((coach, index) => (
+              {coachData.classes.slice(0, 3).map((coachClass, index) => (
                 <li key={index}>
-                  <a href="">
+                  <a href={coachClass.href}>
                     <img
                       className="w-full h-auto rounded-md"
-                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Room-education-classroom-children-library-students-1237486.jpg/800px-Room-education-classroom-children-library-students-1237486.jpg"
+                      src={coachClass.img}
                       alt=""
                     />
                     <h2 className="font-semibold my-1 text-ellipsis w-full text-nowrap overflow-hidden">
-                      {coach.title}
+                      {coachClass.title}
                     </h2>
                     <p className="font-medium text-sm text-gray-500 text-nowrap overflow-hidden">
-                      {coach.description}
+                      {coachClass.description}
                     </p>
                   </a>
                 </li>
@@ -129,7 +83,7 @@ export default function CoachBio() {
             <p className="text-center">
               <a
                 href={`/classes/`}
-                className="bg-gray-400 text-white font-semibold px-10 py-1 text-xl rounded-md"
+                className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-10 py-1 text-xl rounded-md"
               >
                 See All
               </a>
@@ -140,3 +94,24 @@ export default function CoachBio() {
     </>
   );
 }
+const TabButton = ({ currentTab, onClick, label,index }) => {
+  return (
+    <li className="me-2">
+      <button
+        onClick={onClick}
+        className={`${
+          currentTab === index ? "bg-gray-700" : "bg-gray-400"
+        } uppercase inline-block px-4 py-3 text-white rounded-lg active`}
+      >
+        {label}
+      </button>
+    </li>
+  );
+};
+const CertificationItem = ({ imageUrl, onClick }) => {
+  return (
+    <button onClick={onClick}>
+      <img src={imageUrl} alt="Certification" className="w-full h-auto rounded-md" />
+    </button>
+  );
+};

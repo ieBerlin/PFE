@@ -1,14 +1,14 @@
 import { setModalType } from "../../features/modal/modalSlice";
 import { usePost } from "../../hooks/http.js";
 import { useDispatch } from "react-redux";
-export default function RechargeUserMembership() {
+export default function RechargeUserMembership({ remainingDay }) {
   return (
     <div
       className="bg-white px-7 py-5 rounded-md text-start "
       style={{ minWidth: "400px" }}
     >
       <h1 className="text-gray-800 font-bold text-lg">
-        User Has {12} Days Left
+        User Has {remainingDay ?? 0} Days Left
       </h1>
       <h2 className="text-gray-700 font-semibold text-sm">
         Are you sure you want to recharge it?
@@ -37,7 +37,9 @@ function RechargeForm() {
             isFetching ? "bg-gray-100" : "bg-white"
           } px-3 py-2 text-sm font-semibold ${
             isFetching ? "text-gray-400" : "text-gray-900"
-          } shadow-sm ${!isFetching && "hover:bg-gray-50 ring-gray-300 ring-1 ring-inset  "} sm:mt-0 sm:w-auto`}
+          } shadow-sm ${
+            !isFetching && "hover:bg-gray-50 ring-gray-300 ring-1 ring-inset  "
+          } sm:mt-0 sm:w-auto`}
           onClick={() => dispatch(setModalType())}
         >
           Cancel

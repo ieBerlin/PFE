@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import ModalContent from "./ModalContent.jsx";
-export default function Modal({ imageSrc }) {
+export default function Modal({ remainingDay, imageSrc }) {
   const dialog = useRef();
   const modalContentRef = useRef();
   const type = useSelector((state) => state.modal.type);
@@ -51,7 +51,7 @@ export default function Modal({ imageSrc }) {
           ref={modalContentRef}
           className="fixed top-1/2 left-1/2 pt-6 transform -translate-x-1/2 -translate-y-1/2   max-h-screen  "
         >
-          <ModalContent imageSrc={imageSrc} />
+          <ModalContent remainingDay={remainingDay} imageSrc={imageSrc} />
         </div>
       </div>
     </dialog>,

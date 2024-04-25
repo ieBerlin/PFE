@@ -34,7 +34,7 @@ export default function FilterDropdown({
     setIsFilterDropdownMenuOpen((prevState) => !prevState);
   };
 
-  const toggleFilteredCoachesChange = (key, field) => {
+  const toggleFilteredCDataChange = (key, field) => {
     setData((prevState) => ({
       ...prevState,
       [key]: { ...prevState[key], [field]: !prevState[key][field] },
@@ -80,7 +80,7 @@ export default function FilterDropdown({
               options={options}
               selectedOptions={currentSelectedData[title.replace(".", "")]}
               onChange={(field) =>
-                toggleFilteredCoachesChange(title.replace(".", ""), field)
+                toggleFilteredCDataChange(title.replace(".", ""), field)
               }
             />
           ))}
@@ -90,7 +90,7 @@ export default function FilterDropdown({
   );
 }
 
-function FilterOptions({ title, options, selectedOptions, onChange }) {
+export function FilterOptions({ title, options, selectedOptions, onChange }) {
   return (
     <>
       <p className="text-black font-semibold pl-3 py-2 capitalize">{title}</p>
