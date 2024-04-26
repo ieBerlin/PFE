@@ -1,4 +1,5 @@
 .sectionContainer {
+    outline: none;
     background-color: white;
     min-height: calc(100vh - 60px);
     padding: 20px 30px 200px 30px;
@@ -41,17 +42,11 @@
 }
 
 .itemTitle {
-    font-weight: bold;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-}
-
-.itemTitle span {
-    font-weight: normal;
-    font-size: small;
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    color: black;
 }
 
 .itemTitle img {
@@ -61,10 +56,15 @@
 
 .instructor {
     color: grey;
+    font-weight: 500;
     padding: 10px 0;
+    font-size: 13px;
     border: 0;
     background-color: transparent;
     cursor: pointer;
+    /* overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; */
 }
 
 .instructor:hover {
@@ -76,12 +76,13 @@
 }
 
 .classCategory {
+    font-weight: 600;
     letter-spacing: 1px;
     top: 0;
     left: 0;
     margin: 10px 0 0 10px;
     position: absolute;
-    z-index: 500;
+    z-index: 197;
     background-color: rgb(255, 0, 0, 0.2);
     padding: 5px;
     border-radius: 5px;
@@ -89,15 +90,16 @@
 }
 
 .classDuration {
+    font-weight: 600;
     position: absolute;
-    z-index: 501;
+    z-index: 197;
     bottom: 0;
     left: 0;
     margin: 0 0 10px 10px;
     color: white;
     padding: 3px;
     border-radius: 5px;
-    background-color: rgba(49, 104, 166, 0.8);
+    background-color: rgba(49, 104, 166, 0.6);
 }
 
 .classDescription {
@@ -105,15 +107,16 @@
     padding: 10px 20px 10px;
     display: none;
     position: absolute;
-    z-index: 502;
+    z-index: 198;
     width: 100%;
     left: 0;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
-    /* Bottom shadow */
 }
 
 .instructorDropDownMenuContainer {
     position: relative;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis;
+    white-space: nowrap; */
 }
 
 .instructorDropDownMenu img {
@@ -123,15 +126,12 @@
 }
 
 .instructorDropDownMenu {
-    min-width: 200px;
-    background-color: white;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-    padding: 10px 12px;
+    width: min-content;
     display: flex;
     flex-direction: column;
     border-radius: 5px;
     position: absolute;
-    z-index: 504;
+    z-index: 199;
     left: calc(50% - 50px);
     transform: translateX(-50%);
     top: 50%;
@@ -147,9 +147,9 @@
 .coachInfos {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 10px;
     align-items: center;
-    margin-bottom: 29px;
+    margin-bottom: 10px;
 }
 
 .coachInfos h2 {

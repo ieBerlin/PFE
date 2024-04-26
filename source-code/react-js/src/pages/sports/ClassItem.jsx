@@ -1,67 +1,113 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import kilter from "/kilter.jpg";
-import classes from "../../pages/classes/ClassesPage.module.css";
+import kilterImage from "/kilter.jpg";
+import classesStyles from "../../pages/classes/ClassesPage.module.css";
+import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/solid";
 
-export default function ClassItem({ id, name, description }) {
-  const navigate = useNavigate();
+export default function ClassItem({
+  id,
+  title,
+  description,
+  coachName,
+  coachEmail,
+  date,
+  time,
+  totalMembers,
+}) {
   const [isDropDownActive, setIsDropDownActive] = useState(false);
+  const navigate = useNavigate();
 
   const handleInstructorDropDown = (value) => {
     setIsDropDownActive(value);
   };
 
-  const handleInsctructorButtonClick = (e) => {
+  const handleInstructorButtonClick = (e) => {
     e.preventDefault();
   };
-  let instructorDropDownMenuClasses = classes.instructorDropDownMenu ;
-  if(isDropDownActive){
-    instructorDropDownMenuClasses += ` ${classes.active}`
+
+  let instructorDropDownMenuClasses = classesStyles.instructorDropDownMenu;
+  if (isDropDownActive) {
+    instructorDropDownMenuClasses += ` ${classesStyles.active}`;
   }
+
   return (
-    <Link to={`/classes/${id}`} className={classes.classItem}>
-      <div className={classes.classImageContainer}>
+    <Link
+      to={`/classes/${id}`}
+      className={classesStyles.classItem + " shadow-lg"}
+    >
+      <div className={classesStyles.classImageContainer}>
         <img
-          className={classes.classImg}
+          className={classesStyles.classImg}
           src="https://cdn.onefc.com/wp-content/uploads/2022/10/Zhang-Peimian-Jonathan-Di-Bella-ONE162-1920X1280-15.jpg"
           alt=""
         />
-        <span className={classes.classCategory}>Fitness</span>
-        <span className={classes.classDuration}>15 min</span>
+        <span className={classesStyles.classCategory}>Fitness</span>
+        <span className={classesStyles.classDuration}>15 min</span>
       </div>
-      <div className={classes.classItemDetails}>
-        <p className={classes.itemTitle}>
-          {name} <span>20-10-2024 / 14:00</span>
-        </p>
-        <div className={classes.instructorDropDownMenuContainer}>
+      <div className={classesStyles.classItemDetails}>
+        <p className={classesStyles.itemTitle}>{title}</p>
+        <div className="flex flex-row justify-between items-center my-2 gap-1 text-center">
+          <div className="flex flex-row items-center gap-2 justify-center bg-gray-200 p-2 rounded-md">
+            <CalendarIcon className="w-5 h-5 text-gray-600" />
+            <p className="text-gray-600 text-sm">{date}</p>
+          </div>
+          <div className="flex flex-row items-center gap-2 justify-center bg-gray-200 p-2 rounded-md">
+            <ClockIcon className="w-5 h-5 text-gray-600" />
+            <p className="text-gray-600 text-sm">{time}</p>
+          </div>
+        </div>
+        <div
+          className={
+            classesStyles.instructorDropDownMenuContainer + " text-center"
+          }
+        >
           <button
-            className={classes.instructor}
-            onClick={handleInsctructorButtonClick}
+            onClick={handleInstructorButtonClick}
             onMouseOver={() => handleInstructorDropDown(true)}
             onMouseLeave={() => handleInstructorDropDown(false)}
           >
-            INSTRUCTOR NAME
+            <span className="w-full text-gray-500 font-medium py-2 px-0.5 md:px-0 hover:text-gray-700 cursor-pointer">
+              Coach: {coachName}
+            </span>
           </button>
           {isDropDownActive && (
             <div
-              className={instructorDropDownMenuClasses}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/coaches");
+              }}
+              className={`${instructorDropDownMenuClasses} shadow-sm bg-red-300 hover:bg-red-500`}
               onMouseOver={() => handleInstructorDropDown(true)}
               onMouseLeave={() => handleInstructorDropDown(false)}
             >
-              <div className={classes.coachInfos}>
-                <img src={kilter} alt="user avatar" />
-                <div className={classes.coachContact}>
-                  <h2>COACH NAME</h2>
-                  <h4>COACH_EMAIL</h4>
+              <div className={classesStyles.coachInfos + " p-2"}>
+                <img src={kilterImage} alt="coach avatar" />
+                <div className="text-start">
+                  <h2 className="text-black text-md font-medium">
+                    {coachName}
+                  </h2>
+                  <h4 className="text-white text-sm">{coachEmail}</h4>
                 </div>
               </div>
-              <div className={classes.coachExtraDetails}>
-                <p>TOTAL TRAINED MEMEBERS</p>
+              <div className="flex flex-row gap-2 items-center px-2 py-3">
+                <UserIcon className="w-5 h-5 text-white" />
+                <p className="text-sm font-medium text-white text-nowrap inline-block">
+                  Total trained members:{" "}
+                  <p className="text-white inline-block">{totalMembers}</p>
+                </p>
               </div>
             </div>
           )}
         </div>
-        <p className={classes.classDescription}>{description}</p>
+        <p
+          className={
+            classesStyles.classDescription +
+            " shadow-xl text-stone-800 capitalize font-medium text-center"
+          }
+        >
+          {description}
+        </p>
       </div>
     </Link>
   );
