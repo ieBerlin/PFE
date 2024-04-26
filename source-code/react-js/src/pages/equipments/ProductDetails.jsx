@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useFetcher } from "react-router-dom";
-
+import { setModalType } from "../../features/modal/modalSlice";
 export default function ProductDetails({ data }) {
+  const dispatch = useDispatch();
   const { imageUrl, productName, description, price, availability, colors } =
     data;
-  const { Form } = useFetcher();
+  const { Form, state } = useFetcher();
+  const isSubmitting = state === "submitting";
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [currentSelectedSize, setCurrentSelectedSize] = useState({
     size: null,
@@ -19,7 +21,9 @@ export default function ProductDetails({ data }) {
 
   const selectedColor = colors[selectedColorIndex];
   const availableSizes = selectedColor ? selectedColor.sizes : [];
-
+  const isBookingValide =
+    isSubmitting ||
+    (currentSelectedSize.size === null && currentSelectedSize.index === null);
   return (
     <div className="bg-gray-100 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,12 +43,32 @@ export default function ProductDetails({ data }) {
                   userRole.toLowerCase() === "coach") && (
                   <Form method="POST">
                     <button
+                      disabled={isBookingValide}
                       type="submit"
-                      className="w-full bg-gray-900  text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 "
+                      className={`w-full ${
+                        !isBookingValide ? "bg-gray-900" : " bg-gray-500"
+                      }  text-white py-2 px-4 rounded-full font-bold ${
+                        !isBookingValide && " hover:bg-gray-800"
+                      } `}
                     >
-                      Book Now
+                      {!isSubmitting
+                        ? currentSelectedSize.size && currentSelectedSize.index
+                          ? "Book Now"
+                          : "Choose Equipment"
+                        : "Processing..."}
                     </button>
                   </Form>
+                )}
+                {userRole.toLowerCase() === "admin" && (
+                  <button
+                    onClick={() =>
+                      dispatch(setModalType("edit-equipment-informations"))
+                    }
+                    type="submit"
+                    className={`w-full ${"bg-gray-900"}  text-white py-2 px-4 rounded-full font-bold ${" hover:bg-gray-800"} `}
+                  >
+                    Edit Informations
+                  </button>
                 )}
               </div>
               <div className="w-1/2 px-2">

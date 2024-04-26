@@ -171,7 +171,7 @@ function StatusTableData({ status, data }) {
       {status.toLowerCase() === "pending" ? (
         <Popover>
           <PopoverHandler>
-            <Button className="p-0 shadow-none flex items-center flex-row">
+            <Button className="p-0 shadow-none flex items-center flex-row bg-white">
               <span className="text-amber-500 ">Pending</span>
               <ChevronDownIcon className="text-amber-500 w-4 h-4 ml-2" />
             </Button>
@@ -206,7 +206,7 @@ function StatusTableData({ status, data }) {
                 <h1 className="font-semibold text-black">Status</h1>
                 <Button
                   onClick={handlePendingButtonClick}
-                  className="flex flex-row items-center gap-2 w-min p-2 text-blue-600 shadow-none"
+                  className="flex flex-row items-center gap-2 w-min p-2 text-blue-600 shadow-none bg-blue-200"
                 >
                   Pending <PencilIcon className=" text-blue-600 w-5 h-5" />
                 </Button>

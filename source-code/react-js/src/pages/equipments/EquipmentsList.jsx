@@ -15,6 +15,8 @@ const selectedEquipments = {
   },
 };
 export default function EquipmentsList({ data }) {
+  const isAdmin =
+    useSelector((state) => state.userRole.userRole).toLowerCase() === "admin";
   const [currentSelectedEquipments, setCurrentSelectedEquipments] =
     useState(selectedEquipments);
   const filteredEquipments = filterEquipements(data, currentSelectedEquipments);
@@ -22,7 +24,17 @@ export default function EquipmentsList({ data }) {
     <section className={classes.sectionContainer}>
       <h1 className="font-semibold text-2xl mb-2">All Equipments</h1>
       <div className="bg-gray-100  rounded-lg p-4">
-        <div className="flex w-full items-center justify-end  mt-4 ">
+        <div className="flex w-full items-center justify-between  mt-4 ">
+          {isAdmin ? (
+            <Link
+              className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
+              to="/equipments/bookings"
+            >
+              Equipments Booking History
+            </Link>
+          ) : (
+            <div />
+          )}
           <FilterDropdown
             currentSelectedData={currentSelectedEquipments}
             setData={setCurrentSelectedEquipments}
@@ -108,7 +120,6 @@ function EquipmentItem({ equipmentData }) {
               className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-300"
             >
               Edit Equipment <ChevronRightIcon className="ml-2 h-6 w-6" />
-              <Modal />
             </button>
           ) : (
             <Link

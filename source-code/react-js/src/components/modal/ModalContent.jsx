@@ -15,17 +15,7 @@ export default function ModalContent({ remainingDay, imageSrc }) {
   function onConfirm(confirmType) {
     dispatch(setModalType(confirmType));
   }
-  let modalContent = (
-    <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-10">
-      <p className="font-semibold"> Nothing to show !</p>
-      <button
-        onClick={() => dispatch(setModalType())}
-        className=" bg-indigo-700 text-white py-2 rounded-md font-semibold "
-      >
-        Okay
-      </button>
-    </div>
-  );
+  let modalContent;
 
   if (type === "create-user") {
     modalContent = (
@@ -98,7 +88,18 @@ export default function ModalContent({ remainingDay, imageSrc }) {
     return (modalContent = <NotifyMembershipEnd />);
   } else if (type === "custom-message") {
     return (modalContent = <SendCustomMessage />);
+  } else {
+    return (
+      <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-10">
+        <p className="font-semibold"> Nothing to show !</p>
+        <button
+          onClick={() => dispatch(setModalType())}
+          className=" bg-indigo-700 text-white py-2 rounded-md font-semibold "
+        >
+          Okays
+        </button>
+      </div>
+    );
   }
-
   return modalContent;
 }

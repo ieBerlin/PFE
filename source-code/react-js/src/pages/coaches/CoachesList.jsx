@@ -6,11 +6,11 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import Modal from "../../components/modal/Modal.jsx";
-import CoachBio from "../coaches/CoachBio.jsx"
+import CoachBio from "../coaches/CoachBio.jsx";
 
 export default function CoachesList({ data }) {
   const [imageSrc, setImageSrc] = useState(null);
-  console.log(data)
+  console.log(data);
   const {
     coachName,
     coachEmail,
@@ -80,9 +80,31 @@ export default function CoachesList({ data }) {
             </div>
           </div>
 
-          <CoachBio setImage={setImageSrc} />
+          <CoachBio coachData={coachData} setImage={setImageSrc} />
         </div>
       </div>
     </>
   );
 }
+const coachData = {
+  bio: `
+  John Doe is a passionate fitness coach with 5 years of experience.
+  Specializing in fitness training, he creates personalized programs
+  to help clients achieve their goals. John's approach is holistic,
+  focusing on strength, cardio, flexibility, and nutrition. With his
+  supportive and motivating style, he guides clients towards a
+  healthier lifestyle.`,
+  certificationsImages: [
+    "https://international-hospitality-institute.myshopify.com/cdn/shop/products/CHGMCertificateSample.png?v=1613853914",
+    "https://www.actfl.org/uploads/images/general/Opi-tester-certificate-sample.jpg",
+  ],
+  classes: [
+    {
+      href: "123",
+      img: "https://cdn.fleetfeet.com/assets/Blog/Post-Images/iStock-840886888.jpg/dynamic:1-aspect:2.4-fit:cover-strategy:entropy/iStock-840886888--1440.jpg",
+      title: "Class 2",
+      description:
+        "Phasellus consequat feugiat nulla at pharetra. Nulla facilisi. Cras sagittis placerat nisl, at efficitur libero fermentum id.",
+    },
+  ],
+};

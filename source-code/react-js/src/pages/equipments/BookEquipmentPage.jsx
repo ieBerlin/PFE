@@ -22,8 +22,12 @@ function timeOut() {
 export function loader() {
   return defer({ timeOut: timeOut() });
 }
-export function action() {
-  return null;
+export async function action() {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      resolve(null);
+    }, 4000)
+  );
 }
 const productDetails = {
   imageUrl:

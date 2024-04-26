@@ -5,9 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import ModalContent from "./ModalContent.jsx";
 export default function Modal({ remainingDay, imageSrc }) {
+
   const dialog = useRef();
   const modalContentRef = useRef();
   const type = useSelector((state) => state.modal.type);
+  console.log(type)
   const dispatch = useDispatch();
   useEffect(() => {
     if (type) {
