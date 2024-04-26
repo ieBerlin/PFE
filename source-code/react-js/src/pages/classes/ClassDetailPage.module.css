@@ -54,23 +54,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.sportDetails {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 100px;
-}
-
-.sportDetails h1 {
-    font-size: 30px;
-    margin: 10px 0;
-}
-
-.sportDetails p {
-    padding-left: 10px;
-    letter-spacing: 1px;
-}
-
 .relatedClasses {
     margin-top: 100px;
     padding-left: 30px;

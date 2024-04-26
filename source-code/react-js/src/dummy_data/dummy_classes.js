@@ -100,7 +100,7 @@ export const DUMMY_CLASSES = [{
     {
         id: 10,
         title: "Strength Training",
-        description: "Build muscle and increase strength with our weightlifting class.",
+        description: "Build muscle and increase strength with our weightlifting class, Build muscle and increase strength with our weightlifting class, Build muscle and increase strength with our weightlifting class,Build muscle and increase strength with our weightlifting class Build muscle and increase strength with our weightlifting class.",
         coachName: "Alex Johnson",
         coachEmail: "alex@example.com",
         date: "02-03-2023",
