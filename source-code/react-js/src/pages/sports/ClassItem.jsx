@@ -14,6 +14,7 @@ export default function ClassItem({
   date,
   time,
   totalMembers,
+  classCategory
 }) {
   const [isDropDownActive, setIsDropDownActive] = useState(false);
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function ClassItem({
           src="https://cdn.onefc.com/wp-content/uploads/2022/10/Zhang-Peimian-Jonathan-Di-Bella-ONE162-1920X1280-15.jpg"
           alt=""
         />
-        <span className={classesStyles.classCategory}>Fitness</span>
+        <span className={classesStyles.classCategory}>{classCategory}</span>
         <span className={classesStyles.classDuration}>15 min</span>
       </div>
       <div className={classesStyles.classItemDetails}>

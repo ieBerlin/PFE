@@ -2,7 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import LandingPage from "./pages/landing-page/LandingPage.jsx";
 import LoginPage, { action as authAction } from "./pages/auth/Login/Login.jsx";
 import SportsPage from "./pages/sports/SportsPage.jsx";
-import ClassesPage from "./pages/classes/ClassesPage.jsx";
+import ClassesPage, {
+  loader as classesLoader,
+} from "./pages/classes/ClassesPage.jsx";
 import EquipmentsPage, {
   loader as equipmentsPageLoader,
 } from "./pages/equipments/EquipmentsPage.jsx";
@@ -94,7 +96,12 @@ const router = createBrowserRouter([
       {
         path: "classes",
         children: [
-          { index: true, element: <ClassesPage /> },
+          {
+            index: true,
+            element: <ClassesPage />,
+            id: "classes-page-id",
+            loader: classesLoader,
+          },
           {
             path: "create",
             element: <CreateClassPage />,
