@@ -11,7 +11,7 @@ export default function IncomeSide() {
     setCurrentSelectedDate(value);
   };
   return (
-    <div className="bg-white shadow-xl px-5 py-4  rounded-lg">
+    <div className="bg-white  border border-gray-200 hover:border-gray-300  hover:shadow-lg  px-5 py-4  rounded-lg">
       <div className="flex flex-row justify-between  items-center mb-3">
         <strong className="font-bold text-xl">Income</strong>
         <Menu as="div" className="relative inline-block text-left">

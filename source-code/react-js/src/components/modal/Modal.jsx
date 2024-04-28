@@ -47,17 +47,14 @@ export default function Modal({ remainingDay, imageSrc }) {
       }}
       className="relative "
     >
-      <div className=" bg-transparent overflow-y-auto  flex w-full items-center justify-center flex-col backdrop-blur-sm  top-0 fixed transform rounded-lg px-36  text-left shadow-xl transition-all ">
+      <div className=" bg-transparent  flex w-full items-center justify-center flex-col overflow-y-auto h-screen backdrop-blur-sm  top-0 fixed transform rounded-lg px-36 py-10 text-left shadow-xl transition-all ">
         <div
-        style={{
-          maxHeight:"100vh - 64px"
-        }}
           ref={modalContentRef}
-          className="py-8"
+          className="fixed top-1/2 left-1/2 pt-6 transform -translate-x-1/2 -translate-y-1/2   max-h-screen  "
         >
-      </div>
-          <ModalContent remainingDay={remainingDay} imageSrc={imageSrc} />
+        <ModalContent remainingDay={remainingDay} imageSrc={imageSrc} />
         </div>
+      </div>
     </dialog>,
     document.getElementById("modal")
   );
