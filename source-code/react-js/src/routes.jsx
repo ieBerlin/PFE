@@ -6,6 +6,7 @@ import ClassesPage, {
   loader as classesLoader,
 } from "./pages/classes/ClassesPage.jsx";
 import EquipmentsPage, {
+  action as equipmentsPageAction,
   loader as equipmentsPageLoader,
 } from "./pages/equipments/EquipmentsPage.jsx";
 import UserDetailsPage, {
@@ -41,7 +42,9 @@ import BookEquipmentPage, {
 import BookClassPage from "./pages/classes/BookClassPage.jsx";
 import ClassDetailsPage from "./pages/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./pages/classes/EditClassPage.jsx";
-import CreateClassPage from "./pages/classes/CreateClassPage.jsx";
+import CreateClassPage, {
+  action as createClassAction,
+} from "./pages/classes/CreateClassPage.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import PaymentsPage, {
   action as paymentsAction,
@@ -105,6 +108,8 @@ const router = createBrowserRouter([
           {
             path: "create",
             element: <CreateClassPage />,
+            id: "create-class-id",
+            action: createClassAction,
           },
           {
             path: ":classId",
@@ -164,6 +169,7 @@ const router = createBrowserRouter([
             element: <EquipmentsPage />,
             id: "equipments-page-id",
             loader: equipmentsPageLoader,
+            action: equipmentsPageAction,
           },
 
           {

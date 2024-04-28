@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { DUMMY_EQUIPMENTS } from "../../dummy_data/dummy_equipments";
-import FallbackText from "../../components/FallbackText.jsx"
+import FallbackText from "../../components/FallbackText.jsx";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import EquipmentsList from "./EquipmentsList";
 
@@ -10,7 +10,6 @@ export default function EquipmentsPage() {
     <Suspense fallback={<FallbackText title="Fetching available equipments" />}>
       <Await resolve={timeOutLoader}>
         {(resolvedData) => {
-          console.log(resolvedData);
           return <EquipmentsList data={resolvedData} />;
         }}
       </Await>
@@ -30,4 +29,8 @@ function timeOut() {
       resolve(DUMMY_EQUIPMENTS);
     }, 3000);
   });
+}
+export async function action() {
+ await timeOut()
+  return null;
 }

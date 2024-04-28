@@ -41,4 +41,5 @@ export async function action({ request }) {
   console.log("calling all users page action")
   const fd = await request.formData();
   console.log(fd);
+  return null;
 }

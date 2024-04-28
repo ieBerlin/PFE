@@ -2,7 +2,7 @@ import { Suspense, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Await } from "react-router-dom";
 
-export default function RelatedUserField() {
+export default function RelatedUserField({ label, userType }) {
   const searchInputRef = useRef();
   const [isRelatedUsersShown, setIsRelatedUsersShown] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -13,12 +13,12 @@ export default function RelatedUserField() {
   };
 
   return (
-    <div>
+    <div className="my-4">
       <label
         htmlFor="hs-select-label"
         className="block text-sm font-medium mb-2 dark:text-black capitalize"
       >
-        Related User
+        {label}
       </label>
       <div className="relative ">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -61,7 +61,7 @@ export default function RelatedUserField() {
             </h3>
           }
         >
-          <Await resolve={timeOut(searchInputValue)}>
+          <Await resolve={timeOut(searchInputValue, userType)}>
             {(resolvedData) => (
               <div className="pl-3">
                 <div className="flex flex-row justify-between items-center mt-3">
@@ -112,10 +112,14 @@ export default function RelatedUserField() {
   );
 }
 
-function timeOut(searchInputValue) {
+function timeOut(searchInputValue, userType) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(filterUsers(searchInputValue));
+      if (!userType) {
+        resolve(filterUsers(searchInputValue));
+      } else {
+        resolve(filterUsers(searchInputValue, userType));
+      }
     }, 2000);
   });
 }
@@ -128,42 +132,49 @@ function filterUsers(inputVal) {
 const dummy_users = [
   {
     fullName: "John Doe",
+    userType: "coach",
     email: "john.doe@example.com",
     imageSrc:
       "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
   },
   {
     fullName: "Jane Smith",
+    userType: "admin",
     email: "jane.smith@example.com",
     imageSrc:
       "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
   },
   {
     fullName: "Michael Johnson",
+    userType: "member",
     email: "michael.johnson@example.com",
     imageSrc:
       "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
   },
   {
     fullName: "Emily Davis",
+    userType: "coach",
     email: "emily.davis@example.com",
     imageSrc:
       "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
   },
   {
     fullName: "Christopher Wilson",
+    userType: "member",
     email: "christopher.wilson@example.com",
     imageSrc:
       "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
   },
   {
     fullName: "Jessica Martinez",
+    userType: "coach",
     email: "jessica.martinez@example.com",
     imageSrc:
       "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
   },
   {
     fullName: "Daniel Anderson",
+    userType: "member",
     email: "daniel.anderson@example.com",
     imageSrc:
       "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",

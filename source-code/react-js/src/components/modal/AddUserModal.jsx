@@ -2,7 +2,8 @@ import { useState, useRef } from "react";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { useFetcher } from "react-router-dom";
 import PasswordInput from "./PasswordInput.jsx";
-
+import Input from "../../components/Input.jsx"
+import TextAreaInput from "../../components/TextAreaInput.jsx"
 import defaultUserImage from "../../assets/default-user.webp";
 import { useSelector } from "react-redux";
 export default function AddUserModal({ onClose, onConfirm }) {
@@ -50,7 +51,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
               ref={imageRef}
               style={{ display: "none" }}
             />
-            <button onClick={pickImage}>
+            <button type="button" onClick={pickImage}>
               <CameraIcon
                 className=" outline-none absolute w-10 h-10 text-black-500 bg-gray-200 hover:bg-gray-300 p-2 rounded-full"
                 style={{ bottom: "-16px", right: "-16px" }}
@@ -84,7 +85,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
           <DateInput label="Date" placeholder="Enter Your Birth Day" />
           <PhoneNumberInput />
           <GenderInput />
-          <TextAreaInput />
+          <TextAreaInput label="Address" />
           <button type="submit" className="hidden" ref={submitButtonRef} />
         </div>
       </Form>
@@ -165,20 +166,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
     </>
   );
 }
-export function Input({ label, placeholder, type = "text", ...props }) {
-  return (
-    <>
-      <label className="block text-sm font-medium my-2">{label}</label>
-      <input
-        required
-        type={type}
-        className="py-3 px-4 block border-gray-200 border-2  w-96 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-        placeholder={placeholder}
-        {...props}
-      />
-    </>
-  );
-}
+
 export function DateInput({ label, placeholder, ...props }) {
   return (
     <>
@@ -221,20 +209,7 @@ export function GenderInput() {
     </>
   );
 }
-export function TextAreaInput({ ...props }) {
-  return (
-    <>
-      <label className="block text-sm font-medium my-2">Address</label>
-      <textarea
-        required
-        className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm border-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-        rows="3"
-        placeholder="Enter your address"
-        {...props}
-      ></textarea>
-    </>
-  );
-}
+
 export function PhoneNumberInput({ ...props }) {
   return (
     <>

@@ -29,6 +29,6 @@ function timeOut() {
   return new Promise((resolve) =>
     setTimeout(() => {
       resolve(DUMMY_CLASSES);
-    }, 2000)
+    }, 0)
   );
 }

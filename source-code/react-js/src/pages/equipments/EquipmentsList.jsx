@@ -4,8 +4,8 @@ import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
 import FilterDropdown from "../../components/FilterDropdown.jsx";
 import { useState } from "react";
-import Modal from "../../components/modal/Modal.jsx";
 import { setModalType } from "../../features/modal/modalSlice.js";
+import Modal from "../../components/modal/Modal.jsx";
 const selectedEquipments = {
   category: {
     yoga: true,
@@ -17,59 +17,72 @@ const selectedEquipments = {
 export default function EquipmentsList({ data }) {
   const isAdmin =
     useSelector((state) => state.userRole.userRole).toLowerCase() === "admin";
+  const dispatch = useDispatch();
   const [currentSelectedEquipments, setCurrentSelectedEquipments] =
     useState(selectedEquipments);
   const filteredEquipments = filterEquipements(data, currentSelectedEquipments);
   return (
-    <section className={classes.sectionContainer}>
-      <h1 className="font-semibold text-2xl mb-2">All Equipments</h1>
-      <div className="bg-gray-100  rounded-lg p-4">
-        <div className="flex w-full items-center justify-between  mt-4 ">
-          {isAdmin ? (
-            <Link
-              className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
-              to="/equipments/bookings"
-            >
-              Equipments Booking History
-            </Link>
-          ) : (
-            <div />
-          )}
-          <FilterDropdown
-            currentSelectedData={currentSelectedEquipments}
-            setData={setCurrentSelectedEquipments}
-            filterOptionsData={[
-              {
-                title: "category",
-                options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
-              },
-              // {
-              //   title: "equipment.Status",
-              //   options: ["new", "old"],
-              // },
-            ]}
-          />
+    <>
+      <Modal />
+      <section className={classes.sectionContainer}>
+        <h1 className="font-semibold text-2xl mb-2">All Equipments</h1>
+        <div className="bg-gray-100  rounded-lg p-4">
+          <div className="flex w-full items-center justify-between  mt-4 ">
+            {isAdmin ? (
+              <div className="items-center gap-2 flex w-min whitespace-nowrap">
+                <Link
+                  className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
+                  to="/equipments/bookings"
+                >
+                  Equipments Booking History
+                </Link>
+
+                <button
+                  onClick={() => dispatch(setModalType("add-equipment"))}
+                  className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
+                >
+                  Add Equipment
+                </button>
+              </div>
+            ) : (
+              <div />
+            )}
+            <FilterDropdown
+              currentSelectedData={currentSelectedEquipments}
+              setData={setCurrentSelectedEquipments}
+              filterOptionsData={[
+                {
+                  title: "category",
+                  options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
+                },
+                // {
+                //   title: "equipment.Status",
+                //   options: ["new", "old"],
+                // },
+              ]}
+            />
+          </div>
+          <div
+            className=" gap-x-3 justify-center grid"
+            style={{
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            }}
+          >
+            {filteredEquipments && filteredEquipments.length > 0 ? (
+              filteredEquipments.map((item) => (
+                <EquipmentItem key={item.id} equipmentData={item} />
+              ))
+            ) : (
+              <div className="mt-4 bg-white px-6 py-4 shadow-md">
+                <p className="text-stone-500 text-center font-bold text-xl">
+                  No users found!
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-        <div
-          className=" gap-x-3 justify-center grid"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          }}
-        >
-          {filteredEquipments && filteredEquipments.length > 0 ? (
-            filteredEquipments.map((item) => (
-              <EquipmentItem key={item.id} equipmentData={item} />
-            ))
-          ) : (
-            <div className="mt-4 bg-white px-6 py-4 shadow-md">
-              <p className="text-stone-500 text-center font-bold text-xl">
-                No users found!
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 

@@ -9,6 +9,7 @@ import { setModalType } from "../../features/modal/modalSlice";
 import RechargeUserMembership from "./RechargeUserMembership.jsx";
 import NotifyMembershipEnd from "./NotifyMembershipEnd.jsx";
 import SendCustomMessage from "./SendCustomMessage.jsx";
+import AddEquipmentModal from "./AddEquipmentModal.jsx";
 export default function ModalContent({ remainingDay, imageSrc }) {
   const dispatch = useDispatch();
   const type = useSelector((state) => state.modal.type);
@@ -16,11 +17,13 @@ export default function ModalContent({ remainingDay, imageSrc }) {
     dispatch(setModalType(confirmType));
   }
   let modalContent;
-
+  function onClose() {
+    dispatch(setModalType());
+  }
   if (type === "create-user") {
     modalContent = (
       <AddUserModal
-        onClose={() => dispatch(setModalType())}
+        onClose={onClose}
         onConfirm={() => onConfirm("confirm-add-user")}
       />
     );
@@ -88,12 +91,14 @@ export default function ModalContent({ remainingDay, imageSrc }) {
     return (modalContent = <NotifyMembershipEnd />);
   } else if (type === "custom-message") {
     return (modalContent = <SendCustomMessage />);
+  } else if (type === "add-equipment") {
+    return (modalContent = <AddEquipmentModal onClose={onClose} />);
   } else {
     return (
       <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-10">
         <p className="font-semibold"> Nothing to show !</p>
         <button
-          onClick={() => dispatch(setModalType())}
+          onClick={onClose}
           className=" bg-indigo-700 text-white py-2 rounded-md font-semibold "
         >
           Okays

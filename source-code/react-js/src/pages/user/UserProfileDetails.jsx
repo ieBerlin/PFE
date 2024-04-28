@@ -1,11 +1,11 @@
 import { useSubmit } from "../../hooks/http.js";
 import {
-  Input,
   DateInput,
   PhoneNumberInput,
   GenderInput,
-  TextAreaInput,
 } from "../../components/modal/AddUserModal.jsx";
+import Input from "../../components/Input.jsx";
+import TextAreaInput from "../../components/TextAreaInput.jsx";
 import { CheckIcon, PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import defaultUserImage from "../../assets/default-user.webp";
 import { useRef, useState } from "react";

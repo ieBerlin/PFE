@@ -3,12 +3,13 @@ import classes from "./AllNotifications.module.css";
 import closeSvg from "../../../assets/close-svgrepo-com.svg";
 import notificationItemSvg from "../../../assets/payment-svgrepo-com.svg";
 import { useDispatch } from "react-redux";
-
+import IBasePlugin from "@preline/remove-element";
 export default function NotificationsList({ data }) {
   const dispatch = useDispatch();
   return (
     <ul className={classes.notificationList}>
-      {data.map((notificationItem) => (
+      <IBasePlugin />
+      {/* {data.map((notificationItem) => (
         <li key={notificationItem.id} className={classes.notificationItem}>
           <img
             src={notificationItemSvg}
@@ -31,7 +32,7 @@ export default function NotificationsList({ data }) {
             </button>
           </div>
         </li>
-      ))}
+      ))} */}
     </ul>
   );
 }
