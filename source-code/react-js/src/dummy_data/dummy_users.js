@@ -70,3 +70,8 @@ export const filterUsers = (users, selectedUsers) => {
         return isRoleSelected && isStatusSelected;
     });
 };
+export const dummy_reports_users = {
+    clubMembers: 1241,
+    newMembers: 120,
+    newCoaches: 13
+}
