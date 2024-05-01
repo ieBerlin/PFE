@@ -14,7 +14,7 @@ export default function PaymentsPage() {
   return (
     <>
       <Modal />
-      <main className="bg-gray-50 w-full px-5 pt-4 pb-10">
+      <main className="bg-gray-100 w-full px-5 pt-4 pb-10">
         <h1 className="text-4xl mb-1">Payments</h1>
 
         <Suspense

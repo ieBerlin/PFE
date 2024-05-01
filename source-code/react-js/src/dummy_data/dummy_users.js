@@ -75,3 +75,14 @@ export const dummy_reports_users = {
     newMembers: 120,
     newCoaches: 13
 }
+export const billingItems = [{
+        date: "21 March 2022",
+        title: "Marketing UI design in Figma",
+        description: "All of the pages and components are first designed in Figma and we keep a parity between the two versions even as we update the project.",
+    },
+    {
+        date: "10 March 2022",
+        title: "Marketing UI design in Figma",
+        description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cupiditate aliquid, temporibus quaerat eius nobis dicta impedit officia repudiandae cumque deserunt ad sunt nam asperiores beatae quidem non nulla consectetur velit?",
+    },
+];

@@ -6,6 +6,7 @@ import { useState } from "react";
 import CoachBio from "../coaches/CoachBio.jsx";
 import Modal from "../../components/modal/Modal.jsx";
 import BillingHistory from "../../components/BillingHistory.jsx"
+import { billingItems } from "../../dummy_data/dummy_users.js";
 export default function UserPage({ userData }) {
   const dispatch = useDispatch();
   const {
@@ -95,11 +96,11 @@ export default function UserPage({ userData }) {
           {/* Billing History */}
           {isCoachAdditionalInformationsShown ? (
             <div>
-              <BillingHistory />
+              <BillingHistory data={billingItems} />
               <CoachBio coachData={coachData} />
             </div>
           ) : (
-            <BillingHistory />
+            <BillingHistory data={billingItems} />
           )}
 
           {/* Action Buttons */}

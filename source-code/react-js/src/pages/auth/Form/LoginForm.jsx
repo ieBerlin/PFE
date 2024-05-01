@@ -10,7 +10,6 @@ export default function LoginForm() {
   const { Form, state } = fetcher;
   const isSubmitting = state === "submitting";
   const submitButtonStyles = isSubmitting ? classes.submittingLoginButton : classes.loginButton;
-  console.log(state);
   return (
     <Form method="POST" className="flex w-full flex-col px-24">
       <FormInput

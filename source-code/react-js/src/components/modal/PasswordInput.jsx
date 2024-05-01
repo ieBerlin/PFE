@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-export default function PasswordInput({ label, placeholder }) {
+export default function PasswordInput({ label, placeholder, ...props }) {
   const [isShown, setIsShown] = useState(false);
   const handlePasswordInputShow = () => {
     setIsShown((prevState) => !prevState);
@@ -16,6 +16,7 @@ export default function PasswordInput({ label, placeholder }) {
           type={isShown ? "text" : "password"}
           className=" flex w-full py-3 px-4  border-gray-200 border-2 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
           placeholder={placeholder}
+          {...props}
         />
         {isShown ? (
           <EyeSlashIcon

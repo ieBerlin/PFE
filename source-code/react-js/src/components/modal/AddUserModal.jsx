@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { useFetcher } from "react-router-dom";
 import PasswordInput from "./PasswordInput.jsx";
-import Input from "../../components/Input.jsx"
-import TextAreaInput from "../../components/TextAreaInput.jsx"
+import Input from "../../components/Input.jsx";
+import TextAreaInput from "../../components/TextAreaInput.jsx";
 import defaultUserImage from "../../assets/default-user.webp";
 import { useSelector } from "react-redux";
 export default function AddUserModal({ onClose, onConfirm }) {
@@ -59,13 +59,13 @@ export default function AddUserModal({ onClose, onConfirm }) {
             </button>
           </div>
           {isAdmin ? (
-            <select className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
+            <select name="user-role" className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
               <option value="member">Member</option>
               <option value="coach">Coach</option>
               <option value="admin">Admin</option>
             </select>
           ) : (
-            <select className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
+            <select name="user-role" className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
               <option value="member">Member</option>
               <option value="coach">Coach</option>
             </select>
@@ -73,19 +73,45 @@ export default function AddUserModal({ onClose, onConfirm }) {
         </div>
         {/* Other input fields */}
         <div className="mt-10">
-          <Input label="Email" placeholder="Enter Your Email" type="email" />
-          <Input label="Username" placeholder="Enter Your Username" />
-          <PasswordInput label="Password" placeholder="Enter Your Password" />
+          <Input
+            label="Email"
+            placeholder="Enter Your Email"
+            type="email"
+            name="email"
+          />
+          <Input
+            label="Username"
+            placeholder="Enter Your Username"
+            name="username"
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Enter Your Password"
+            name="password"
+          />
           <PasswordInput
             label="Confirm Password"
             placeholder="Confirm Your Password"
+            name="confirm-password"
           />
-          <Input label="First Name" placeholder="Enter Your First Name" />
-          <Input label="Last Name" placeholder="Enter Your Last Name" />
-          <DateInput label="Date" placeholder="Enter Your Birth Day" />
-          <PhoneNumberInput />
+          <Input
+            label="First Name"
+            placeholder="Enter Your First Name"
+            name="first-name"
+          />
+          <Input
+            label="Last Name"
+            placeholder="Enter Your Last Name"
+            name="last-name"
+          />
+          <DateInput
+            label="Date"
+            placeholder="Enter Your Birth Day"
+            name="birthday-date"
+          />
+          <PhoneNumberInput name="phone-number" />
           <GenderInput />
-          <TextAreaInput label="Address" />
+          <TextAreaInput label="Address" name="address" />
           <button type="submit" className="hidden" ref={submitButtonRef} />
         </div>
       </Form>
@@ -188,19 +214,21 @@ export function GenderInput() {
       <div className="flex gap-x-6 border-gray-200 border-2 w-min px-4 py-2 rounded-lg">
         <div className="flex items-center">
           <input
+            value="male"
             defaultChecked
             id="male-radio"
             type="radio"
-            name="gender-group"
+            name="gender"
             className="mr-2 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500"
           />
           <label className="text-sm text-gray-500">Male</label>
         </div>
         <div className="flex items-center">
           <input
+            value="female"
             id="female-radio"
             type="radio"
-            name="gender-group"
+            name="gender"
             className="mr-2 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500"
           />
           <label className="text-sm text-gray-500">Female</label>

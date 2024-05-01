@@ -22,7 +22,7 @@ export default function Transactions({ transactionsData }) {
     selectedTransactions
   );
   return (
-    <section className="bg-white shadow-2xl p-4 rounded-md mt-10">
+    <section className="bg-white  shadow-md p-4 rounded-md mt-10">
       <div className="flex justify-between items-center mb-4 px-3">
         <h1 className="text-black font-semibold text-xl">All Transactions</h1>
         <Menu as="div" className="relative inline-block text-left">

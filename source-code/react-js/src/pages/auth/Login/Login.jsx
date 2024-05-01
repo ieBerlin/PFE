@@ -2,7 +2,7 @@ import logoImage from "../../../assets/logoImage.png";
 import LoginForm from "../Form/LoginForm";
 import gymImage from "../../../assets/gymImage.jpg";
 import classes from "./Login.module.css";
-import { Link } from "react-router-dom";
+import { json, Link } from "react-router-dom";
 import { setModalType } from "../../../features/modal/modalSlice.js";
 import Modal from "../../../components/modal/Modal.jsx";
 import { useDispatch } from "react-redux";
@@ -47,20 +47,51 @@ export default function LoginPage() {
   );
 }
 export async function action({ request }) {
-  // const data = await request.formData();
-  // const formType = data.get("form-type");
-  // console.log("formType : " + formType);
-  // const formData = {
-  //   email: data.get("email"),
-  //   password: data.get("password"),
-  // };
-  // // console.log(formData);
- await timeoutPromise();
-  return null;
+  try {
+    const data = await request.formData();
+
+    const mode = data.get("form-type");
+    if (!mode) {
+      throw new Error("Form type not provided.");
+    }
+    switch (mode) {
+      case "sign-up-form":
+        return processSignUpForm(data);
+      case "login-form":
+        return processLoginForm(data);
+      default:
+        throw new Error("Unrecognized form type.");
+    }
+  } catch (error) {
+    console.error("Error processing form data:", error.message);
+    throw json({
+      status: 400,
+      message: error.message || "Bad Request",
+    });
+  }
 }
 
-async function timeoutPromise() {
-  return new Promise((resolve) => setTimeout(() => {
-    resolve('Hello World');
-  }, 5000));
+function processSignUpForm(formData) {
+  const fd = Object.fromEntries(formData.entries());
+  return {
+    email: fd.email,
+    password: fd.password,
+    confirmPassword: fd["confirm-password"],
+    username: fd.username,
+    phoneNumber: fd["phone-number"],
+    dateOfBirth: fd["birthday-date"],
+    firstName: fd["first-name"],
+    lastName: fd["last-name"],
+    address: fd.address,
+    gender: fd.gender,
+    role: fd["user-role"],
+  };
+}
+
+function processLoginForm(formData) {
+  const fd = Object.fromEntries(formData.entries());
+  return {
+    email: fd.email,
+    password: fd.password,
+  };
 }
