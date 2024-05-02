@@ -1,17 +1,19 @@
-const jwt = require('jsonwebtoken'); // Corrected require statement for jwt
-const SECRET_KEY = require('../../config/jwt_secret.js');
+const jwt = require('jsonwebtoken');
+const secretKey = require('../../config/jwt_secret.js'); // Renamed variable
 const { fetchUserEmail } = require('./userEmail.js');
 const { fetchUserRole } = require('./userRole.js');
 
 async function verifyToken(req, res, next) {
-    let token = req.headers['x-access-token'] || req.headers['authorization']; // Changed '|' to '||' for logical OR
-    if (!token)
+    let token = req.headers['x-access-token'] || req.headers['authorization'];
+    if (!token) {
+        console.log('Hello World!')
         return res.status(403).json({
             message: 'Forbidden'
         });
-    token = token.split(" ")[1];
+    }
+    // token = token.split(".")[1];
     try {
-        const decoded = jwt.verify(token, SECRET_KEY); // Corrected variable name and added missing 'const' keyword
+        const decoded = jwt.verify(token, secretKey);
         if (decoded.username) {
             decoded.email = await fetchUserEmail({ username: decoded.username });
         }
@@ -19,10 +21,11 @@ async function verifyToken(req, res, next) {
         req.userEmail = decoded.email;
         next();
     } catch (error) {
+        console.error(error)
         return res.status(401).send({
             message: "Unauthorized user!"
         });
     }
 }
 
-module.exports = verifyToken
+module.exports = verifyToken;

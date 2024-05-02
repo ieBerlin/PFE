@@ -28,8 +28,9 @@ export default function UserProfileDetails({ data: userData }) {
   };
 
   const completionPercentage = Math.floor(
-    (Object.entries(userData).filter(([_, value]) => value.trim() !== "")
-      .length /
+    (Object.entries(userData).filter(
+      ([_, value]) => String(value).trim() !== ""
+    ).length /
       Object.keys(userData).length) *
       100
   );
@@ -172,7 +173,7 @@ export default function UserProfileDetails({ data: userData }) {
                 key={key}
                 className="flex flex-row gap-4 mt-1 capitalize font-semibold"
               >
-                {value.trim() !== "" ? (
+                {`${value}`.trim() !== "" ? (
                   <>
                     <CheckIcon className="w-6 h-6 text-gray-900" />
                     <h3 className="text-gray-900 text-sm">

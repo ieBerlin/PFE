@@ -7,7 +7,9 @@ const deleteUserProfile = require("../controllers/userProfile/deleteUserProfile.
 const verifyToken = require("../middlewares/auth/authJWT.js");
 const authUserRole = require('../middlewares/auth/authUserRole.js')
 const authAdminOrManager = require('../middlewares/auth/authAdminOrManager.js')
-router.get("/", verifyToken, authUserRole, getAllUsersProfiles);
+const getUserProfileDependOnEmail = require('../controllers/userProfile/getUserProfileDependOnEmail.js')
+router.get("/", verifyToken, getUserProfileDependOnEmail)
+router.get("/all-users", verifyToken, authUserRole, getAllUsersProfiles);
 router.get("/:userId", verifyToken, authUserRole, getUserProfile);
 router.put("/:userId", verifyToken, authUserRole, updateUserProfile);
 router.delete("/:userId", verifyToken, authAdminOrManager, deleteUserProfile);

@@ -5,7 +5,7 @@ const { pool } = require("../../models/db/connect");
  * @param {string} username The username of the user to fetch the role for.
  * @returns {string|null} The role of the user, or null if not found.
  */
-const fetchUserRole = async({ email }) => {
+async function fetchUserRole({ email }) {
     try {
         const [rows] = await pool.query('SELECT role FROM users WHERE email = ?', [email]);
         if (rows && rows.length > 0) {

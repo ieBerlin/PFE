@@ -35,7 +35,7 @@ const loginUser = async(req, res) => {
             const token = jwt.sign({
                     email
                 }, SECRET_KEY, {
-                    expiresIn: 2400
+                    expiresIn: 24000
                 })
                 // Password matched, send success response
             setTimeout(() => {
@@ -65,7 +65,7 @@ const loginUser = async(req, res) => {
             const token = jwt.sign({
                     username: username
                 }, SECRET_KEY, {
-                    expiresIn: 2400
+                    expiresIn: 24000
                 })
                 // Password matched, send success response
             setTimeout(() => {

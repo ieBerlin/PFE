@@ -57,11 +57,12 @@ import UpdateUserPasswordPage from "./pages/user/UpdateUserPasswordPage.jsx";
 import CoachPageDetails, {
   loader as coachPageDetailsLoader,
 } from "./pages/coaches/CoachPageDetails.jsx";
+import ErrorPage from "./components/ErrorPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    // errorElement: <ErrorPage />,
+    errorElement: <ErrorPage />,
     id: "root",
     loader: tokenLoader,
     children: [

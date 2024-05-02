@@ -1,49 +1,52 @@
-import { Await, defer, useRouteLoaderData } from "react-router-dom";
+import { defer, json } from "react-router-dom";
 import UserProfileDetails from "./UserProfileDetails.jsx";
-import { Suspense } from "react";
-import FallbackText from "../../components/FallbackText.jsx"
-
-const userData = {
-  email: "user@example.com",
-  username: "coolUser123",
-  password: "securePassword123",
-  first_name: "John",
-  last_name: "Doe",
-  date_of_birth: "1990-01-01",
-  gender: "Male",
-  address: "123 Main St, Cityville",
-  phone_number: "699009900",
-  role: "Member",
-  image: "",
-  bio: "",
-};
+import { useEffect } from "react";
+import FallbackText from "../../components/FallbackText.jsx";
+import { useMutation } from "@tanstack/react-query";
+import { fetchFunction } from "../../hooks/http.js";
 
 export default function UserProfil() {
-  const { timeOut: timeOutLoader } = useRouteLoaderData("user-profile-id");
-  return (
-    <Suspense
-      fallback={
-        <div className="px-5 py-7">
-          <FallbackText title="Fetching user profile data" />
-        </div>
+  const { isPending, error, isError, data, mutate } = useMutation({
+    mutationKey: ["user-profile"],
+    mutationFn: async ({ token }) => {
+      try {
+        return await fetchFunction({
+          url: "http://localhost:8081/user/profile/",
+          options: {
+            method: "GET",
+            headers: { "x-access-token": token },
+          },
+        });
+      } catch (error) {
+        throw new Error("Failed to fetch user profile"); // Throw a custom error message
       }
-    >
-      <Await resolve={timeOutLoader}>
-        {(resolvedData) => <UserProfileDetails data={resolvedData} />}
-      </Await>
-    </Suspense>
-  );
+    },
+  });
+  // console.log(data);
+  useEffect(() => {
+    const token = localStorage.getItem("user-token") || undefined;
+    if (!token) {
+      throw json({ status: 403 });
+    }
+    mutate({ token });
+  }, [mutate]);
+  if (isPending) {
+    return (
+      <div className="px-5 py-7">
+        <FallbackText title="Fetching user profile data" />
+      </div>
+    );
+  }
+
+  if (!isPending && data) {
+    return <UserProfileDetails data={data} />;
+  } else {
+    return <p>Nothing to show!</p>;
+  }
 }
 
-function timeOut() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(userData);
-    }, 2000);
-  });
-}
 export function loader() {
   return defer({
-    timeOut: timeOut(),
+    // timeOut: timeOut(),
   });
 }

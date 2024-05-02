@@ -79,3 +79,11 @@ export const usePost = (initialFunction, onSuccess = () => {}, onError = () => {
 
     return { isFetching, handlePost };
 };
+
+export async function fetchFunction({ url, options }) {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+        throw new Error('An error occurred!');
+    }
+    return await response.json();
+}
