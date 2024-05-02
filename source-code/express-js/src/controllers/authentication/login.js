@@ -2,6 +2,9 @@ const { validateLoginInputs, userExists, comparePassword } = require("./func");
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../config/jwt_secret.js')
 const loginUser = async(req, res) => {
+    console.log('-------------------------------')
+    console.log(req.body)
+    console.log('-------------------------------')
     const { email, password, username } = req.body;
     let errors = {};
 
@@ -35,7 +38,9 @@ const loginUser = async(req, res) => {
                     expiresIn: 2400
                 })
                 // Password matched, send success response
-            return res.status(200).json({ token, message: "Login successful" });
+            setTimeout(() => {
+                return res.status(200).json({ token, message: "Login successful" });
+            }, 2000);
         }
 
         // If username is provided, validate username and password
@@ -68,7 +73,10 @@ const loginUser = async(req, res) => {
                     expiresIn: 2400
                 })
                 // Password matched, send success response
-            return res.status(200).json({ token, message: "Login successful" });
+            setTimeout(() => {
+                return res.status(200).json({ token, message: "Login successful" });
+            }, 2000);
+
         }
     } catch (error) {
         console.error("Error logging in user:", error);

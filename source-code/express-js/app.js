@@ -12,12 +12,12 @@ const bookingsRouter = require("./src/routes/booking.route.js");
 const classesRouter = require("./src/routes/class.route.js");
 const notificationRouter = require("./src/routes/notification.route.js");
 const { pool } = require("./src/models/db/connect.js");
-const cors = require("./src/middlewares/cors/corsConfig.js");
+const corsMiddleware = require("./src/middlewares/cors/corsConfig.js");
 // Middlewares
 dotenv.config();
 app.use(express.static("./src"));
 app.use(express.json());
-app.use(cors);
+app.use(corsMiddleware);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 // Authentication router

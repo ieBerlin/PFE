@@ -2,7 +2,7 @@ import logoImage from "../../../assets/logoImage.png";
 import LoginForm from "../Form/LoginForm";
 import gymImage from "../../../assets/gymImage.jpg";
 import classes from "./Login.module.css";
-import { json, Link } from "react-router-dom";
+import { json, Link, redirect } from "react-router-dom";
 import { setModalType } from "../../../features/modal/modalSlice.js";
 import Modal from "../../../components/modal/Modal.jsx";
 import { useDispatch } from "react-redux";
@@ -49,7 +49,6 @@ export default function LoginPage() {
 export async function action({ request }) {
   try {
     const data = await request.formData();
-
     const mode = data.get("form-type");
     if (!mode) {
       throw new Error("Form type not provided.");
@@ -58,7 +57,30 @@ export async function action({ request }) {
       case "sign-up-form":
         return processSignUpForm(data);
       case "login-form":
-        return processLoginForm(data);
+        try {
+          const response = await fetch(
+            "http://localhost:8081/user/auth/login",
+            {
+              method: "POST",
+              body: JSON.stringify(processLoginForm(data)),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!response.ok) {
+            return json({ status: response.status, success: false });
+          }
+
+          const responseData = await response.json();
+          localStorage.setItem("user-token", responseData.token);
+          return json({ status: 200, success: true });
+        } catch (error) {
+          console.error("An error occurred during login:", error.message);
+          return json({ status: 500, success: false });
+        }
+
       default:
         throw new Error("Unrecognized form type.");
     }
@@ -71,7 +93,7 @@ export async function action({ request }) {
   }
 }
 
-function processSignUpForm(formData) {
+async function processSignUpForm(formData) {
   const fd = Object.fromEntries(formData.entries());
   return {
     email: fd.email,

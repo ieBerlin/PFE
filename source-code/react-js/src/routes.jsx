@@ -241,6 +241,7 @@ const router = createBrowserRouter([
   {
     path: "auth",
     element: <LoginPage />,
+    id: "login-id",
     action: authAction,
   },
 ]);

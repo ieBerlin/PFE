@@ -26,12 +26,49 @@ export default function RootLayout() {
     </nav>
   );
 }
-export function loader() {
-  const userRole = localStorage.getItem("user-role") || undefined;
-  const isValidUser =
-    userRole && ["admin", "member", "coach"].includes(userRole);
-  if (!isValidUser) {
-    throw json({ message: "Forbidden", status: 403 });
+export async function loader() {
+  try {
+      const data = await fetchUserRole();
+      if (data && data.userRole) {
+          const userRole = data.userRole;
+          console.log(userRole);
+          const isValidUser = ["admin", "member", "coach"].includes(userRole);
+          if (!isValidUser) {
+              throw new Error("Forbidden");
+          }
+          return userRole;
+      } else {
+          throw new Error("Forbidden");
+      }
+  } catch (error) {
+      console.error("An error occurred while fetching user role:", error);
+      throw error; // Rethrow the error for the caller to handle if needed
   }
-  return userRole;
+}
+
+async function fetchUserRole() {
+  const userToken = localStorage.getItem("user-token");
+  if (!userToken) {
+      return null;
+  }
+
+  try {
+      const response = await fetch("http://localhost:8081/user/auth/user-role", {
+          method: "POST",
+          body: JSON.stringify({ token: userToken }),
+          headers: {
+              "Content-Type": "application/json",
+          },
+      });
+
+      if (!response.ok) {
+          throw new Error("Failed to fetch user role");
+      }
+
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error("An error occurred while fetching user role:", error);
+      throw error; // Rethrow the error for the caller to handle if needed
+  }
 }

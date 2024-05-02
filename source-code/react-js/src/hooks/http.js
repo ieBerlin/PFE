@@ -54,20 +54,28 @@ export function useSubmit(fetchFn, initialValue) {
         fetchFuncCaller
     };
 }
-export const usePost = () => {
+
+export const usePost = (initialFunction, onSuccess = () => {}, onError = () => {}) => {
     const [isFetching, setIsFetching] = useState(false);
-    const handlePost = useCallback(async() => {
-        setIsFetching(true)
+
+    const handlePost = useCallback(async(options = {}) => {
+        setIsFetching(true);
         try {
-            setTimeout(() => {
-                setIsFetching(false)
-            }, 5000)
+            const response = await initialFunction(options);
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            const data = await response.json();
+            setIsFetching(false);
+            onSuccess(data);
+            return data;
         } catch (error) {
-            setIsFetching(false)
-            console.log(error)
+            setIsFetching(false);
+            onError(error);
+            console.error('An error occurred:', error);
+            throw error; // Rethrow the error for the caller to handle if needed
         }
-    }, [])
+    }, [initialFunction, onSuccess, onError]);
 
-    return { isFetching, handlePost }
-
-}
+    return { isFetching, handlePost };
+};

@@ -3,9 +3,8 @@ import imgLogo from "../../assets/logoImage.png";
 import classes from "./Header.module.css";
 import { HomeIcon } from "@heroicons/react/24/solid";
 export default function Header() {
-  const userRole = localStorage.getItem("user-role") || undefined;
-  const isValidUser =
-    userRole && ["admin", "member", "coach"].includes(userRole);
+  const userRole = localStorage.getItem("user-token") || undefined;
+  
   return (
     <header className={classes.header}>
       <div className={classes.logo}>
@@ -32,7 +31,7 @@ export default function Header() {
         </ul>
       </nav>
       <div className={classes.authentication}>
-        {!isValidUser ? (
+        {!userRole ? (
           <Link to="/auth">
             <button>Login</button>
           </Link>
