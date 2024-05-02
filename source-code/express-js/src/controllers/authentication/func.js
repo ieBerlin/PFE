@@ -28,38 +28,53 @@ const validateSignUpInputs = ({
     phoneNumber,
     gender,
     address,
+    role
 }) => {
     let errors = {};
+
     if (!email || !isValidEmail(email)) {
-        errors.email = "Invalid email!";
+        errors.email = "Please provide a valid email address.";
     }
+
     if (!password || !isValidPassword(password)) {
-        errors.password = "Invalid password!";
+        errors.password = "Password must be at least 8 characters long and contain at least one letter and one number.";
     }
+
     if (!username || !isValidUsername(username)) {
-        errors.username = "Invalid username";
+        errors.username = "Please provide a valid username.";
     }
+
     if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
-        errors.phoneNumber = "Invalid phone number!";
+        errors.phoneNumber = "Please provide a valid phone number.";
     }
+
     if (!dateOfBirth || !isValidAge(dateOfBirth)) {
-        errors.dateOfBirth = "Invalid date of birth!";
+        errors.dateOfBirth = "Please provide a valid date of birth.";
     }
+
     if (!firstName || !isValidName(firstName)) {
-        errors.firstName = "Invalid first name!";
+        errors.firstName = "Please provide a valid first name.";
     }
+
     if (!lastName || !isValidName(lastName)) {
-        errors.lastName = "Invalid last name!";
+        errors.lastName = "Please provide a valid last name.";
     }
+
     if (!address || address.trim() === "") {
-        errors.address = "Invalid address!";
+        errors.address = "Please provide a valid address.";
     }
+
     if (!gender || !isValidName(gender.trim())) {
-        errors.gender = "Invalid gender!";
+        errors.gender = "Please provide a valid gender.";
+    }
+
+    if (!role || (role.toLowerCase() !== 'member' && role.toLowerCase() !== 'coach')) {
+        errors.role = "Please select a valid role (Member or Coach).";
     }
 
     return errors;
 };
+
 const validateLoginInputs = ({ type, field, password }) => {
     const errors = {};
     if (type === "email") {

@@ -15,7 +15,9 @@ const createUser = async(req, res) => {
         gender,
         address,
         phoneNumber,
+        role,
     } = req.body;
+
     const errors = validateSignUpInputs({
         email,
         password,
@@ -26,10 +28,10 @@ const createUser = async(req, res) => {
         phoneNumber,
         gender,
         address,
+        role,
     });
-
     if (Object.keys(errors).length > 0) {
-        return res.status(422).json(errors);
+        return res.status(422).json({ message: errors });
     }
 
     try {
@@ -47,8 +49,14 @@ const createUser = async(req, res) => {
             gender,
             address,
             phoneNumber,
+            role
         });
-        return res.status(201).json({ message: "User created successfully" });
+        setTimeout(() => {
+            return res.status(201).json({
+                message: "User created successfully"
+
+            });
+        }, 2000);
     } catch (error) {
         console.error("Error creating user:", error);
         return res.status(500).json({ message: "Internal server error" });

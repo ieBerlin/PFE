@@ -2,7 +2,7 @@ import logoImage from "../../../assets/logoImage.png";
 import LoginForm from "../Form/LoginForm";
 import gymImage from "../../../assets/gymImage.jpg";
 import classes from "./Login.module.css";
-import { json, Link, redirect } from "react-router-dom";
+import { json, Link } from "react-router-dom";
 import { setModalType } from "../../../features/modal/modalSlice.js";
 import Modal from "../../../components/modal/Modal.jsx";
 import { useDispatch } from "react-redux";
@@ -50,19 +50,25 @@ export async function action({ request }) {
   try {
     const data = await request.formData();
     const mode = data.get("form-type");
+
     if (!mode) {
       throw new Error("Form type not provided.");
     }
     switch (mode) {
       case "sign-up-form":
-        return processSignUpForm(data);
-      case "login-form":
         try {
+          const password = data.get("password");
+          const confirmPassword = data.get(["confirm-password"]);
+          if (password !== confirmPassword) {
+            const errors = { password: "Passwords do not match." };
+            return json({ errors });
+          }
+
           const response = await fetch(
-            "http://localhost:8081/user/auth/login",
+            "http://localhost:8081/user/auth/signup",
             {
               method: "POST",
-              body: JSON.stringify(processLoginForm(data)),
+              body: JSON.stringify(await processSignUpForm(data)),
               headers: {
                 "Content-Type": "application/json",
               },
@@ -70,7 +76,50 @@ export async function action({ request }) {
           );
 
           if (!response.ok) {
-            return json({ status: response.status, success: false });
+            const responseData = await response.json();
+            if (response.status === 422 || response.status === 409) {
+              const errors = responseData.message || "Error occurred";
+              console.log(responseData);
+              return json({ errors });
+            } else {
+              const message = responseData.message || "Error occurred";
+              return json({
+                status: response.status,
+                success: false,
+                message,
+              });
+            }
+          }
+
+          // Success
+          return json({ status: 200, success: true });
+        } catch (error) {
+          console.error("An error occurred during signup:", error.message);
+          return json({
+            status: 500,
+            success: false,
+            message: "Internal Server Error",
+          });
+        }
+      case "login-form":
+        try {
+          const response = await fetch(
+            "http://localhost:8081/user/auth/login",
+            {
+              method: "POST",
+              body: JSON.stringify(await processLoginForm(data)),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!response.ok) {
+            return json({
+              status: response.status,
+              success: false,
+              message: response.message || "Error occured",
+            });
           }
 
           const responseData = await response.json();
@@ -80,7 +129,6 @@ export async function action({ request }) {
           console.error("An error occurred during login:", error.message);
           return json({ status: 500, success: false });
         }
-
       default:
         throw new Error("Unrecognized form type.");
     }
@@ -95,10 +143,10 @@ export async function action({ request }) {
 
 async function processSignUpForm(formData) {
   const fd = Object.fromEntries(formData.entries());
+
   return {
     email: fd.email,
     password: fd.password,
-    confirmPassword: fd["confirm-password"],
     username: fd.username,
     phoneNumber: fd["phone-number"],
     dateOfBirth: fd["birthday-date"],

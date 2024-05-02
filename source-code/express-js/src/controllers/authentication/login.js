@@ -41,10 +41,7 @@ const loginUser = async(req, res) => {
             setTimeout(() => {
                 return res.status(200).json({ token, message: "Login successful" });
             }, 2000);
-        }
-
-        // If username is provided, validate username and password
-        else if (username) {
+        } else if (username) {
             errors = validateLoginInputs({
                 type: "username",
                 field: username,
@@ -53,8 +50,6 @@ const loginUser = async(req, res) => {
             if (Object.keys(errors).length > 0) {
                 return res.status(422).json(errors);
             }
-            // Implement similar logic as above for username
-
             if (!(await userExists(null, username))) {
                 return res.status(404).json({ message: "User not found" });
             }

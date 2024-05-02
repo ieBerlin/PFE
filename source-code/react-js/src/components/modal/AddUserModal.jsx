@@ -5,10 +5,24 @@ import PasswordInput from "./PasswordInput.jsx";
 import Input from "../../components/Input.jsx";
 import TextAreaInput from "../../components/TextAreaInput.jsx";
 import defaultUserImage from "../../assets/default-user.webp";
-import { useSelector } from "react-redux";
-export default function AddUserModal({ onClose, onConfirm }) {
+import { useDispatch, useSelector } from "react-redux";
+import PhoneNumberInput from "../PhoneNumberInput.jsx";
+import GenderInput from "../GenderInput.jsx";
+import DateInput from "../DateInput.jsx";
+import { setModalType } from "../../features/modal/modalSlice.js";
+export default function AddUserModal() {
+  const errorsRef = useRef();
+  const scrollToRef = () => {
+    if (errorsRef.current) {
+      errorsRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  const dispatch = useDispatch();
   const isAdmin = useSelector((state) => state.userRole.userRole === "admin");
   const { state, data, Form } = useFetcher();
+  if (data && data.success) {
+    window.location.reload();
+  }
   const isLoading = state === "submitting";
   const [currentImageSrc, setCurrentImageSrc] = useState(defaultUserImage);
   const imageRef = useRef();
@@ -30,7 +44,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
   };
 
   return (
-    <>
+    <div>
       <Form method="post" className="px-8 pb-4 pt-5 rounded-md bg-white">
         <input name="form-type" defaultValue="sign-up-form" hidden />
         <h3 className="text-black font-semibold text-xl mb-4">
@@ -59,13 +73,19 @@ export default function AddUserModal({ onClose, onConfirm }) {
             </button>
           </div>
           {isAdmin ? (
-            <select name="user-role" className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
+            <select
+              name="user-role"
+              className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+            >
               <option value="member">Member</option>
               <option value="coach">Coach</option>
               <option value="admin">Admin</option>
             </select>
           ) : (
-            <select name="user-role" className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
+            <select
+              name="user-role"
+              className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+            >
               <option value="member">Member</option>
               <option value="coach">Coach</option>
             </select>
@@ -115,12 +135,50 @@ export default function AddUserModal({ onClose, onConfirm }) {
           <button type="submit" className="hidden" ref={submitButtonRef} />
         </div>
       </Form>
-      <ul className="bg-white px-8 flex flex-col gap-2">
-        {!isLoading &&
-          data &&
-          data.errors &&
-          data.errors.map((error, index) => (
-            <li key={index}>
+      {!isLoading && data && data.errors && (
+        <ul className="bg-white px-8 flex flex-col gap-2" ref={errorsRef}>
+          {typeof data.errors === "object" ? (
+            Object.entries(data.errors).map(([key, value]) => (
+              <li key={key}>
+                <div
+                  className="bg-red-100 border-s-4 border-red-500 p-4 "
+                  role="alert"
+                >
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex justify-center items-center size-8 rounded-full border-4 border-red-100 bg-red-200 text-red-800 ">
+                        <svg
+                          className="flex-shrink-0 size-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M18 6 6 18"></path>
+                          <path d="m6 6 12 12"></path>
+                        </svg>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <h3 className="text-gray-800 font-semibold capitalize">
+                        {key || "An error occurred"}
+                      </h3>
+                      <p className="text-sm text-gray-700 capitalize">
+                        {value ||
+                          "An error occurred while processing your request."}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li>
               <div
                 className="bg-red-100 border-s-4 border-red-500 p-4 "
                 role="alert"
@@ -147,18 +205,19 @@ export default function AddUserModal({ onClose, onConfirm }) {
                   </div>
                   <div className="ms-3">
                     <h3 className="text-gray-800 font-semibold capitalize">
-                      {error.title || "An error occurred"}
+                      Error
                     </h3>
                     <p className="text-sm text-gray-700 capitalize">
-                      {error.description ||
+                      {data.errors ||
                         "An error occurred while processing your request."}
                     </p>
                   </div>
                 </div>
               </div>
             </li>
-          ))}
-      </ul>
+          )}
+        </ul>
+      )}
       <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
         <button
           disabled={isLoading}
@@ -171,6 +230,7 @@ export default function AddUserModal({ onClose, onConfirm }) {
           onClick={() => {
             if (submitButtonRef) {
               submitButtonRef.current.click();
+              scrollToRef();
             }
           }}
         >
@@ -184,122 +244,11 @@ export default function AddUserModal({ onClose, onConfirm }) {
           } px-3 py-2 text-sm font-semibold ${
             isLoading ? "text-gray-400" : "text-gray-900"
           } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
-          onClick={onClose}
+          onClick={() => dispatch(setModalType())}
         >
           Cancel
         </button>
       </div>
-    </>
-  );
-}
-
-export function DateInput({ label, placeholder, ...props }) {
-  return (
-    <>
-      <label className="block text-sm font-medium my-2">{label}</label>
-      <input
-        required
-        type="date"
-        className="py-2 px-4 block w-full border-gray-200 border-2 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-        placeholder={placeholder}
-        {...props}
-      />
-    </>
-  );
-}
-export function GenderInput() {
-  return (
-    <>
-      <label className="block text-sm font-medium my-2">Gender</label>
-      <div className="flex gap-x-6 border-gray-200 border-2 w-min px-4 py-2 rounded-lg">
-        <div className="flex items-center">
-          <input
-            value="male"
-            defaultChecked
-            id="male-radio"
-            type="radio"
-            name="gender"
-            className="mr-2 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500"
-          />
-          <label className="text-sm text-gray-500">Male</label>
-        </div>
-        <div className="flex items-center">
-          <input
-            value="female"
-            id="female-radio"
-            type="radio"
-            name="gender"
-            className="mr-2 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500"
-          />
-          <label className="text-sm text-gray-500">Female</label>
-        </div>
-      </div>
-    </>
-  );
-}
-
-export function PhoneNumberInput({ ...props }) {
-  return (
-    <>
-      <label className="block text-sm font-medium my-2">Phone Number</label>
-      <div className="flex">
-        <div
-          className=" outline-none flex-shrink-0 z-10 inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 "
-          type="button"
-        >
-          <svg
-            viewBox="0 0 36 36"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            role="img"
-            className=" w-6"
-            preserveAspectRatio="xMidYMid meet"
-            fill="#000000"
-          >
-            <g id="SVGRepo_bgCarrier" strokeWidth="0" />
-
-            <g
-              id="SVGRepo_tracerCarrier"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-
-            <g id="SVGRepo_iconCarrier">
-              <path
-                fill="#006233"
-                d="M4 5a4 4 0 0 0-4 4v18a4 4 0 0 0 4 4h14V5H4z"
-              />
-
-              <path
-                fill="#EEE"
-                d="M32 5H18v26h14a4 4 0 0 0 4-4V9a4 4 0 0 0-4-4z"
-              />
-
-              <path
-                fill="#D20F34"
-                d="M20 24c-3.315 0-6-2.685-6-6c0-3.314 2.685-6 6-6c1.31 0 2.52.425 3.507 1.138A7.332 7.332 0 0 0 18 10.647A7.353 7.353 0 0 0 10.647 18A7.353 7.353 0 0 0 18 25.354c2.195 0 4.16-.967 5.507-2.492A5.963 5.963 0 0 1 20 24z"
-              />
-
-              <path
-                fill="#D20F34"
-                d="M25.302 18.23l-2.44.562l-.22 2.493l-1.288-2.146l-2.44.561l1.644-1.888l-1.287-2.147l2.303.98l1.644-1.889l-.22 2.494z"
-              />
-            </g>
-          </svg>
-          <p style={{ marginLeft: "1px" }}>+213</p>
-        </div>
-        <div className="relative w-full">
-          <input
-            type="text"
-            id="phone-input"
-            aria-describedby="helper-text-explanation"
-            className="block p-2.5 w-full z-20 text-sm text-gray-900 rounded-e-lg   border-gray-300 border-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-            placeholder="699-213-213"
-            required
-            {...props}
-          />
-        </div>
-      </div>
-    </>
+    </div>
   );
 }

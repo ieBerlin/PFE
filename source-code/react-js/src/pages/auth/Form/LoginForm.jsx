@@ -5,14 +5,18 @@ import PasswordFormInput from "./PasswordFormInput";
 import classes from "../Login/Login.module.css";
 import { useFetcher, useNavigate } from "react-router-dom";
 import { UserIcon } from "@heroicons/react/24/solid";
+import { useEffect } from "react";
 export default function LoginForm() {
-const navigate = useNavigate();  
+  const navigate = useNavigate();
   const { Form, data, state } = useFetcher({
-    key: "login=id",
+    key: "login-id",
   });
-  if (data && data.success) {
-   navigate('/dashboard');
-  }
+
+  useEffect(() => {
+    if (data && data.success) {
+      navigate("/dashboard");
+    }
+  }, [data, navigate]);
   const isSubmitting = state === "submitting";
   const submitButtonStyles = isSubmitting
     ? classes.submittingLoginButton

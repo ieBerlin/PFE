@@ -1,9 +1,9 @@
 import { useSubmit } from "../../hooks/http.js";
-import {
-  DateInput,
-  PhoneNumberInput,
-  GenderInput,
-} from "../../components/modal/AddUserModal.jsx";
+
+import PhoneNumberInput from "../../components/PhoneNumberInput.jsx";
+import DateInput from "../../components/DateInput.jsx";
+import GenderInput from "../../components/GenderInput.jsx";
+
 import Input from "../../components/Input.jsx";
 import TextAreaInput from "../../components/TextAreaInput.jsx";
 import { CheckIcon, PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
