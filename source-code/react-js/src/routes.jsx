@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import LandingPage from "./pages/landing-page/LandingPage.jsx";
+import LandingPage, {
+  loader as landingPageLoader,
+} from "./pages/landing-page/LandingPage.jsx";
 import LoginPage, { action as authAction } from "./pages/auth/Login/Login.jsx";
 import SportsPage from "./pages/sports/SportsPage.jsx";
 import ClassesPage, {
@@ -238,6 +240,8 @@ const router = createBrowserRouter([
   {
     index: true,
     element: <LandingPage />,
+    id: "landing-page-id",
+    loader: landingPageLoader,
   },
   {
     path: "auth",

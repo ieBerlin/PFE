@@ -13,6 +13,7 @@ const classesRouter = require("./src/routes/class.route.js");
 const notificationRouter = require("./src/routes/notification.route.js");
 const { pool } = require("./src/models/db/connect.js");
 const corsMiddleware = require("./src/middlewares/cors/corsConfig.js");
+const verifyToken = require("./src/middlewares/auth/authJWT.js");
 // Middlewares
 dotenv.config();
 app.use(express.static("./src"));

@@ -2,9 +2,7 @@ import { Link } from "react-router-dom";
 import imgLogo from "../../assets/logoImage.png";
 import classes from "./Header.module.css";
 import { HomeIcon } from "@heroicons/react/24/solid";
-export default function Header() {
-  const userRole = localStorage.getItem("user-token") || undefined;
-  
+export default function Header({ isValidLogin }) {
   return (
     <header className={classes.header}>
       <div className={classes.logo}>
@@ -31,7 +29,7 @@ export default function Header() {
         </ul>
       </nav>
       <div className={classes.authentication}>
-        {!userRole ? (
+        {!isValidLogin ? (
           <Link to="/auth">
             <button>Login</button>
           </Link>

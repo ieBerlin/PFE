@@ -9,7 +9,9 @@ const defineUserRole = require('../controllers/authentication/defineUserRole.js'
     // const updatePassword = require("../../controllers/authentication/updatePassword.js"); // Import updatePassword function
     // const resendVerificationEmail = require("../../controllers/authentication/resendVerificationEmail.js"); // Import resendVerificationEmail function
 
-const verifyToken = require("../middlewares/auth/authJWT.js");
+const verifyTokenMiddleware = require("../middlewares/auth/authJWT.js");
+const verifyToken = require("../controllers/authentication/verifyToken.js");
+router.route("/verify-token").get(verifyToken);
 router.route("/signup").post(createUser);
 router.route("/login").post(loginUser);
 router.route('/user-role').post(defineUserRole)
@@ -18,10 +20,5 @@ router.route('/user-role').post(defineUserRole)
     // router.route("/forget-password/verify-reset-token").post(verifyResetToken); // Corrected endpoint path
     // router.route("/update-password").post(updatePassword);
     // router.route("/resend-verification-email").post(resendVerificationEmail); // Use router.route instead of app.post
-
-// Temporary router for dashboard
-router.get("/dashboard", verifyToken, (req, res) => {
-    res.send("Successfully accessed dashboard");
-});
 
 module.exports = router;

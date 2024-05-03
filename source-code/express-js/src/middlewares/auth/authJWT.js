@@ -4,6 +4,7 @@ const { fetchUserEmail } = require('./userEmail.js');
 const { fetchUserRole } = require('./userRole.js');
 
 async function verifyToken(req, res, next) {
+    console.log('here')
     let token = req.headers['x-access-token'] || req.headers['authorization'];
     if (!token) {
         return res.status(403).json({
