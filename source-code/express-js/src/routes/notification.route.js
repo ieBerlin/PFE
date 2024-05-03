@@ -7,8 +7,8 @@ const authUserRole = require("../middlewares/auth/authUserRole.js");
 const verifyToken = require("../middlewares/auth/authJWT.js");
 const markNotificationAsRead = require("../controllers/notification/markAsRead.js");
 
-router.get("/:userId", verifyToken, authUserRole, getAllNotifications);
-router.get("/get-latest-notifications/:userId", verifyToken, authUserRole, getLatestNotifications);
+router.get("/get-latest-notifications", verifyToken, getLatestNotifications);
+router.get("/get-all-notifications", verifyToken, getAllNotifications);
 router.post("/", verifyToken, authUserRole, createNotification);
 router.post("/mark-as-read/:messageId", verifyToken, authUserRole, markNotificationAsRead);
 

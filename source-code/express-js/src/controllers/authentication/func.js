@@ -133,6 +133,7 @@ const insertUser = async({
     gender,
     address,
     phoneNumber,
+    role
 }) => {
     const formattedPhoneNumber = phoneNumberFormatter(phoneNumber);
     const formattedDateOfBirth = dateOfBirthFormatter(dateOfBirth);
@@ -148,7 +149,7 @@ const insertUser = async({
             address,
             phone_number,
             role
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,'registered-user')`;
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)`;
     const values = [
         email,
         hashedPassword,
@@ -159,6 +160,7 @@ const insertUser = async({
         gender,
         address,
         formattedPhoneNumber,
+        role
     ];
     await pool.execute(sql, values);
 };
