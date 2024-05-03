@@ -10,8 +10,8 @@ const { isValidName } = require("../../utils/validation/nameValidation.js");
 const { isValidAge } = require("../../utils/validation/ageValidation.js");
 const updateUserProfile = async(req, res) => {
     try {
-        const { userId } = req.params;
-        const { email, username, first_name, last_name, date_of_birth, phone_number, gender, address } = req.body;
+        const { userEmail } = req;
+        const { email, username, firstName, lastName, dateOfBirth, phoneNumber, gender, address } = req.body;
         let errors = {};
         if (!email || !isValidEmail(email)) {
             errors.email = "Invalid email!";
@@ -20,16 +20,16 @@ const updateUserProfile = async(req, res) => {
         if (!username || !isValidUsername(username)) {
             errors.username = "Invalid username";
         }
-        if (!phone_number || !isValidPhoneNumber(phone_number)) {
+        if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
             errors.phone_number = "Invalid phone number!";
         }
-        if (!date_of_birth || !isValidAge(date_of_birth)) {
+        if (!dateOfBirth || !isValidAge(dateOfBirth)) {
             errors.date_of_birth = "Invalid date of birth!";
         }
-        if (!first_name || !isValidName(first_name)) {
+        if (!firstName || !isValidName(firstName)) {
             errors.first_name = "Invalid first name!";
         }
-        if (!last_name || !isValidName(last_name)) {
+        if (!lastName || !isValidName(lastName)) {
             errors.lastName = "Invalid last name!";
         }
 
@@ -41,19 +41,23 @@ const updateUserProfile = async(req, res) => {
             errors.gender = "Invalid gender!";
         }
         if (Object.keys(errors).length) {
+            console.log(errors)
             return res.status(400).json(errors);
         }
 
         // Check if the user exists
-        const [user] = await pool.query('SELECT * FROM users WHERE userId = ?', [userId]);
+        console.log(userEmail)
+        const [user] = await pool.query('SELECT * FROM users WHERE email = ?', [userEmail]);
         if (user.length === 0) {
             return res.status(404).json({ message: 'User not found.' });
         }
 
         // Update user profile in the database
-        await pool.query('UPDATE users SET email=?, username=?, first_name=?, last_name=?, date_of_birth=?, phone_number=?, gender=?, address=? WHERE userId=?', [email, username, first_name, last_name, date_of_birth, phone_number, gender, address, userId]);
+        await pool.query('UPDATE users SET email=?, username=?, first_name=?, last_name=?, date_of_birth=?, phone_number=?, gender=?, address=? WHERE email=?', [email, username, firstName, lastName, dateOfBirth, phoneNumber, gender, address, email]);
 
-        return res.status(200).json({ message: 'User profile updated successfully.' });
+        setTimeout(() => {
+            return res.status(200).json({ message: 'User profile updated successfully.' });
+        }, 1200);
     } catch (error) {
         console.error('Error updating user profile:', error);
         return res.status(500).json({ message: 'Internal Server Error' });

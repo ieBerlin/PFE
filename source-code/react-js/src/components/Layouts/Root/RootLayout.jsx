@@ -32,7 +32,6 @@ export async function loader() {
     const data = await fetchUserRole();
     if (data && data.userRole) {
       const userRole = data.userRole;
-      console.log(userRole);
       const isValidUser = ["admin", "member", "coach"].includes(userRole);
       if (!isValidUser) {
         throw json({ status: 403 });

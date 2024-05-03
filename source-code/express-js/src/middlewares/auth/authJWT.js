@@ -6,7 +6,6 @@ const { fetchUserRole } = require('./userRole.js');
 async function verifyToken(req, res, next) {
     let token = req.headers['x-access-token'] || req.headers['authorization'];
     if (!token) {
-        console.log('Hello World!')
         return res.status(403).json({
             message: 'Forbidden'
         });

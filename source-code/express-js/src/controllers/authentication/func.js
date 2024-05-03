@@ -109,7 +109,6 @@ const comparePassword = async({ type, field, plainPassword }) => {
         if (type === 'email') {
             result = await pool.query('SELECT password FROM users WHERE email = ? LIMIT 1', [field]);
         } else {
-
             result = await pool.query('SELECT password FROM users WHERE username = ? LIMIT 1', [field]);
         }
         if (!result[0] || !result[0][0] || !result[0][0].password) {
@@ -117,6 +116,7 @@ const comparePassword = async({ type, field, plainPassword }) => {
         }
         const hashedPasswordFromDB = result[0][0].password;
         const match = await bcrypt.compare(plainPassword, hashedPasswordFromDB);
+        console.log(match)
         return match;
     } catch (error) {
         throw new Error('Invalid credentials!');

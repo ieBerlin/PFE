@@ -8,9 +8,12 @@ const verifyToken = require("../middlewares/auth/authJWT.js");
 const authUserRole = require('../middlewares/auth/authUserRole.js')
 const authAdminOrManager = require('../middlewares/auth/authAdminOrManager.js')
 const getUserProfileDependOnEmail = require('../controllers/userProfile/getUserProfileDependOnEmail.js')
+const updatePassword = require('../controllers/userProfile/updatePassword.js')
+
 router.get("/", verifyToken, getUserProfileDependOnEmail)
 router.get("/all-users", verifyToken, authUserRole, getAllUsersProfiles);
 router.get("/:userId", verifyToken, authUserRole, getUserProfile);
-router.put("/:userId", verifyToken, authUserRole, updateUserProfile);
+router.put("/", verifyToken, updateUserProfile)
+router.post('/update-password', verifyToken, updatePassword)
 router.delete("/:userId", verifyToken, authAdminOrManager, deleteUserProfile);
 module.exports = router;

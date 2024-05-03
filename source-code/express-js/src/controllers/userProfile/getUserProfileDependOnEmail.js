@@ -18,7 +18,9 @@ const getUserProfileDependOnEmail = async(req, res) => {
         const [result] = await pool.query('SELECT email,username,first_name,last_name,date_of_birth,phone_number,gender,address,role FROM users WHERE email = ?', [userEmail]);
         if (result.length > 0) {
             const userProfile = result[0]; // Extract user profile data
-            return res.status(200).json(userProfile);
+            setTimeout(() => {
+                return res.status(200).json(userProfile);
+            }, 1500);
         } else {
             return res.status(404).json({ message: 'User profile not found for the provided email' });
         }

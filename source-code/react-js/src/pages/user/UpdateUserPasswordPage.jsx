@@ -1,20 +1,60 @@
 import { LockClosedIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { Form } from "react-router-dom";
-import PasswordInput from  "../../components/modal/PasswordInput.jsx"
+import PasswordInput from "../../components/modal/PasswordInput.jsx";
 import { useRef } from "react";
-import { useSubmit } from "../../hooks/http.js";
+import { fetchFunction, getToken } from "../../hooks/http.js";
+import { useMutation } from "@tanstack/react-query";
+import ErrorMessage from "../../components/ErrorMessage.jsx";
+const token = getToken();
 export default function UpdateUserPasswordPage() {
   const submitButtonRef = useRef();
-  const { isFetching, fetchFuncCaller } = useSubmit();
+  const { isPending, mutate, isError, error } = useMutation({
+    mutationFn: async (data) => {
+      const resData = await fetchFunction({
+        url: "http://localhost:8081/user/profile/update-password",
+        options: {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        },
+      });
+      console.log(resData)
+      if (resData.status === 404) {
+        throw new Error("User Not Found!");
+      }
+      if (resData.status === 401) {
+        throw resData;
+      }
+    },
+  });
 
-  const submitFormHandler = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    fetchFuncCaller();
+    const formData = new FormData(e.target);
+    const data = {
+      currentPassword: formData.get("current-password"),
+      newPassword: formData.get("new-password"),
+      confirmNewPassword: formData.get("confirm-new-password"),
+    };
+    mutate(data);
   };
+  let content =
+    !isPending &&
+    isError &&
+    (error.status === 401
+      ? Object.entries(error).map(([key, value]) => {
+          if (key !== "status") {
+            return <ErrorMessage key={key} title={key} message={value} />;
+          }
+        })
+      : "An error occured!");
   return (
     <section className="py-4 px-6 bg-gray-100 flex h-full w-full flex-col">
       <h1 className="font-bold text-2xl mb-3">Update Password</h1>
-      <div className="bg-white shadow-lg flex h-full w-full flex-col px-20 py-24">
+      <div className="bg-white shadow-lg flex h-full w-full flex-col justify-center items-center py-10">
         <div className="rounded-full bg-blue-100 p-3 w-min h-min ml-2">
           <LockClosedIcon className="w-8 h-8 text-blue-700" />
         </div>
@@ -24,37 +64,38 @@ export default function UpdateUserPasswordPage() {
         </p>
         <div className="font-semibold flex justify-end w-[600px]">
           <button
-            disabled={isFetching}
+            disabled={isPending}
             onClick={() => submitButtonRef.current.click()}
             className={`${
-              isFetching ? "bg-gray-200" : "bg-blue-600 "
+              isPending ? "bg-gray-200" : "bg-blue-600 "
             }  flex flex-row items-center gap-2 border border-gray-300 p-2 rounded-lg text-white`}
           >
-            {!isFetching && <PencilIcon className="w-4 h-4" />}
-            <p
-              className={`
-                         ${isFetching ? "text-gray-500 " : "text-white"}`}
-            >
-              {isFetching ? "Loading..." : "Save"}
+            {!isPending && <PencilIcon className="w-4 h-4" />}
+            <p className={`${isPending ? "text-gray-500 " : "text-white"}`}>
+              {isPending ? "Loading..." : "Save"}
             </p>
           </button>
         </div>
 
-        <Form className="mt-4 w-[600px]" onSubmit={submitFormHandler}>
+        <Form className="mt-4 w-[600px]" onSubmit={handleSubmit}>
           <PasswordInput
+            name="current-password"
             label="Current Password"
-            placeholder="Please Enter your Current Password"
+            placeholder="Please enter your current password"
           />
           <PasswordInput
+            name="new-password"
             label="New Password"
-            placeholder="Enter New Password"
+            placeholder="Enter new password"
           />
           <PasswordInput
+            name="confirm-new-password"
             label="Confirm Password"
-            placeholder="Confirm Password"
+            placeholder="Confirm password"
           />
           <button type="submit" className="hidden" ref={submitButtonRef} />
         </Form>
+        <div>{content}</div>
       </div>
     </section>
   );

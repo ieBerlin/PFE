@@ -15,7 +15,7 @@ function NotificationBell() {
 
   useEffect(() => {
     if (showNotifications) {
-      console.log("Notifications shown");
+      // console.log("Notifications shown");
     }
   }, [showNotifications]);
 
