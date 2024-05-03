@@ -82,8 +82,8 @@ export const usePost = (initialFunction, onSuccess = () => {}, onError = () => {
 
 export async function fetchFunction({ url, options }) {
     const response = await fetch(url, options);
-    if (!response.ok) {
-        throw new Error('An error occurred!');
-    }
-    return await response.json();
+    return { status: response.status, ...await response.json() };
+}
+export function getToken() {
+    return localStorage.getItem('user-token') || null;
 }
