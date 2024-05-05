@@ -9,7 +9,7 @@ const verifyToken = require("../middlewares/auth/authJWT.js");
 const authAdminOrManager = require("../middlewares/auth/authAdminOrManager.js");
 router.get("/", getEquipment);
 router.get("/:equipmentId", getSingleEquipment);
-router.post("/", verifyToken, authAdminOrManager, createEquipment);
+router.post("/", verifyToken, createEquipment);
 router.put("/:equipmentId", verifyToken, authAdminOrManager, updateEquipment);
 router.delete(
     "/:equipmentId",

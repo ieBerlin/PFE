@@ -5,6 +5,7 @@ import RelatedUsers from "../../components/modal/RelatedUsers.jsx";
 import DatePicker from "../../components/DatePicker.jsx";
 import PriceInput from "../../components/PriceInput.jsx";
 import { Link, useFetcher } from "react-router-dom";
+import CategorySelect from "../../components/CategorySelect.jsx";
 
 export default function CreateClassPage() {
   const submitButtonRef = useRef();
@@ -66,22 +67,6 @@ export default function CreateClassPage() {
             Cancel
           </Link>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function CategorySelect() {
-  return (
-    <div>
-      <label className="block text-sm font-medium my-2">Category</label>
-      <div className="relative">
-        <select className="border-2 p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 outline-none ">
-          <option value="kickboxing">Kickboxing</option>
-          <option value="fitness">Fitness</option>
-          <option value="cardio">Cardio</option>
-          <option value="bodybuilding">Bodybuilding</option>
-        </select>
       </div>
     </div>
   );
