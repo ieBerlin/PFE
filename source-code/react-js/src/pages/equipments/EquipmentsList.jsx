@@ -20,10 +20,16 @@ export default function EquipmentsList({ data }) {
   const dispatch = useDispatch();
   const [currentSelectedEquipments, setCurrentSelectedEquipments] =
     useState(selectedEquipments);
+  const [currentSelectedEquipmentData, setCurrentSelectedEquipmentData] = useState(null);
   const filteredEquipments = filterEquipements(data, currentSelectedEquipments);
+  const modal = isAdmin ? (
+    <Modal equipmentData={currentSelectedEquipmentData} />
+  ) : (
+    <Modal />
+  );
   return (
     <>
-      <Modal />
+      {modal}
       <section className={classes.sectionContainer}>
         <h1 className="font-semibold text-2xl mb-2">All Equipments</h1>
         <div className="bg-gray-100  rounded-lg p-4">
@@ -70,7 +76,7 @@ export default function EquipmentsList({ data }) {
           >
             {filteredEquipments && filteredEquipments.length > 0 ? (
               filteredEquipments.map((item) => (
-                <EquipmentItem key={item.id} equipmentData={item} />
+                <EquipmentItem key={item.id} equipmentData={item} onEditEquipment={setCurrentSelectedEquipmentData} />
               ))
             ) : (
               <div className="mt-4 bg-white px-6 py-4 shadow-md">
@@ -86,7 +92,7 @@ export default function EquipmentsList({ data }) {
   );
 }
 
-function EquipmentItem({ equipmentData }) {
+function EquipmentItem({ equipmentData,onEditEquipment }) {
   const { userRole } = useSelector((state) => state.userRole);
   const dispatch = useDispatch();
   return (
@@ -129,7 +135,10 @@ function EquipmentItem({ equipmentData }) {
           </h2>
           {userRole.toLowerCase() === "admin" ? (
             <button
-              onClick={() => dispatch(setModalType("edit-equipment"))}
+              onClick={() => {
+                onEditEquipment(equipmentData);
+                dispatch(setModalType("edit-equipment"));
+              }}
               className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-300"
             >
               Edit Equipment <ChevronRightIcon className="ml-2 h-6 w-6" />

@@ -11,7 +11,12 @@ import NotifyMembershipEnd from "./NotifyMembershipEnd.jsx";
 import SendCustomMessage from "./SendCustomMessage.jsx";
 import AddEquipmentModal from "./AddEquipmentModal.jsx";
 import { useNavigate } from "react-router-dom";
-export default function ModalContent({ remainingDay, imageSrc }) {
+import EditEquipmentModal from "./EditEquipmentModal.jsx";
+export default function ModalContent({
+  equipmentData,
+  remainingDay,
+  imageSrc,
+}) {
   const dispatch = useDispatch();
   const type = useSelector((state) => state.modal.type);
   function onConfirm(confirmType) {
@@ -23,7 +28,6 @@ export default function ModalContent({ remainingDay, imageSrc }) {
   }
   const navigate = useNavigate();
   function handleConfirmSignOut() {
-    console.log('CLicked')
     onClose();
     localStorage.removeItem("user-token");
     navigate("/auth");
@@ -103,6 +107,10 @@ export default function ModalContent({ remainingDay, imageSrc }) {
     return (modalContent = <SendCustomMessage />);
   } else if (type === "add-equipment") {
     return (modalContent = <AddEquipmentModal onClose={onClose} />);
+  } else if (type === "edit-equipment") {
+    return (modalContent = (
+      <EditEquipmentModal equipmentData={equipmentData} onClose={onClose} />
+    ));
   } else {
     return (
       <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-10">

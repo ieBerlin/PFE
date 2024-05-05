@@ -7,10 +7,10 @@ import TextAreaInput from "../TextAreaInput";
 import PriceInput from "../PriceInput";
 import ErrorMessage from "../ErrorMessage";
 import CategorySelect from "../CategorySelect";
-import { fetchFunction, getToken } from "../../hooks/http.js";
+import { getToken } from "../../hooks/http.js";
 import { Form, json } from "react-router-dom";
 
-export default function AddEquipmentModal({ onClose }) {
+export default function EditEquipmentModal({ onClose, equipmentData: data }) {
   const submitButtonRef = useRef();
   const [previewImageSrc, setPreviewImageSrc] = useState(defaultEquipmentImage);
   const imageInputRef = useRef();
@@ -23,23 +23,23 @@ export default function AddEquipmentModal({ onClose }) {
         return json({ status: 403 });
       }
 
-      const response = await fetchFunction({
-        url: "http://localhost:8081/equipments",
-        options: {
-          method: "POST",
-          body: JSON.stringify(equipmentData),
-          headers: {
-            "x-access-token": token,
-            "Content-Type": "application/json",
-          },
-        },
-      });
-      if (!response.ok) {
-        throw response;
-      }
+      //   const response = await fetchFunction({
+      //     url: "http://localhost:8081/equipments",
+      //     options: {
+      //       method: "POST",
+      //       body: JSON.stringify(equipmentData),
+      //       headers: {
+      //         "x-access-token": token,
+      //         "Content-Type": "application/json",
+      //       },
+      //     },
+      //   });
+      //   if (!response.ok) {
+      //     throw response;
+      //   }
     },
     onSuccess: () => {
-      window.location.reload();
+      //   window.location.reload();
     },
     onError: (error) => {
       if (typeof error === "string") {
@@ -51,8 +51,6 @@ export default function AddEquipmentModal({ onClose }) {
       }
     },
   });
-  console.log(error);
-
   function submitForm(e) {
     e.preventDefault();
     const fd = new FormData(e.target);
@@ -119,36 +117,46 @@ export default function AddEquipmentModal({ onClose }) {
         </div>
         <div className="mt-10">
           <Input
+            defaultValue={(data && data.name) ?? ""}
             name="equipment-name"
             label="Equipment Name"
             placeholder="Enter Equipment Name"
             type="text"
           />
           <TextAreaInput
+            defaultValue={(data && data.description) ?? ""}
             name="equipment-description"
             label="Equipment Description"
           />
-          <PriceInput name="equipment-price" />
+          <PriceInput
+            name="equipment-price"
+            defaultValue={(data && data.price) ?? ""}
+          />
           <Input
+            defaultValue={(data && data.quantity) ?? ""}
             label="Available Quantity"
             placeholder="Enter Equipment's Available Quantity"
             type="number"
             name="equipment-available-quantity"
           />
           <Input
+            defaultValue={(data && data.quantity) ?? ""}
             label="Max Quantity"
             placeholder="Enter Equipment's Max Quantity"
             type="number"
             name="equipment-max-quantity"
           />
-          <CategorySelect name="equipment-category" />
+          <CategorySelect
+            name="equipment-category"
+            selectedField={data && data.category}
+          />
           <button type="submit" className="hidden" ref={submitButtonRef} />
         </div>
       </Form>
       {isError && error && error.data && (
         <div className="px-4 bg-white">
-        {  Object.entries(error.data).map(([key, value]) => (
-          <ErrorMessage key={key} title={key} message={value} />
+          {Object.entries(error.data).map(([key, value]) => (
+            <ErrorMessage key={key} title={key} message={value} />
           ))}
         </div>
       )}
@@ -167,7 +175,7 @@ export default function AddEquipmentModal({ onClose }) {
             }
           }}
         >
-          {isLoading ? "Loading..." : "Add Equipment"}
+          {isLoading ? "Loading..." : "Edit Equipment"}
         </button>
         <button
           disabled={isLoading}

@@ -3,7 +3,7 @@ const getCurrentDateTime = require("../../utils/getCurrentDateTime.js");
 
 const createEquipment = async(req, res) => {
     try {
-        const { name, description, max_quantity, category, availableQuantity, image } = req.body;
+        const { name, description, price, max_quantity, category, availableQuantity, image } = req.body;
         console.log(req.body)
         let errors = {};
 
@@ -25,6 +25,9 @@ const createEquipment = async(req, res) => {
         if (!availableQuantity) {
             errors.availableQuantity = "No provided available quantity.";
         }
+        if (!price) {
+            errors.price = "No provided price.";
+        }
         // if (!image) {
         //     errors.image = "No provided image.";
         // }
@@ -33,8 +36,8 @@ const createEquipment = async(req, res) => {
             return res.status(400).json(errors);
         }
 
-        const sql = "INSERT INTO equipment(name, description, max_quantity, created_at, availableQuantity, image, category) VALUES(?, ?, ?, ?, ?, ?, ?)";
-        const values = [name, description, max_quantity, getCurrentDateTime(), availableQuantity, image, category];
+        const sql = "INSERT INTO equipment(name, description, max_quantity, created_at, availableQuantity, image, category,price) VALUES(?, ?, ?, ?, ?, ?, ?,?)";
+        const values = [name, description, max_quantity, getCurrentDateTime(), availableQuantity, image, category, price];
         await pool.query(sql, values);
 
         return res.status(201).json({ message: "Equipment created successfully" });
