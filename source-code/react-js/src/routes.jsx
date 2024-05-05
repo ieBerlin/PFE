@@ -42,7 +42,9 @@ import BookEquipmentPage, {
   loader as bookEquipmentLoader,
 } from "./pages/equipments/BookEquipmentPage.jsx";
 import BookClassPage from "./pages/classes/BookClassPage.jsx";
-import ClassDetailsPage from "./pages/classes/ClassDetailsPage.jsx";
+import ClassDetailsPage, {
+  loader as classDetailsPage,
+} from "./pages/classes/ClassDetailsPage.jsx";
 import EditClassPage from "./pages/classes/EditClassPage.jsx";
 import CreateClassPage, {
   action as createClassAction,
@@ -120,6 +122,7 @@ const router = createBrowserRouter([
               {
                 index: true,
                 element: <ClassDetailsPage />,
+                loader: classDetailsPage,
               },
               {
                 path: "edit",

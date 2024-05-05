@@ -60,14 +60,15 @@ export const filterUsers = (users, selectedUsers) => {
     return users.filter(user => {
         // Check if the user's role is selected
         const isRoleSelected = Object.entries(selectedUsers.userRole)
-            .every(([role, isSelected]) => isSelected || user.role.toLowerCase() !== role);
+            .every(([userRole, isSelected]) => isSelected || user.role.toLowerCase() !== userRole);
 
         // Check if the user's status is selected
         const isStatusSelected = Object.entries(selectedUsers.status)
             .every(([status, isSelected]) => isSelected || user.status.toLowerCase() !== status);
 
         // Return true only if both role and status are selected
-        return isRoleSelected && isStatusSelected;
+        return isRoleSelected &&
+            isStatusSelected;
     });
 };
 export const dummy_reports_users = {

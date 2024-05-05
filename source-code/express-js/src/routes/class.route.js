@@ -10,8 +10,8 @@ const verifyToken = require("../middlewares/auth/authJWT.js");
 const authAdminOrManager = require("../middlewares/auth/authAdminOrManager.js");
 const authUserRole = require('../middlewares/auth/authUserRole.js');
 
-router.get("/", verifyToken, authUserRole, getAllClasses);
-router.get("/:classId", verifyToken, authUserRole, getSingleClass);
+router.get("/", verifyToken, getAllClasses);
+router.get("/:classId", verifyToken, getSingleClass);
 router.post("/", verifyToken, authAdminOrManager, createClass);
 router.put("/:classId", verifyToken, authAdminOrManager, updateClass);
 router.delete("/:classId", verifyToken, authAdminOrManager, deleteClass);

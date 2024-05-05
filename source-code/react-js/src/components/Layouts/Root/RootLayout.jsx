@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLoaderData } from "react-router-dom";
+import { json, Outlet, useLoaderData } from "react-router-dom";
 import MainNavigation from "../../MainNavigation/MainNavigation";
 import { changeUserRole } from "../../../features/userRole/userRoleSlice";
 import classes from "./RootLayout.module.css";
 import { useEffect } from "react";
+import { fetchFunction } from "../../../hooks/http";
 
 export default function RootLayout() {
   const dispatch = useDispatch();
@@ -16,7 +17,9 @@ export default function RootLayout() {
       dispatch(changeUserRole(loaderData));
     }
   }, [loaderData, dispatch]);
-
+  if (loaderData && loaderData.status === 403) {
+    return;
+  }
   // Calculate main content padding based on sidebar open/closed state
   const mainContentPadding = `60px 0 0 ${isOpen ? "250px" : "78px"}`;
 
@@ -29,43 +32,43 @@ export default function RootLayout() {
 }
 
 export async function loader() {
-  try {
-    const data = await fetchUserRole();
+  const data = await fetchUserRole();
 
-    if (!data || !data.userRole || !["admin", "member", "coach"].includes(data.userRole)) {
-      throw new Error("Invalid user role");
-    }
-
-    return data.userRole;
-  } catch (error) {
-    console.error("Error fetching user role:", error.message);
-    throw new Error("Unauthorized");
+  if (
+    !data ||
+    !data.userRole ||
+    !["admin", "member", "coach"].includes(data.userRole)
+  ) {
+    return json({ status: 403 });
   }
+
+  return data.userRole;
 }
 
 async function fetchUserRole() {
   const token = localStorage.getItem("user-token");
 
   if (!token) {
-    throw new Error("User token not found");
+    return json({ status: 403 });
   }
 
   try {
-    const response = await fetch("http://localhost:8081/user/auth/user-role", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
+    const response = await fetchFunction({
+      url: "http://localhost:8081/user/auth/user-role",
+      options: {
+        method: "POST",
+        headers: {
+          "x-access-token": token,
+        },
       },
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch user role");
+    if (!response.status > 399) {
+      return json({ status: response.status });
     }
-
-    return response.json();
+    return response.data
   } catch (error) {
     console.error("Error fetching user role:", error.message);
-    throw new Error("Failed to fetch user role");
+    return json({ status: 403 });
   }
 }

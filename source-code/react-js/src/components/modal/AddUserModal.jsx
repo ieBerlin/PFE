@@ -21,6 +21,7 @@ export default function AddUserModal() {
   const dispatch = useDispatch();
   const isAdmin = useSelector((state) => state.userRole.userRole === "admin");
   const { state, data, Form } = useFetcher();
+  console.log(data)
   if (data && data.success) {
     window.location.reload();
   }

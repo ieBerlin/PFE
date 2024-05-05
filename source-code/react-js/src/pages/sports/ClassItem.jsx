@@ -49,11 +49,11 @@ export default function ClassItem({
       <div className={classesStyles.classItemDetails}>
         <p className={classesStyles.itemTitle}>{title}</p>
         <div className="flex flex-row justify-between items-center my-2 gap-1 text-center">
-          <div className="flex flex-row items-center gap-2 justify-center bg-gray-200 p-2 rounded-md">
+          <div className="flex flex-row items-center gap-2 justify-center bg-gray-200 p-2 rounded-md w-full whitespace-nowrap">
             <CalendarIcon className="w-5 h-5 text-gray-600" />
             <p className="text-gray-600 text-sm">{date}</p>
           </div>
-          <div className="flex flex-row items-center gap-2 justify-center bg-gray-200 p-2 rounded-md">
+          <div className="flex flex-row items-center gap-2 justify-center bg-gray-200 p-2 rounded-md w-full whitespace-nowrap">
             <ClockIcon className="w-5 h-5 text-gray-600" />
             <p className="text-gray-600 text-sm">{time}</p>
           </div>

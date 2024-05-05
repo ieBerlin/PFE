@@ -68,7 +68,7 @@ const validateSignUpInputs = ({
         errors.gender = "Please provide a valid gender.";
     }
 
-    if (!role || (role.toLowerCase() !== 'member' && role.toLowerCase() !== 'coach')) {
+    if (!role || (role.toLowerCase() !== 'member' && role.toLowerCase() !== 'coach' && role.toLowerCase() !== 'admin')) {
         errors.role = "Please select a valid role (Member or Coach).";
     }
 

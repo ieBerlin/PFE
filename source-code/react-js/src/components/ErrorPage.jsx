@@ -3,6 +3,7 @@ import NotFoundPage from "../components/NotFoundPage.jsx";
 import ForbiddenPage from "./ForbiddenPage.jsx"
 export default function ErrorPage() {
   const error = useRouteError();
+  console.log(error)
   if (error.status === 404) {
     return <NotFoundPage />;
   }

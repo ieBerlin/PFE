@@ -82,8 +82,25 @@ export const usePost = (initialFunction, onSuccess = () => {}, onError = () => {
 
 export async function fetchFunction({ url, options }) {
     const response = await fetch(url, options);
-    return { status: response.status, ...await response.json() };
+    const data = await response.json()
+    return { status: response.status, data };
 }
 export function getToken() {
-    return localStorage.getItem('user-token') || null;
+    return localStorage.getItem('user-token');
+}
+export async function processSignUpForm(formData) {
+    const fd = Object.fromEntries(formData.entries());
+
+    return {
+        email: fd.email,
+        password: fd.password,
+        username: fd.username,
+        phoneNumber: fd["phone-number"],
+        dateOfBirth: fd["birthday-date"],
+        firstName: fd["first-name"],
+        lastName: fd["last-name"],
+        address: fd.address,
+        gender: fd.gender,
+        role: fd["user-role"],
+    };
 }

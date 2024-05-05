@@ -6,7 +6,6 @@ const fetchUserBasicInformations = async(req, res) => {
     console.log('Hello World!')
     try {
         const { userEmail } = req;
-        console.log(userEmail)
         const sql = 'SELECT username, first_name FROM users WHERE email = ?';
         const [result] = await pool.query(sql, [userEmail]);
 

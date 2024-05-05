@@ -13,11 +13,12 @@ const selectedClasses = {
 };
 export default function ClassesList({ data }) {
   const isAdmin =
-    useSelector((state) => state.userRole.userRole).toLowerCase() === "admin";
+    useSelector((state) =>
+      (state.userRole?.userRole ?? "").trim().toLowerCase()
+    ) === "admin";
   const [currentSelectedClasses, setCurrentSelectedClasses] =
     useState(selectedClasses);
   const fiteredClasses = filterClasses(data, currentSelectedClasses);
-  console.log(fiteredClasses);
   return (
     <>
       <div className="flex flex-row w-full px-4 pt-2 mt-2 justify-between items-center ">
@@ -66,16 +67,16 @@ function ClassesItems({ classes }) {
   }
   return classes.map((classItem) => (
     <ClassItem
-      key={classItem.id}
-      id={classItem.id}
-      title={classItem.title}
+      key={classItem.classId}
+      id={classItem.classId}
+      title={classItem.name}
       description={classItem.description}
-      coachName={classItem.coachName}
-      coachEmail={classItem.coachEmail}
+      coachName={classItem.instructor_name}
+      coachEmail={classItem.instructor_email}
       date={classItem.date}
       time={classItem.time}
-      totalMembers={classItem.totalMembers}
-      classCategory={classItem.classCategory}
+      totalMembers={classItem.maximum_capacity}
+      classCategory={classItem.category}
     />
   ));
 }

@@ -3,16 +3,25 @@ import { setModalType } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
 
 export default function ConfirmModal({
-  color="blue",
+  color = "blue",
   title,
   description,
   confirmButtonLabel = "Go Back",
+  onConfirm,
 }) {
   const iconColorClass = `text-${color}-600`;
   const iconBgClass = `bg-${color}-100`;
   const buttonBgClass = `bg-${color}-500`;
   const buttonHoverBgClass = `hover:bg-${color}-600`;
   const dispatch = useDispatch();
+
+  function handleConfirmClick() {
+    if (onConfirm) {
+      onConfirm();
+    } else {
+      dispatch(setModalType());
+    }
+  }
   return (
     <div className="bg-white px-4 pb-4 pt-5 ">
       <div className="flex flex-col w-full h-full items-center justify-center px-4">
@@ -24,7 +33,7 @@ export default function ConfirmModal({
         <p className="text-center text-sm text-slate-500">{description}</p>
 
         <button
-          onClick={() => dispatch(setModalType())}
+          onClick={handleConfirmClick}
           className={`mt-4 ${buttonBgClass} text-white font-semibold rounded-md px-32 py-1 ${buttonHoverBgClass}`}
         >
           {confirmButtonLabel}

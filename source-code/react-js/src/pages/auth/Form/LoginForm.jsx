@@ -3,9 +3,10 @@ import isValidPassword from "../../../utils/validation/passwordValidation.js";
 import FormInput from "./FormInput.jsx";
 import PasswordFormInput from "./PasswordFormInput";
 import classes from "../Login/Login.module.css";
-import { useFetcher, useNavigate } from "react-router-dom";
 import { UserIcon } from "@heroicons/react/24/solid";
+import { useFetcher, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+
 export default function LoginForm() {
   const navigate = useNavigate();
   const { Form, data, state } = useFetcher({
@@ -17,10 +18,12 @@ export default function LoginForm() {
       navigate("/dashboard");
     }
   }, [data, navigate]);
+
   const isSubmitting = state === "submitting";
   const submitButtonStyles = isSubmitting
     ? classes.submittingLoginButton
     : classes.loginButton;
+
   return (
     <Form method="POST" className="flex w-full flex-col px-24">
       <FormInput

@@ -22,6 +22,8 @@ export default function AllNotifications() {
   );
 }
 export async function loader() {
+  console.log("loader");
+
   try {
     const response = await fetch(
       "http://localhost:8081/notification/get-all-notifications",

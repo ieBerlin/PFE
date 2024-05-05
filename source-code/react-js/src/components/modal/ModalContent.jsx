@@ -10,6 +10,7 @@ import RechargeUserMembership from "./RechargeUserMembership.jsx";
 import NotifyMembershipEnd from "./NotifyMembershipEnd.jsx";
 import SendCustomMessage from "./SendCustomMessage.jsx";
 import AddEquipmentModal from "./AddEquipmentModal.jsx";
+import { useNavigate } from "react-router-dom";
 export default function ModalContent({ remainingDay, imageSrc }) {
   const dispatch = useDispatch();
   const type = useSelector((state) => state.modal.type);
@@ -20,6 +21,14 @@ export default function ModalContent({ remainingDay, imageSrc }) {
   function onClose() {
     dispatch(setModalType());
   }
+  const navigate = useNavigate();
+  function handleConfirmSignOut() {
+    console.log('CLicked')
+    onClose();
+    localStorage.removeItem("user-token");
+    navigate("/auth");
+  }
+
   if (type === "create-user") {
     modalContent = (
       <AddUserModal
@@ -68,6 +77,7 @@ export default function ModalContent({ remainingDay, imageSrc }) {
         title="Are You Sure You Want to Sign Out?"
         description="Are you sure you want to sign out of your account? Click 'Confirm' to sign out."
         confirmButtonLabel="Sign Out"
+        onConfirm={handleConfirmSignOut}
       />
     );
   } else if (type === "view-certification") {

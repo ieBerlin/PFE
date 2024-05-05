@@ -1,0 +1,7 @@
+const express = require("express");
+const verifyToken = require("../middlewares/auth/authJWT");
+const getAllPayments = require('../controllers/payments/getAllPayments.js')
+const router = express.Router();
+router.get("/", verifyToken, getAllPayments);
+
+module.exports = router;

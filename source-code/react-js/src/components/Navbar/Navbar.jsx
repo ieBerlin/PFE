@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { json, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import NotificationBell from "./NotificationBell/NotificationBell.jsx";
 import ProfileDropdownMenu from "./ProfileDropdownMenu/ProfileDropDownMenu.jsx";
@@ -11,11 +10,10 @@ import avatar from "/kilter.jpg";
 const token = getToken();
 
 function Navbar({ width }) {
-  const { data, isError } = useQuery({
+  const { data, isError, error } = useQuery({
     queryKey: ["user"],
     queryFn: () => fetchUserCredentials(),
   });
-console.log(data)
   const greetingMessage =
     new Date().getHours() > 12 ? "Good evening" : "Good morning";
   return (
@@ -43,6 +41,9 @@ export default Navbar;
 
 async function fetchUserCredentials() {
   try {
+    if (!token) {
+      throw json({ status: 403 });
+    }
     const response = await fetch(
       "http://localhost:8081/user/auth/user-basic-informations",
       {
@@ -55,13 +56,18 @@ async function fetchUserCredentials() {
     );
 
     if (!response.ok) {
-      throw new Error("Couldn't fetch user credentials.");
+      throw json({
+        message: "Couldn't fetch user crendetiansl",
+        status: response.status,
+      });
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching user credentials:", error.message);
-    throw error;
+    throw json({
+      message: "Couldn't fetch user crendetiansl",
+      status: 400,
+    });
   }
 }

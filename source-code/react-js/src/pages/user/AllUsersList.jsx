@@ -92,7 +92,7 @@ export default function AllUsersList({ users }) {
           }
           return (
             <div
-              key={user.id}
+              key={user.username}
               className="mt-4 bg-white grid grid-cols-4 items-center px-6 py-2 shadow-md"
             >
               {user.role.toLowerCase() === "coach" ||
@@ -107,7 +107,7 @@ export default function AllUsersList({ users }) {
                     alt=""
                   />
                   <div className="flex flex-col">
-                    <h1 className="font-semibold">{user.name}</h1>
+                    <h1 className="font-semibold">{`${user.first_name} ${user.last_name}`}</h1>
                     <p className="text-stone-500 text-sm w-30 truncate">
                       {user.email}
                     </p>

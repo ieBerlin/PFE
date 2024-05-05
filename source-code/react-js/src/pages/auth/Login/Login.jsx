@@ -6,6 +6,8 @@ import { json, Link } from "react-router-dom";
 import { setModalType } from "../../../features/modal/modalSlice.js";
 import Modal from "../../../components/modal/Modal.jsx";
 import { useDispatch } from "react-redux";
+import { processSignUpForm } from "../../../hooks/http.js";
+
 export default function LoginPage() {
   const dispatch = useDispatch();
   function handleEnrollNowClick() {
@@ -139,23 +141,6 @@ export async function action({ request }) {
       message: error.message || "Bad Request",
     });
   }
-}
-
-async function processSignUpForm(formData) {
-  const fd = Object.fromEntries(formData.entries());
-
-  return {
-    email: fd.email,
-    password: fd.password,
-    username: fd.username,
-    phoneNumber: fd["phone-number"],
-    dateOfBirth: fd["birthday-date"],
-    firstName: fd["first-name"],
-    lastName: fd["last-name"],
-    address: fd.address,
-    gender: fd.gender,
-    role: fd["user-role"],
-  };
 }
 
 function processLoginForm(formData) {

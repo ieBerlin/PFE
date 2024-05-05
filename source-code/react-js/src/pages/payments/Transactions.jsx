@@ -53,7 +53,7 @@ export default function Transactions({ transactionsData }) {
       ) : (
         filteredTransactions.map((transaction) => (
           <div
-            key={`transaction-${transaction.id}`}
+            key={`${transaction.paymentId}`}
             className="grid grid-cols-2 mt-3 transition-opacity duration-300"
           >
             <div className="flex items-center">
@@ -82,7 +82,7 @@ export default function Transactions({ transactionsData }) {
                   {transaction.title}
                 </h1>
                 <p className="text-sm text-stone-500 font-semibold">
-                  {transaction.date}
+                  {transaction.paymentDate}
                 </p>
               </div>
             </div>
@@ -104,7 +104,7 @@ export default function Transactions({ transactionsData }) {
                     : "text-red-500"
                 } font-bold`}
               >
-                {transaction.amount}
+                ${transaction.amount}
               </h1>
             </div>
           </div>
