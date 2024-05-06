@@ -60,7 +60,7 @@ export async function loader() {
 
   return defer({
     data: await fetchFunction({
-      url: "http://localhost:8081/payments",
+      url: "http://localhost:8081/transactions",
       options: {
         method: "GET",
         headers: {

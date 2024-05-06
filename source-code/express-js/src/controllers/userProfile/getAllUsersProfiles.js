@@ -7,7 +7,9 @@ const getAllUsersProfiles = async(req, res) => {
 
         // Check if the user profile exists
         if (result.length > 0) {
-            return res.status(200).json(result); // Return the user profile data
+            setTimeout(() => {
+                return res.status(200).json(result); // Return the user profile data
+            }, 750)
         } else {
             return res.status(404).json({ message: 'User profiles not found.' });
         }

@@ -6,7 +6,7 @@ import Input from "../Input";
 import TextAreaInput from "../TextAreaInput";
 import PriceInput from "../PriceInput";
 import ErrorMessage from "../ErrorMessage";
-import CategorySelect from "../CategorySelect";
+import SelectInput from "../SelectInput";
 import { fetchFunction, getToken } from "../../hooks/http.js";
 import { Form, json } from "react-router-dom";
 
@@ -141,14 +141,18 @@ export default function AddEquipmentModal({ onClose }) {
             type="number"
             name="equipment-max-quantity"
           />
-          <CategorySelect name="equipment-category" />
+          <SelectInput
+            label="Category"
+            data={categories}
+            name="equipment-category"
+          />
           <button type="submit" className="hidden" ref={submitButtonRef} />
         </div>
       </Form>
       {isError && error && error.data && (
         <div className="px-4 bg-white">
-        {  Object.entries(error.data).map(([key, value]) => (
-          <ErrorMessage key={key} title={key} message={value} />
+          {Object.entries(error.data).map(([key, value]) => (
+            <ErrorMessage key={key} title={key} message={value} />
           ))}
         </div>
       )}
@@ -183,3 +187,9 @@ export default function AddEquipmentModal({ onClose }) {
     </div>
   );
 }
+export const categories = [
+  { value: "kickboxing", label: "Kickboxing" },
+  { value: "fitness", label: "Fitness" },
+  { value: "cardio", label: "Cardio" },
+  { value: "bodybuilding", label: "Bodybuilding" },
+];

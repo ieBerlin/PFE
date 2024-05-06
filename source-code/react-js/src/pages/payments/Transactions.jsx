@@ -51,64 +51,73 @@ export default function Transactions({ transactionsData }) {
           Nothing to show
         </p>
       ) : (
-        filteredTransactions.map((transaction) => (
-          <div
-            key={`${transaction.paymentId}`}
-            className="grid grid-cols-2 mt-3 transition-opacity duration-300"
-          >
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="3"
-                stroke="currentColor"
-                className={`w-10 h-10 ${
-                  transaction.type === "income" ? "bg-green-300" : "bg-red-300"
-                } p-2 rounded-xl ${
-                  transaction.type === "income"
-                    ? "text-green-700"
-                    : "text-red-700"
-                }`}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.25 6.75 12 3m0 0 3.75 3.75M12 3v18"
-                />
-              </svg>
-              <div className="pl-4">
-                <h1 className="text-blue text-lg font-semibold">
-                  {transaction.title}
+        filteredTransactions.map((transaction) => {
+          const formattedDate = new Date(
+            `${transaction.transactionDate}`
+          ).toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
+          return (
+            <div
+              key={`${transaction.transactionId}`}
+              className="grid grid-cols-2 mt-3 transition-opacity duration-300"
+            >
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="3"
+                  stroke="currentColor"
+                  className={`w-10 h-10 ${
+                    transaction.paymentType === "income"
+                      ? "bg-green-300"
+                      : "bg-red-300"
+                  } p-2 rounded-xl ${
+                    transaction.paymentType === "income"
+                      ? "text-green-700"
+                      : "text-red-700"
+                  }`}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 6.75 12 3m0 0 3.75 3.75M12 3v18"
+                  />
+                </svg>
+                <div className="pl-4">
+                  <h1 className="text-blue text-lg font-semibold">
+                    {transaction.transactionType}
+                  </h1>
+                  <p className="text-sm text-stone-500 font-semibold">
+                    {formattedDate}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-column justify-between items-center">
+                <div className="flex items-center gap-5">
+                  <img
+                    className="w-14 h-14 fill object-cover rounded-full"
+                    src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
+                    alt=""
+                  />
+                  <h1 className="text-sm font-semibold">{transaction.email}</h1>
+                </div>
+                <h1
+                  className={`text-2xl ${
+                    transaction.paymentType === "income"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  } font-bold`}
+                >
+                  ${transaction.price}
                 </h1>
-                <p className="text-sm text-stone-500 font-semibold">
-                  {transaction.paymentDate}
-                </p>
               </div>
             </div>
-            <div className="flex flex-column justify-between items-center">
-              <div className="flex items-center gap-5">
-                <img
-                  className="w-14 h-14 fill object-cover rounded-full"
-                  src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
-                  alt=""
-                />
-                <h1 className="text-sm font-semibold">
-                  {transaction.username}
-                </h1>
-              </div>
-              <h1
-                className={`text-2xl ${
-                  transaction.type === "income"
-                    ? "text-green-500"
-                    : "text-red-500"
-                } font-bold`}
-              >
-                ${transaction.amount}
-              </h1>
-            </div>
-          </div>
-        ))
+          );
+        })
       )}
     </section>
   );
@@ -120,9 +129,9 @@ const filterTransactions = (transactions, selectedOptions) => {
     if (income && expense) {
       return true;
     } else if (income) {
-      return transaction.type === "income";
+      return transaction.paymentType === "income";
     } else if (expense) {
-      return transaction.type === "expense";
+      return transaction.paymentType === "expense";
     } else {
       return false;
     }

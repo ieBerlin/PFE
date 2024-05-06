@@ -20,7 +20,7 @@ const getUserProfileDependOnEmail = async(req, res) => {
             const userProfile = result[0]; // Extract user profile data
             setTimeout(() => {
                 return res.status(200).json(userProfile);
-            }, 1500);
+            }, 0);
         } else {
             return res.status(404).json({ message: 'User profile not found for the provided email' });
         }

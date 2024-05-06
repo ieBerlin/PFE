@@ -1,25 +1,32 @@
 import { Suspense } from "react";
 import { DUMMY_EQUIPMENTS } from "../../dummy_data/dummy_equipments";
 import FallbackText from "../../components/FallbackText.jsx";
-import { Await, defer, useRouteLoaderData } from "react-router-dom";
+import { Await, defer, json, useRouteLoaderData } from "react-router-dom";
 import EquipmentsList from "./EquipmentsList";
+import { fetchFunction, getToken } from "../../hooks/http.js";
 
 export default function EquipmentsPage() {
-  const { timeOut: timeOutLoader } = useRouteLoaderData("equipments-page-id");
+  const equipmentsLoader = useRouteLoaderData("equipments-page-id");
   return (
     <Suspense fallback={<FallbackText title="Fetching available equipments" />}>
-      <Await resolve={timeOutLoader}>
-        {(resolvedData) => {
-          return <EquipmentsList data={resolvedData} />;
-        }}
+      <Await resolve={equipmentsLoader}>
+        {(resolvedData) => <EquipmentsList data={resolvedData.data} />}
       </Await>
     </Suspense>
   );
 }
 
 export function loader() {
-  return defer({
-    timeOut: timeOut(),
+  const token = getToken();
+  if (!token) {
+    return json({ status: 403, success: false });
+  }
+  return fetchFunction({
+    url: "http://localhost:8081/equipments",
+    options: {
+      method: "GET",
+      headers: { "x-access-token": token },
+    },
   });
 }
 
@@ -31,6 +38,6 @@ function timeOut() {
   });
 }
 export async function action() {
- await timeOut()
+  await timeOut();
   return null;
 }

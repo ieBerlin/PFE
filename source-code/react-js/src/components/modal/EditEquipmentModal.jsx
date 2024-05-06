@@ -6,16 +6,18 @@ import Input from "../Input";
 import TextAreaInput from "../TextAreaInput";
 import PriceInput from "../PriceInput";
 import ErrorMessage from "../ErrorMessage";
-import CategorySelect from "../CategorySelect";
-import { getToken } from "../../hooks/http.js";
+import SelectInput from "../SelectInput";
+import { fetchFunction, getToken } from "../../hooks/http.js";
 import { Form, json } from "react-router-dom";
+import { categories } from "./AddEquipmentModal.jsx";
 
 export default function EditEquipmentModal({ onClose, equipmentData: data }) {
+  console.log(data);
   const submitButtonRef = useRef();
   const [previewImageSrc, setPreviewImageSrc] = useState(defaultEquipmentImage);
   const imageInputRef = useRef();
 
-  const { isLoading, isError, error, mutate } = useMutation({
+  const { isPending, isError, error, mutate } = useMutation({
     mutationKey: ["equipments"],
     mutationFn: async (equipmentData) => {
       const token = getToken();
@@ -23,23 +25,24 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
         return json({ status: 403 });
       }
 
-      //   const response = await fetchFunction({
-      //     url: "http://localhost:8081/equipments",
-      //     options: {
-      //       method: "POST",
-      //       body: JSON.stringify(equipmentData),
-      //       headers: {
-      //         "x-access-token": token,
-      //         "Content-Type": "application/json",
-      //       },
-      //     },
-      //   });
-      //   if (!response.ok) {
-      //     throw response;
-      //   }
+      const response = await fetchFunction({
+        url: `${"http://localhost:8081/equipments/" + data.id}`,
+        options: {
+          method: "PUT",
+          body: JSON.stringify(equipmentData),
+          headers: {
+            "x-access-token": token,
+            "Content-Type": "application/json",
+          },
+        },
+      });
+      if (response.status > 399) {
+        throw response;
+      }
     },
     onSuccess: () => {
-      //   window.location.reload();
+      onClose();
+      window.location.reload();
     },
     onError: (error) => {
       if (typeof error === "string") {
@@ -133,20 +136,21 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
             defaultValue={(data && data.price) ?? ""}
           />
           <Input
-            defaultValue={(data && data.quantity) ?? ""}
+            defaultValue={(data && data.availableQuantity) ?? ""}
             label="Available Quantity"
             placeholder="Enter Equipment's Available Quantity"
             type="number"
             name="equipment-available-quantity"
           />
           <Input
-            defaultValue={(data && data.quantity) ?? ""}
+            defaultValue={(data && data.max_quantity) ?? ""}
             label="Max Quantity"
             placeholder="Enter Equipment's Max Quantity"
             type="number"
             name="equipment-max-quantity"
           />
-          <CategorySelect
+          <SelectInput
+            data={categories}
             name="equipment-category"
             selectedField={data && data.category}
           />
@@ -162,12 +166,12 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
       )}
       <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
         <button
-          disabled={isLoading}
+          disabled={isPending}
           type="button"
           className={`${
-            isLoading ? "bg-gray-200 text-gray-500" : "bg-blue-600 text-white"
+            isPending ? "bg-gray-200 text-gray-500" : "bg-blue-600 text-white"
           } outline-none inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${
-            !isLoading && "hover:bg-blue-500"
+            !isPending && "hover:bg-blue-500"
           } sm:ml-3 sm:w-auto`}
           onClick={() => {
             if (submitButtonRef.current) {
@@ -175,13 +179,13 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
             }
           }}
         >
-          {isLoading ? "Loading..." : "Edit Equipment"}
+          {isPending ? "Loading..." : "Edit Equipment"}
         </button>
         <button
-          disabled={isLoading}
+          disabled={isPending}
           type="button"
           className={`outline-none mt-3 inline-flex w-full justify-center rounded-md ${
-            isLoading ? "bg-gray-100 text-gray-400" : "bg-white text-gray-900"
+            isPending ? "bg-gray-100 text-gray-400" : "bg-white text-gray-900"
           } px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
           onClick={onClose}
         >

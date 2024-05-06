@@ -1,6 +1,7 @@
 import { Suspense, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { Await } from "react-router-dom";
+import { Await, json } from "react-router-dom";
+import { fetchFunction, getToken } from "../../../hooks/http";
 
 export default function RelatedUserField({ label, userType }) {
   const searchInputRef = useRef();
@@ -61,7 +62,7 @@ export default function RelatedUserField({ label, userType }) {
             </h3>
           }
         >
-          <Await resolve={timeOut(searchInputValue, userType)}>
+          <Await resolve={usersLoader(searchInputValue, userType)}>
             {(resolvedData) => (
               <div className="pl-3">
                 <div className="flex flex-row justify-between items-center mt-3">
@@ -81,6 +82,7 @@ export default function RelatedUserField({ label, userType }) {
                       <li key={user.email}>
                         <div className="flex gap-2 items-center hover:bg-gray-100 cursor-pointer">
                           <input
+                            value={user.email}
                             type="radio"
                             name="related-user"
                             className="cursor"
@@ -112,71 +114,30 @@ export default function RelatedUserField({ label, userType }) {
   );
 }
 
-function timeOut(searchInputValue, userType) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (!userType) {
-        resolve(filterUsers(searchInputValue));
-      } else {
-        resolve(filterUsers(searchInputValue, userType));
-      }
-    }, 2000);
+async function usersLoader(searchInputValue, userType) {
+  const token = getToken();
+  if (!token) {
+    return json({ status: 403 });
+  }
+  const response = await fetchFunction({
+    url: "http://localhost:8081/user/profile/all-users",
+    options: {
+      method: "GET",
+      headers: {
+        "x-access-token": token,
+      },
+    },
   });
+  const data = response.data;
+  if (!userType) {
+    return filterUsers(data, searchInputValue);
+  } else {
+    return filterUsers(data, searchInputValue, userType);
+  }
 }
 
-function filterUsers(inputVal) {
-  return dummy_users.filter((user) =>
+function filterUsers(users, inputVal) {
+  return users.filter((user) =>
     user.email.toLowerCase().includes(inputVal.trim().toLowerCase())
   );
 }
-const dummy_users = [
-  {
-    fullName: "John Doe",
-    userType: "coach",
-    email: "john.doe@example.com",
-    imageSrc:
-      "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
-  },
-  {
-    fullName: "Jane Smith",
-    userType: "admin",
-    email: "jane.smith@example.com",
-    imageSrc:
-      "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
-  },
-  {
-    fullName: "Michael Johnson",
-    userType: "member",
-    email: "michael.johnson@example.com",
-    imageSrc:
-      "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
-  },
-  {
-    fullName: "Emily Davis",
-    userType: "coach",
-    email: "emily.davis@example.com",
-    imageSrc:
-      "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
-  },
-  {
-    fullName: "Christopher Wilson",
-    userType: "member",
-    email: "christopher.wilson@example.com",
-    imageSrc:
-      "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
-  },
-  {
-    fullName: "Jessica Martinez",
-    userType: "coach",
-    email: "jessica.martinez@example.com",
-    imageSrc:
-      "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
-  },
-  {
-    fullName: "Daniel Anderson",
-    userType: "member",
-    email: "daniel.anderson@example.com",
-    imageSrc:
-      "https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg",
-  },
-];

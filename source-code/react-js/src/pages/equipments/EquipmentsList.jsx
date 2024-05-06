@@ -16,11 +16,12 @@ const selectedEquipments = {
 };
 export default function EquipmentsList({ data }) {
   const isAdmin =
-    useSelector((state) => state.userRole.userRole).toLowerCase() === "admin";
+    useSelector((state) => state.userRole.userRole?.toLowerCase()) === "admin";
   const dispatch = useDispatch();
   const [currentSelectedEquipments, setCurrentSelectedEquipments] =
     useState(selectedEquipments);
-  const [currentSelectedEquipmentData, setCurrentSelectedEquipmentData] = useState(null);
+  const [currentSelectedEquipmentData, setCurrentSelectedEquipmentData] =
+    useState(null);
   const filteredEquipments = filterEquipements(data, currentSelectedEquipments);
   const modal = isAdmin ? (
     <Modal equipmentData={currentSelectedEquipmentData} />
@@ -76,7 +77,11 @@ export default function EquipmentsList({ data }) {
           >
             {filteredEquipments && filteredEquipments.length > 0 ? (
               filteredEquipments.map((item) => (
-                <EquipmentItem key={item.id} equipmentData={item} onEditEquipment={setCurrentSelectedEquipmentData} />
+                <EquipmentItem
+                  key={item.id}
+                  equipmentData={item}
+                  onEditEquipment={setCurrentSelectedEquipmentData}
+                />
               ))
             ) : (
               <div className="mt-4 bg-white px-6 py-4 shadow-md">
@@ -92,7 +97,7 @@ export default function EquipmentsList({ data }) {
   );
 }
 
-function EquipmentItem({ equipmentData,onEditEquipment }) {
+function EquipmentItem({ equipmentData, onEditEquipment }) {
   const { userRole } = useSelector((state) => state.userRole);
   const dispatch = useDispatch();
   return (
@@ -133,7 +138,7 @@ function EquipmentItem({ equipmentData,onEditEquipment }) {
           <h2 className="text-purple-800 font-semibold text-xl">
             ${equipmentData.price}
           </h2>
-          {userRole.toLowerCase() === "admin" ? (
+          {userRole?.toLowerCase() === "admin" ? (
             <button
               onClick={() => {
                 onEditEquipment(equipmentData);
@@ -156,10 +161,12 @@ function EquipmentItem({ equipmentData,onEditEquipment }) {
     </li>
   );
 }
-function filterEquipements(users, selectedUsers) {
-  return users.filter((user) => {
+function filterEquipements(equipments, selectedEquipments) {
+  return equipments.filter((user) => {
     // Check if the user's role is selected
-    const isCategorySelected = Object.entries(selectedUsers.category).every(
+    const isCategorySelected = Object.entries(
+      selectedEquipments.category
+    ).every(
       ([category, isSelected]) =>
         isSelected || user.category.toLowerCase() !== category
     );

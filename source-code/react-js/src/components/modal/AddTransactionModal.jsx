@@ -1,18 +1,60 @@
 import { useRef, useState } from "react";
-import { useFetcher } from "react-router-dom";
-import RelatedUserField from "./RelatedUsers";
+import RelatedUserField from "./related-user/RelatedUsers.jsx";
 import { useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import PriceInput from "../PriceInput.jsx";
 import DatePicker from "../DatePicker.jsx";
+import SelectInputComponent from "../SelectInput.jsx";
+import { fetchFunction, getToken } from "../../hooks/http.js";
+import { useMutation } from "@tanstack/react-query";
+import { Form, json } from "react-router-dom";
+import Input from "../Input.jsx";
 export default function AddTransactionModal() {
   const dispatch = useDispatch();
   const submitButtonRef = useRef();
-  const { Form, state, data } = useFetcher({ key: "payments-loader" });
-  const isSubmitting = state === "submitting";
+  const {
+    isError,
+    error,
+    isPending: isSubmitting,
+    data,
+    mutate,
+  } = useMutation({
+    mutationKey: ["transactions"],
+    mutationFn: async (transactionData) => {
+      const token = getToken();
+      if (!token) {
+        throw json({ success: false, json: 403 });
+      }
+      const response = await fetchFunction({
+        url: "http://localhost:8081/transactions",
+        options: {
+          method: "POST",
+          body:JSON.stringify(transactionData),
+          headers: {
+            "x-access-token": token,
+            'Content-Type':"application/json"
+          },
+        },
+      });
+      console.log(response.data);
+      return response;
+    },
+  });
   const submitHandler = (e) => {
-    // e.preventDefault();
-    console.log(data);
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const transactionData = {
+      relatedUser: fd.get("related-user"),
+      transactionType: fd.get("transaction-type"),
+      method: fd.get("transaction-method"),
+      price: fd.get("transaction-price"),
+      paymentType: fd.get("payment-type"),
+      status: fd.get("transaction-status"),
+      date: fd.get("transaction-date"),
+      time: fd.get("transaction-time"),
+      notes: fd.get("transaction-notes"),
+    };
+    mutate(transactionData);
   };
   return (
     <div className="px-8 pb-4 pt-5 rounded-md bg-white">
@@ -25,36 +67,51 @@ export default function AddTransactionModal() {
         <input name="payment-action" defaultValue="add-transaction" hidden />
         <RelatedUserField label="Related User" />
         <SelectInput
+          name="transaction-type"
           label="Transaction Type"
-          options={[
-            "Membership Fee",
-            "Personal Training",
-            "Session Payment",
-            "Merchandise Purchase",
-            "Other",
+          data={[
+            { value: "membership_fee", label: "Membership Fee" },
+            { value: "personal_training", label: "Personal Training" },
+            { value: "session_payment", label: "Session Payment" },
+            { value: "merchandise_purchase", label: "Merchandise Purchase" },
+            { value: "other", label: "Other" },
           ]}
           placeholder="Select transaction type"
         />
         <SelectInput
+          name="transaction-method"
           label="Transaction Method"
-          options={[
-            "Cash",
-            "Credit Card",
-            "Debit Card",
-            "Online Payment",
-            "Other",
+          data={[
+            { value: "cash", label: "Cash" },
+            { value: "credit_card", label: "Credit Card" },
+            { value: "debit_card", label: "Debit Card" },
+            { value: "online_payment", label: "Online Payment" },
+            { value: "other", label: "Other" },
           ]}
-          placeholder="Select transaction method"
+          placeholder="Select transaction Method"
         />
-        <PriceInput />
-        <PaymentType />
+        <PriceInput required name="transaction-price" />
+        <PaymentType name="payment-type" />
         <SelectInput
+          name="transaction-status"
           label="Transaction Status"
-          options={["Paid", "Pending", "Refunded", "Cancelled", "Other"]}
+          data={[
+            { value: "paid", label: "Paid" },
+            { value: "pending", label: "Pending" },
+            { value: "refunded", label: "Refunded" },
+            { value: "cancelled", label: "Cancelled" },
+            { value: "other", label: "Other" },
+          ]}
           placeholder="Select transaction status"
         />
-        <DatePicker label="Transaction Date and Time" />
-        <TransactionNotes />
+
+        <DatePicker
+          required
+          dateName="transaction-date"
+          timeName="transaction-time"
+          label="Transaction Date and Time"
+        />
+        <TransactionNotes name="transaction-notes" />
         <button type="submit" hidden ref={submitButtonRef} />
       </Form>
       <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
@@ -91,42 +148,27 @@ export default function AddTransactionModal() {
   );
 }
 
-function SelectInput({ label, options, placeholder }) {
+function SelectInput({ label, data, name, selectedField, ...props }) {
   const [isOtherSelected, setIsOtherSelected] = useState(false);
-
   const handleSelectChange = (event) => {
-    setIsOtherSelected(event.target.value === "Other");
+    setIsOtherSelected(event.target.value === "other");
   };
 
   return (
     <div>
-      <label
-        htmlFor="hs-select-label"
-        className="block text-sm font-medium mb-2 dark:text-black capitalize"
-      >
-        {label}
-      </label>
-      <select
-        id="hs-select-label"
-        className="outline-none py-3 px-4 pe-9 flex w-full border border-gray-300 rounded-lg text-sm"
-        onChange={handleSelectChange}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option, index) => (
-          <option
-            value={option.trim()}
-            className="capitalize text-black"
-            key={index}
-          >
-            {option}
-          </option>
-        ))}
-      </select>
-      <div>
+      <div className="relative">
+        <SelectInputComponent
+          label={label}
+          data={data}
+          name={!isOtherSelected && name}
+          selectedField={selectedField}
+          onChange={handleSelectChange}
+          {...props}
+        />
         {isOtherSelected && (
-          <input
-            type="text"
-            className="flex w-full py-3 px-4 border-gray-300 rounded-lg text-sm border mt-2"
+          <Input
+            name={name}
+            label="Other"
             placeholder={`Type the other ${label.toLowerCase()}`}
           />
         )}
@@ -134,8 +176,7 @@ function SelectInput({ label, options, placeholder }) {
     </div>
   );
 }
-
-function PaymentType() {
+function PaymentType({ ...props }) {
   return (
     <div>
       <label
@@ -170,7 +211,7 @@ function PaymentType() {
   );
 }
 
-function TransactionNotes() {
+function TransactionNotes({ ...props }) {
   return (
     <div>
       <label
@@ -182,9 +223,9 @@ function TransactionNotes() {
       <textarea
         type="text"
         id="hs-input-with-leading-and-trailing-icon"
-        name="hs-input-with-leading-and-trailing-icon"
         className="outline-none flex w-full  py-3 px-4 ps-9 pe-16 border border-gray-300 shadow-sm rounded-lg text-sm focus:z-10 "
         placeholder="Type transaction notes"
+        {...props}
       />
     </div>
   );

@@ -14,8 +14,8 @@ const paymentsRouter = require('./src/routes/payments.route.js')
 const notificationRouter = require("./src/routes/notification.route.js");
 const { pool } = require("./src/models/db/connect.js");
 const corsMiddleware = require("./src/middlewares/cors/corsConfig.js");
-const verifyToken = require("./src/middlewares/auth/authJWT.js");
-// Middlewares
+const transactionsRouter = require("./src/routes/transactions.route.js")
+    // Middlewares
 dotenv.config();
 app.use(express.static("./src"));
 app.use(express.json());
@@ -33,6 +33,7 @@ app.use('/class', classesRouter);
 app.use('/sport', sportsRouter);
 app.use('/notification', notificationRouter);
 app.use('/payments', paymentsRouter)
+app.use('/transactions', transactionsRouter);
 const port = process.env.PORT || 8080;
 
 // Start the server

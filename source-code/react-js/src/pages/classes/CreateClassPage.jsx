@@ -1,11 +1,12 @@
 import { useRef } from "react";
 import Input from "../../components/Input.jsx";
 import TextAreaInput from "../../components/TextAreaInput.jsx";
-import RelatedUsers from "../../components/modal/RelatedUsers.jsx";
+import RelatedUsers from "../../components/modal/related-user/RelatedUsers.jsx";
 import DatePicker from "../../components/DatePicker.jsx";
 import PriceInput from "../../components/PriceInput.jsx";
 import { Link, useFetcher } from "react-router-dom";
-import CategorySelect from "../../components/CategorySelect.jsx";
+import { categories } from "../../components/modal/AddEquipmentModal.jsx";
+import SelectInput from "../../components/SelectInput.jsx";
 
 export default function CreateClassPage() {
   const submitButtonRef = useRef();
@@ -28,7 +29,7 @@ export default function CreateClassPage() {
         <Form method="POST" className="p-2">
           <Input label="Class Name" placeholder="Enter Class Name" />
           <TextAreaInput label="Class Description" />
-          <CategorySelect />
+          <SelectInput data={categories} />
           <RelatedUsers
             label=" Who will be coaching this class?"
             userType="coach"
