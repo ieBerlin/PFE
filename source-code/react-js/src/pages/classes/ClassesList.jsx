@@ -73,8 +73,8 @@ function ClassesItems({ classes }) {
       description={classItem.description}
       coachName={classItem.instructor_name}
       coachEmail={classItem.instructor_email}
-      date={classItem.date}
-      time={classItem.time}
+      date={classItem.startDate }
+      time={classItem.startTime}
       totalMembers={classItem.maximum_capacity}
       classCategory={classItem.category}
     />
@@ -87,7 +87,7 @@ const filterClasses = (classes, selectedClasses) => {
     ).every(([classCategory, isSelected]) => {
       return (
         isSelected ||
-        classItem.classCategory.toLowerCase() !== classCategory.toLowerCase()
+        classItem.category.toLowerCase() !== classCategory.toLowerCase()
       );
     });
 

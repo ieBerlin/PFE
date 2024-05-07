@@ -2,9 +2,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import kilterImage from "/kilter.jpg";
 import classesStyles from "../../pages/classes/ClassesPage.module.css";
-import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline";
+import {
+  CalendarIcon,
+  ChevronRightIcon,
+  ClockIcon,
+} from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
-
+import { useSelector } from "react-redux";
 export default function ClassItem({
   id,
   title,
@@ -14,7 +18,7 @@ export default function ClassItem({
   date,
   time,
   totalMembers,
-  classCategory
+  classCategory,
 }) {
   const [isDropDownActive, setIsDropDownActive] = useState(false);
   const navigate = useNavigate();
@@ -31,7 +35,9 @@ export default function ClassItem({
   if (isDropDownActive) {
     instructorDropDownMenuClasses += ` ${classesStyles.active}`;
   }
-
+  const isAdmin = useSelector(
+    (state) => state.userRole.userRole?.toLowerCase() === "admin"
+  );
   return (
     <Link
       to={`/classes/${id}`}
@@ -101,14 +107,26 @@ export default function ClassItem({
             </div>
           )}
         </div>
-        <p
-          className={
-            classesStyles.classDescription +
-            " shadow-xl text-stone-800 capitalize font-medium text-center"
-          }
-        >
-          {description}
-        </p>
+        {!isAdmin ? (
+          <p
+            className={
+              classesStyles.classDescription +
+              " shadow-xl text-stone-800 capitalize font-medium text-center"
+            }
+          >
+            {description}
+          </p>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(`/classes/edit/${id}`);
+            }}
+            className="my-2 w-full flex items-center justify-center rounded-md bg-orange-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-orange-400 focus:outline-none focus:ring-4 focus:ring-orange-300"
+          >
+            Edit Equipment <ChevronRightIcon className="ml-2  h-6 w-6" />
+          </button>
+        )}
       </div>
     </Link>
   );

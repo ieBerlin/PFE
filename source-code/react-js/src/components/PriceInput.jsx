@@ -4,7 +4,7 @@ export default function PriceInput({ ...props }) {
       <div className="flex w-full flex-col">
         <label
           htmlFor="hs-select-label"
-          className="block text-sm font-medium mb-2 dark:text-black capitalize"
+          className="block text-sm font-medium my-2"
         >
           Price
         </label>

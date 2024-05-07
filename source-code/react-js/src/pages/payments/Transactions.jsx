@@ -97,14 +97,20 @@ export default function Transactions({ transactionsData }) {
                 </div>
               </div>
               <div className="flex flex-column justify-between items-center">
-                <div className="flex items-center gap-5">
-                  <img
-                    className="w-14 h-14 fill object-cover rounded-full"
-                    src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
-                    alt=""
-                  />
-                  <h1 className="text-sm font-semibold">{transaction.email}</h1>
-                </div>
+                {(transaction.email && transaction.email !== "" )? (
+                  <div className="flex items-center gap-5">
+                    <img
+                      className="w-14 h-14 fill object-cover rounded-full"
+                      src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
+                      alt=""
+                    />
+                    <h1 className="text-sm font-semibold">
+                      {transaction.email}
+                    </h1>
+                  </div>
+                ) : (
+                  <h3 className="font-semibold p-2 text-center text-red-500 bg-red-50 rounded-md">Non-User Related</h3>
+                )}
                 <h1
                   className={`text-2xl ${
                     transaction.paymentType === "income"

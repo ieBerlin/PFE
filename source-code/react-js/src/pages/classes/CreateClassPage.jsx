@@ -4,18 +4,51 @@ import TextAreaInput from "../../components/TextAreaInput.jsx";
 import RelatedUsers from "../../components/modal/related-user/RelatedUsers.jsx";
 import DatePicker from "../../components/DatePicker.jsx";
 import PriceInput from "../../components/PriceInput.jsx";
-import { Link, useFetcher } from "react-router-dom";
+import { Form, json, Link } from "react-router-dom";
 import { categories } from "../../components/modal/AddEquipmentModal.jsx";
 import SelectInput from "../../components/SelectInput.jsx";
-
+import { useMutation } from "@tanstack/react-query";
+import { fetchFunction, getToken } from "../../hooks/http.js";
 export default function CreateClassPage() {
   const submitButtonRef = useRef();
-  const { Form, state, data } = useFetcher({
-    key: "create-class-id",
+  const { isPending, data, isError, error, mutate } = useMutation({
+    mutationKey: ["classes", "create-class"],
+    mutationFn: async (data) => {
+      const token = getToken();
+      if (!token) {
+        return json({ status: 403 });
+      }
+      const response = await fetchFunction({
+        url: "http://localhost:8081/class",
+        options: {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        },
+      });
+      console.log(response.data);
+    },
   });
-  console.log(data);
-  const isLoading = state === "submitting";
-
+  function handleSubmitForm(e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const classData = {
+      name: fd.get("class-name"),
+      description: fd.get("class-description"),
+      category: fd.get("class-category"),
+      instructorEmail: fd.get("related-user"),
+      startDate: fd.get("class-start-date"),
+      endDate: fd.get("class-end-date"),
+      startTime: fd.get("class-start-time"),
+      endTime: fd.get("class-end-time"),
+      price: fd.get("class-price"),
+      maxSize: fd.get("class-max-size"),
+    };
+    mutate(classData);
+  }
   return (
     <div className="bg-gray-100 p-4">
       <h4 className="font-bold text-xl text-gray-700 mb-4">
@@ -26,27 +59,44 @@ export default function CreateClassPage() {
           Basic Information
         </h3>
         <hr className="w-full h-1 my-4" />
-        <Form method="POST" className="p-2">
-          <Input label="Class Name" placeholder="Enter Class Name" />
-          <TextAreaInput label="Class Description" />
-          <SelectInput data={categories} />
+        <Form onSubmit={handleSubmitForm} method="POST" className="p-2">
+          <Input
+            name="class-name"
+            label="Class Name"
+            placeholder="Enter Class Name"
+          />
+          <TextAreaInput name="class-description" label="Class Description" />
+          <SelectInput
+            label="Category"
+            name="class-category"
+            data={categories}
+          />
           <RelatedUsers
+            name="class-related-user"
             label=" Who will be coaching this class?"
             userType="coach"
           />
-          <DateTimePicker label="Start Date and Time" />
-          <DateTimePicker label="End Date and Time" />
+          <DatePicker
+            label="Start Date and Time"
+            dateName="class-start-date"
+            timeName="class-start-time"
+          />
+          <DatePicker
+            label="End Date and Time"
+            dateName="class-end-date"
+            timeName="class-end-time"
+          />
           <AdditionalInformation />
           <input type="submit" value="" hidden ref={submitButtonRef} />
         </Form>
         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
           <button
-            disabled={isLoading}
+            disabled={isPending}
             type="button"
             className={`${
-              isLoading ? "bg-gray-200" : "bg-blue-600"
+              isPending ? "bg-gray-400" : "bg-blue-600"
             } text-white outline-none inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${
-              !isLoading && "hover:bg-blue-500"
+              !isPending && "hover:bg-blue-500"
             } sm:ml-3 sm:w-auto`}
             onClick={() => {
               if (submitButtonRef.current) {
@@ -54,15 +104,15 @@ export default function CreateClassPage() {
               }
             }}
           >
-            {isLoading ? "Loading..." : "Add Class"}
+            {isPending ? "Loading..." : "Add Class"}
           </button>
           <Link
-            disabled={isLoading}
+            disabled={isPending}
             to="/classes"
             className={`outline-none mt-3 inline-flex w-full justify-center rounded-md ${
-              isLoading ? "bg-gray-100" : "bg-white"
+              isPending ? "bg-gray-100" : "bg-white"
             } px-3 py-2 text-sm font-semibold ${
-              isLoading ? "text-gray-400" : "text-gray-900"
+              isPending ? "text-gray-400" : "text-gray-900"
             } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
           >
             Cancel
@@ -77,17 +127,13 @@ function AdditionalInformation() {
   return (
     <div className="grid grid-cols-2 items-center justify-center">
       <div>
-        <Input label="Maximum Class Size" type="number" />
+        <Input name="class-max-size" label="Maximum Class Size" type="number" />
       </div>
       <div>
-        <PriceInput />
+        <PriceInput name="class-price" />
       </div>
     </div>
   );
-}
-
-function DateTimePicker({ label }) {
-  return <DatePicker label={label} />;
 }
 
 function timeOut() {

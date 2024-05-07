@@ -1,4 +1,5 @@
 export default function DatePicker({ label, required, dateName, timeName }) {
+  console.log(dateName)
   const dateId = `${dateName}-id`;
   const timeId = `${timeName}-id`;
 

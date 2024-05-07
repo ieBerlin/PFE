@@ -111,7 +111,7 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
           src="https://akfit.com/cdn/shop/articles/107194-exercise-equipmentg1.png?v=1694789703"
           alt="Coach"
         />
-        <span className="absolute top-0 left-0 m-2 rounded-xl  p-[4px] text-center text-sm  bg-amber-300 text-white font-semibold">
+        <span className="absolute top-0 left-0 m-2 rounded-xl text-center text-sm bg-blue-400   p-[4px]   text-white font-semibold">
           {equipmentData.category}
         </span>
       </div>

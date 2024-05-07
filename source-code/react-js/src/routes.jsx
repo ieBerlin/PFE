@@ -117,6 +117,15 @@ const router = createBrowserRouter([
             action: createClassAction,
           },
           {
+            path: "edit",
+            children: [
+              {
+                path: ":classId",
+                element: <EditClassPage />,
+              },
+            ],
+          },
+          {
             path: ":classId",
             children: [
               {
@@ -124,10 +133,7 @@ const router = createBrowserRouter([
                 element: <ClassDetailsPage />,
                 loader: classDetailsPage,
               },
-              {
-                path: "edit",
-                element: <EditClassPage />,
-              },
+
               {
                 path: "book",
                 element: <BookClassPage />,
