@@ -3,7 +3,11 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Await, json } from "react-router-dom";
 import { fetchFunction, getToken } from "../../../hooks/http";
 
-export default function RelatedUserField({ label, userType }) {
+export default function RelatedUserField({
+  label,
+  userType,
+  defaultRelatedUser,
+}) {
   const searchInputRef = useRef();
   const [isRelatedUsersShown, setIsRelatedUsersShown] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -54,66 +58,86 @@ export default function RelatedUserField({ label, userType }) {
           Search
         </button>
       </div>
-      {isRelatedUsersShown && (
-        <Suspense
-          fallback={
-            <h3 className="text-gray-700 font-medium text-center py-2">
-              Fetching Related Users...
-            </h3>
-          }
-        >
-          <Await resolve={usersLoader(searchInputValue, userType)}>
-            {(resolvedData) => (
-              <div className="pl-3">
-                <div className="flex flex-row justify-between items-center mt-3">
-                  <h4 className="text-gray-400 uppercase font-medium text-sm">
-                    Users
-                  </h4>
-                  <button
-                    type="button"
-                    onClick={() => setIsRelatedUsersShown(false)}
-                  >
-                    <XMarkIcon className="text-gray-400 w-6 h-6" />
-                  </button>
-                </div>
-                {resolvedData && resolvedData.length > 0 ? (
-                  <ul className="flex flex-col w-full gap-2 mt-3 px-3 max-h-[100px] overflow-y-auto shadow-sm">
-                    {resolvedData.map((user) => (
-                      <li key={user.email}>
-                        <div className="flex gap-2 items-center hover:bg-gray-100 cursor-pointer">
-                          <input
-                            value={user.email}
-                            type="radio"
-                            name="related-user"
-                            className="cursor"
-                            htmlFor={user.email}
-                          />
-                          <img
-                            className="w-8 h-8 rounded-full"
-                            src={user.imageSrc}
-                            alt={user.fullName}
-                          />
-                          <h4 className="text-gray-600 text-sm">
-                            {user.email}
-                          </h4>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <h3 className="text-gray-700 font-medium text-center py-2">
-                    No Users found
-                  </h3>
-                )}
-              </div>
-            )}
-          </Await>
-        </Suspense>
+      {searchInputValue === "" && defaultRelatedUser ? (
+        <UserCredentials
+          isChecked
+          resolvedData={defaultRelatedUser}
+          setIsRelatedUsersShown={setIsRelatedUsersShown}
+        />
+      ) : (
+        isRelatedUsersShown && (
+          <FetchUser
+            searchInputValue={searchInputValue}
+            userType={userType}
+            setIsRelatedUsersShown={setIsRelatedUsersShown}
+          />
+        )
       )}
     </div>
   );
 }
-
+function FetchUser({ searchInputValue, userType, setIsRelatedUsersShown }) {
+  return (
+    <Suspense
+      fallback={
+        <h3 className="text-gray-700 font-medium text-center py-2">
+          Fetching Related Users...
+        </h3>
+      }
+    >
+      <Await resolve={usersLoader(searchInputValue, userType)}>
+        {(resolvedData) => (
+          <UserCredentials
+            resolvedData={resolvedData}
+            setIsRelatedUsersShown={setIsRelatedUsersShown}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+function UserCredentials({ resolvedData, setIsRelatedUsersShown, isChecked }) {
+  return (
+    <>
+      <div className="pl-3">
+        <div className="flex flex-row justify-between items-center mt-3">
+          <h4 className="text-gray-400 uppercase font-medium text-sm">Users</h4>
+          <button type="button" onClick={() => setIsRelatedUsersShown(false)}>
+            <XMarkIcon className="text-gray-400 w-6 h-6" />
+          </button>
+        </div>
+        {resolvedData && resolvedData.length > 0 ? (
+          <ul className="flex flex-col w-full gap-2 mt-3 px-3 max-h-[100px] overflow-y-auto shadow-sm">
+            {resolvedData.map((user) => (
+              <li key={user.email}>
+                <div className="flex gap-2 items-center hover:bg-gray-100 cursor-pointer">
+                  <input
+                    defaultChecked={isChecked}
+                    value={user.email}
+                    type="radio"
+                    name="related-user"
+                    className="cursor"
+                    htmlFor={user.email}
+                  />
+                  <img
+                    className="w-8 h-8 rounded-full"
+                    src={user.imageSrc}
+                    alt={user.fullName}
+                  />
+                  <h4 className="text-gray-600 text-sm">{user.email}</h4>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <h3 className="text-gray-700 font-medium text-center py-2">
+            No Users found
+          </h3>
+        )}
+      </div>
+    </>
+  );
+}
 async function usersLoader(searchInputValue, userType) {
   const token = getToken();
   if (!token) {

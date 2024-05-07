@@ -1,6 +1,6 @@
 export default function Input({ label, placeholder, type = "text", ...props }) {
   return (
-    <>
+    <div>
       <label className="block text-sm font-medium my-2">{label}</label>
       <input
         required
@@ -9,6 +9,6 @@ export default function Input({ label, placeholder, type = "text", ...props }) {
         placeholder={placeholder}
         {...props}
       />
-    </>
+    </div>
   );
 }

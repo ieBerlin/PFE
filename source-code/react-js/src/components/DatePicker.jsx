@@ -1,5 +1,12 @@
-export default function DatePicker({ label, required, dateName, timeName }) {
-  console.log(dateName)
+export default function DatePicker({
+  label,
+  required,
+  dateName,
+  timeName,
+  defaultDateValue,
+  defaultTimeValue,
+}) {
+  console.log(dateName);
   const dateId = `${dateName}-id`;
   const timeId = `${timeName}-id`;
 
@@ -16,15 +23,20 @@ export default function DatePicker({ label, required, dateName, timeName }) {
           required={required}
           type="date"
           id={dateId}
-          className="outline-none text-gray-500  py-3 px-4 ps-9 pe-16 block border w-full border-gray-300 shadow-sm rounded-s-lg text-sm "
+          className="outline-none text-gray-500 py-3 px-4 ps-9 pe-16 block border w-full border-gray-300 shadow-sm rounded-s-lg text-sm"
           name={dateName ?? ""}
+          defaultValue={
+            new Date(defaultDateValue).toISOString().split("T")[0] ?? ""
+          }
         />
+
         <input
           required={required}
           type="time"
           id={timeId}
           className=" outline-none text-gray-500 py-3 px-4 ps-9 pe-16 block border items-center w-full border-gray-300 shadow-sm rounded-e-lg text-sm "
           name={timeName ?? ""}
+          defaultValue={defaultTimeValue ?? ""}
         />
       </div>
     </div>

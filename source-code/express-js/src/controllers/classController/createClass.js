@@ -3,7 +3,7 @@ const getCurrentDateTime = require('../../utils/getCurrentDateTime.js');
 
 const createClass = async(req, res) => {
     try {
-        const { name, description, instructor_id, date, maximum_capacity, duration, status, category } = req.body;
+        const { name, description, instructorEmail: instructor_email, startDate, startTime, endDate, endTime, maxSize, price, category } = req.body;
         let errors = {};
 
         if (!name) {
@@ -12,20 +12,20 @@ const createClass = async(req, res) => {
         if (!description) {
             errors.description = "No provided description.";
         }
-        if (!instructor_id) {
-            errors.instructor_id = "No provided instructor ID.";
+        if (!instructor_email) {
+            errors.instructor_email = "No provided instructor email.";
         }
-        if (!date) {
-            errors.date = "No provided date.";
+        if (!startDate || !startTime) {
+            errors.startDateTime = "No provided start date or time.";
         }
-        if (!maximum_capacity) {
-            errors.maximum_capacity = "No provided maximum capacity.";
+        if (!endDate || !endTime) {
+            errors.endDateTime = "No provided end date or time.";
         }
-        if (!duration) {
-            errors.duration = "No provided duration.";
+        if (!maxSize) {
+            errors.maxSize = "No provided maximum capacity.";
         }
-        if (!status) {
-            errors.status = "No provided status.";
+        if (!price) {
+            errors.price = "No provided price.";
         }
         if (!category) {
             errors.category = "No provided category.";
@@ -35,11 +35,15 @@ const createClass = async(req, res) => {
             return res.status(400).json(errors);
         }
 
+        // Combine startDate and startTime, endDate and endTime to form date fields
+        const startDateTime = new Date(`${startDate}T${startTime}`);
+        const endDateTime = new Date(`${endDate}T${endTime}`);
+
         const sql = `
-            INSERT INTO classes (name, description, instructor_id, date, maximum_capacity, current_enrollement_count, duration, status, category, created_at)
-            VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, ?)
+            INSERT INTO classes (name, description, instructor_email, startDate, startTime, endDate, endTime, maximum_capacity, current_enrollment_count, price, category, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)
         `;
-        const values = [name, description, instructor_id, date, maximum_capacity, duration, 'scheduled', category, getCurrentDateTime()];
+        const values = [name, description, instructor_email, startDate, startTime, endDate, endTime, maxSize, price, category, getCurrentDateTime()];
 
         await pool.query(sql, values);
 

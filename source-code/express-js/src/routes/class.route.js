@@ -13,7 +13,7 @@ const authUserRole = require('../middlewares/auth/authUserRole.js');
 router.get("/", verifyToken, getAllClasses);
 router.get("/:classId", verifyToken, getSingleClass);
 router.post("/", verifyToken, authAdminOrManager, createClass);
-router.put("/:classId", verifyToken, authAdminOrManager, updateClass);
+router.put("/:classId", verifyToken, updateClass);
 router.delete("/:classId", verifyToken, authAdminOrManager, deleteClass);
 router.put("/:classId/:status", verifyToken, authAdminOrManager, updateClassStatus);
 
