@@ -3,26 +3,17 @@ import { DUMMY_COACHES } from "../../dummy_data/dummy_coaches.js";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import AvailableCoaches from "./AvailableCoaches.jsx";
 import { Suspense } from "react";
+import FallbackText from "../../components/FallbackText.jsx";
 export default function CoachesPage() {
   const { timeOut } = useRouteLoaderData("coaches-page");
 
   return (
     <section className={classes.sectionContainer}>
-      <Suspense fallback={<FallbackText />}>
+      <Suspense fallback={<FallbackText title="Fetching Coaches data..." />}>
         <Await resolve={timeOut}>
           {(resolvedData) => <AvailableCoaches coaches={resolvedData} />}
         </Await>
       </Suspense>
-    </section>
-  );
-}
-
-function FallbackText() {
-  return (
-    <section className=" flex h-full w-full flex-col">
-      <p className="text-gray-700 text-xl font-semibold text-center mt-7">
-        Fetching Coaches data...
-      </p>
     </section>
   );
 }

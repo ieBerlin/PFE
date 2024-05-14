@@ -54,7 +54,7 @@ export default function PhoneNumberInput({ ...props }) {
             id="phone-input"
             aria-describedby="helper-text-explanation"
             className="block p-2.5 w-full z-20 text-sm text-gray-900 rounded-e-lg   border-gray-300 border-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-            placeholder="699-213-213"
+            placeholder="0XXXXXXXXX"
             required
             {...props}
           />

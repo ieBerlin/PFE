@@ -3,13 +3,14 @@ import ApexCharts from "apexcharts";
 import { Menu } from "@headlessui/react";
 
 export default function ChartComponent({ incomeData, expenseData, dates }) {
+  console.log(dates)
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
 
   useEffect(() => {
-    const incomeTotal = incomeData.reduce((acc, curr) => acc + curr.value, 0);
+    const incomeTotal = incomeData.reduce((acc, curr) => acc + curr.amount, 0);
     const expenseTotal = expenseData.reduce(
-      (acc, curr) => acc + curr.value,
+      (acc, curr) => acc + curr.amount,
       0
     );
     setTotalIncome(incomeTotal);
@@ -23,7 +24,7 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
       year: "numeric",
     })
   );
-
+console.log(formattedDates)
   useEffect(() => {
     if (
       document.getElementById("line-chart") &&
@@ -79,12 +80,12 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
     series: [
       {
         name: "Income",
-        data: incomeData.map(({ value }) => value),
+        data: incomeData.map(({ amount }) => amount),
         color: "#22C55E",
       },
       {
         name: "Expense",
-        data: expenseData.map(({ value }) => value),
+        data: expenseData.map(({ amount }) => amount),
         color: "#ef4444",
       },
     ],
@@ -139,7 +140,7 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
           </div>
         </div>
         <div>
-        <Menu as="div" className="relative inline-block text-left">
+        {/* <Menu as="div" className="relative inline-block text-left">
           <div>
             <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               {"selectedDate"}
@@ -180,7 +181,7 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
               </div>
             </Menu.Items>
           </div>
-        </Menu>
+        </Menu> */}
         </div>
       </div>
       <div id="line-chart" />

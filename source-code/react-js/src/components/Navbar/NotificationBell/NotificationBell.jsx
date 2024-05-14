@@ -1,14 +1,36 @@
 import "./NotificationBell.css";
 import "./NotificationMenu.css";
-import { useState, useRef, useEffect, Suspense } from "react";
+import { useState, useRef, useEffect } from "react";
 import { BellIcon } from "@heroicons/react/24/solid";
-import { Await, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NotificationItem from "./NotificationItem.jsx";
-import { getToken } from "../../../hooks/http.js";
+import { fetchFun, getToken } from "../../../hooks/http.js";
 import LoadingIndicator from "../../LoadingIndicator.jsx";
+import { useQuery } from "@tanstack/react-query";
+
 const token = getToken();
 
-export default function NotificationBell() {
+const NotificationBell = () => {
+  const { data, isError, isPending } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: async () => {
+      try {
+        const data = await fetchFun({
+          url: "http://localhost:8081/notification/get-latest-notifications",
+          options: {
+            method: "GET",
+            headers: {
+              "x-access-token": token,
+            },
+          },
+        });
+        return data || [];
+      } catch (error) {
+        return [];
+      }
+    },
+  });
+
   const [isNotificationsVisible, setIsNotificationsVisible] = useState(false);
   const [isNotificationsBoxAlreadyOpen, setIsNotificationsBoxAlreadyOpen] =
     useState(false);
@@ -38,6 +60,31 @@ export default function NotificationBell() {
     );
     setIsNotificationsBoxAlreadyOpen(true);
   };
+  let notificationsContent;
+  if (isPending) {
+    notificationsContent = (
+      <div className="py-3 items-center justify-center flex">
+        <LoadingIndicator />
+      </div>
+    );
+  } else if (!isError && data && data.length > 0) {
+    notificationsContent = data
+      .slice(0, 3)
+      .map((notification, index) => (
+        <NotificationItem
+          key={index}
+          title={notification.title}
+          description={notification.description}
+          date={notification.date}
+        />
+      ));
+  } else {
+    notificationsContent = (
+      <div className="no-notification">
+        <h1 className="font-semibold text-black">No New Notifications</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="notifier red">
@@ -49,16 +96,8 @@ export default function NotificationBell() {
         <BellIcon className="text-white w-7 h-7" />
       </button>
 
-      {!isNotificationsBoxAlreadyOpen && (
-        <Suspense fallback={null}>
-          <Await resolve={fetchUnreadNotifications()}>
-            {(resolvedData) => (
-              <span className="badge">
-                {resolvedData.length > 100 ? "+99" : resolvedData.length}
-              </span>
-            )}
-          </Await>
-        </Suspense>
+      {!isNotificationsBoxAlreadyOpen && data && !isError && (
+        <span className="badge">{data.length > 100 ? "+99" : data.length}</span>
       )}
 
       <div ref={notificationsMenuRef}>
@@ -69,40 +108,11 @@ export default function NotificationBell() {
         >
           <div className="notifications-header">
             <h1>Notifications</h1>
-            <Suspense fallback={null}>
-              <Await resolve={fetchUnreadNotifications()}>
-                {(resolvedData) => (
-                  <p className="new-notification">{resolvedData.length} New</p>
-                )}
-              </Await>
-            </Suspense>
+            {data && !isError && (
+              <p className="new-notification">{data.length} New</p>
+            )}
           </div>
-          <Suspense
-            fallback={
-              <div className="py-3 items-center justify-center flex">
-                <LoadingIndicator />
-              </div>
-            }
-          >
-            <Await resolve={fetchUnreadNotifications()}>
-              {(resolvedData) => {
-                return resolvedData && resolvedData.length > 0 ? (
-                  resolvedData
-                    .slice(0, 3)
-                    .map((notification, index) => (
-                      <NotificationItem
-                        key={index}
-                        title={notification.title}
-                        description={notification.description}
-                        date={notification.date}
-                      />
-                    ))
-                ) : (
-                  <div className="no-notification">No new notifications</div>
-                );
-              }}
-            </Await>
-          </Suspense>
+          {notificationsContent}
           <div className="all-notifications">
             <Link
               to="/user/all-notifications"
@@ -115,28 +125,6 @@ export default function NotificationBell() {
       </div>
     </div>
   );
-}
+};
 
-async function fetchUnreadNotifications() {
-  try {
-    const response = await fetch(
-      "http://localhost:8081/notification/get-latest-notifications",
-      {
-        method: "GET",
-        headers: {
-          "x-access-token": token,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching notifications:", error);
-    return [];
-  }
-}
+export default NotificationBell;

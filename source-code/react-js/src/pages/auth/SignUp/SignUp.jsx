@@ -1,7 +1,7 @@
 import logoImage from "../../../assets/logoImage.png";
 import gymImage from "../../../assets/gymImage.jpg";
 import loginClasses from "../Login/Login.module.css";
-import SignUpForm from "../Form/SignUpForm.jsx";
+// import SignUpForm from "../Form/SignUpForm.jsx";
 import { Link } from "react-router-dom";
 export default function SignUpPage() {
   function handleEnrollNowClick() {}
@@ -27,7 +27,7 @@ export default function SignUpPage() {
           <section className={loginClasses.mainSection}>
             <h1>Register</h1>
             <h4>{"Hello there! Ready to join us?"}</h4>
-            <SignUpForm />
+            {/* <SignUpForm /> */}
           </section>
         </div>
         <div className={loginClasses.gymPicture}>

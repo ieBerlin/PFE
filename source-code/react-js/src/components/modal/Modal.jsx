@@ -4,7 +4,12 @@ import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import ModalContent from "./ModalContent.jsx";
-export default function Modal({ equipmentData, remainingDay, imageSrc }) {
+export default function Modal({
+  equipmentData,
+  remainingDay,
+  imageSrc,
+  classId,
+}) {
   const dialog = useRef();
   const modalContentRef = useRef();
   const type = useSelector((state) => state.modal.type);
@@ -55,6 +60,7 @@ export default function Modal({ equipmentData, remainingDay, imageSrc }) {
             equipmentData={equipmentData}
             remainingDay={remainingDay}
             imageSrc={imageSrc}
+            classId={classId}
           />
         </div>
       </div>

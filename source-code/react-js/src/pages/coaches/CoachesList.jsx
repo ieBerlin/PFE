@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/solid";
 import Modal from "../../components/modal/Modal.jsx";
 import CoachBio from "../coaches/CoachBio.jsx";
+import { Link } from "react-router-dom";
 
 export default function CoachesList({ data }) {
   const [imageSrc, setImageSrc] = useState(null);
@@ -38,7 +39,15 @@ export default function CoachesList({ data }) {
           }}
         >
           <div className="bg-white shadow-md pl-8 pr-16 py-6">
-            <h1 className="font-bold text-2xl">{coachName}</h1>
+            <div className="flex flex-row justify-between">
+              <h1 className="font-bold text-2xl">{coachName}</h1>
+              <Link
+                to={"connect"}
+                className="px-3 py-2 bg-blue-600 hover:bg-blue-500 font-medium rounded-lg text-white"
+              >
+                Contact with
+              </Link>
+            </div>
             <p className="text-sm text-gray-600">{coachCategory}</p>
             <div className="flex flex-row items-center justify-start gap-3 my-3">
               <div className="bg-yellow-400 px-4 py-1 w-min rounded-md flex flex-row items-center gap-1">

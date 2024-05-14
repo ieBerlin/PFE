@@ -15,13 +15,11 @@ const getLatestNotifications = async(req, res) => {
         const sql = 'SELECT * FROM notifications WHERE userEmail = ? AND created_at >= ?';
         const [result] = await pool.query(sql, [userEmail, sevenDaysAgo]);
 
-        if (result.length > 0) {
-            setTimeout(() => {
-                return res.status(200).json(result);
-            }, 1500);
-        } else {
-            return res.status(404).json({ message: 'No notifications found within the last 7 days' });
-        }
+
+        setTimeout(() => {
+            return res.status(200).json(result);
+        }, 1500);
+
     } catch (error) {
         console.error('Error retrieving notifications:', error);
         return res.status(500).json({ message: 'Internal Server Error' });

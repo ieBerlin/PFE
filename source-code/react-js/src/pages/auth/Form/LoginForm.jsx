@@ -4,28 +4,48 @@ import FormInput from "./FormInput.jsx";
 import PasswordFormInput from "./PasswordFormInput";
 import classes from "../Login/Login.module.css";
 import { UserIcon } from "@heroicons/react/24/solid";
-import { useFetcher, useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-
+import { useMutation } from "@tanstack/react-query";
+import { fetchFun, processLoginForm } from "../../../hooks/http.js";
+import ErrorMessage from "../../../components/ErrorMessage.jsx";
 export default function LoginForm() {
   const navigate = useNavigate();
-  const { Form, data, state } = useFetcher({
-    key: "login-id",
+  const { data, isError, error, mutate, isPending } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: async (userCrendetials) => {
+      return await fetchFun({
+        url: "http://localhost:8081/user/auth/login",
+        options: {
+          method: "POST",
+          body: JSON.stringify(userCrendetials),
+          headers: {
+            "x-access-token": "token",
+            "Content-Type": "application/json",
+          },
+        },
+      });
+    },
   });
-
+console.log(data)
   useEffect(() => {
-    if (data && data.success) {
+    if (data && data.token) {
+      localStorage.setItem("user-token", data.token);
       navigate("/dashboard");
     }
   }, [data, navigate]);
-
-  const isSubmitting = state === "submitting";
-  const submitButtonStyles = isSubmitting
+  async function handleSubmitForm(e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const userCrendetials = processLoginForm(fd);
+    mutate(userCrendetials);
+  }
+  const submitButtonStyles = isPending
     ? classes.submittingLoginButton
     : classes.loginButton;
 
   return (
-    <Form method="POST" className="flex w-full flex-col px-24">
+    <Form onSubmit={handleSubmitForm} className="flex w-full flex-col px-24">
       <FormInput
         Icon={UserIcon}
         isNotValidInput="Email is not valid"
@@ -47,16 +67,17 @@ export default function LoginForm() {
         required
       />
       <div className={classes.rememberMe}>
-        <input type="checkbox" name="remember-me" id="remember-me" />
-        <p>Remember me</p>
+        {/* <input type="checkbox" name="remember-me" id="remember-me" />
+        <p>Remember me</p> */}
       </div>
-      <button
-        disabled={isSubmitting}
-        type="submit"
-        className={submitButtonStyles}
-      >
-        {isSubmitting ? "Loading..." : "Login"}
+      <button disabled={isPending} type="submit" className={submitButtonStyles}>
+        {isPending ? "Loading..." : "Login"}
       </button>
+      {isError &&
+        error &&
+        Object.entries(error.info).map(([key, value]) => (
+          <ErrorMessage key={key} title={key} message={value} />
+        ))}
     </Form>
   );
 }

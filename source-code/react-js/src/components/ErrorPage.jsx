@@ -1,17 +1,13 @@
 import { useRouteError } from "react-router-dom";
 import NotFoundPage from "../components/NotFoundPage.jsx";
-import ForbiddenPage from "./ForbiddenPage.jsx"
+import ForbiddenPage from "./ForbiddenPage.jsx";
+import ErrorBoundary from "./ErrorBoundary.jsx";
 export default function ErrorPage() {
   const error = useRouteError();
-  console.log(error)
   if (error.status === 404) {
     return <NotFoundPage />;
   }
-  if (error.data && error.data.status === 403) {
+  if (error && error.status === 403) {
     return <ForbiddenPage />;
-  }
-  return <p>{error.status}</p>;
-  // if(
-  // error.status==403
-  // )
+  } else return <ErrorBoundary />;
 }

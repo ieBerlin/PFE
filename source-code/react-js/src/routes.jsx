@@ -2,7 +2,10 @@ import { createBrowserRouter } from "react-router-dom";
 import LandingPage, {
   loader as landingPageLoader,
 } from "./pages/landing-page/LandingPage.jsx";
-import LoginPage, { action as authAction } from "./pages/auth/Login/Login.jsx";
+import LoginPage, {
+  action as authAction,
+  loader as loginLoader,
+} from "./pages/auth/Login/Login.jsx";
 import SportsPage from "./pages/sports/SportsPage.jsx";
 import ClassesPage, {
   loader as classesLoader,
@@ -28,12 +31,11 @@ import DeleteSportCategorie from "./pages/sports/DeleteSportCategorie.jsx";
 import ReportsPage, {
   loader as reportsLoader,
 } from "./pages/reports/ReportsPage.jsx";
-import UserProfil, {
-  loader as userProfileLoader,
-} from "./pages/user/UserProfil.jsx";
+import UserProfil from "./pages/user/UserProfil.jsx";
 import CoachesPage, {
   loader as coachesPageLoader,
 } from "./pages/coaches/CoachesPage.jsx";
+import ClientsPage from "./pages/coaches/ClientsPage.jsx";
 import EquipmentsBookings, {
   loader as bookingsEquipmentsLoader,
 } from "./pages/equipments/EquipmentsBookings.jsx";
@@ -50,6 +52,7 @@ import CreateClassPage, {
   action as createClassAction,
 } from "./pages/classes/CreateClassPage.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
+import MemberOverviewPage from "./pages/member/MemberOverviewPage.jsx";
 import PaymentsPage, {
   action as paymentsAction,
   loader as paymentsLoader,
@@ -62,6 +65,9 @@ import CoachPageDetails, {
   loader as coachPageDetailsLoader,
 } from "./pages/coaches/CoachPageDetails.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
+import CoachingPage, {
+  loader as connectLoader,
+} from "./pages/coaches/connect-with/CoachingPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -70,6 +76,10 @@ const router = createBrowserRouter([
     id: "root",
     loader: tokenLoader,
     children: [
+      {
+        path: "overview",
+        element: <MemberOverviewPage />,
+      },
       {
         path: "dashboard",
         element: <Dashboard />,
@@ -153,9 +163,14 @@ const router = createBrowserRouter([
           },
           {
             path: ":coachId",
-            element: <CoachPageDetails />,
-            id: "coach-details-id",
-            loader: coachPageDetailsLoader,
+            children: [
+              {
+                index: true,
+                element: <CoachPageDetails />,
+                id: "coach-details-id",
+                loader: coachPageDetailsLoader,
+              },
+            ],
           },
         ],
       },
@@ -211,13 +226,25 @@ const router = createBrowserRouter([
         loader: reportsLoader,
       },
       {
+        path: "clients",
+        element: <ClientsPage />,
+      },
+      {
+        path: "coaching",
+        children: [
+          {
+            path:':userId',
+            element: <CoachingPage />,
+            loader: connectLoader,
+          },
+        ],
+      },
+      {
         path: "profile",
         children: [
           {
             index: true,
             element: <UserProfil />,
-            id: "user-profile-id",
-            loader: userProfileLoader,
           },
 
           {
@@ -257,6 +284,7 @@ const router = createBrowserRouter([
     element: <LoginPage />,
     id: "login-id",
     action: authAction,
+    loader: loginLoader,
   },
 ]);
 

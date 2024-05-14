@@ -1,36 +1,39 @@
 import { LockClosedIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { Form } from "react-router-dom";
+import { Form, json } from "react-router-dom";
 import PasswordInput from "../../components/modal/PasswordInput.jsx";
 import { useRef } from "react";
-import { fetchFunction, getToken } from "../../hooks/http.js";
+import { fetchFun, fetchFunction, getToken } from "../../hooks/http.js";
 import { useMutation } from "@tanstack/react-query";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
+import SuccessMessage from "../../components/SuccessMessage.jsx";
 const token = getToken();
 export default function UpdateUserPasswordPage() {
   const submitButtonRef = useRef();
-  const { isPending, mutate, isError, error } = useMutation({
-    mutationFn: async (data) => {
-      const resData = await fetchFunction({
+  const { isPending, data, mutate, isError, error } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: async (userData) => {
+      if (userData.newPassword !== userData.confirmNewPassword) {
+        throw {
+          info: {
+            "Unmatched passwords":
+              "The new and the confirm new passwords  aren' matched",
+          },
+        };
+      }
+      return await fetchFun({
         url: "http://localhost:8081/user/profile/update-password",
         options: {
           method: "POST",
-          body: JSON.stringify(data),
+          body: JSON.stringify(userData),
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
         },
       });
-      console.log(resData)
-      if (resData.status === 404) {
-        throw new Error("User Not Found!");
-      }
-      if (resData.status === 401) {
-        throw resData;
-      }
     },
   });
-
+console.log(data)
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -41,16 +44,26 @@ export default function UpdateUserPasswordPage() {
     };
     mutate(data);
   };
-  let content =
+  let content;
+  content =
     !isPending &&
     isError &&
-    (error.status === 401
-      ? Object.entries(error).map(([key, value]) => {
+    (error
+      ? Object.entries(error.info).map(([key, value]) => {
           if (key !== "status") {
             return <ErrorMessage key={key} title={key} message={value} />;
           }
         })
       : "An error occured!");
+      if (data  && !isPending) {
+        content = (
+          <SuccessMessage
+            title="Request Successful"
+            message="Your request has been processed successfully."
+          />
+        );
+      }
+    
   return (
     <section className="py-4 px-6 bg-gray-100 flex h-full w-full flex-col">
       <h1 className="font-bold text-2xl mb-3">Update Password</h1>

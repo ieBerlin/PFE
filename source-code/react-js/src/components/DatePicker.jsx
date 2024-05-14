@@ -26,7 +26,9 @@ export default function DatePicker({
           className="outline-none text-gray-500 py-3 px-4 ps-9 pe-16 block border w-full border-gray-300 shadow-sm rounded-s-lg text-sm"
           name={dateName ?? ""}
           defaultValue={
-            new Date(defaultDateValue).toISOString().split("T")[0] ?? ""
+            (defaultDateValue &&
+              new Date(defaultDateValue).toISOString().split("T")[0]) ??
+            ""
           }
         />
 

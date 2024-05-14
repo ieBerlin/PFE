@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import CoachBio from "../coaches/CoachBio.jsx";
 import Modal from "../../components/modal/Modal.jsx";
-import BillingHistory from "../../components/BillingHistory.jsx"
+import BillingHistory from "../../components/BillingHistory.jsx";
 import { billingItems } from "../../dummy_data/dummy_users.js";
 export default function UserPage({ userData }) {
   const dispatch = useDispatch();
@@ -135,17 +135,26 @@ export default function UserPage({ userData }) {
             >
               Custom Message
             </ActionButton>
+            <ActionButton
+              color="red"
+              onClick={() => dispatch(setModalType("block-user"))}
+            >
+              Block User Account
+            </ActionButton>
           </div>
         </div>
-      </div>{" "}
+      </div>
     </>
   );
 }
 
-
-function ActionButton({ color, onClick, children }) {
+export function ActionButton({ color, onClick, children, classes }) {
   return (
-    <Button color={color} className="text-white w-full" onClick={onClick}>
+    <Button
+      color={color}
+      className={" text-white w-full " + classes}
+      onClick={onClick}
+    >
       {children}
     </Button>
   );

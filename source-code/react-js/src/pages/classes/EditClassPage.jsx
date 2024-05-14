@@ -10,10 +10,14 @@ import DatePicker from "../../components/DatePicker.jsx";
 import PriceInput from "../../components/PriceInput.jsx";
 import SelectInput from "../../components/SelectInput.jsx";
 import { categories } from "../../components/modal/AddEquipmentModal.jsx";
+import { ActionButton } from "../user/UserPage.jsx";
+import { setModalType } from "../../features/modal/modalSlice.js";
+import { useDispatch } from "react-redux";
 
 export default function EditClassPage() {
   const submitButtonRef = useRef();
   const { classId } = useParams();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const {
     isPending: isFetchingClass,
@@ -54,7 +58,7 @@ export default function EditClassPage() {
           },
         },
       });
-      console.log(response.data)
+      console.log(response.data);
     },
   });
 
@@ -92,9 +96,18 @@ export default function EditClassPage() {
         Update Class Information
       </h4>
       <div className="flex flex-col w-full bg-white p-4">
-        <h3 className="font-medium text-black capitalize text-start">
-          Basic Information
-        </h3>
+        <div className="items-center flex justify-between">
+          <h3 className="font-medium text-black capitalize text-start">
+            Basic Information
+          </h3>
+          <ActionButton
+            color="red"
+            onClick={() => dispatch(setModalType("delete-class"))}
+            classes={"w-min whitespace-nowrap"}
+          >
+            Delete Class
+          </ActionButton>
+        </div>
         <hr className="w-full h-1 my-4" />
         <Form onSubmit={handleSubmitForm} method="POST" className="p-2">
           <Input

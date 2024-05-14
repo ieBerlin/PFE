@@ -2,7 +2,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { filterCoaches } from "../../dummy_data/dummy_coaches";
-import FilterDropdown from "../../components/FilterDropdown.jsx"
+import FilterDropdown from "../../components/FilterDropdown.jsx";
 const selectedCoaches = {
   coachCategory: {
     yoga: true,
@@ -68,42 +68,44 @@ function CoachList({ coaches }) {
       style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
     >
       {coaches.map((coach) => (
-        <li
-          key={coach.coachId}
-          className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md"
-        >
-          <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">
-            <img
-              className="object-cover flex w-full h-full"
-              src="https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTk2MTM1OTAwNDIyMzUwMzQx/main2-trainer2.jpg"
-              alt="Coach"
-            />
-            <span className="absolute top-0 left-0 m-2 rounded-xl bg-gray-700 p-[4px] text-center text-sm font-medium text-white">
-              {coach.coachCategory}
-            </span>
-          </div>
-          <div className="mt-4 px-5 pb-5">
-            <Link to={`${coach.coachId}`}>
-              <h5 className="text-xl tracking-tight text-slate-900">
-                {coach.coachName}
-              </h5>
-            </Link>
-            <div className="mt-2 mb-5 flex items-center justify-between">
-              <div className="flex items-center">
-                <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
-                  {coach.coachLevel}
-                </span>
-              </div>
-            </div>
-            <Link
-              to={`${coach.coachId}`}
-              className="flex items-center justify-center rounded-md bg-blue-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-            >
-              See more <ChevronRightIcon className="ml-2 h-6 w-6" />
-            </Link>
-          </div>
-        </li>
+        <CoachCard key={coach.coachId} coach={coach} />
       ))}
     </ul>
+  );
+}
+export function CoachCard({coach}) {
+  return (
+    <li className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+      <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">
+        <img
+          className="object-cover flex w-full h-full"
+          src="https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTk2MTM1OTAwNDIyMzUwMzQx/main2-trainer2.jpg"
+          alt="Coach"
+        />
+        <span className="absolute top-0 left-0 m-2 rounded-xl bg-gray-700 p-[4px] text-center text-sm font-medium text-white">
+          {coach.coachCategory}
+        </span>
+      </div>
+      <div className="mt-4 px-5 pb-5">
+        <Link to={`${coach.coachId}`}>
+          <h5 className="text-xl tracking-tight text-slate-900">
+            {coach.coachName}
+          </h5>
+        </Link>
+        <div className="mt-2 mb-5 flex items-center justify-between">
+          <div className="flex items-center">
+            <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
+              {coach.coachLevel}
+            </span>
+          </div>
+        </div>
+        <Link
+          to={`${coach.coachId}`}
+          className="flex items-center justify-center rounded-md bg-blue-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+        >
+          See more <ChevronRightIcon className="ml-2 h-6 w-6" />
+        </Link>
+      </div>
+    </li>
   );
 }

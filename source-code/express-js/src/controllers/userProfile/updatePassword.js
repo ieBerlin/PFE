@@ -18,7 +18,7 @@ const updatePassword = async(req, res) => {
 
     try {
 
-        const comparePasswords = comparePassword({ type: 'email', field: userEmail, plainPassword: currentPassword });
+        const comparePasswords = await comparePassword({ type: 'email', field: userEmail, plainPassword: currentPassword });
 
         if (!comparePasswords) {
             return res.status(401).json({ message: "Current password is incorrect" });

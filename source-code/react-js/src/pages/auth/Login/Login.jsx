@@ -2,18 +2,35 @@ import logoImage from "../../../assets/logoImage.png";
 import LoginForm from "../Form/LoginForm";
 import gymImage from "../../../assets/gymImage.jpg";
 import classes from "./Login.module.css";
-import { json, Link } from "react-router-dom";
+import {
+  defer,
+  json,
+  Link,
+  useNavigate,
+  useRouteLoaderData,
+} from "react-router-dom";
 import { setModalType } from "../../../features/modal/modalSlice.js";
 import Modal from "../../../components/modal/Modal.jsx";
-import { useDispatch } from "react-redux";
-import { processSignUpForm } from "../../../hooks/http.js";
+import { useDispatch, useSelector } from "react-redux";
+import { getToken, isAuthenticatedUser } from "../../../hooks/http.js";
+import { useEffect } from "react";
 
 export default function LoginPage() {
+  const isAdmin = useSelector(
+    (state) => state.userRole.userRole?.toLowerCase() === "admin"
+  );
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isAuthenticatedUser } = useRouteLoaderData("login-id");
+
   function handleEnrollNowClick() {
     dispatch(setModalType("create-user"));
   }
-
+  useEffect(() => {
+    if (isAuthenticatedUser) {
+      return navigate(isAdmin ? "/dashboard" : "/overview");
+    }
+  }, [isAdmin, isAuthenticatedUser, navigate]);
   return (
     <>
       <Modal />
@@ -57,52 +74,16 @@ export async function action({ request }) {
       throw new Error("Form type not provided.");
     }
     switch (mode) {
-      case "sign-up-form":
-        try {
-          const password = data.get("password");
-          const confirmPassword = data.get(["confirm-password"]);
-          if (password !== confirmPassword) {
-            const errors = { password: "Passwords do not match." };
-            return json({ errors });
-          }
-
-          const response = await fetch(
-            "http://localhost:8081/user/auth/signup",
-            {
-              method: "POST",
-              body: JSON.stringify(await processSignUpForm(data)),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (!response.ok) {
-            const responseData = await response.json();
-            if (response.status === 422 || response.status === 409) {
-              const errors = responseData.message || "Error occurred";
-              console.log(responseData);
-              return json({ errors });
-            } else {
-              const message = responseData.message || "Error occurred";
-              return json({
-                status: response.status,
-                success: false,
-                message,
-              });
-            }
-          }
-
-          // Success
-          return json({ status: 200, success: true });
-        } catch (error) {
-          console.error("An error occurred during signup:", error.message);
-          return json({
-            status: 500,
-            success: false,
-            message: "Internal Server Error",
-          });
+      case "sign-up-form": {
+        const password = data.get("password");
+        const confirmPassword = data.get(["confirm-password"]);
+        if (password !== confirmPassword) {
+          const errors = { password: "Passwords do not match." };
+          throw errors;
         }
+
+        return;
+      }
       case "login-form":
         try {
           const response = await fetch(
@@ -149,4 +130,13 @@ function processLoginForm(formData) {
     email: fd.email,
     password: fd.password,
   };
+}
+export async function loader() {
+  const token = getToken();
+  if (!token) {
+    return false;
+  }
+  return defer({
+    isAuthenticatedUser: (await isAuthenticatedUser(token)) || false,
+  });
 }

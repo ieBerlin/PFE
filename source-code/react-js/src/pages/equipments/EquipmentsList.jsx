@@ -86,7 +86,7 @@ export default function EquipmentsList({ data }) {
             ) : (
               <div className="mt-4 bg-white px-6 py-4 shadow-md">
                 <p className="text-stone-500 text-center font-bold text-xl">
-                  No users found!
+                  No equipments found!
                 </p>
               </div>
             )}

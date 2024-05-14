@@ -31,7 +31,7 @@ const createUser = async(req, res) => {
         role,
     });
     if (Object.keys(errors).length > 0) {
-        return res.status(422).json({ message: errors });
+        return res.status(422).json(errors);
     }
 
     try {

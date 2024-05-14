@@ -9,16 +9,19 @@ export default function ChartBar({
   label,
 }) {
   const [selectedDate, setSelectedDate] = useState(dates[0]);
-console.log(maxYValue)
   const handleDateSelect = (date) => {
     setSelectedDate(date);
   };
+  const total = Array.from(data).reduce(
+    (prevItem, currentItem) => prevItem + currentItem.amount,
+    0
+  );
 
   return (
     <div className="bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg px-5 py-4 rounded-lg">
       <div className="flex flex-row justify-between items-center mb-3">
         <strong className="font-bold text-xl">{label}</strong>
-        <Menu as="div" className="relative inline-block text-left">
+        {/* <Menu as="div" className="relative inline-block text-left">
           <div>
             <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               {selectedDate}
@@ -59,11 +62,13 @@ console.log(maxYValue)
               </div>
             </Menu.Items>
           </div>
-        </Menu>
+        </Menu> */}
       </div>
       <div className="flex flex-row items-center justify-between">
         <div />
-        <h1 className="text-2xl font-bold">${maxYValue}</h1>
+        <h1 className="text-2xl font-bold">
+          ${isNaN(Number(total)) ? 0 : total}
+        </h1>
       </div>
       <div>
         <div className="flex flex-row mt-2 text-stone-500 font-medium text-sm">
@@ -80,21 +85,21 @@ console.log(maxYValue)
           >
             {data.map((dataItem) => (
               <div
-                key={`label-${dataItem.id}`}
+                key={`label-${dataItem.paymentId}`}
                 className={
                   "w-10 bg-" +
                   color +
                   " mx-auto my-0 rounded-t-md text-center text-sm text-white"
                 }
                 style={{
-                  height: `${Math.ceil((250 * dataItem.value) / maxYValue)}px`,
+                  height: `${Math.ceil((250 * dataItem.amount) / maxYValue)}px`,
                   verticalAlign: "middle",
                   lineHeight: `${Math.ceil(
-                    (250 * dataItem.value) / maxYValue
+                    (250 * dataItem.amount) / maxYValue
                   )}px`,
                 }}
               >
-                {dataItem.value}
+                {dataItem.amount}
               </div>
             ))}
           </div>

@@ -17,6 +17,7 @@ const {
     phoneNumberFormatter,
 } = require("../../utils/formatter/phoneNumber.js");
 const { pool } = require("../../models/db/connect.js");
+
 const bcrypt = require("bcrypt");
 const validateSignUpInputs = ({
     email,

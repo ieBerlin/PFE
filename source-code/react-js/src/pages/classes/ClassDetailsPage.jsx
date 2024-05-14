@@ -1,6 +1,6 @@
 import { Await, defer, json, Link, useLoaderData } from "react-router-dom";
 import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline";
-import { fetchFunction, getToken } from "../../hooks/http.js";
+import { fetchFun, fetchFunction, getToken } from "../../hooks/http.js";
 import FallbackText from "../../components/FallbackText.jsx";
 import { Suspense } from "react";
 import SuggestedClassItem from "./SuggestedClassItem.jsx";
@@ -19,26 +19,25 @@ export default function ClassDetailsPage() {
       >
         <Await resolve={loaderData}>
           {(resolvedData) => {
-            console.log(resolvedData);
-            if (!resolvedData || resolvedData.status !== 200) {
-              return <NotFoundMessage />;
-            } else {
-              const { data } = resolvedData;
-              console.log(data)
+            if (!resolvedData) {
               return (
-                <ClassInformations
-                  title={data.name}
-                  description={data.description}
-                  date={data.date}
-                  time={data.time}
-                  instructor={data.instructor_name}
-                  currentEnrollementCount={data.current_enrollement_count}
-                  maximumCapacity={data.maximum_capacity}
-                  status={data.status}
-                  
-                />
+                <h3 className="text-black text-xl my-5 text-center font-semibold">
+                  Nothing to show!
+                </h3>
               );
             }
+            return (
+              <ClassInformations
+                title={resolvedData.name}
+                description={resolvedData.description}
+                date={resolvedData.date}
+                time={resolvedData.time}
+                instructor={resolvedData.instructor_name}
+                currentEnrollementCount={resolvedData.current_enrollement_count}
+                maximumCapacity={resolvedData.maximum_capacity}
+                status={resolvedData.status}
+              />
+            );
           }}
         </Await>
       </Suspense>
@@ -141,10 +140,11 @@ export async function loader({ params }) {
   if (!token) {
     return json({ status: 403 });
   }
-  return await fetchFunction({
+  const data = await fetchFun({
     url: `http://localhost:8081/class/${classId}`,
     options: {
       headers: { "x-access-token": token, method: "GET" },
     },
   });
+  return data;
 }

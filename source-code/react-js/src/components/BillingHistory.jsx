@@ -4,8 +4,7 @@ export default function BillingHistory({data}) {
 
 
   return (
-    <div className="bg-white px-3 py-2">
-      <h1 className="font-bold text-xl text-blue-700 mb-2">Billing History</h1>
+    <div className="bg-white px-3 py-2 my-3">
       <ol className="relative border-s border-gray-400">
         {data.map((item, index) => (
           <li key={index} className="mb-10 ms-4">

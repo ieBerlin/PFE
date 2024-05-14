@@ -93,8 +93,8 @@ const CoachNavs = {
   sidebar: [
     {
       id: 1,
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Overview",
+      href: "/overview",
       labelSvg: <ChartBarIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
@@ -119,8 +119,8 @@ const CoachNavs = {
   dropDownMenu: [
     {
       id: 1,
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Overview",
+      href: "/overview",
       labelSvg: <ChartBarIcon className={profileDropDownMenuSvgClasses} />,
     },
 
@@ -157,8 +157,8 @@ const MemberNavs = {
   sidebar: [
     {
       id: 1,
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Overview",
+      href: "/overview",
       labelSvg: <ChartBarIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
     {
@@ -183,8 +183,8 @@ const MemberNavs = {
   dropDownMenu: [
     {
       id: 1,
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Overview",
+      href: "/overview",
       labelSvg: <ChartBarIcon className={profileDropDownMenuSvgClasses} />,
     },
 

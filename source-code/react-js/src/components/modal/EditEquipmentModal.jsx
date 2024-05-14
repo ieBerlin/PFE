@@ -7,12 +7,11 @@ import TextAreaInput from "../TextAreaInput";
 import PriceInput from "../PriceInput";
 import ErrorMessage from "../ErrorMessage";
 import SelectInput from "../SelectInput";
-import { fetchFunction, getToken } from "../../hooks/http.js";
+import { fetchFun, fetchFunction, getToken } from "../../hooks/http.js";
 import { Form, json } from "react-router-dom";
 import { categories } from "./AddEquipmentModal.jsx";
 
 export default function EditEquipmentModal({ onClose, equipmentData: data }) {
-  console.log(data);
   const submitButtonRef = useRef();
   const [previewImageSrc, setPreviewImageSrc] = useState(defaultEquipmentImage);
   const imageInputRef = useRef();
@@ -21,11 +20,8 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
     mutationKey: ["equipments"],
     mutationFn: async (equipmentData) => {
       const token = getToken();
-      if (!token) {
-        return json({ status: 403 });
-      }
 
-      const response = await fetchFunction({
+      return await fetchFun({
         url: `${"http://localhost:8081/equipments/" + data.id}`,
         options: {
           method: "PUT",
@@ -36,22 +32,10 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
           },
         },
       });
-      if (response.status > 399) {
-        throw response;
-      }
     },
     onSuccess: () => {
       onClose();
       window.location.reload();
-    },
-    onError: (error) => {
-      if (typeof error === "string") {
-        return error;
-      } else if (typeof error === "object" && error.data) {
-        return Object.entries(error.data);
-      } else {
-        return "An error occurred";
-      }
     },
   });
   function submitForm(e) {
@@ -157,9 +141,9 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
           <button type="submit" className="hidden" ref={submitButtonRef} />
         </div>
       </Form>
-      {isError && error && error.data && (
+      {isError && error && (
         <div className="px-4 bg-white">
-          {Object.entries(error.data).map(([key, value]) => (
+          {Object.entries(error.info).map(([key, value]) => (
             <ErrorMessage key={key} title={key} message={value} />
           ))}
         </div>
