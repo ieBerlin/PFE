@@ -56,7 +56,7 @@ export default function NavList() {
       ) : (
         <p className="text-black font-semibold text-center text-nowrap text-ellipsis overflow-hidden">Nothing results found!</p>
       )}
-      <div className="profile">
+      {/* <div className="profile">
         <div className="profile-details-container">
           <div className="profile-details">
             <img src={searchSvg} alt="" />
@@ -72,7 +72,7 @@ export default function NavList() {
             <img src={logoutSvg} id="log-out" alt="" />
           </button>
         </div>
-      </div>
+      </div> */}
     </ul>
   );
 }

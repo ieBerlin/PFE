@@ -20,8 +20,8 @@ export default function ClassesList({ data }) {
     useState(selectedClasses);
   const fiteredClasses = filterClasses(data, currentSelectedClasses);
   return (
-    <>
-      <div className="flex flex-row w-full px-4 pt-2 mt-2 justify-between items-center ">
+    <div className="bg-white rounded-md mt-5">
+      <div className="flex flex-row w-full px-4 pt-3 mt-2 justify-between items-center ">
         <div />
         <div className="flex flex-row items-center gap-2">
           {isAdmin && (
@@ -52,7 +52,7 @@ export default function ClassesList({ data }) {
       >
         <ClassesItems classes={fiteredClasses} />
       </ul>
-    </>
+    </div>
   );
 }
 function ClassesItems({ classes }) {

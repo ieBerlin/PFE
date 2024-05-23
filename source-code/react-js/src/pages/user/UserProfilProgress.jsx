@@ -9,7 +9,7 @@ export default function UserProfilProgress({ userData }) {
       100
   );
   return (
-    <div className="bg-white relative p-4 shadow-lg">
+    <div className="bg-white shadow-md relative p-4 rounded-md">
       <h1 className="font-bold mb-3">Complete your profile</h1>
       <div
         style={{

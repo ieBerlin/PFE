@@ -23,14 +23,9 @@ export default function AvailableCoaches({ coaches }) {
 
   const filteredCoaches = filterCoaches(coaches, currentSelectedCoaches);
   return (
-    <>
-      <div className="flex flex-row w-full px-4 pt-2 mt-2 justify-between items-center">
-        <div className="font-semibold text-2xl">
-          All coaches{" "}
-          <span className="text-gray-600 text-lg">
-            ({filteredCoaches.length})
-          </span>
-        </div>
+    <div className="bg-white rounded-md mt-5">
+      <div className="flex flex-row w-full px-4 pt-3 justify-between items-center ">
+        <div />
         <FilterDropdown
           currentSelectedData={currentSelectedCoaches}
           setData={setCurrentSelectedCoaches}
@@ -47,7 +42,7 @@ export default function AvailableCoaches({ coaches }) {
         />
       </div>
       <CoachList coaches={filteredCoaches} />
-    </>
+    </div>
   );
 }
 
@@ -73,7 +68,7 @@ function CoachList({ coaches }) {
     </ul>
   );
 }
-export function CoachCard({coach}) {
+export function CoachCard({ coach }) {
   return (
     <li className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">

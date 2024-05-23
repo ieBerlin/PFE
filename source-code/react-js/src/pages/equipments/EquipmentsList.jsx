@@ -31,68 +31,66 @@ export default function EquipmentsList({ data }) {
   return (
     <>
       {modal}
-      <section className={classes.sectionContainer}>
-        <h1 className="font-semibold text-2xl mb-2">All Equipments</h1>
-        <div className="bg-gray-100  rounded-lg p-4">
-          <div className="flex w-full items-center justify-between  mt-4 ">
-            {isAdmin ? (
-              <div className="items-center gap-2 flex w-min whitespace-nowrap">
-                <Link
-                  className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
-                  to="/equipments/bookings"
-                >
-                  Equipments Booking History
-                </Link>
 
-                <button
-                  onClick={() => dispatch(setModalType("add-equipment"))}
-                  className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
-                >
-                  Add Equipment
-                </button>
-              </div>
-            ) : (
-              <div />
-            )}
-            <FilterDropdown
-              currentSelectedData={currentSelectedEquipments}
-              setData={setCurrentSelectedEquipments}
-              filterOptionsData={[
-                {
-                  title: "category",
-                  options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
-                },
-                // {
-                //   title: "equipment.Status",
-                //   options: ["new", "old"],
-                // },
-              ]}
-            />
-          </div>
-          <div
-            className=" gap-x-3 justify-center grid"
-            style={{
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            }}
-          >
-            {filteredEquipments && filteredEquipments.length > 0 ? (
-              filteredEquipments.map((item) => (
-                <EquipmentItem
-                  key={item.id}
-                  equipmentData={item}
-                  onEditEquipment={setCurrentSelectedEquipmentData}
-                />
-              ))
-            ) : (
-              <div className="mt-4 bg-white px-6 py-4 shadow-md">
-                <p className="text-stone-500 text-center font-bold text-xl">
-                  No equipments found!
-                </p>
-              </div>
-            )}
-          </div>
+      <div className="bg-white rounded-md  pt-3 mt-5">
+        <div className="flex w-full items-center justify-between px-3">
+          {isAdmin ? (
+            <div className="items-center gap-2 flex w-min whitespace-nowrap">
+              <Link
+                className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
+                to="/equipments/bookings"
+              >
+                Equipments Booking History
+              </Link>
+
+              <button
+                onClick={() => dispatch(setModalType("add-equipment"))}
+                className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
+              >
+                Add Equipment
+              </button>
+            </div>
+          ) : (
+            <div />
+          )}
+          <FilterDropdown
+            currentSelectedData={currentSelectedEquipments}
+            setData={setCurrentSelectedEquipments}
+            filterOptionsData={[
+              {
+                title: "category",
+                options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
+              },
+              // {
+              //   title: "equipment.Status",
+              //   options: ["new", "old"],
+              // },
+            ]}
+          />
         </div>
-      </section>
+        <div
+          className=" gap-x-3 justify-center grid"
+          style={{
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          }}
+        >
+          {filteredEquipments && filteredEquipments.length > 0 ? (
+            filteredEquipments.map((item) => (
+              <EquipmentItem
+                key={item.id}
+                equipmentData={item}
+                onEditEquipment={setCurrentSelectedEquipmentData}
+              />
+            ))
+          ) : (
+            <div className="mt-4 bg-white px-6 py-4 shadow-md">
+              <p className="text-stone-500 text-center font-bold text-xl">
+                No equipments found!
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 }

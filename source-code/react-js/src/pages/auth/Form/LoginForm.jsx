@@ -1,14 +1,11 @@
-import isValidEmail from "../../../utils/validation/emailValidation.js";
-import isValidPassword from "../../../utils/validation/passwordValidation.js";
-import FormInput from "./FormInput.jsx";
-import PasswordFormInput from "./PasswordFormInput";
 import classes from "../Login/Login.module.css";
-import { UserIcon } from "@heroicons/react/24/solid";
 import { Form, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { fetchFun, processLoginForm } from "../../../hooks/http.js";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
+import PasswordInput from "../../../components/modal/PasswordInput.jsx";
+import Input from "../../../components/Input.jsx"
 export default function LoginForm() {
   const navigate = useNavigate();
   const { data, isError, error, mutate, isPending } = useMutation({
@@ -27,7 +24,7 @@ export default function LoginForm() {
       });
     },
   });
-console.log(data)
+  console.log(data);
   useEffect(() => {
     if (data && data.token) {
       localStorage.setItem("user-token", data.token);
@@ -46,7 +43,7 @@ console.log(data)
 
   return (
     <Form onSubmit={handleSubmitForm} className="flex w-full flex-col px-24">
-      <FormInput
+      {/* <FormInput
         Icon={UserIcon}
         isNotValidInput="Email is not valid"
         isValidInputFun={isValidEmail}
@@ -55,17 +52,28 @@ console.log(data)
         name="email"
         type="email"
         required
+      /> */}
+      <Input
+        placeholder="Enter Your Email"
+        type="email"
+        name="email"
       />
       <input name="form-type" defaultValue="login-form" hidden />
 
       <div className="mt-2" />
-      <PasswordFormInput
+      <PasswordInput
+        id="password"
+        placeholder="Enter Your Password"
+        name="password"
+        required
+      />
+      {/* <PasswordFormInput
         id="password"
         name="password"
         isValidInputFun={isValidPassword}
         label="password"
         required
-      />
+      /> */}
       <div className={classes.rememberMe}>
         {/* <input type="checkbox" name="remember-me" id="remember-me" />
         <p>Remember me</p> */}

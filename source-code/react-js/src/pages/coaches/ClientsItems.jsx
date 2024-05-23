@@ -15,15 +15,10 @@ export default function ClientsItems({ data: clients }) {
   const filteredClients = filterClients(clients, currentSelectedClients);
   console.log(filteredClients);
 
-  return     (
-    <>
-      <div className="flex flex-row w-full px-4 pt-2 mt-2 justify-between items-center">
-        <div className="font-semibold text-2xl">
-          All clients{" "}
-          <span className="text-gray-600 text-lg">
-            ({filteredClients.length})
-          </span>
-        </div>
+  return (
+    <div className="bg-white rounded-md">
+      <div className="flex flex-row w-full px-4 pt-2 mt-3 justify-between items-center">
+        <div />
         <FilterDropdown
           currentSelectedData={currentSelectedClients}
           setData={setCurrentSelectedClients}
@@ -36,7 +31,7 @@ export default function ClientsItems({ data: clients }) {
         />
       </div>
       <ClientsList clients={filteredClients} />
-    </>
+    </div>
   );
 }
 export const filterClients = (clients, selectedCriteria) => {

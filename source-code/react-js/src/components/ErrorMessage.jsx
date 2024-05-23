@@ -1,6 +1,9 @@
 export default function ErrorMessage({ title, message }) {
   return (
-    <div className="bg-red-100 border-s-4 border-red-500 p-4 my-2" role="alert">
+    <div className="bg-red-100 border-s-4 border-red-500 p-4 my-2 " style={{
+      borderTopRightRadius:"5px",
+      borderBottomRightRadius:"5px"
+    }}>
       <div className="flex">
         <div className="flex-shrink-0">
           <span className="inline-flex justify-center items-center size-8 rounded-full border-4 border-red-100 bg-red-200 text-red-800 ">

@@ -1,52 +1,55 @@
-Routing Section :
+Coach:
 
-::User Authentication :
+/overview: Provides a summary of the coach's latest activities, including the classes they are coaching, membership status (active or ended), equipment bookings with return deadlines, and billing history.
 
-/login
-/register
-/forgot-password
-/reset-password/:token
-/logout
+/clients: Displays a list of the coach's clients with filtering options to sort and search based on various criteria.
 
-::User Profile :
-/profile
-/profile/edit
-/user/:userId
+/coaching: Shows the conversation section between the coach and members. Coaches can add attachments to the conversation, while members can only read the messages without the ability to comment.
 
-::Class management :
+/profile: Additional information section where coaches can add certifications and other professional details to their profile.
 
-/classes
+/equipments: Allows coaches to view available equipments. Coaches can explore the equipment page and check the details of each item.
+
+/equipments/book/:equipmentId: Enables coaches to reserve equipment by specifying the equipment ID. Coaches can see the booking status and deadlines for returning the equipment.
+
+Member:
+
+/overview: Displays the member's basic information, including the coach they are working with, classes they have signed up for, upcoming classes, billing history, and reserved equipment with return deadlines.
+
+/classes: Shows the current active classes with filtering options to help members find specific classes based on their interests and schedule.
+
+/classes/:classId: Provides detailed information about a specific class, including the possibility to join or register for the class.
+
+/coaches: Allows members to explore the coaches page with filtering options to find coaches based on their expertise, ratings, and other criteria.
+
+/coaches/:coachId: Displays a detailed profile of a specific coach, including their qualifications, classes they are coaching, and reviews from other members.
+
+/equipments: Enables members to discover available equipment. Members can explore the equipment page and check the details of each item.
+
+/equipments/book/:equipmentId: Allows members to reserve equipment by specifying the equipment ID. Members can see the booking status and deadlines for returning the equipment.
+
+/coaches/:coachId/connect: Displays the conversation between the member and their coach. Members can view messages from their coach and receive updates and instructions, but cannot comment or reply.
+
+admin :
+/dashboard : 
+admin can see the latest activities in the gym like new users, spend this month, earn this month, reserved equipments, also the billing transactions history.
+
+/classes:
+ Shows the current active classes with filtering options to help members find specific classes based on their interests and schedule.
+
 /classes/create
-/classes/:classId
-/classes/:classId/edit
-/classes/:classId/book
-/classes/filter
+User can add class.
 
-::Sports Management:
+/classes/edit/:classId :
+user can edit classId class
 
-/sports
-/sports/create
-/sports/:name
-/sports/:name/edit
-/sports/:sportId/delete
+/equipments: 
+Enables members to discover available equipment. Members can explore the equipment page and check the details of each item.
+At the same page, admin can edit equipment informations.
+At the same page, admin can edit equipment informations.
 
-::equipments :
+/equipments/bookings : 
+admin can see the latest booking and filtering options. also accept or reject the pending bookings.
 
-/equipment: Page to view available gym equipment and make bookings.
-/equipment/bookings: Page to view current and past equipment bookings.
-
-::Dashboard (Admin/Manager):
-
-/dashboard
-/dashboard/classes
-/dashboard/sports
-/dashboard/users
-
-::Additional Paths:
-
-/home: Route to the home page.
-/about: Route to the about page.
-/contact: Route to the contact page.
-
-::notifications :
-All notifications : /user/all-notifications
+/reports :
+admin can see the reports page which includes the General Club Stats and Financials

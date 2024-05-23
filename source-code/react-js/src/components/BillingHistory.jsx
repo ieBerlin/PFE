@@ -1,10 +1,7 @@
-
-export default function BillingHistory({data}) {
-  // Dummy billing items
-
-
-  return (
-    <div className="bg-white px-3 py-2 my-3">
+export default function BillingHistory({ data }) {
+  let content;
+  if (data && data.length > 0) {
+    content = (
       <ol className="relative border-s border-gray-400">
         {data.map((item, index) => (
           <li key={index} className="mb-10 ms-4">
@@ -21,6 +18,14 @@ export default function BillingHistory({data}) {
           </li>
         ))}
       </ol>
-    </div>
-  );
+    );
+  } else {
+    content = (
+      <h3 className="text-black text-xl bg-white rounded-md text-center font-semibold">
+        Billing history is Empty !
+      </h3>
+    );
+  }
+
+  return <div className="bg-white px-3 py-3 my-3">{content}</div>;
 }

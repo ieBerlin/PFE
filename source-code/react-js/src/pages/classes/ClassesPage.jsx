@@ -6,8 +6,8 @@ import { fetchFun, getToken } from "../../hooks/http.js";
 export default function ClassesPage() {
   const dataLoader = useRouteLoaderData("classes-page-id");
   return (
-    <section className="bg-gray-50 min-h-[calc(100vh-60px)] px-4  pb-40 pt-5 sm:px-6 ">
-      <h3 className="font-bold text-xl">Start exploring classes</h3>
+    <section className="bg-gray-100 min-h-[calc(100vh-60px)] px-5  pb-40 pt-4">
+      <h1 className="text-4xl text-black">Classes</h1>
       <Suspense fallback={<FallbackText title="Fetching available classes" />}>
         <Await resolve={dataLoader}>
           {(resolvedData) => <ClassesList data={resolvedData} />}

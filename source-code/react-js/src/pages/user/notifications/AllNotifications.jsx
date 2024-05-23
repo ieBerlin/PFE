@@ -6,17 +6,14 @@ import { getToken } from "../../../hooks/http.js";
 const token = getToken();
 export default function AllNotifications() {
   const loaderData = useRouteLoaderData("notifications-id");
+  console.log(loaderData);
   return (
-    <div className="py-5 px-[200px] bg-gray-100">
-      <div className="font-semibold text-2xl py-5 pl-5">All Notifications </div>
+    <div className="bg-gray-100 min-h-[calc(100vh-60px)] px-5  pb-40 pt-4">
+      <h1 className="text-4xl text-black">All notifications</h1>
       <Suspense
-        fallback={<FallbackText title="Fetch available notifications" />}
+        fallback={<FallbackText title="Fetching notifications data..." />}
       >
-        {/* <Await resolve={timeOut}> */}
-        {/* {(resolvedData) => */}
         <NotificationsList notifications={loaderData} />
-        {/* } */}
-        {/* </Await> */}
       </Suspense>
     </div>
   );

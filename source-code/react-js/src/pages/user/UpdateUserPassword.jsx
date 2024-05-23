@@ -5,16 +5,14 @@ import DateInput from "../../components/DateInput.jsx";
 import PhoneNumberInput from "../../components/PhoneNumberInput.jsx";
 import GenderInput from "../../components/GenderInput.jsx";
 import TextAreaInput from "../../components/TextAreaInput.jsx";
-import {
-  ClipboardDocumentCheckIcon,
-  PencilIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
+import { PencilIcon } from "@heroicons/react/24/outline";
 import defaultUserImage from "../../assets/default-user.webp";
 import { useMutation } from "@tanstack/react-query";
 import { fetchFun, getToken } from "../../hooks/http.js";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import SuccessMessage from "../../components/SuccessMessage.jsx";
+import { useSelector } from "react-redux";
+import CoachAdditionalInformations from "./CoachAdditionalInformations.jsx";
 const token = getToken();
 export default function UpdateUserPassword({ userData }) {
   const [currentAvatar, setCurrentAvatar] = useState(defaultUserImage);
@@ -47,20 +45,27 @@ export default function UpdateUserPassword({ userData }) {
     }
   };
   let content;
-  content =
-    !isPending &&
-    isError &&
-    (error
-      ? Object.entries(error.info).map(([key, value]) => (
-          <ErrorMessage key={key} title={key} message={value} />
-        ))
-      : "An error occured!");
-  if (data  && !isPending) {
+
+  content = !isPending && isError && (
+    <div className="">
+      <h1 className="font-medium text-lg text-red-500">Errors </h1>
+      {error
+        ? Object.entries(error.info).map(([key, value]) => (
+            <ErrorMessage key={key} title={key} message={value} />
+          ))
+        : "An error occured!"}
+    </div>
+  );
+
+  if (data && !isPending) {
     content = (
-      <SuccessMessage
-        title="Request Successful"
-        message="Your request has been processed successfully."
-      />
+      <div className="">
+        <h1 className="font-medium text-lg text-emerald-500">Server feedback </h1>
+        <SuccessMessage
+          title="Request Successful"
+          message="Your request has been processed successfully."
+        />
+      </div>
     );
   }
 
@@ -79,9 +84,11 @@ export default function UpdateUserPassword({ userData }) {
     };
     mutate(userData);
   };
-
+  const isCoach = useSelector(
+    (state) => state.userRole.userRole?.toLowerCase() === "coach"
+  );
   return (
-    <div className="bg-white shadow-lg">
+    <div className="bg-white shadow-md rounded-md">
       {/* Profile Picture Upload Section */}
       <div className="flex flex-row gap-20 p-8 pl-12 mb-2">
         {/* Avatar Display */}
@@ -128,7 +135,9 @@ export default function UpdateUserPassword({ userData }) {
         <div className="flex flex-col w-full border border-gray-300 mx-8 my-2 px-4 py-2 rounded-lg">
           {/* Section Header with Update Password Link */}
           <div className="flex flex-row justify-between items-center">
-            <h1 className="font-bold text-gray-900 text-lg">Personal info</h1>
+            <h1 className="font-bold text-gray-700 text-lg">
+              Personal infomations
+            </h1>
             <Link
               to="update-password"
               className="text-white bg-blue-600 px-4 py-2 rounded-md font-semibold"
@@ -182,24 +191,9 @@ export default function UpdateUserPassword({ userData }) {
               />
               {/* Hidden submit button to trigger form submission */}
               <button type="submit" className="hidden" ref={submitButtonRef} />
+              {isCoach && <CoachAdditionalInformations />}
             </Form>
-            <p className="block text-sm font-medium my-3">Certifications</p>
-            <div
-              className="w-full grid gap-2"
-              style={{
-                gridTemplateColumns: "repeat(auto-fit , minmax(250px , 1fr))",
-              }}
-            >
-              <AddImage />
-              <AddImage />
-              <AddImage />
-            </div>
-            {/* Save Button */}
-            <div className="flex  justify-end w-full">
-              <button className={`font-medium rounded-lg text-orange-600`}>
-                Add Certification
-              </button>
-            </div>
+
             <div className="flex justify-end mt-4 font-semibold">
               <button
                 disabled={isPending}
@@ -218,20 +212,6 @@ export default function UpdateUserPassword({ userData }) {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-function AddImage() {
-  return (
-    <div className="relative inline-block">
-      <img
-        className="rounded-md"
-        src="https://i0.wp.com/calmatters.org/wp-content/uploads/2021/08/class-size.jpg?fit=2266%2C1322&ssl=1"
-        alt=""
-      />
-      <button>
-        <TrashIcon className=" bg-gray-200 p-1 rounded-full w-7 h-7 absolute right-2 top-2" />
-      </button>
     </div>
   );
 }

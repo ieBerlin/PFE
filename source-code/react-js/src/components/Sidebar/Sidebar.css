@@ -3,7 +3,7 @@
     left: 0;
     top: 0;
     width: 78px;
-    height: calc(100% - 85px);
+    height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
     background: white;

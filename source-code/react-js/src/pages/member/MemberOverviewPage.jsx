@@ -7,27 +7,27 @@ import { Link } from "react-router-dom";
 export default function MemberOverviewPage() {
   const membershipStatus = "active"; // Declare membership status directly
   const upcomingClasses = [
-    {
-      id: 1,
-      name: "Class 1",
-    },
+    // {
+    //   id: 1,
+    //   name: "Class 1",
+    // },
   ];
 
   const coaches = [
-    {
-      id: 1,
-      name: "John Doe",
-      category: "Fitness Trainer",
-      level: "Advanced",
-    },
+    // {
+    //   id: 1,
+    //   name: "John Doe",
+    //   category: "Fitness Trainer",
+    //   level: "Advanced",
+    // },
   ];
   const equipments = [
-    {
-      id: 1,
-      name: "John Doe",
-      category: "Fitness Trainer",
-      level: "Advanced",
-    },
+    // {
+    //   id: 1,
+    //   name: "John Doe",
+    //   category: "Fitness Trainer",
+    //   level: "Advanced",
+    // },
   ];
 
   const membershipStatusStyle =
@@ -39,8 +39,8 @@ export default function MemberOverviewPage() {
 
   return (
     <div className="bg-gray-100 w-full px-5 pt-4 pb-10">
-      <h1 className="text-4xl mb-3">Overview</h1>
-      <div className="my-4 px-5">
+      <h1 className="text-4xl mb-5">Overview</h1>
+      <div className="px-5">
         <h3 className="text-gray-700 font-semibold text-xl">
           Membership Status
         </h3>
@@ -61,13 +61,13 @@ export default function MemberOverviewPage() {
             </div>
           )}
         </div>
-        <h3 className="text-gray-700 font-semibold text-xl">
+        <h3 className="text-gray-700 font-semibold text-xl mb-3">
           Upcoming Classes You've Signed Up For
         </h3>
 
         {upcomingClasses && upcomingClasses.length > 0 ? (
           <div
-            className="grid gap-3"
+            className="grid gap-3 bg-white py-2 rounded-md mb-3"
             style={{
               gridTemplateColumns: "repeat(auto-fit, minmax(auto,250px))",
             }}
@@ -77,9 +77,7 @@ export default function MemberOverviewPage() {
             ))}
           </div>
         ) : (
-          <h3 className="text-black text-xl my-5 text-center font-semibold">
-            Nothing to show!
-          </h3>
+          <EmptyComponent title="There's no classes!" />
         )}
         <h3 className="text-gray-700 font-semibold text-xl">
           Coaches You're Training With
@@ -96,9 +94,7 @@ export default function MemberOverviewPage() {
             ))}
           </div>
         ) : (
-          <h3 className="text-black text-xl my-5 text-center font-semibold">
-            Nothing to show!
-          </h3>
+          <EmptyComponent title="There's no coaches to show !" />
         )}
         <h3 className="text-gray-700 font-semibold text-xl">
           Equipment Already Booked
@@ -115,9 +111,7 @@ export default function MemberOverviewPage() {
             ))}
           </div>
         ) : (
-          <h3 className="text-black text-xl my-5 text-center font-semibold">
-            Nothing to show!
-          </h3>
+          <EmptyComponent title="There's no equipments to show !" />
         )}
         <h3 className="text-gray-700 font-semibold text-xl">Billing History</h3>
         <BillingHistory data={billingItems} />
@@ -163,5 +157,12 @@ function CoachCard({ coach }) {
         </Link>
       </div>
     </li>
+  );
+}
+function EmptyComponent({ title }) {
+  return (
+    <h3 className="text-black text-xl my-3 bg-white py-3 rounded-md text-center font-semibold">
+      {title}
+    </h3>
   );
 }

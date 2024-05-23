@@ -8,11 +8,14 @@ import { fetchFun, fetchFunction, getToken } from "../../hooks/http.js";
 export default function EquipmentsPage() {
   const equipmentsLoader = useRouteLoaderData("equipments-page-id");
   return (
-    <Suspense fallback={<FallbackText title="Fetching available equipments" />}>
-      <Await resolve={equipmentsLoader}>
-        {(resolvedData) => <EquipmentsList data={resolvedData} />}
-      </Await>
-    </Suspense>
+    <section className="bg-gray-100 px-5   py-4">
+      <h1 className="text-4xl text-black">Equipments</h1>
+      <Suspense fallback={<FallbackText title="Fetching equipments data..." />}>
+        <Await resolve={equipmentsLoader}>
+          {(resolvedData) => <EquipmentsList data={resolvedData} />}
+        </Await>
+      </Suspense>
+    </section>
   );
 }
 

@@ -1,4 +1,3 @@
-import classes from "./CoachesPage.module.css";
 import { DUMMY_COACHES } from "../../dummy_data/dummy_coaches.js";
 import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import AvailableCoaches from "./AvailableCoaches.jsx";
@@ -8,7 +7,8 @@ export default function CoachesPage() {
   const { timeOut } = useRouteLoaderData("coaches-page");
 
   return (
-    <section className={classes.sectionContainer}>
+    <section className="bg-gray-100 px-5   py-4">
+      <h1 className="text-4xl text-black">Coaches</h1>
       <Suspense fallback={<FallbackText title="Fetching Coaches data..." />}>
         <Await resolve={timeOut}>
           {(resolvedData) => <AvailableCoaches coaches={resolvedData} />}

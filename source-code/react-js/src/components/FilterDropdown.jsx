@@ -44,7 +44,7 @@ export default function FilterDropdown({
   return (
     <div className="relative" ref={dropdownMenuRef}>
       <button
-        className="text-stone-900 bg-white hover:bg-gray-50 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+        className=" bg-gray-500 text-white hover:bg-gray-400 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
         type="button"
         ref={buttonRef}
         onClick={toggleFilterDropdownMenu}
