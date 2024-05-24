@@ -3,9 +3,40 @@ import ClassItem from "../sports/ClassItem";
 import BillingHistory from "../../components/BillingHistory.jsx";
 import { billingItems } from "../../dummy_data/dummy_users.js";
 import { Link } from "react-router-dom";
-
+import { useQuery } from "@tanstack/react-query";
+import { fetchFun, getToken } from "../../hooks/http.js";
 export default function MemberOverviewPage() {
-  const membershipStatus = "active"; // Declare membership status directly
+  const { data: membershipStatusData } = useQuery({
+    queryKey: ["membership"],
+    queryFn: async () => {
+      try {
+        const data = await fetchFun({
+          url: "http://localhost:8081/membership/membership-status",
+          options: {
+            method: "GET",
+            headers: {
+              "x-access-token": getToken(),
+            },
+          },
+        });
+        return data;
+      } catch (error) {
+        return { status: false };
+      }
+    },
+  });
+  let membershipStatus;
+  if (membershipStatusData && membershipStatusData.status) {
+    membershipStatus = "active";
+  } else {
+    membershipStatus = "end";
+  }
+  const membershipStatusStyle =
+    membershipStatus === "active"
+      ? "emerald"
+      : membershipStatus === "end"
+      ? "red"
+      : "blue";
   const upcomingClasses = [
     // {
     //   id: 1,
@@ -29,13 +60,6 @@ export default function MemberOverviewPage() {
     //   level: "Advanced",
     // },
   ];
-
-  const membershipStatusStyle =
-    membershipStatus === "active"
-      ? "emerald"
-      : membershipStatus === "end"
-      ? "red"
-      : "blue";
 
   return (
     <div className="bg-gray-100 w-full px-5 pt-4 pb-10">

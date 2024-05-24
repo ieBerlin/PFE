@@ -2,22 +2,11 @@ import { Suspense } from "react";
 import Modal from "../../components/modal/Modal.jsx";
 import Transactions from "./Transactions.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
-import { defer, json, useRouteLoaderData } from "react-router-dom";
-import { fetchFunction, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken } from "../../hooks/http.js";
+import { Await } from "react-router-dom";
 // import { classNames } from "../../utils/helpers.js"; // Assuming helpers.js contains utility functions
 
 export default function PaymentsPage() {
-  const {
-    data: transactionLoader,
-    isLoading,
-    error,
-  } = useRouteLoaderData("payments-loader");
-
-  if (error) {
-    // Handle error case
-    return <div>Error: {error.message}</div>;
-  }
-
   return (
     <>
       <Modal />
@@ -28,47 +17,29 @@ export default function PaymentsPage() {
             <FallbackText title="Fetching available transactions data" />
           }
         >
-          {isLoading ? (
-            <FallbackText title="Loading transactions..." />
-          ) : (
-            <Transactions transactionsData={transactionLoader?.data || []} />
-          )}
+          <Await resolve={loader()}>
+            {(resolvedData) => <Transactions transactionsData={resolvedData} />}
+          </Await>
         </Suspense>
       </main>
     </>
   );
 }
 
-export async function action({ params, request }) {
-  let formData = await request.formData();
-  const actionType = formData.get("payment-action") || null;
-  if (actionType && actionType === "add-transaction") {
-    await timeoutPromise();
-    return json({
-      message: "",
-      success: true,
-    });
-  }
-  return 12;
-}
-
 export async function loader() {
-  const token = getToken();
-  if (!token) {
-    throw json({ status: 403 });
-  }
-
-  return defer({
-    data: await fetchFunction({
+  try {
+    return await fetchFun({
       url: "http://localhost:8081/transactions",
       options: {
         method: "GET",
         headers: {
-          "x-access-token": token,
+          "x-access-token": getToken(),
         },
       },
-    }),
-  });
+    });
+  } catch (_) {
+    return [];
+  }
 }
 
 async function timeoutPromise() {

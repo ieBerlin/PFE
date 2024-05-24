@@ -6,6 +6,7 @@ const usersAuthRouter = require("./src/routes/auth.route.js");
 const usersRouter = require("./src/routes/users.route.js");
 const userProfileRouter = require("./src/routes/user-profile.route.js");
 const membershipPlansRouter = require("./src/routes/membership-plan.route.js");
+const membershipRouter = require("./src/routes/membership.route.js");
 const feedbackRouter = require("./src/routes/feedback.route.js");
 const equipmentsRouter = require("./src/routes/equipment.route.js");
 const sportsRouter = require('./src/routes/sport.route.js');
@@ -17,6 +18,7 @@ const { pool } = require("./src/models/db/connect.js");
 const corsMiddleware = require("./src/middlewares/cors/corsConfig.js");
 const transactionsRouter = require("./src/routes/transactions.route.js")
 const clientsRouter = require("./src/routes/clients.route.js")
+const dashboardRouter = require("./src/routes/dashboard.route.js")
     // Middlewares
 dotenv.config();
 app.use(express.static("./src"));
@@ -30,6 +32,7 @@ app.use('/users', usersRouter)
 app.use("/equipments", equipmentsRouter);
 app.use("/user/profile", userProfileRouter);
 app.use("/membership-plans", membershipPlansRouter);
+app.use("/membership", membershipRouter);
 app.use('/feedback', feedbackRouter)
 app.use('/booking', bookingsRouter)
 app.use('/class', classesRouter);
@@ -38,6 +41,7 @@ app.use('/notification', notificationRouter);
 app.use('/payments', paymentsRouter)
 app.use('/transactions', transactionsRouter);
 app.use('/clients', clientsRouter);
+app.use('/dashboard', dashboardRouter);
 const port = process.env.PORT || 8080;
 
 // Start the server

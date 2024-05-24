@@ -6,7 +6,6 @@ export default function DatePicker({
   defaultDateValue,
   defaultTimeValue,
 }) {
-  console.log(dateName);
   const dateId = `${dateName}-id`;
   const timeId = `${timeName}-id`;
 

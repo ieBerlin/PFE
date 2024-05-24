@@ -1,7 +1,7 @@
 import { Suspense, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Await, json } from "react-router-dom";
-import { fetchFunction, getToken } from "../../../hooks/http";
+import { fetchFun, fetchFunction, getToken } from "../../../hooks/http";
 
 export default function RelatedUserField({
   label,
@@ -139,20 +139,16 @@ function UserCredentials({ resolvedData, setIsRelatedUsersShown, isChecked }) {
   );
 }
 async function usersLoader(searchInputValue, userType) {
-  const token = getToken();
-  if (!token) {
-    return json({ status: 403 });
-  }
-  const response = await fetchFunction({
+  const response = await fetchFun({
     url: "http://localhost:8081/user/profile/all-users",
     options: {
       method: "GET",
       headers: {
-        "x-access-token": token,
+        "x-access-token": getToken(),
       },
     },
   });
-  const data = response.data;
+  const data = response;
   if (!userType) {
     return filterUsers(data, searchInputValue);
   } else {
@@ -160,8 +156,15 @@ async function usersLoader(searchInputValue, userType) {
   }
 }
 
-function filterUsers(users, inputVal) {
-  return users.filter((user) =>
-    user.email.toLowerCase().includes(inputVal.trim().toLowerCase())
-  );
+function filterUsers(users, inputVal, userType) {
+  return users.filter((user) => {
+    const emailMatch = user.email.toLowerCase().includes(inputVal.trim().toLowerCase());
+    if (userType) {
+      const roleMatch = user.role === userType;
+      return emailMatch && roleMatch;
+    } else {
+      return emailMatch;
+    }
+  });
 }
+

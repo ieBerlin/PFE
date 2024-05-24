@@ -5,41 +5,65 @@ import { setModalType } from "../../features/modal/modalSlice.js";
 import PriceInput from "../PriceInput.jsx";
 import DatePicker from "../DatePicker.jsx";
 import SelectInputComponent from "../SelectInput.jsx";
-import { fetchFunction, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken } from "../../hooks/http.js";
 import { useMutation } from "@tanstack/react-query";
-import { Form, json } from "react-router-dom";
+import { Form } from "react-router-dom";
 import Input from "../Input.jsx";
+import SuccessMessage from "../SuccessMessage.jsx";
+import ErrorMessage from "../ErrorMessage.jsx";
 export default function AddTransactionModal() {
   const dispatch = useDispatch();
   const submitButtonRef = useRef();
+
   const {
     isError,
+    data,
     error,
     isPending: isSubmitting,
-    data,
     mutate,
   } = useMutation({
     mutationKey: ["transactions"],
     mutationFn: async (transactionData) => {
-      const token = getToken();
-      if (!token) {
-        throw json({ success: false, json: 403 });
-      }
-      const response = await fetchFunction({
+      const response = await fetchFun({
         url: "http://localhost:8081/transactions",
         options: {
           method: "POST",
-          body:JSON.stringify(transactionData),
+          body: JSON.stringify(transactionData),
           headers: {
-            "x-access-token": token,
-            'Content-Type':"application/json"
+            "x-access-token": getToken(),
+            "Content-Type": "application/json",
           },
         },
       });
-      console.log(response.data);
       return response;
     },
   });
+  let content;
+  content = !isSubmitting && isError && (
+    <div className="">
+      <h1 className="font-medium text-lg text-red-500">Errors </h1>
+      {error
+        ? Object.entries(error.info).map(([key, value]) => {
+            console.log(error.info);
+            return <ErrorMessage key={key} title={key} message={value} />;
+          })
+        : "An error occured!"}
+    </div>
+  );
+
+  if (data && !isSubmitting) {
+    content = (
+      <div className="">
+        <h1 className="font-medium text-lg text-emerald-500">
+          Server feedback{" "}
+        </h1>
+        <SuccessMessage
+          title="Request Successful"
+          message="Your request has been processed successfully."
+        />
+      </div>
+    );
+  }
   const submitHandler = (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
@@ -144,6 +168,7 @@ export default function AddTransactionModal() {
           Cancel
         </button>
       </div>
+      {content}
     </div>
   );
 }

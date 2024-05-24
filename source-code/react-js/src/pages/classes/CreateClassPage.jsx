@@ -4,32 +4,29 @@ import TextAreaInput from "../../components/TextAreaInput.jsx";
 import RelatedUsers from "../../components/modal/related-user/RelatedUsers.jsx";
 import DatePicker from "../../components/DatePicker.jsx";
 import PriceInput from "../../components/PriceInput.jsx";
-import { Form, json, Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import { categories } from "../../components/modal/AddEquipmentModal.jsx";
 import SelectInput from "../../components/SelectInput.jsx";
 import { useMutation } from "@tanstack/react-query";
-import { fetchFunction, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken } from "../../hooks/http.js";
+import SuccessMessage from "../../components/SuccessMessage.jsx";
+import ErrorMessage from "../../components/ErrorMessage.jsx";
 export default function CreateClassPage() {
   const submitButtonRef = useRef();
   const { isPending, data, isError, error, mutate } = useMutation({
     mutationKey: ["classes", "create-class"],
     mutationFn: async (data) => {
-      const token = getToken();
-      if (!token) {
-        return json({ status: 403 });
-      }
-      const response = await fetchFunction({
+      return await fetchFun({
         url: "http://localhost:8081/class",
         options: {
           method: "POST",
           body: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json",
-            "x-access-token": token,
+            "x-access-token": getToken(),
           },
         },
       });
-      console.log(response.data);
     },
   });
   function handleSubmitForm(e) {
@@ -48,6 +45,33 @@ export default function CreateClassPage() {
       maxSize: fd.get("class-max-size"),
     };
     mutate(classData);
+  }
+  let content;
+  console.log(isError);
+  content = !isPending && isError && (
+    <div className="">
+      <h1 className="font-medium text-lg text-red-500">Errors </h1>
+      {error
+        ? Object.entries(error.info).map(([key, value]) => {
+            console.log(error.info);
+            return <ErrorMessage key={key} title={key} message={value} />;
+          })
+        : "An error occured!"}
+    </div>
+  );
+
+  if (data && !isPending) {
+    content = (
+      <div className="">
+        <h1 className="font-medium text-lg text-emerald-500">
+          Server feedback{" "}
+        </h1>
+        <SuccessMessage
+          title="Request Successful"
+          message="Your request has been processed successfully."
+        />
+      </div>
+    );
   }
   return (
     <div className="bg-gray-100 p-4">
@@ -118,6 +142,7 @@ export default function CreateClassPage() {
             Cancel
           </Link>
         </div>
+        {content}
       </div>
     </div>
   );

@@ -12,25 +12,29 @@ const token = getToken();
 function Navbar({ width }) {
   const { data, isError, error } = useQuery({
     queryKey: ["user"],
-    queryFn: () => fetchUserCredentials(),
+    queryFn: fetchUserCredentials,
   });
   const greetingMessage =
-    new Date().getHours() > 12 ? "Good evening" : "Good morning";
+    new Date().getHours() > 12 ? "Good Evening" : "Good Morning";
   return (
     <nav className="navbar-container" style={{ width: width }}>
       <div className="greeting">
-        <h2>
-          {greetingMessage}
-          {data && data.first_name && `, ${data.first_name}`}
+        <h2 className="inline-block">
+          {greetingMessage + " "}
+          {data && data.first_name && (
+            <span className="text-gray-800 inline-block font-semibold capitalize">
+              {data.first_name}
+            </span>
+          )}
         </h2>
-        <p>Welcome again</p>
       </div>
+
       <div className="user-info">
         <NotificationBell />
         <Link to="/profile">
           <img className="user-avatar" src={avatar} alt="User Avatar" />
         </Link>
-        <div className="user-name">{data && data.username}</div>
+        <div className="user-name text-gray-800 " >{data && data.username}</div>
         <ProfileDropdownMenu />
       </div>
     </nav>

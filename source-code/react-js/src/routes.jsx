@@ -7,9 +7,7 @@ import LoginPage, {
   loader as loginLoader,
 } from "./pages/auth/Login/Login.jsx";
 import SportsPage from "./pages/sports/SportsPage.jsx";
-import ClassesPage, {
-  loader as classesLoader,
-} from "./pages/classes/ClassesPage.jsx";
+import ClassesPage from "./pages/classes/ClassesPage.jsx";
 import EquipmentsPage, {
   action as equipmentsPageAction,
   loader as equipmentsPageLoader,
@@ -53,10 +51,7 @@ import CreateClassPage, {
 } from "./pages/classes/CreateClassPage.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import MemberOverviewPage from "./pages/member/MemberOverviewPage.jsx";
-import PaymentsPage, {
-  action as paymentsAction,
-  loader as paymentsLoader,
-} from "./pages/payments/PaymentsPage.jsx";
+import PaymentsPage from "./pages/payments/PaymentsPage.jsx";
 import RootLayout, {
   loader as tokenLoader,
 } from "./components/Layouts/Root/RootLayout.jsx";
@@ -117,8 +112,6 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <ClassesPage />,
-            id: "classes-page-id",
-            loader: classesLoader,
           },
           {
             path: "create",
@@ -184,9 +177,7 @@ const router = createBrowserRouter([
       {
         path: "payments",
         element: <PaymentsPage />,
-        id: "payments-loader",
-        loader: paymentsLoader,
-        action: paymentsAction,
+      
       },
       {
         path: "equipments",
@@ -233,7 +224,7 @@ const router = createBrowserRouter([
         path: "coaching",
         children: [
           {
-            path:':userId',
+            path: ":userId",
             element: <CoachingPage />,
             loader: connectLoader,
           },

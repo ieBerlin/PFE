@@ -9,6 +9,7 @@ const authAdminOrManager = require("../middlewares/auth/authAdminOrManager.js");
 const verifyToken = require("../middlewares/auth/authJWT.js");
 
 router.get("/:planId", getMembershipPlan);
+
 router.get("/", getMembershipPlans);
 router.post("/", verifyToken, authAdminOrManager, postMembershipPlan);
 router.put("/:planId", verifyToken, authAdminOrManager, updateMembershipPlan);

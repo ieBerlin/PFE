@@ -10,6 +10,7 @@ import SelectInput from "../SelectInput";
 import { fetchFun, fetchFunction, getToken } from "../../hooks/http.js";
 import { Form, json } from "react-router-dom";
 import { categories } from "./AddEquipmentModal.jsx";
+import SuccessMessage from "../SuccessMessage.jsx";
 
 export default function EditEquipmentModal({ onClose, equipmentData: data }) {
   const submitButtonRef = useRef();
@@ -32,10 +33,6 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
           },
         },
       });
-    },
-    onSuccess: () => {
-      onClose();
-      window.location.reload();
     },
   });
   function submitForm(e) {
@@ -67,9 +64,34 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
       reader.readAsDataURL(file);
     }
   };
+  let content;
+  content = !isPending && isError && (
+    <div className="">
+      <h1 className="font-medium text-lg text-red-500">Errors </h1>
+      {error
+        ? Object.entries(error.info).map(([key, value]) => {
+            console.log(error.info);
+            return <ErrorMessage key={key} title={key} message={value} />;
+          })
+        : "An error occured!"}
+    </div>
+  );
 
+  if (data && !isPending) {
+    content = (
+      <div className="">
+        <h1 className="font-medium text-lg text-emerald-500">
+          Server feedback{" "}
+        </h1>
+        <SuccessMessage
+          title="Request Successful"
+          message="Your request has been processed successfully."
+        />
+      </div>
+    );
+  }
   return (
-    <div>
+    <div className="bg-white px-3 py-2">
       <Form
         onSubmit={submitForm}
         method="post"
@@ -176,6 +198,7 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
           Cancel
         </button>
       </div>
+      {content}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Modal from "../../components/modal/Modal";
 import { Await, defer, json, useRouteLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 import {
+  fetchFun,
   fetchFunction,
   getToken,
   processSignUpForm,
@@ -9,14 +10,14 @@ import {
 import AllUsersList from "./AllUsersList.jsx";
 export default function AllUserPage() {
   const { timeOut } = useRouteLoaderData("all-users-id");
+
   return (
     <>
       <Modal />
       <Suspense fallback={<FallbackText />}>
         <Await resolve={timeOut}>
           {(resolvedData) => {
-            const { data } = resolvedData;
-            return <AllUsersList users={data} />;
+            return <AllUsersList users={resolvedData} />;
           }}
         </Await>
       </Suspense>
@@ -28,17 +29,13 @@ export function loader() {
     timeOut: timeOut(),
   });
 }
-const timeOut = () => {
-  const token = getToken();
-  if (!token) {
-    throw json({ status: 403 });
-  }
-  return fetchFunction({
+const timeOut = async () => {
+  return await fetchFun({
     url: "http://localhost:8081/user/profile/all-users",
     options: {
       method: "GET",
       headers: {
-        "x-access-token": token,
+        "x-access-token": getToken(),
       },
     },
   });

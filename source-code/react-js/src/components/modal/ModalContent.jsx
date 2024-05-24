@@ -10,9 +10,9 @@ import RechargeUserMembership from "./RechargeUserMembership.jsx";
 import NotifyMembershipEnd from "./NotifyMembershipEnd.jsx";
 import SendCustomMessage from "./SendCustomMessage.jsx";
 import AddEquipmentModal from "./AddEquipmentModal.jsx";
-import { json, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EditEquipmentModal from "./EditEquipmentModal.jsx";
-import { fetchFunction, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken } from "../../hooks/http.js";
 export default function ModalContent({
   equipmentData,
   remainingDay,
@@ -34,23 +34,16 @@ export default function ModalContent({
     localStorage.removeItem("user-token");
     navigate("/auth");
   }
-  async function handleDeleteClass() {
-    const token = getToken();
-    if (!token) {
-      return json({ status: 403 });
-    }
-    const response = await fetchFunction({
-      url: `http://localhost:8081/class/${classId}`,
+  async function handleDeleteClass(url, method) {
+    await fetchFun({
+      url,
       options: {
-        method: "DELETE",
+        method,
         headers: {
-          "x-access-token": token,
+          "x-access-token": getToken(),
         },
       },
     });
-    dispatch(setModalType())
-    console.log(response.data);
-
   }
 
   if (type === "create-user") {
@@ -135,9 +128,11 @@ export default function ModalContent({
     modalContent = (
       <ConfirmationModal
         title="Delete Class"
-        description=" Are you sure you want to class this account? All of the data will be permanently removed. This action cannot be undone."
+        description=" Are you sure you want to delete this class? All of the data will be permanently removed. This action cannot be undone."
         confirmActionLabel="Delete"
-        onConfirm={handleDeleteClass}
+        onConfirm={() =>
+          handleDeleteClass(`http://localhost:8081/class/${classId}`, "DELETE")
+        }
       />
     );
   } else {

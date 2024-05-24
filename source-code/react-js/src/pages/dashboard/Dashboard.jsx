@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ChartBarIcon,
   Cog8ToothIcon,
@@ -7,65 +6,125 @@ import {
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import BillingHistory from "../../components/BillingHistory.jsx";
-import { billingItems } from "../../dummy_data/dummy_users.js";
-
+import { fetchFun, getToken } from "../../hooks/http.js";
+import { useQueries } from "@tanstack/react-query";
+import FallbackText from "../../components/FallbackText.jsx"
 // Dashboard component
 export default function Dashboard() {
-  // Card data
-  const cardData = [
-    {
-      label: "New Users",
-      value: "$600",
-      icon: (
-        <ChartBarIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
-      ),
-      href: "/users",
-      statistics: {
-        title: "User Growth",
-        value: "+23%",
-        color: "blue-500",
+  const data = useQueries({
+    queries: [
+      {
+        staleTime: 0,
+        queryKey: ["dashboard"],
+        queryFn: async () => {
+          try {
+            const response = await fetchFun({
+              url: "http://localhost:8081/dashboard",
+              options: {
+                method: "GET",
+                headers: {
+                  "x-access-token": getToken(),
+                },
+              },
+            });
+
+            return response;
+          } catch (error) {
+            return false;
+          }
+        },
       },
-    },
-    {
-      label: "Spend this month",
-      value: "$600",
-      icon: (
-        <ArrowTrendingDownIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
-      ),
-      href: "/reports",
-      statistics: {
-        title: "Sales This Month",
-        value: "+23%",
-        color: "red-500",
+      {
+        staleTime: 0,
+        queryKey: ["transactions"],
+        queryFn: async () => {
+          try {
+            const response = await fetchFun({
+              url: "http://localhost:8081/dashboard/transactions", // Update the URL to your backend endpoint
+              options: {
+                method: "GET",
+                headers: {
+                  "x-access-token": getToken(),
+                },
+              },
+            });
+            return response;
+          } catch (error) {
+            return false;
+          }
+        },
       },
-    },
-    {
-      label: "Earn this month",
-      value: "$600",
-      icon: (
-        <ArrowTrendingUpIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
-      ),
-      href: "/reports",
-      statistics: {
-        title: "Earnings This Month",
-        value: "+23%",
-        color: "emerald-500",
-      },
-    },
-    {
-      label: "Reserved Equipment",
-      value: "$600",
-      icon: (
-        <Cog8ToothIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
-      ),
-      href: "/equipments",
-      statistics: {
-        title: "Reserved Items",
-        value: "+23%",
-        color: "amber-500",
-      },
-    },
-  ];
+    ],
+  });
+  let basicInformations = [];
+  let transactionsData = [];
+  if (!data[0].isPending && !data[0].isError && data[0].data) {
+    basicInformations = data[0].data;
+  }
+  if (!data[1].isError && data[1].data) {
+    transactionsData = data[1].data;
+  }
+
+  const cardData = basicInformations
+    ? [
+        {
+          label: "New Users",
+          value: `$${basicInformations?.newUsers?.currentMonth ?? 0}`, // Update value based on fetched data
+          icon: (
+            <ChartBarIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
+          ),
+          href: "/users",
+          statistics: {
+            title: "User Growth",
+            value: `+${basicInformations?.newUsers?.growth ?? 0}%`, // Update growth percentage based on fetched data
+            color: "blue-500",
+          },
+        },
+        {
+          label: "Spend this month",
+          value: `$${
+            basicInformations?.transactions?.expense?.currentMonth ?? 0
+          }`, // Update value based on fetched data
+          icon: (
+            <ArrowTrendingDownIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
+          ),
+          href: "/reports",
+          statistics: {
+            title: "Sales This Month",
+            value: `+${basicInformations?.transactions?.expense?.growth ?? 0}%`, // Update growth percentage based on fetched data
+            color: "red-500",
+          },
+        },
+        {
+          label: "Earn this month",
+          value: `$${
+            basicInformations?.transactions?.income?.currentMonth ?? 0
+          }`, // Update value based on fetched data
+          icon: (
+            <ArrowTrendingUpIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
+          ),
+          href: "/reports",
+          statistics: {
+            title: "Earnings This Month",
+            value: `+${basicInformations?.transactions?.income?.growth ?? 0}%`, // Update growth percentage based on fetched data
+            color: "emerald-500",
+          },
+        },
+        {
+          label: "Reserved Equipment",
+          value: `$${basicInformations?.reservedEquipments?.currentMonth ?? 0}`, // Update value based on fetched data
+          icon: (
+            <Cog8ToothIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
+          ),
+          href: "/equipments",
+          statistics: {
+            title: "Reserved Items",
+            value: `${basicInformations?.reservedEquipments?.growth ?? 0} %`, // Update growth percentage based on fetched data
+            color: "amber-500",
+          },
+        },
+      ]
+    : [];
 
   return (
     <div className="bg-gray-100 w-full px-5 pt-4 pb-10">
@@ -77,20 +136,24 @@ export default function Dashboard() {
           }}
           className="grid gap-4"
         >
-          {cardData.map((data, index) => (
+          {cardData.map((item, index) => (
             <CardComponent
               key={index}
-              label={data.label}
-              value={data.value}
-              icon={data.icon}
-              href={data.href}
-              statistics={data.statistics} 
+              label={item.label}
+              value={item.value}
+              icon={item.icon}
+              href={item.href}
+              statistics={item.statistics}
             />
           ))}
         </div>
-        <div className="flex gap-4 flex-col bg-white mt-4 rounded-md pb-4 hover:shadow-md">
-          <BillingHistory data={billingItems} />
-          <hr className="border-t-1 border-gray-300  h-2 mx-3"/>
+        <div className="flex gap-2 flex-col bg-white mt-2 rounded-md hover:shadow-md">
+          {data[1].isPending ? (
+            <FallbackText title={"Fetching billing data"} />
+          ) : (
+            <BillingHistory data={transactionsData} />
+          )}
+          <hr className="border-t-1 border-gray-300  h-2 mx-3" />
           <Link
             to="/payments"
             className="text-center font-bold text-gray-600 hover:bg-gray-100 hover:text-gray-800 rounded-md mx-auto py-2 px-5"
@@ -103,7 +166,6 @@ export default function Dashboard() {
   );
 }
 
-// CardComponent component
 function CardComponent({ label, value, icon, href, statistics }) {
   return (
     <Link to={href} className="flex items-center">
