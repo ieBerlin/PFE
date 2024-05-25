@@ -1,6 +1,7 @@
+import { QueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+export const queryClient = new QueryClient();
 // export function useFetch(fetchFn, initialValue) {
 //     const [isFetching, setIsFetching] = useState(false);
 //     const [error, setError] = useState(null);

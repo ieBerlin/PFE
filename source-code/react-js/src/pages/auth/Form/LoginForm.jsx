@@ -2,7 +2,7 @@ import classes from "../Login/Login.module.css";
 import { Form, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { fetchFun, processLoginForm } from "../../../hooks/http.js";
+import { fetchFun, processLoginForm, queryClient } from "../../../hooks/http.js";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import PasswordInput from "../../../components/modal/PasswordInput.jsx";
 import Input from "../../../components/Input.jsx"
@@ -23,6 +23,7 @@ export default function LoginForm() {
         },
       });
     },
+    onMutate:()=>queryClient.invalidateQueries()
   });
   console.log(data);
   useEffect(() => {

@@ -12,7 +12,7 @@ import SendCustomMessage from "./SendCustomMessage.jsx";
 import AddEquipmentModal from "./AddEquipmentModal.jsx";
 import { useNavigate } from "react-router-dom";
 import EditEquipmentModal from "./EditEquipmentModal.jsx";
-import { fetchFun, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 export default function ModalContent({
   equipmentData,
   remainingDay,
@@ -30,9 +30,10 @@ export default function ModalContent({
   }
   const navigate = useNavigate();
   function handleConfirmSignOut() {
-    onClose();
+    queryClient.clear();
     localStorage.removeItem("user-token");
     navigate("/auth");
+    onClose();
   }
   async function handleDeleteClass(url, method) {
     await fetchFun({
