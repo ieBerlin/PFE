@@ -3,15 +3,19 @@ import {
   CalendarDaysIcon,
   PencilIcon,
 } from "@heroicons/react/24/solid";
+import ErrorMessage from "../../components/ErrorMessage.jsx";
+import SuccessMessage from "../../components/SuccessMessage.jsx";
 import {
   Button,
   Popover,
   PopoverContent,
   PopoverHandler,
 } from "@material-tailwind/react";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Form, Link } from "react-router-dom";
 import FilterDropdown from "../../components/FilterDropdown";
+import { fetchFun, getToken } from "../../hooks/http";
 const selectedBookings = {
   userType: {
     coach: true,
@@ -112,32 +116,35 @@ export default function EquipmentsTable({ data }) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 ">
-                    {filteredBookings.map((booking, index) => (
-                      <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
-                          {booking.bookingId}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium ">
-                          {booking.bookingDate}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
-                          {booking.deadlineDate}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
-                          <Link to={`/users/${booking.userId}`}>
-                            {booking.staff}
-                          </Link>
-                        </td>
-                        <UserTypeData type={booking.userType} />
-                        <StatusTableData
-                          status={booking.status}
-                          data={booking}
-                        />
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
-                          {booking.price}
-                        </td>
-                      </tr>
-                    ))}
+                    {filteredBookings.map((booking, index) => {
+                      console.log(booking)
+                      return (
+                        <tr key={index}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                            {booking.bookingId}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium ">
+                            {booking.date}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
+                            {booking.time}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
+                            <Link to={`/users/${booking.userId}`}>
+                              {booking.staff}
+                            </Link>
+                          </td>
+                          <UserTypeData type={booking.staff} />
+                          <StatusTableData
+                            status={booking.status}
+                            data={booking}
+                          />
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
+                            ${booking.price}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -150,13 +157,63 @@ export default function EquipmentsTable({ data }) {
 }
 
 function StatusTableData({ status, data }) {
-  // const [isStatusChanged, setIsStatusChanged] = useState(false);
-  // const [isPendingChanged, setIsPendingChanged] = useState(false);
-  // function handlePendingButtonClick() {
-  //   setIsStatusChanged((prevState) => !prevState);
-  //   setIsPendingChanged(false);
-  // }
-  const isSubmitting = false;
+  const {
+    mutate,
+    isPending: isSubmitting,
+    isError,
+    error,
+    data: responseData,
+  } = useMutation({
+    mutationKey: ["equipments", "bookings"],
+    mutationFn: async (data) =>
+      await fetchFun({
+        url: `${"http://localhost:8081/booking/" + data.bookingId}`,
+        options: {
+          method: "PUT",
+          body: JSON.stringify(data),
+          headers: {
+            "x-access-token": getToken(),
+            "Content-Type": "application/json",
+          },
+        },
+      }),
+  });
+  let content;
+  if (isError) {
+    content = (
+      <div className="">
+        <h1 className="font-medium text-lg text-red-500">Errors </h1>
+        {error
+          ? Object.entries(error.info).map(([key, value]) => (
+              <ErrorMessage key={key} title={key} message={value} />
+            ))
+          : "An error occured!"}
+      </div>
+    );
+  } else if (responseData) {
+    content = (
+      <div>
+        <h1 className="font-medium text-lg text-emerald-500">
+          Server feedback{" "}
+        </h1>
+        <div className="flex flex-row">
+          <SuccessMessage
+            title="Request Successful"
+            message="Your request has been processed successfully."
+          />
+        </div>
+      </div>
+    );
+  }
+
+  function handleSubmit(e) {
+    const formData = new FormData(e.target);
+    const fd = {
+      bookingId: data.bookingId,
+      status: formData.get("status"),
+    };
+    mutate(fd);
+  }
   let textStyle;
   if (status.toLowerCase() === "pending") {
     textStyle = " text-amber-500";
@@ -167,6 +224,7 @@ function StatusTableData({ status, data }) {
   } else {
     textStyle = " text-gray-800";
   }
+
   return (
     <td
       className={`px-6 py-4 whitespace-nowrap text-sm ${textStyle} font-medium`}
@@ -180,7 +238,7 @@ function StatusTableData({ status, data }) {
             </Button>
           </PopoverHandler>
           <PopoverContent className="z-[999] overflow-hidden p-0">
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <div className="flex flex-row items-center justify-start px-8 bg-gray-100 gap-3 w-full  py-4">
                 <img
                   className="w-10 h-10 rounded-full"
@@ -194,20 +252,23 @@ function StatusTableData({ status, data }) {
                   <h3 className="text-gray-700">From </h3>
                   <h1 className="text-black font-semibold px-2 py-2 bg-gray-100 flex flex-row items-center gap-2 text-nowrap rounded-sm">
                     <CalendarDaysIcon className="w-4 h-4 text-gray-600" />
-                    {data.bookingDate}
+                    {data.date}
                   </h1>
                 </div>
                 <div className="flex flex-row items-center   justify-center m-2 gap-2">
                   <h3 className="text-gray-700">To </h3>
                   <h1 className="text-black font-semibold px-2 py-2 bg-gray-100 flex flex-row items-center gap-2 text-nowrap rounded-sm">
                     <CalendarDaysIcon className="w-4 h-4 text-gray-600" />
-                    {data.deadlineDate}
+                    {data.time}
                   </h1>
                 </div>
               </div>
               <div className="bg-gray-100 px-10 py-2 flex flex-row items-center justify-between">
                 <h1 className="font-semibold text-black">Status</h1>
-                <select className="py-2 outline-none px-4 pe-9  border-gray-200 rounded-lg text-sm border-1 focus:border-blue-500 ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                <select
+                  name="status"
+                  className="py-2 outline-none px-4 pe-9  border-gray-200 rounded-lg text-sm border-1 focus:border-blue-500 ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                >
                   <option value="pending">pending</option>
                   <option value="rejected">rejected</option>
                   <option value="approved">approved</option>
@@ -285,7 +346,7 @@ function StatusTableData({ status, data }) {
                     <h2 className="min-w-40 font-semibold inline-block  px-4 py-2">
                       User Type{" "}
                     </h2>
-                    <p className="inline">{data.userType}</p>
+                    <p className="inline">{data.staff}</p>
                   </div>
                   <div>
                     <h2 className="min-w-40 font-semibold inline-block  px-4 py-2">
@@ -298,7 +359,7 @@ function StatusTableData({ status, data }) {
               <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <button
                   disabled={isSubmitting}
-                  type="button"
+                  type="submit"
                   className={`${
                     isSubmitting ? "bg-gray-200" : "bg-blue-600 "
                   }   ${
@@ -310,19 +371,8 @@ function StatusTableData({ status, data }) {
                 >
                   {isSubmitting ? "Loading..." : "Edit"}
                 </button>
-                <button
-                  disabled={isSubmitting}
-                  type="button"
-                  className={` outline-none  mt-3 inline-flex w-full justify-center rounded-md ${
-                    isSubmitting ? "bg-gray-100" : "bg-white"
-                  } px-3 py-2 text-sm font-semibold ${
-                    isSubmitting ? "text-gray-400" : "text-gray-900"
-                  } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto`}
-                  // onClick={() => dispatch(setModalType())}
-                >
-                  Cancel
-                </button>
               </div>
+              <div className="flex w-full justify-center px-3 py-2">{content}</div>
             </Form>
           </PopoverContent>
         </Popover>
@@ -334,9 +384,9 @@ function StatusTableData({ status, data }) {
 }
 function UserTypeData({ type }) {
   let styles;
-  if (type.toLowerCase() === "coach") {
+  if (type?.toLowerCase() === "coach") {
     styles = " text-blue-700 bg-blue-200";
-  } else if (type.toLowerCase() === "member") {
+  } else if (type?.toLowerCase() === "member") {
     styles = " text-emerald-700 bg-emerald-200";
   } else {
     styles = " text-gray-900 bg-gray-200";

@@ -34,9 +34,7 @@ import CoachesPage, {
   loader as coachesPageLoader,
 } from "./pages/coaches/CoachesPage.jsx";
 import ClientsPage from "./pages/coaches/ClientsPage.jsx";
-import EquipmentsBookings, {
-  loader as bookingsEquipmentsLoader,
-} from "./pages/equipments/EquipmentsBookings.jsx";
+import EquipmentsBookings  from "./pages/equipments/EquipmentsBookings.jsx";
 import BookEquipmentPage from "./pages/equipments/BookEquipmentPage.jsx";
 import BookClassPage from "./pages/classes/BookClassPage.jsx";
 import ClassDetailsPage, {
@@ -198,8 +196,6 @@ const router = createBrowserRouter([
           {
             path: "bookings",
             element: <EquipmentsBookings />,
-            id: "equipments-bookings-id",
-            loader: bookingsEquipmentsLoader,
           },
         ],
       },
