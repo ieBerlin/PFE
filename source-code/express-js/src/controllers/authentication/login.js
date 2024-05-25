@@ -1,6 +1,8 @@
 const { validateLoginInputs, userExists, comparePassword } = require("./func");
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../config/jwt_secret.js')
+const fetchUserRole = require('../../middlewares/auth/userRole.js')
+
 const loginUser = async(req, res) => {
     console.log('-------------------------------')
     console.log(req.body)
@@ -68,8 +70,9 @@ const loginUser = async(req, res) => {
                     expiresIn: 24000
                 })
                 // Password matched, send success response
+            const userRole = await fetchUserRole()
             setTimeout(() => {
-                return res.status(200).json({ token, message: "Login successful" });
+                return res.status(200).json({ token, message: "Login successful", userRole });
             }, 2000);
 
         }

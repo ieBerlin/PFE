@@ -1,11 +1,16 @@
 import classes from "../Login/Login.module.css";
 import { Form, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { fetchFun, processLoginForm, queryClient } from "../../../hooks/http.js";
+import {
+  fetchFun,
+  processLoginForm,
+  queryClient,
+} from "../../../hooks/http.js";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import PasswordInput from "../../../components/modal/PasswordInput.jsx";
-import Input from "../../../components/Input.jsx"
+import Input from "../../../components/Input.jsx";
+import { useSelector } from "react-redux";
 export default function LoginForm() {
   const navigate = useNavigate();
   const { data, isError, error, mutate, isPending } = useMutation({
@@ -23,13 +28,17 @@ export default function LoginForm() {
         },
       });
     },
-    onMutate:()=>queryClient.invalidateQueries()
+    onMutate: () => queryClient.invalidateQueries(),
   });
-  console.log(data);
+  const userRole = useSelector((state) => state?.userRole?.userRole);
+  console.log(userRole);
   useEffect(() => {
     if (data && data.token) {
       localStorage.setItem("user-token", data.token);
-      navigate("/dashboard");
+      if (data.userRole === "admin") navigate("/dashboard");
+      else {
+        navigate("/overview");
+      }
     }
   }, [data, navigate]);
   async function handleSubmitForm(e) {
@@ -44,21 +53,7 @@ export default function LoginForm() {
 
   return (
     <Form onSubmit={handleSubmitForm} className="flex w-full flex-col px-24">
-      {/* <FormInput
-        Icon={UserIcon}
-        isNotValidInput="Email is not valid"
-        isValidInputFun={isValidEmail}
-        label="email"
-        id="email"
-        name="email"
-        type="email"
-        required
-      /> */}
-      <Input
-        placeholder="Enter Your Email"
-        type="email"
-        name="email"
-      />
+      <Input placeholder="Enter Your Email" type="email" name="email" />
       <input name="form-type" defaultValue="login-form" hidden />
 
       <div className="mt-2" />
@@ -68,17 +63,8 @@ export default function LoginForm() {
         name="password"
         required
       />
-      {/* <PasswordFormInput
-        id="password"
-        name="password"
-        isValidInputFun={isValidPassword}
-        label="password"
-        required
-      /> */}
-      <div className={classes.rememberMe}>
-        {/* <input type="checkbox" name="remember-me" id="remember-me" />
-        <p>Remember me</p> */}
-      </div>
+
+      <div className={classes.rememberMe}></div>
       <button disabled={isPending} type="submit" className={submitButtonStyles}>
         {isPending ? "Loading..." : "Login"}
       </button>

@@ -1,30 +1,63 @@
 import { CalendarIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import ClassItem from "../sports/ClassItem";
 import BillingHistory from "../../components/BillingHistory.jsx";
-import { billingItems } from "../../dummy_data/dummy_users.js";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { fetchFun, getToken } from "../../hooks/http.js";
 export default function MemberOverviewPage() {
-  const { data: membershipStatusData } = useQuery({
-    queryKey: ["membership"],
-    queryFn: async () => {
-      try {
-        const data = await fetchFun({
-          url: "http://localhost:8081/membership/membership-status",
-          options: {
-            method: "GET",
-            headers: {
-              "x-access-token": getToken(),
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: ["membership"],
+        queryFn: async () => {
+          try {
+            const data = await fetchFun({
+              url: "http://localhost:8081/membership/membership-status",
+              options: {
+                method: "GET",
+                headers: {
+                  "x-access-token": getToken(),
+                },
+              },
+            });
+            return data;
+          } catch (error) {
+            return { status: false };
+          }
+        },
+      },
+      {
+        queryKey: ["bookings"],
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/booking/getUserEquipments",
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
             },
-          },
-        });
-        return data;
-      } catch (error) {
-        return { status: false };
-      }
-    },
+          }),
+      },
+      {
+        queryKey: ["billing"],
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/transactions/user-transactions",
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
+    ],
   });
+  const membershipStatusData = results[0].data;
+  const equipmentsData = results[1].data||[];
+
+  const billingHistoryData = results[2].data || [];
   let membershipStatus;
   if (membershipStatusData && membershipStatusData.status) {
     membershipStatus = "active";
@@ -45,14 +78,6 @@ export default function MemberOverviewPage() {
   ];
 
   const coaches = [
-    // {
-    //   id: 1,
-    //   name: "John Doe",
-    //   category: "Fitness Trainer",
-    //   level: "Advanced",
-    // },
-  ];
-  const equipments = [
     // {
     //   id: 1,
     //   name: "John Doe",
@@ -123,14 +148,14 @@ export default function MemberOverviewPage() {
         <h3 className="text-gray-700 font-semibold text-xl">
           Equipment Already Booked
         </h3>
-        {equipments && equipments.length > 0 ? (
+        {equipmentsData && equipmentsData.length > 0 ? (
           <div
             className="grid gap-3"
             style={{
               gridTemplateColumns: "repeat(auto-fit, minmax(auto,250px))",
             }}
           >
-            {equipments.map((equipment) => (
+            {equipmentsData.map((equipment) => (
               <CoachCard key={equipment.id} coach={equipment} />
             ))}
           </div>
@@ -138,7 +163,7 @@ export default function MemberOverviewPage() {
           <EmptyComponent title="There's no equipments to show !" />
         )}
         <h3 className="text-gray-700 font-semibold text-xl">Billing History</h3>
-        <BillingHistory data={billingItems} />
+        <BillingHistory data={billingHistoryData} />
       </div>
     </div>
   );

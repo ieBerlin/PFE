@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const getAllBooking = require("../controllers/booking/getAllBooking.js");
 const getSingleBooking = require("../controllers/booking/getSingleBooking.js");
+const getUserEquipments = require("../controllers/booking/getUserEquipments.js");
 const bookEquipment = require("../controllers/booking/bookEquipment.js");
 const confirmEquipmentBooking = require("../controllers/booking/confirmEquipmentBooking.js");
 const cancelEquipmentBooking = require("../controllers/booking/cancelEquipmentBooking.js");
@@ -10,6 +11,7 @@ const verifyToken = require("../middlewares/auth/authJWT.js");
 const authAdminOrManager = require("../middlewares/auth/authAdminOrManager.js");
 const authUserRole = require('../middlewares/auth/authUserRole.js');
 
+router.get("/getUserEquipments", verifyToken, getUserEquipments);
 router.get("/:bookingId", verifyToken, getSingleBooking);
 router.post("/", verifyToken, bookEquipment);
 // Get single booking by ID

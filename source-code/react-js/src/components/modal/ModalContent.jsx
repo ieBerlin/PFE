@@ -30,6 +30,7 @@ export default function ModalContent({
   }
   const navigate = useNavigate();
   function handleConfirmSignOut() {
+    queryClient.cancelQueries();
     queryClient.clear();
     localStorage.removeItem("user-token");
     navigate("/auth");
