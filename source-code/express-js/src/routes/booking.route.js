@@ -10,22 +10,22 @@ const verifyToken = require("../middlewares/auth/authJWT.js");
 const authAdminOrManager = require("../middlewares/auth/authAdminOrManager.js");
 const authUserRole = require('../middlewares/auth/authUserRole.js');
 
+router.get("/:bookingId", verifyToken, getSingleBooking);
+router.post("/", verifyToken, bookEquipment);
 // Get single booking by ID
-router.get("/:bookingId", authUserRole, getSingleBooking);
 
-// Get all bookings (for admin or manager)
-router.get("/", authAdminOrManager, getAllBooking);
+// // Get all bookings (for admin or manager)
+// router.get("/", authAdminOrManager, getAllBooking);
 
 // Book equipment
-router.post("/", authUserRole, bookEquipment);
 
-// Confirm equipment booking request (for admin or manager)
-router.post("/confirm-request/:bookingId", verifyToken, authAdminOrManager, confirmEquipmentBooking);
+// // Confirm equipment booking request (for admin or manager)
+// router.post("/confirm-request/:bookingId", verifyToken, authAdminOrManager, confirmEquipmentBooking);
 
-// Cancel equipment booking request (for users)
-router.post("/cancel-request/:bookingId", verifyToken, authUserRole, cancelEquipmentBooking);
+// // Cancel equipment booking request (for users)
+// router.post("/cancel-request/:bookingId", verifyToken, authUserRole, cancelEquipmentBooking);
 
-// Reject equipment booking request (for admin or manager)
-router.post("/reject-request/:bookingId", verifyToken, authAdminOrManager, rejectEquipmentBooking);
+// // Reject equipment booking request (for admin or manager)
+// router.post("/reject-request/:bookingId", verifyToken, authAdminOrManager, rejectEquipmentBooking);
 
 module.exports = router;

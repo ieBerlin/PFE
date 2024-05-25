@@ -51,7 +51,6 @@ export default function AddEquipmentModal({ onClose }) {
       }
     },
   });
-  console.log(error);
 
   function submitForm(e) {
     e.preventDefault();

@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const secretKey = require('../../config/jwt_secret.js');
 
 const verifyToken = (req, res) => {
-    console.log('VERIFY TOKEN')
     let token = req.headers['x-access-token'] || req.headers['authorization'];
 
     if (!token) {

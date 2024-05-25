@@ -1,34 +1,8 @@
-import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import ProductDetails from "./ProductDetails.jsx";
-import { Suspense } from "react";
-import FallbackText from "../../components/FallbackText.jsx";
 export default function BookEquipmentPage() {
-  const { timeOut: timeOutLoader } = useRouteLoaderData("book-equipment-page");
-  return (
-    <Suspense fallback={<FallbackText title="Fetching equipment details" />}>
-      <Await resolve={timeOutLoader}>
-        {(resolvedData) => <ProductDetails data={resolvedData} />}
-      </Await>
-    </Suspense>
-  );
+  return <ProductDetails />;
 }
-function timeOut() {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve(productDetails);
-    }, 2000)
-  );
-}
-export function loader() {
-  return defer({ timeOut: timeOut() });
-}
-export async function action() {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve(null);
-    }, 4000)
-  );
-}
+
 const productDetails = {
   imageUrl:
     "https://cdn.pixabay.com/photo/2020/05/22/17/53/mockup-5206355_960_720.jpg",

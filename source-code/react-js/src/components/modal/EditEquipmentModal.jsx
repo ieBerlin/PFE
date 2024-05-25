@@ -90,6 +90,8 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
       </div>
     );
   }
+  console.log(data);
+
   return (
     <div className="bg-white px-3 py-2">
       <Form

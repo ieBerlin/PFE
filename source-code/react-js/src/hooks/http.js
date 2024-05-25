@@ -95,6 +95,7 @@ export async function fetchFunction({ url, options }) {
 export async function fetchFun({ url, options }) {
     const response = await fetch(url, options);
     if (!response.ok) {
+        console.log('error')
         let error = new Error("An error occurred while fetching the data.");
         error.code = response.status;
         error.info = await response.json();

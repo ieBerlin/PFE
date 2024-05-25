@@ -3,7 +3,6 @@ const { pool } = require("../../models/db/connect"); // Assuming `pool` is impor
 const SECRET_KEY = require("../../config/jwt_secret");
 
 const fetchUserBasicInformations = async(req, res) => {
-    console.log('Hello World!')
     try {
         const { userEmail } = req;
         const sql = 'SELECT username, first_name FROM users WHERE email = ?';
