@@ -65,6 +65,7 @@ export default function AllUsersList({ users }) {
       </div>
       {filteredUsers.length > 0 ? (
         filteredUsers.map((user) => {
+          console.log(user)
           let userRoleClasses;
           let statusClasses;
           if (user.status.toLowerCase().trim() === "active") {
@@ -98,7 +99,7 @@ export default function AllUsersList({ users }) {
               {user.role.toLowerCase() === "coach" ||
               user.role.toLowerCase() === "member" ? (
                 <a
-                  href={`/user/${user.id}`}
+                  href={`/user/${user.userId}`}
                   className="flex flex-row gap-4 items-center"
                 >
                   <img

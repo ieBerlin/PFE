@@ -17,11 +17,12 @@ import { useEffect } from "react";
 
 export default function LoginPage() {
   const isAdmin = useSelector(
-    (state) => state.userRole.userRole?.toLowerCase() === "admin"
+    (state) => state.userRole?.userRole?.toLowerCase() === "admin"
   );
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticatedUser } = useRouteLoaderData("login-id");
+  const isAuthenticatedUser = useRouteLoaderData("login-id");
 
   function handleEnrollNowClick() {
     dispatch(setModalType("create-user"));
@@ -132,11 +133,10 @@ function processLoginForm(formData) {
   };
 }
 export async function loader() {
-  const token = getToken();
-  if (!token) {
+  try {
+    const data = await isAuthenticatedUser(getToken())
+    return data || false;
+  } catch (error) {
     return false;
   }
-  return defer({
-    isAuthenticatedUser: (await isAuthenticatedUser(token)) || false,
-  });
 }

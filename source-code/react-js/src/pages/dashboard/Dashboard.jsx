@@ -10,9 +10,10 @@ import { fetchFun, getToken } from "../../hooks/http.js";
 import { useQueries } from "@tanstack/react-query";
 import FallbackText from "../../components/FallbackText.jsx"
 import { useState } from "react";
+import { useSelector } from "react-redux";
 // Dashboard component
 export default function Dashboard() {
-  const userRole = useState(state=>state.userRole?.userRole?.toLowerCase()==='admin')
+  const userRole = useSelector(state=>state.userRole?.userRole?.toLowerCase()==='admin')
   if(!userRole){
     throw {status:403}
   }

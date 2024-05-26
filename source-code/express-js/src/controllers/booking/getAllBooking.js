@@ -28,7 +28,7 @@ const getBooking = async (req, res) => {
           year: "numeric",
         });
         const formattedTime = date.toLocaleTimeString("en-US");
-        delete item.bookingDate;
+
         // Return combined result with formatted date and time
         return {
           ...item,
@@ -39,6 +39,13 @@ const getBooking = async (req, res) => {
         };
       })
     );
+
+    // Sort the results from the latest to the earliest based on the formatted date and time
+    equipmentsResult.sort((a, b) => {
+      const dateA = new Date(`${a.date} ${a.time}`);
+      const dateB = new Date(`${b.date} ${b.time}`);
+      return dateB - dateA;
+    });
 
     return res.status(200).json(equipmentsResult);
   } catch (error) {

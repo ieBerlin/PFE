@@ -13,7 +13,7 @@ export default function RootLayout() {
     throw { status: 403 };
   }
   dispatch(changeUserRole(loaderData.userRole));
-  const mainContentPadding = `60px 0 0 ${isOpen ? "250px" : "78px"}`;
+  const mainContentPadding = `50px 0 0 ${isOpen ? "250px" : "78px"}`;
 
   return (
     <nav className={classes.nav} style={{ padding: mainContentPadding }}>

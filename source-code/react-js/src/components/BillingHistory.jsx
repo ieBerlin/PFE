@@ -11,7 +11,6 @@ export default function BillingHistory({ data }) {
     content = (
       <ol className="relative border-s border-gray-400">
         {data.map((item, index) => {
-          console.log(item.date)
           const date = new Date(item.date);
           const formattedDate = date.toLocaleDateString("en-us", {
             month: "short",

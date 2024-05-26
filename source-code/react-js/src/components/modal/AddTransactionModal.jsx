@@ -94,10 +94,10 @@ export default function AddTransactionModal() {
           name="transaction-type"
           label="Transaction Type"
           data={[
-            { value: "membership_fee", label: "Membership Fee" },
-            { value: "personal_training", label: "Personal Training" },
-            { value: "session_payment", label: "Session Payment" },
-            { value: "merchandise_purchase", label: "Merchandise Purchase" },
+            { value: "Membership Fee", label: "Membership Fee" },
+            { value: "Personal Training", label: "Personal Training" },
+            { value: "Session Payment", label: "Session Payment" },
+            { value: "Merchandise Purchase", label: "Merchandise Purchase" },
             { value: "other", label: "Other" },
           ]}
           placeholder="Select transaction type"

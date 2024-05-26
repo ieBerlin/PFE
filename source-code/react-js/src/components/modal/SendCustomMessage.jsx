@@ -1,6 +1,10 @@
 import { useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice";
-import { usePost } from "../../hooks/http";
+import { fetchFun, getToken, usePost } from "../../hooks/http";
+import { useMutation } from "@tanstack/react-query";
+import { Form, useParams } from "react-router-dom";
+import SuccessMessage from "../SuccessMessage";
+import ErrorMessage from "../ErrorMessage";
 
 export default function SendCustomMessage() {
   return (
@@ -18,16 +22,68 @@ export default function SendCustomMessage() {
 }
 
 function MembershipNotificationForm() {
-  const { isFetching, handlePost } = usePost();
   const dispatch = useDispatch();
+  const { userId } = useParams();
+  const {
+    isPending: isFetching,
+    mutate,
+    data,
+    isError,
+    error,
+  } = useMutation({
+    mutationKey: ["recharge"],
+    mutationFn: async (data) =>
+      await fetchFun({
+        url: `${"http://localhost:8081/notification"}`,
+        options: {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "x-access-token": getToken(),
+            "Content-Type": "application/json",
+          },
+        },
+      }),
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    handlePost();
+    const formData = new FormData(event.target);
+    const fd = {
+      userId: userId,
+      title: formData.get("title"),
+      message: formData.get("description"),
+    };
+    mutate(fd);
   };
+  let content;
+  content = !isFetching && isError && (
+    <div className="">
+      <h1 className="font-medium text-lg text-red-500">Errors </h1>
+      {error
+        ? Object.entries(error.info).map(([key, value]) => {
+            console.log(error.info);
+            return <ErrorMessage key={key} title={key} message={value} />;
+          })
+        : "An error occured!"}
+    </div>
+  );
 
+  if (data && !isFetching) {
+    content = (
+      <div className="">
+        <h1 className="font-medium text-lg text-emerald-500">
+          Server feedback{" "}
+        </h1>
+        <SuccessMessage
+          title="Request Successful"
+          message="Your request has been processed successfully."
+        />
+      </div>
+    );
+  }
   return (
-    <form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <Input />
       <TextAreaInput />
       <div className="flex justify-end pt-3 gap-3">
@@ -37,7 +93,8 @@ function MembershipNotificationForm() {
         />
         <SubmitButton isFetching={isFetching} />
       </div>
-    </form>
+      {content}
+    </Form>
   );
 }
 

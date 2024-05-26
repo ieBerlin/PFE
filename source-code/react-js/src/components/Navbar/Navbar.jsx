@@ -42,18 +42,13 @@ function Navbar({ width }) {
 export default Navbar;
 
 async function fetchUserCredentials() {
-  try {
-    return await fetchFun({
-      url: "http://localhost:8081/user/auth/user-basic-informations",
-      options: {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": getToken(),
-        },
+  return await fetchFun({
+    url: "http://localhost:8081/user/auth/user-basic-informations",
+    options: {
+      method: "GET",
+      headers: {
+        "x-access-token": getToken(),
       },
-    });
-  } catch (error) {
-    return;
-  }
+    },
+  });
 }

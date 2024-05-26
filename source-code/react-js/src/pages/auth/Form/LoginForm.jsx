@@ -30,8 +30,7 @@ export default function LoginForm() {
     },
     onMutate: () => queryClient.invalidateQueries(),
   });
-  const userRole = useSelector((state) => state?.userRole?.userRole);
-  console.log(userRole);
+
   useEffect(() => {
     if (data && data.token) {
       localStorage.setItem("user-token", data.token);

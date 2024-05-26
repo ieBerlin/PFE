@@ -7,6 +7,9 @@ import CoachBio from "../coaches/CoachBio.jsx";
 import Modal from "../../components/modal/Modal.jsx";
 import BillingHistory from "../../components/BillingHistory.jsx";
 import { billingItems } from "../../dummy_data/dummy_users.js";
+import { useQueries } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { fetchFun, getToken } from "../../hooks/http.js";
 export default function UserPage({ userData }) {
   const dispatch = useDispatch();
   const {
@@ -25,7 +28,25 @@ export default function UserPage({ userData }) {
   ] = useState(false);
   // Calculate the width based on the membership days left
   const width = Math.round(((30 - membershipDaysLeft) / 30) * 100);
-
+  const { userId } = useParams();
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: ["user-" + userId],
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/user/profile/" + userId,
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
+    ],
+  });
+  console.log(results[0]?.data)
   return (
     <>
       <Modal remainingDay={membershipDaysLeft} />

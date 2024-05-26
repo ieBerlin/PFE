@@ -3,7 +3,7 @@ const { pool } = require('../../models/db/connect.js');
 const getAllUsersProfiles = async(req, res) => {
     try {
         // Fetch user profile data from the database
-        const [result] = await pool.query('SELECT email, username, first_name, last_name, date_of_birth, phone_number, gender, address, role, registration_date, last_time_login, status FROM users');
+        const [result] = await pool.query('SELECT userId, email, username, first_name, last_name, date_of_birth, phone_number, gender, address, role, registration_date, last_time_login, status FROM users');
 
         // Check if the user profile exists
         if (result.length > 0) {

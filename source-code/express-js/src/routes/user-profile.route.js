@@ -11,8 +11,8 @@ const getUserProfileDependOnEmail = require('../controllers/userProfile/getUserP
 const updatePassword = require('../controllers/userProfile/updatePassword.js')
 
 router.get("/", verifyToken, getUserProfileDependOnEmail)
+router.get("/:userId", verifyToken, getUserProfile);
 router.get("/all-users", verifyToken, getAllUsersProfiles);
-router.get("/:userId", verifyToken, authUserRole, getUserProfile);
 router.put("/", verifyToken, updateUserProfile)
 router.post('/update-password', verifyToken, updatePassword)
 router.delete("/:userId", verifyToken, authAdminOrManager, deleteUserProfile);

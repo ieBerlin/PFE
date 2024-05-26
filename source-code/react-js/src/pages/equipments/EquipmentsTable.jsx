@@ -15,7 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Form, Link } from "react-router-dom";
 import FilterDropdown from "../../components/FilterDropdown";
-import { fetchFun, getToken } from "../../hooks/http";
+import { fetchFun, getToken, queryClient } from "../../hooks/http";
 const selectedBookings = {
   userType: {
     coach: true,
@@ -117,7 +117,7 @@ export default function EquipmentsTable({ data }) {
                   </thead>
                   <tbody className="divide-y divide-gray-200 ">
                     {filteredBookings.map((booking, index) => {
-                      console.log(booking)
+                      console.log(booking);
                       return (
                         <tr key={index}>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
@@ -177,6 +177,12 @@ function StatusTableData({ status, data }) {
           },
         },
       }),
+    onSuccess: async (data) =>
+      await queryClient.invalidateQueries([
+        "equipments",
+        "bookings",
+        "equipments-" + data.bookingId,
+      ]),
   });
   let content;
   if (isError) {
@@ -372,7 +378,9 @@ function StatusTableData({ status, data }) {
                   {isSubmitting ? "Loading..." : "Edit"}
                 </button>
               </div>
-              <div className="flex w-full justify-center px-3 py-2">{content}</div>
+              <div className="flex w-full justify-center px-3 py-2">
+                {content}
+              </div>
             </Form>
           </PopoverContent>
         </Popover>

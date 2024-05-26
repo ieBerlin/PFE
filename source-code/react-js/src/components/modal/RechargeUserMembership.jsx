@@ -1,6 +1,8 @@
+import { Form } from "react-router-dom";
 import { setModalType } from "../../features/modal/modalSlice";
-import { usePost } from "../../hooks/http.js";
+import { fetchFun, getToken, usePost } from "../../hooks/http.js";
 import { useDispatch } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
 export default function RechargeUserMembership({ remainingDay }) {
   return (
     <div
@@ -19,16 +21,31 @@ export default function RechargeUserMembership({ remainingDay }) {
 }
 
 function RechargeForm() {
-  const { isFetching, handlePost } = usePost();
+  const { isPending: isFetching, mutate } = useMutation({
+    queryKey: ["recharge"],
+    queryFn: async (data) =>
+      await fetchFun({
+        url: `${"http://localhost:8081/notifications"}`,
+        options: {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "x-access-token": getToken(),
+            "Content-Type": "application/json",
+          },
+        },
+      }),
+  });
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent default form submission
-    handlePost(); // Call handlePost to initiate recharge
+    event.preventDefault();
+    const fd = {};
+    mutate(fd);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <div className="pl-24 pt-3 flex flex-row w-full justify-end">
         <button
           disabled={isFetching}
@@ -56,6 +73,6 @@ function RechargeForm() {
           {isFetching ? "Processing..." : "Confirm Recharge"}
         </button>
       </div>
-    </form>
+    </Form>
   );
 }

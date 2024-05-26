@@ -1,12 +1,17 @@
 const { pool } = require('../../models/db/connect.js');
 
 const getTransactions = async(req, res) => {
-    console.log("getTransactions")
+    console.log("getTransactions");
     try {
-        // Query to fetch transactions from the database
-        const query = 'SELECT transactionType AS title, CONCAT(transactionDate, " ", transactionTime) AS date, transactionNotes AS description FROM transactions';
+        // Query to fetch transactions from the database, sorted by transactionDate
+        const query = `
+            SELECT transactionType AS title, 
+                   transactionDate AS date, 
+                   transactionNotes AS description 
+            FROM transactions 
+            ORDER BY transactionDate`;
+
         const [results] = await pool.query(query);
-        console.log(results)
 
         res.status(200).json(results);
     } catch (error) {
