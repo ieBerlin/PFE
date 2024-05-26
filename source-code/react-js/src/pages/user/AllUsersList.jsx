@@ -65,7 +65,6 @@ export default function AllUsersList({ users }) {
       </div>
       {filteredUsers.length > 0 ? (
         filteredUsers.map((user) => {
-          console.log(user)
           let userRoleClasses;
           let statusClasses;
           if (user.status.toLowerCase().trim() === "active") {

@@ -12,6 +12,7 @@ const selectedClasses = {
   },
 };
 export default function ClassesList({ data }) {
+
   const isAdmin =
     useSelector((state) =>
       (state.userRole?.userRole ?? "").trim().toLowerCase()
@@ -66,18 +67,7 @@ function ClassesItems({ classes }) {
     );
   }
   return classes.map((classItem) => (
-    <ClassItem
-      key={classItem.classId}
-      id={classItem.classId}
-      title={classItem.name}
-      description={classItem.description}
-      coachName={classItem.instructor_name}
-      coachEmail={classItem.instructor_email}
-      date={classItem.startDate }
-      time={classItem.startTime}
-      totalMembers={classItem.maximum_capacity}
-      classCategory={classItem.category}
-    />
+    <ClassItem key={classItem.classId} data={classItem} />
   ));
 }
 const filterClasses = (classes, selectedClasses) => {

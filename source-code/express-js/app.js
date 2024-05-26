@@ -4,15 +4,14 @@ const app = express();
 const dotenv = require("dotenv");
 const usersAuthRouter = require("./src/routes/auth.route.js");
 const usersRouter = require("./src/routes/users.route.js");
+const coachRouter = require("./src/routes/coaches.route.js");
 const userProfileRouter = require("./src/routes/user-profile.route.js");
 const membershipPlansRouter = require("./src/routes/membership-plan.route.js");
 const membershipRouter = require("./src/routes/membership.route.js");
-const feedbackRouter = require("./src/routes/feedback.route.js");
 const equipmentsRouter = require("./src/routes/equipment.route.js");
 const sportsRouter = require('./src/routes/sport.route.js');
 const bookingsRouter = require("./src/routes/booking.route.js");
 const classesRouter = require("./src/routes/class.route.js");
-const paymentsRouter = require('./src/routes/payments.route.js')
 const notificationRouter = require("./src/routes/notification.route.js");
 const { pool } = require("./src/models/db/connect.js");
 const corsMiddleware = require("./src/middlewares/cors/corsConfig.js");
@@ -29,16 +28,15 @@ app.use(express.urlencoded({ extended: true }));
 // Authentication router
 app.use("/user/auth", usersAuthRouter);
 app.use('/users', usersRouter)
+app.use('/coaches', coachRouter)
 app.use("/equipments", equipmentsRouter);
 app.use("/user/profile", userProfileRouter);
 app.use("/membership-plans", membershipPlansRouter);
 app.use("/membership", membershipRouter);
-app.use('/feedback', feedbackRouter)
 app.use('/booking', bookingsRouter)
 app.use('/class', classesRouter);
 app.use('/sport', sportsRouter);
 app.use('/notification', notificationRouter);
-app.use('/payments', paymentsRouter)
 app.use('/transactions', transactionsRouter);
 app.use('/clients', clientsRouter);
 app.use('/dashboard', dashboardRouter);

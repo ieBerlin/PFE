@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFetcher, useParams } from "react-router-dom";
 import { setModalType } from "../../features/modal/modalSlice";
 import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
-import { fetchFun, getToken } from "../../hooks/http";
+import { fetchFun, getToken, queryClient } from "../../hooks/http";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import SuccessMessage from "../../components/SuccessMessage.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
@@ -44,7 +44,7 @@ export default function ProductDetails() {
               },
             },
           }),
-        retryDelay: 3
+        retryDelay: 3,
       },
     ],
   });
@@ -81,6 +81,12 @@ export default function ProductDetails() {
           },
         },
       }),
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        "equipments-" + equipmentId,
+        "bookings-" + equipmentId,
+      ]);
+    },
   });
   const { Form, state } = useFetcher();
   const isSubmitting = state === "submitting";

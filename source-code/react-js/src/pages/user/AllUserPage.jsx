@@ -8,47 +8,35 @@ import {
   processSignUpForm,
 } from "../../hooks/http.js";
 import AllUsersList from "./AllUsersList.jsx";
+import FallbackText from "../../components/FallbackText.jsx";
 export default function AllUserPage() {
-  const { timeOut } = useRouteLoaderData("all-users-id");
-
   return (
     <>
       <Modal />
-      <Suspense fallback={<FallbackText />}>
-        <Await resolve={timeOut}>
-          {(resolvedData) => {
-            return <AllUsersList users={resolvedData} />;
-          }}
+      <Suspense fallback={<FallbackText title={"Fetching Users data..."} />}>
+        <Await resolve={loader()}>
+          {(resolvedData) => <AllUsersList users={resolvedData} />}
         </Await>
       </Suspense>
     </>
   );
 }
-export function loader() {
-  return defer({
-    timeOut: timeOut(),
-  });
-}
-const timeOut = async () => {
-  return await fetchFun({
-    url: "http://localhost:8081/user/profile/all-users",
-    options: {
-      method: "GET",
-      headers: {
-        "x-access-token": getToken(),
+export async function loader() {
+  try {
+    return await fetchFun({
+      url: "http://localhost:8081/user/profile/all-users",
+      options: {
+        method: "GET",
+        headers: {
+          "x-access-token": getToken(),
+        },
       },
-    },
-  });
-};
-function FallbackText() {
-  return (
-    <section className=" flex h-full w-full flex-col">
-      <p className="text-gray-700 text-xl font-semibold text-center mt-7">
-        Fetching Users data...
-      </p>
-    </section>
-  );
+    });
+  } catch (error) {
+    return [];
+  }
 }
+
 export async function action({ request }) {
   const data = await request.formData();
   const mode = data.get("form-type");

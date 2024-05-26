@@ -6,25 +6,79 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import Modal from "../../components/modal/Modal.jsx";
+import FallbackText from "../../components/FallbackText.jsx";
 import CoachBio from "../coaches/CoachBio.jsx";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFun, getToken } from "../../hooks/http.js";
+import ErrorMessage from "../../components/ErrorMessage.jsx";
 
-export default function CoachesList({ data }) {
+export default function CoachesList() {
+  const { coachId } = useParams();
   const [imageSrc, setImageSrc] = useState(null);
-  console.log(data);
-  const {
-    coachName,
-    coachEmail,
-    coachExperience,
-    coachLevel,
-    coachCategory,
-    totalTrainedMembers,
-    coachContact,
-  } = data;
   const isMember = useSelector(
     (state) => state.userRole?.userRole?.toLowerCase() === "member"
   );
+  const { isPending, data, isError, error } = useQuery({
+    queryKey: ["coaches"],
+    staleTime: Infinity,
+    retry:false,
+    queryFn: async () =>
+      await fetchFun({
+        url: "http://localhost:8081/coaches/" + coachId,
+        options: {
+          method: "GET",
+          headers: {
+            "x-access-token": getToken(),
+          },
+        },
+      }),
+  });
+  if (isPending) {
+    return <FallbackText title="Fetching coach data..." />;
+  }
+
+  if (isError) {
+    if (error.code === 404) {
+      // throw { status: 404 };
+      return <FallbackText title="Coach not found!" />;
+    }
+    return (
+      <div className="">
+        <h1 className="font-medium text-lg text-red-500">Errors </h1>
+        {error
+          ? Object.entries(error.info).map(([key, value]) => {
+              console.log(error.info);
+              return <ErrorMessage key={key} title={key} message={value} />;
+            })
+          : "An error occured!"}
+      </div>
+    );
+  }
+  if (!data) {
+    <p className="text-black text-center text-xl font-semibold my-16">
+      Nothing to show
+    </p>;
+  }
+
+  const {
+    first_name,
+    last_name,
+    email: coachEmail,
+    experienceLevel: coachExperience,
+    specialization: coachCategory,
+    totalTrainedMembers,
+    contact,
+    certifications,
+    bio,
+  } = data;
+  const coachContact = JSON.parse(contact);
+  const coachData = {
+    bio,
+    certificationsImages: certifications,
+  };
+  const coachName = first_name + " " + last_name;
   return (
     <>
       <Modal imageSrc={imageSrc} />
@@ -42,8 +96,8 @@ export default function CoachesList({ data }) {
             gridTemplateColumns: "auto 1fr",
           }}
         >
-          <div className="bg-white shadow-md pl-8 pr-16 py-6">
-            <div className="flex flex-row justify-between">
+          <div className="bg-white shadow-md px-4 py-6">
+            <div className="flex flex-row justify-between gap-3">
               <h1 className="font-bold text-2xl">{coachName}</h1>
               {isMember && (
                 <Link
@@ -54,24 +108,20 @@ export default function CoachesList({ data }) {
                 </Link>
               )}
             </div>
-            <p className="text-sm text-gray-600">{coachCategory}</p>
-            <div className="flex flex-row items-center justify-start gap-3 my-3">
-              <div className="bg-yellow-400 px-4 py-1 w-min rounded-md flex flex-row items-center gap-1">
-                <StarIcon className="h-4 w-4 text-white " />
-                <h3 className="text-white">4.5</h3>
-              </div>
-              <h4 className="text-gray-600"> (12)</h4>
-            </div>
+            <h3 className="text-sm text-blue-900 font-semibold bg-blue-100 px-3 py-1 inline-block rounded-md my-2">
+              {coachCategory}
+            </h3>
+
             <h1 className="flex items-center gap-2">
               <UserGroupIcon className="w-6 h-6 text-gray-500" />
               <p className=" text-gray-500 font-medium text-sm">
                 {totalTrainedMembers} Total Trained Members
               </p>
             </h1>
-            <h1 className="flex items-center gap-2 mt-2">
+            {/* <h1 className="flex items-center gap-2 mt-2">
               <AcademicCapIcon className="w-6 h-6 text-gray-500" />
               <p className=" text-gray-500 font-medium text-sm">{coachLevel}</p>
-            </h1>
+            </h1> */}
             <div className="mt-4">
               <h1 className="font-semibold my-2">Connect With Me</h1>
 
@@ -82,14 +132,14 @@ export default function CoachesList({ data }) {
                 {coachEmail}
               </a>
 
-              {Object.entries(coachContact).map(([key, value]) => (
+              {coachContact.map((item) => (
                 <a
-                  href={value}
+                  href={Object.values(item)[0]}
                   className="block cursor-pointer text-gray-600 font-medium my-1"
                   target="_blank"
-                  key={key}
+                  key={Object.keys(item)[0]}
                 >
-                  {value}
+                  {Object.values(item)[0]}
                 </a>
               ))}
             </div>
@@ -101,25 +151,3 @@ export default function CoachesList({ data }) {
     </>
   );
 }
-const coachData = {
-  bio: `
-  John Doe is a passionate fitness coach with 5 years of experience.
-  Specializing in fitness training, he creates personalized programs
-  to help clients achieve their goals. John's approach is holistic,
-  focusing on strength, cardio, flexibility, and nutrition. With his
-  supportive and motivating style, he guides clients towards a
-  healthier lifestyle.`,
-  certificationsImages: [
-    "https://international-hospitality-institute.myshopify.com/cdn/shop/products/CHGMCertificateSample.png?v=1613853914",
-    "https://www.actfl.org/uploads/images/general/Opi-tester-certificate-sample.jpg",
-  ],
-  classes: [
-    {
-      href: "123",
-      img: "https://cdn.fleetfeet.com/assets/Blog/Post-Images/iStock-840886888.jpg/dynamic:1-aspect:2.4-fit:cover-strategy:entropy/iStock-840886888--1440.jpg",
-      title: "Class 2",
-      description:
-        "Phasellus consequat feugiat nulla at pharetra. Nulla facilisi. Cras sagittis placerat nisl, at efficitur libero fermentum id.",
-    },
-  ],
-};

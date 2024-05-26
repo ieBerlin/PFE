@@ -10,7 +10,7 @@ import RechargeUserMembership from "./RechargeUserMembership.jsx";
 import NotifyMembershipEnd from "./NotifyMembershipEnd.jsx";
 import SendCustomMessage from "./SendCustomMessage.jsx";
 import AddEquipmentModal from "./AddEquipmentModal.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EditEquipmentModal from "./EditEquipmentModal.jsx";
 import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 export default function ModalContent({
@@ -28,6 +28,8 @@ export default function ModalContent({
   function onClose() {
     dispatch(setModalType());
   }
+  const { userId } = useParams();
+
   const navigate = useNavigate();
   function handleConfirmSignOut() {
     queryClient.cancelQueries();
@@ -36,8 +38,8 @@ export default function ModalContent({
     navigate("/auth");
     onClose();
   }
-  async function handleDeleteClass(url, method) {
-    await fetchFun({
+  async function handleSendReq(url, method) {
+    return await fetchFun({
       url,
       options: {
         method,
@@ -62,9 +64,68 @@ export default function ModalContent({
         description=" Are you sure you want to delete this account? All of the data will be permanently removed. This action cannot be undone."
         confirmActionLabel="Delete"
         onConfirm={() => onConfirm("confirm-delete-user")}
+        mutationFn={() =>
+          handleSendReq(
+            "http://localhost:8081/user/profile/" + userId,
+            "DELETE"
+          )
+        }
       />
     );
-  } else if (type === "reset-password") {
+  } else if (type === "block-user") {
+    modalContent = (
+      <ConfirmationModal
+        title="Block User"
+        description=" Are you sure you want to block this account?"
+        confirmActionLabel="Block"
+        onConfirm={() => {
+          onConfirm("confirm-block-user");
+          queryClient.invalidateQueries([["user-" + userId]]);
+        }}
+        mutationFn={async () =>
+          await fetchFun({
+            url: "http://localhost:8081/users/user-status/" + userId,
+            options: {
+              method: "PUT",
+              body: JSON.stringify({ status: "blocked" }),
+              headers: {
+                "x-access-token": getToken(),
+                "Content-Type": "application/json",
+              },
+            },
+          })
+        }
+      />
+    );
+  }
+  
+  else if (type === "activate-user") {
+    modalContent = (
+      <ConfirmationModal
+        title="Activate User"
+        description=" Are you sure you want to activate this account?"
+        confirmActionLabel="Block"
+        onConfirm={() => {
+          onConfirm("confirm-activate-user");
+          queryClient.invalidateQueries([["user-" + userId]]);
+        }}
+        mutationFn={async () =>
+          await fetchFun({
+            url: "http://localhost:8081/users/user-status/" + userId,
+            options: {
+              method: "PUT",
+              body: JSON.stringify({ status: "active" }),
+              headers: {
+                "x-access-token": getToken(),
+                "Content-Type": "application/json",
+              },
+            },
+          })
+        }
+      />
+    );
+  }
+  else if (type === "reset-password") {
     modalContent = <ResetPasswordModal />;
   } else if (type === "confirm-reset-password") {
     modalContent = (
@@ -80,17 +141,74 @@ export default function ModalContent({
         color="red"
         title="User Deleted Successfully"
         description="User has been successfully deleted."
+        onConfirm={() => {
+          navigate("/users");
+          dispatch(setModalType());
+        }}
       />
     );
-  } else if (type === "confirm-add-user") {
+  
+  } else if (type === "confirm-block-user") {
+    modalContent = (
+      <ConfirmModal
+        color="red"
+        title="User Blocked Successfully"
+        description="User has been successfully blocked."
+      />
+    );
+  }
+  else if (type === "confirm-activate-user") {
+    modalContent = (
+      <ConfirmModal
+        color="green"
+        title="User activated Successfully"
+        description="User has been successfully activated."
+      />
+    );
+  }
+  else if (type === "confirm-notify-membership-user") {
+    modalContent = (
+      <ConfirmModal
+        color="green"
+        title="User Membership Notification Sent Successfully"
+        description="A membership notification has been successfully sent to the user."
+      />
+    );
+  } else if (type === "confirm-custom-message") {
+    modalContent = (
+      <ConfirmModal
+        color="green"
+        title="The Custom Message Has Been Sent Successfully"
+        description="The custom message has been successfully sent to the user."
+      />
+    );
+  }
+  
+
+  else if (type === "confirm-add-user") {
     modalContent = (
       <ConfirmModal
         color="blue"
         title="User Added Successfully"
         description="User has been successfully added."
+   
       />
     );
-  } else if (type === "confirm-sign-out") {
+  }
+  else if (type === "create-class") {
+    modalContent = (
+      <ConfirmModal
+        color="blue"
+        title="Class Created Successfully"
+        description="Class has been successfully created."
+        onConfirm={()=>{
+          dispatch(setModalType())
+          navigate('/classes');
+        }}
+      />
+    );
+  } 
+  else if (type === "confirm-sign-out") {
     modalContent = (
       <ConfirmModal
         title="Are You Sure You Want to Sign Out?"
@@ -117,9 +235,17 @@ export default function ModalContent({
       <RechargeUserMembership remainingDay={remainingDay} />
     ));
   } else if (type === "notify-membership-end") {
-    return (modalContent = <NotifyMembershipEnd />);
+    return (modalContent = (
+      <NotifyMembershipEnd
+        onConfirm={() => onConfirm("confirm-notify-membership-user")}
+      />
+    ));
   } else if (type === "custom-message") {
-    return (modalContent = <SendCustomMessage />);
+    return (modalContent = (
+      <SendCustomMessage
+        onConfirm={() => onConfirm("confirm-custom-message")}
+      />
+    ));
   } else if (type === "add-equipment") {
     return (modalContent = <AddEquipmentModal onClose={onClose} />);
   } else if (type === "edit-equipment") {
@@ -133,7 +259,7 @@ export default function ModalContent({
         description=" Are you sure you want to delete this class? All of the data will be permanently removed. This action cannot be undone."
         confirmActionLabel="Delete"
         onConfirm={() =>
-          handleDeleteClass(`http://localhost:8081/class/${classId}`, "DELETE")
+          handleSendReq(`http://localhost:8081/class/${classId}`, "DELETE")
         }
       />
     );

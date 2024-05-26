@@ -6,7 +6,7 @@ import { Form, useParams } from "react-router-dom";
 import SuccessMessage from "../SuccessMessage";
 import ErrorMessage from "../ErrorMessage";
 
-export default function SendCustomMessage() {
+export default function SendCustomMessage({onConfirm}) {
   return (
     <div
       className="bg-white px-7 py-5 rounded-md text-start"
@@ -16,12 +16,12 @@ export default function SendCustomMessage() {
         Notify User of Custom Message
       </h1>
 
-      <MembershipNotificationForm />
+      <MembershipNotificationForm onConfirm={onConfirm} />
     </div>
   );
 }
 
-function MembershipNotificationForm() {
+function MembershipNotificationForm({onConfirm}) {
   const dispatch = useDispatch();
   const { userId } = useParams();
   const {
@@ -70,6 +70,9 @@ function MembershipNotificationForm() {
   );
 
   if (data && !isFetching) {
+    if(onConfirm){
+      return onConfirm();
+    }
     content = (
       <div className="">
         <h1 className="font-medium text-lg text-emerald-500">

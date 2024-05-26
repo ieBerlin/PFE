@@ -9,9 +9,11 @@ import { categories } from "../../components/modal/AddEquipmentModal.jsx";
 import SelectInput from "../../components/SelectInput.jsx";
 import { useMutation } from "@tanstack/react-query";
 import { fetchFun, getToken } from "../../hooks/http.js";
-import SuccessMessage from "../../components/SuccessMessage.jsx";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
+import { setModalType } from "../../features/modal/modalSlice.js";
+import { useDispatch } from "react-redux";
 export default function CreateClassPage() {
+  const dispatch = useDispatch();
   const submitButtonRef = useRef();
   const { isPending, data, isError, error, mutate } = useMutation({
     mutationKey: ["classes", "create-class"],
@@ -43,17 +45,17 @@ export default function CreateClassPage() {
       endTime: fd.get("class-end-time"),
       price: fd.get("class-price"),
       maxSize: fd.get("class-max-size"),
+      
     };
     mutate(classData);
   }
   let content;
-  console.log(isError);
+  console.log(data);
   content = !isPending && isError && (
     <div className="">
       <h1 className="font-medium text-lg text-red-500">Errors </h1>
       {error
         ? Object.entries(error.info).map(([key, value]) => {
-            console.log(error.info);
             return <ErrorMessage key={key} title={key} message={value} />;
           })
         : "An error occured!"}
@@ -61,17 +63,7 @@ export default function CreateClassPage() {
   );
 
   if (data && !isPending) {
-    content = (
-      <div className="">
-        <h1 className="font-medium text-lg text-emerald-500">
-          Server feedback{" "}
-        </h1>
-        <SuccessMessage
-          title="Request Successful"
-          message="Your request has been processed successfully."
-        />
-      </div>
-    );
+    dispatch(setModalType("create-class"));
   }
   return (
     <div className="bg-gray-100 p-4">

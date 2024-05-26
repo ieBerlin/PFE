@@ -1,7 +1,7 @@
 const { pool } = require('../../models/db/connect.js');
 
-const getUserTransaction = async(req, res) => {
-    const { userId } = req
+const getUserTransactionId = async(req, res) => {
+    const { userId } = req.params
     try {
         const [result] = await pool.query('SELECT transactionId AS id, transactionDate AS date, transactionNotes AS description, transactionMethod	AS title FROM transactions WHERE userId = ?', [userId]);
         return res.status(200).json(result);
@@ -11,4 +11,4 @@ const getUserTransaction = async(req, res) => {
     }
 };
 
-module.exports = getUserTransaction;
+module.exports = getUserTransactionId;

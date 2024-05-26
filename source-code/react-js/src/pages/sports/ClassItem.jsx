@@ -3,23 +3,28 @@ import { Link, useNavigate } from "react-router-dom";
 import kilterImage from "/kilter.jpg";
 import classesStyles from "../../pages/classes/ClassesPage.module.css";
 import {
+  BriefcaseIcon,
   CalendarIcon,
+  CheckBadgeIcon,
   ChevronRightIcon,
   ClockIcon,
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
-export default function ClassItem({
-  id,
-  title,
-  description,
-  coachName,
-  coachEmail,
-  date,
-  time,
-  totalMembers,
-  classCategory,
-}) {
+export default function ClassItem({ data }) {
+  console.log(data);
+  const {
+    classId: id,
+    name: title,
+    description,
+    instructor_name: coachName,
+    instructor_email: coachEmail,
+    startDate: date,
+    startTime: time,
+    instructor_extra_info,
+    category: classCategory,
+  } = data;
+
   const [isDropDownActive, setIsDropDownActive] = useState(false);
   const navigate = useNavigate();
 
@@ -44,8 +49,8 @@ export default function ClassItem({
     year: "numeric",
   });
 
-  const formattedTime = String(time).split(":").slice(0,2).join(':')
- 
+  const formattedTime = String(time).split(":").slice(0, 2).join(":");
+
   return (
     <Link
       to={`/classes/${id}`}
@@ -90,9 +95,9 @@ export default function ClassItem({
             <div
               onClick={(e) => {
                 e.preventDefault();
-                navigate("/coaches");
+                navigate("/coaches/" + instructor_extra_info?.coachId);
               }}
-              className={`${instructorDropDownMenuClasses} shadow-sm bg-red-300 hover:bg-red-500`}
+              className={`${instructorDropDownMenuClasses} shadow-sm bg-amber-300 hover:bg-amber-500`}
               onMouseOver={() => handleInstructorDropDown(true)}
               onMouseLeave={() => handleInstructorDropDown(false)}
             >
@@ -109,7 +114,27 @@ export default function ClassItem({
                 <UserIcon className="w-5 h-5 text-white" />
                 <p className="text-sm font-medium text-white text-nowrap inline-block">
                   Total trained members:{" "}
-                  <p className="text-white inline-block">{totalMembers}</p>
+                  <p className="text-stone-800 inline-block">
+                    {instructor_extra_info?.totalTrainedMembers || "Unknown"}
+                  </p>
+                </p>
+              </div>
+              <div className="flex flex-row gap-2 items-center px-2 py-3">
+                <BriefcaseIcon className="w-5 h-5 text-white" />
+                <p className="text-sm font-medium text-white text-nowrap inline-block">
+                  Specialization:{" "}
+                  <p className="text-stone-800 inline-block">
+                    {instructor_extra_info?.specialization || "Unknown"}
+                  </p>
+                </p>
+              </div>
+              <div className="flex flex-row gap-2 items-center px-2 py-3">
+                <CheckBadgeIcon className="w-5 h-5 text-white" />
+                <p className="text-sm font-medium text-white text-nowrap inline-block">
+                  Experience Level:{" "}
+                  <p className="text-stone-800 inline-block">
+                    {instructor_extra_info?.experienceLevel || "Unknown"}
+                  </p>
                 </p>
               </div>
             </div>

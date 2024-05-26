@@ -34,16 +34,19 @@ const createClass = async(req, res) => {
         if (Object.keys(errors).length) {
             return res.status(400).json(errors);
         }
+        const [result] = await pool.query('SELECT  CONCAT(first_name, " ", last_name) as name from users where email = ?', [instructor_email]);
+
+        const instructor_name = result[0].name
 
         // Combine startDate and startTime, endDate and endTime to form date fields
         const startDateTime = new Date(`${startDate}T${startTime}`);
         const endDateTime = new Date(`${endDate}T${endTime}`);
 
         const sql = `
-            INSERT INTO classes (name, description, instructor_email, startDate, startTime, endDate, endTime, maximum_capacity, current_enrollment_count, price, category, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)
+            INSERT INTO classes (name, description, instructor_email,instructor_name, startDate, startTime, endDate, endTime, maximum_capacity, current_enrollment_count, price, category, created_at)
+            VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, 0, ?, ?, ?)
         `;
-        const values = [name, description, instructor_email, startDate, startTime, endDate, endTime, maxSize, price, category, getCurrentDateTime()];
+        const values = [name, description, instructor_email, instructor_name, startDate, startTime, endDate, endTime, maxSize, price, category, getCurrentDateTime()];
 
         await pool.query(sql, values);
 

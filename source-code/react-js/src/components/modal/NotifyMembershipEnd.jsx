@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Form, useParams } from "react-router-dom";
 import SuccessMessage from "../SuccessMessage";
 import ErrorMessage from "../ErrorMessage";
-export default function NotifyMembershipEnd() {
+export default function NotifyMembershipEnd({ onConfirm }) {
   return (
     <div
       className="bg-white px-7 py-5 rounded-md text-start"
@@ -17,12 +17,12 @@ export default function NotifyMembershipEnd() {
       <h2 className="text-gray-700 font-semibold text-sm">
         Are you sure you want to send a membership notification to the user?
       </h2>
-      <MembershipNotificationForm />
+      <MembershipNotificationForm onConfirm={onConfirm} />
     </div>
   );
 }
 
-function MembershipNotificationForm() {
+function MembershipNotificationForm({ onConfirm }) {
   const dispatch = useDispatch();
   const { userId } = useParams();
   const {
@@ -43,13 +43,13 @@ function MembershipNotificationForm() {
             title: "Membership End Notification",
             message: `Dear Member,
             We're writing to inform you that your membership with Organization/Service Name is approaching its end. Your access to specific features or benefits will be discontinued as of End Date.`,
-              }),
+          }),
           headers: {
             "x-access-token": getToken(),
             "Content-Type": "application/json",
           },
         },
-      })
+      }),
   });
 
   let content;
@@ -66,6 +66,9 @@ function MembershipNotificationForm() {
   );
 
   if (data && !isFetching) {
+    if (onConfirm) {
+      return onConfirm();
+    }
     content = (
       <div className="">
         <h1 className="font-medium text-lg text-emerald-500">

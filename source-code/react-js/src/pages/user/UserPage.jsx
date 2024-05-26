@@ -5,30 +5,17 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import CoachBio from "../coaches/CoachBio.jsx";
 import Modal from "../../components/modal/Modal.jsx";
+import FallbackText from "../../components/FallbackText.jsx";
 import BillingHistory from "../../components/BillingHistory.jsx";
-import { billingItems } from "../../dummy_data/dummy_users.js";
 import { useQueries } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchFun, getToken } from "../../hooks/http.js";
-export default function UserPage({ userData }) {
-  const dispatch = useDispatch();
-  const {
-    membershipInfo,
-    name,
-    avatarSrc,
-    location,
-    phoneNumber,
-    email,
-    userRole,
-  } = userData;
-  const membershipDaysLeft = membershipInfo.membershipDaysLeft;
+export default function UserPage() {
+  const { userId } = useParams();
   const [
     isCoachAdditionalInformationsShown,
     setIsCoachAdditionalInformationsShown,
   ] = useState(false);
-  // Calculate the width based on the membership days left
-  const width = Math.round(((30 - membershipDaysLeft) / 30) * 100);
-  const { userId } = useParams();
   const results = useQueries({
     queries: [
       {
@@ -44,12 +31,52 @@ export default function UserPage({ userData }) {
             },
           }),
       },
+      {
+        queryKey: ["billing"],
+        queryFn: async () =>
+          await fetchFun({
+            url:
+              "http://localhost:8081/transactions/user-transactions/" + userId,
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
     ],
   });
-  console.log(results[0]?.data)
+
+  const billingHistory = results[1].data ?? [];
+  const userData = results[0].data;
+  console.log(userData);
+  const dispatch = useDispatch();
+  if (results[0].isPending || results[1].isPending) {
+    return (
+      <div className="px-5 py-7">
+        <FallbackText title="Fetching user data" />
+      </div>
+    );
+  }
+  const {
+    // membershipInfo,
+    first_name,
+    last_name,
+    avatarSrc,
+    address,
+    phone_number,
+    email,
+    role,
+  } = userData;
+  // const membershipDaysLeft = membershipInfo.membershipDaysLeft;
+
+  // Calculate the width based on the membership days left
+  // const width = Math.round(((30 - membershipDaysLeft) / 30) * 100);
+  const name = first_name + " " + last_name;
   return (
     <>
-      <Modal remainingDay={membershipDaysLeft} />
+      {/* <Modal remainingDay={membershipDaysLeft} /> */}
       <div className="flex w-full h-full px-4 py-3 bg-gray-100 flex-col">
         <h1 className="text-gray-700 font-bold text-xl mb-4">{name}</h1>
         <div
@@ -67,13 +94,13 @@ export default function UserPage({ userData }) {
               style={{ height: "150px", width: "150px" }}
               alt="User Avatar"
             />
-            <h2 className="bg-amber-50 text-amber-500 font-bold">{userRole}</h2>
-            <h3 className="font-medium text-black text-center">{location}</h3>
+            <h2 className="bg-amber-50 text-amber-500 font-bold">{role}</h2>
+            <h3 className="font-medium text-black text-center">{address}</h3>
             {/* Contact Information */}
             <div className="flex flex-col items-start gap-2">
               <ContactInfoIcon
                 icon={<PhoneIcon className="text-gray-800 w-5 h-5" />}
-                info={phoneNumber}
+                info={phone_number}
               />
               <ContactInfoIcon
                 icon={<EnvelopeIcon className="text-gray-800 w-5 h-5" />}
@@ -82,7 +109,7 @@ export default function UserPage({ userData }) {
             </div>
             <div className="p-4 bg-blue-100 w-full">
               <div className="inline-block mb-2 ml-[calc(25%-1.25rem)] py-0.5 px-1.5 bg-blue-50 border border-blue-200 text-xs font-medium text-blue-600 rounded-lg">
-                {30 - membershipDaysLeft}
+                {/* {30 - membershipDaysLeft} */}
               </div>
               <div
                 className="flex w-full h-2 bg-gray-400 rounded-full overflow-hidden"
@@ -93,14 +120,14 @@ export default function UserPage({ userData }) {
               >
                 <div
                   className="flex justify-center items-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500"
-                  style={{ width: `${width}%` }}
+                  // style={{ width: `${width}%` }}
                 ></div>
               </div>
               <h4 className="font-medium text-sm mt-4 text-center">
                 Remaining Days of User Membership
               </h4>
             </div>
-            {userRole.toLowerCase() === "coach" && (
+            {role.toLowerCase() === "coach" && (
               <button
                 onClick={() =>
                   setIsCoachAdditionalInformationsShown(
@@ -117,18 +144,18 @@ export default function UserPage({ userData }) {
           {/* Billing History */}
           {isCoachAdditionalInformationsShown ? (
             <div>
-              <BillingHistory data={billingItems} />
+              <BillingHistory data={billingHistory} />
               <CoachBio coachData={coachData} />
             </div>
           ) : (
-            <BillingHistory data={billingItems} />
+            <BillingHistory data={billingHistory} />
           )}
 
           {/* Action Buttons */}
           <div className="bg-white h-full w-min px-4 py-3 flex flex-col gap-2 items-center">
             <h1 className="font-semibold text-black">Actions</h1>
-            {(userRole.toLowerCase() === "member" ||
-              userRole.toLowerCase() === "coach") && (
+            {(role.toLowerCase() === "member" ||
+              role.toLowerCase() === "coach") && (
               <ActionButton
                 color="cyan"
                 onClick={() =>
@@ -145,7 +172,7 @@ export default function UserPage({ userData }) {
               Delete Account
             </ActionButton>
             <ActionButton
-              color="green"
+              color="blue"
               onClick={() => dispatch(setModalType("notify-membership-end"))}
             >
               Notify Membership End
@@ -156,12 +183,21 @@ export default function UserPage({ userData }) {
             >
               Custom Message
             </ActionButton>
-            <ActionButton
-              color="red"
-              onClick={() => dispatch(setModalType("block-user"))}
-            >
-              Block User Account
-            </ActionButton>
+            {results[0].data && results[0].data.status === "active" ? (
+              <ActionButton
+                color="red"
+                onClick={() => dispatch(setModalType("block-user"))}
+              >
+                Block User Account
+              </ActionButton>
+            ) : (
+              <ActionButton
+                color="green"
+                onClick={() => dispatch(setModalType("activate-user"))}
+              >
+                Activate User Account
+              </ActionButton>
+            )}
           </div>
         </div>
       </div>

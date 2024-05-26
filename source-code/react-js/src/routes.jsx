@@ -12,14 +12,8 @@ import EquipmentsPage, {
   action as equipmentsPageAction,
   loader as equipmentsPageLoader,
 } from "./pages/equipments/EquipmentsPage.jsx";
-import UserDetailsPage, {
-  action as userDetailAction,
-  loader as userPageDetailsLoader,
-} from "./pages/user/UserDetailsPage.jsx";
-import AllUserPage, {
-  loader as allUsersLoader,
-  action as allUsersAction,
-} from "./pages/user/AllUserPage.jsx";
+import UserDetailsPage from "./pages/user/UserDetailsPage.jsx";
+import AllUserPage from "./pages/user/AllUserPage.jsx";
 import AllNotifications, {
   loader as notificationsLoader,
 } from "./pages/user/notifications/AllNotifications.jsx";
@@ -30,11 +24,9 @@ import ReportsPage, {
   loader as reportsLoader,
 } from "./pages/reports/ReportsPage.jsx";
 import UserProfil from "./pages/user/UserProfil.jsx";
-import CoachesPage, {
-  loader as coachesPageLoader,
-} from "./pages/coaches/CoachesPage.jsx";
+import CoachesPage from "./pages/coaches/CoachesPage.jsx";
 import ClientsPage from "./pages/coaches/ClientsPage.jsx";
-import EquipmentsBookings  from "./pages/equipments/EquipmentsBookings.jsx";
+import EquipmentsBookings from "./pages/equipments/EquipmentsBookings.jsx";
 import BookEquipmentPage from "./pages/equipments/BookEquipmentPage.jsx";
 import BookClassPage from "./pages/classes/BookClassPage.jsx";
 import ClassDetailsPage, {
@@ -51,9 +43,7 @@ import RootLayout, {
   loader as tokenLoader,
 } from "./components/Layouts/Root/RootLayout.jsx";
 import UpdateUserPasswordPage from "./pages/user/UpdateUserPasswordPage.jsx";
-import CoachPageDetails, {
-  loader as coachPageDetailsLoader,
-} from "./pages/coaches/CoachPageDetails.jsx";
+import CoachPageDetails from "./pages/coaches/CoachPageDetails.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
 import CoachingPage, {
   loader as connectLoader,
@@ -146,8 +136,6 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <CoachesPage />,
-            id: "coaches-page",
-            loader: coachesPageLoader,
           },
           {
             path: ":coachId",
@@ -155,8 +143,6 @@ const router = createBrowserRouter([
               {
                 index: true,
                 element: <CoachPageDetails />,
-                id: "coach-details-id",
-                loader: coachPageDetailsLoader,
               },
             ],
           },
@@ -165,9 +151,6 @@ const router = createBrowserRouter([
       {
         path: "users",
         element: <AllUserPage />,
-        id: "all-users-id",
-        loader: allUsersLoader,
-        action: allUsersAction,
       },
       {
         path: "payments",
@@ -245,9 +228,6 @@ const router = createBrowserRouter([
           {
             path: ":userId",
             element: <UserDetailsPage />,
-            id: "user-detail-id",
-            loader: userPageDetailsLoader,
-            action: userDetailAction,
           },
         ],
       },
