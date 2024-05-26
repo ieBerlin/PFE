@@ -56,21 +56,7 @@ export const DUMMY_USERS = [{
     },
 
 ];
-export const filterUsers = (users, selectedUsers) => {
-    return users.filter(user => {
-        // Check if the user's role is selected
-        const isRoleSelected = Object.entries(selectedUsers.userRole)
-            .every(([userRole, isSelected]) => isSelected || user.role.toLowerCase() !== userRole);
 
-        // Check if the user's status is selected
-        const isStatusSelected = Object.entries(selectedUsers.status)
-            .every(([status, isSelected]) => isSelected || user.status.toLowerCase() !== status);
-
-        // Return true only if both role and status are selected
-        return isRoleSelected &&
-            isStatusSelected;
-    });
-};
 export const dummy_reports_users = {
     clubMembers: 1241,
     newMembers: 120,

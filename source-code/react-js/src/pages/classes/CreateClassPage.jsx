@@ -50,7 +50,6 @@ export default function CreateClassPage() {
     mutate(classData);
   }
   let content;
-  console.log(data);
   content = !isPending && isError && (
     <div className="">
       <h1 className="font-medium text-lg text-red-500">Errors </h1>

@@ -3,7 +3,7 @@ const getCurrentDateTime = require('../../utils/getCurrentDateTime.js');
 
 const createTransaction = async(req, res) => {
     try {
-        const { relatedUser: email, transactionType, method: transactionMethod, price, paymentType, status: transactionStatus, date: transactionDate, time: transactionTime, notes: transactionNotes } = req.body;
+        const { relatedUser: userId, transactionType, method: transactionMethod, price, paymentType, status: transactionStatus, date: transactionDate, time: transactionTime, notes: transactionNotes } = req.body;
         let errors = {};
         if (!transactionType) {
             errors.transactionType = "No transaction type provided.";
@@ -32,10 +32,10 @@ const createTransaction = async(req, res) => {
         }
 
         const sql = `
-            INSERT INTO transactions (email, transactionType, transactionMethod, price, paymentType, transactionStatus, transactionDate, transactionTime, transactionNotes)
+            INSERT INTO transactions (userId, transactionType, transactionMethod, price, paymentType, transactionStatus, transactionDate, transactionTime, transactionNotes)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const values = [email, transactionType, transactionMethod, price, paymentType, transactionStatus, transactionDate, transactionTime, transactionNotes];
+        const values = [userId, transactionType, transactionMethod, price, paymentType, transactionStatus, transactionDate, transactionTime, transactionNotes];
 
         await pool.query(sql, values);
 

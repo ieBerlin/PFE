@@ -1,12 +1,9 @@
-/* eslint-disable react/prop-types */
-import { Await } from "react-router-dom";
 import FallbackText from "../../components/FallbackText.jsx";
 import EquipmentsTable from "./EquipmentsTable.jsx";
-import { Suspense } from "react";
 import { fetchFun, getToken } from "../../hooks/http.js";
 import { useQuery } from "@tanstack/react-query";
 export default function EquipmentsBookings() {
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["equipments", "bookings"],
     queryFn: async () =>
       await fetchFun({
@@ -31,6 +28,4 @@ export default function EquipmentsBookings() {
   );
 }
 
-async function loader() {
-  return;
-}
+

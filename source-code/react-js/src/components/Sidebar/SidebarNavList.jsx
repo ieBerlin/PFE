@@ -28,7 +28,6 @@ export default function NavList() {
     }
   };
   const signOutHandler = () => {
-    console.log('Clicked')
     dispatch(setModalType("confirm-sign-out"));
   };
   return (

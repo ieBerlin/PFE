@@ -7,7 +7,6 @@ import { isAuthenticatedUser } from "../../hooks/http.js";
 
 export default function LandingPage() {
   const isValidLogin = useRouteLoaderData("landing-page-id");
-  console.log(isValidLogin);
   if (isValidLogin === null) {
     // LoaderData not yet available, show loading spinner or placeholder
     return <div>Loading...</div>;

@@ -20,9 +20,7 @@ import AllNotifications, {
 import CreateSportCategoriePage from "./pages/sports/CreateSportCategoriePage.jsx";
 import SportCategoriePage from "./pages/sports/SportCategoriePage.jsx";
 import DeleteSportCategorie from "./pages/sports/DeleteSportCategorie.jsx";
-import ReportsPage, {
-  loader as reportsLoader,
-} from "./pages/reports/ReportsPage.jsx";
+import ReportsPage  from "./pages/reports/ReportsPage.jsx";
 import UserProfil from "./pages/user/UserProfil.jsx";
 import CoachesPage from "./pages/coaches/CoachesPage.jsx";
 import ClientsPage from "./pages/coaches/ClientsPage.jsx";
@@ -185,8 +183,6 @@ const router = createBrowserRouter([
       {
         path: "reports",
         element: <ReportsPage />,
-        id: "reports-loader",
-        loader: reportsLoader,
       },
       {
         path: "clients",

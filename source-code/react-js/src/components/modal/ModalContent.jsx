@@ -24,7 +24,6 @@ export default function ModalContent({
   function onConfirm(confirmType) {
     dispatch(setModalType(confirmType));
   }
-  let modalContent;
   function onClose() {
     dispatch(setModalType());
   }
@@ -38,42 +37,36 @@ export default function ModalContent({
     navigate("/auth");
     onClose();
   }
-  async function handleSendReq(url, method) {
-    return await fetchFun({
-      url,
-      options: {
-        method,
-        headers: {
-          "x-access-token": getToken(),
-        },
-      },
-    });
-  }
 
   if (type === "create-user") {
-    modalContent = (
+    return (
       <AddUserModal
         onClose={onClose}
         onConfirm={() => onConfirm("confirm-add-user")}
       />
     );
   } else if (type === "delete-user") {
-    modalContent = (
+    return (
       <ConfirmationModal
         title="Delete User"
         description=" Are you sure you want to delete this account? All of the data will be permanently removed. This action cannot be undone."
         confirmActionLabel="Delete"
         onConfirm={() => onConfirm("confirm-delete-user")}
-        mutationFn={() =>
-          handleSendReq(
-            "http://localhost:8081/user/profile/" + userId,
-            "DELETE"
-          )
+        mutationFn={async () =>
+          await fetchFun({
+            url: "http://localhost:8081/user/profile/" + userId,
+            options: {
+              method: "DELETE",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          })
         }
       />
     );
   } else if (type === "block-user") {
-    modalContent = (
+    return (
       <ConfirmationModal
         title="Block User"
         description=" Are you sure you want to block this account?"
@@ -97,14 +90,12 @@ export default function ModalContent({
         }
       />
     );
-  }
-  
-  else if (type === "activate-user") {
-    modalContent = (
+  } else if (type === "activate-user") {
+    return (
       <ConfirmationModal
         title="Activate User"
         description=" Are you sure you want to activate this account?"
-        confirmActionLabel="Block"
+        confirmActionLabel="Activate"
         onConfirm={() => {
           onConfirm("confirm-activate-user");
           queryClient.invalidateQueries([["user-" + userId]]);
@@ -124,19 +115,59 @@ export default function ModalContent({
         }
       />
     );
-  }
-  else if (type === "reset-password") {
-    modalContent = <ResetPasswordModal />;
+  } else if (type === "reset-password") {
+    return <ResetPasswordModal />;
   } else if (type === "confirm-reset-password") {
-    modalContent = (
+    return (
       <ConfirmModal
         color="green"
         title="Password reset confirmation sent"
         description="The user's password has been successfully reset. An email has been sent to the user with instructions on how to set up a new password"
       />
     );
+  } else if (type === "custom-message") {
+    return (
+      <SendCustomMessage
+        onConfirm={() => onConfirm("confirm-custom-message")}
+      />
+    );
+  } else if (type === "delete-notification") {
+    return (
+      <ConfirmationModal
+        title="Delete Notification"
+        description="Are you sure you want to delete this notification? Once deleted, it cannot be recovered."
+        confirmActionLabel="Delete"
+        onConfirm={() => {}}
+      />
+    );
+  } else if (type === "add-equipment") {
+    return <AddEquipmentModal onClose={onClose} />;
+  } else if (type === "edit-equipment") {
+    return (
+      <EditEquipmentModal equipmentData={equipmentData} onClose={onClose} />
+    );
+  } else if (type === "delete-class") {
+    return (
+      <ConfirmationModal
+        title="Delete Class"
+        description=" Are you sure you want to delete this class? All of the data will be permanently removed. This action cannot be undone."
+        confirmActionLabel="Delete"
+        onConfirm={() => onConfirm("confirm-delete-class")}
+        mutationFn={async () =>
+          await fetchFun({
+            url: "http://localhost:8081/class/" + classId,
+            options: {
+              method: "DELETE",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          })
+        }
+      />
+    );
   } else if (type === "confirm-delete-user") {
-    modalContent = (
+    return (
       <ConfirmModal
         color="red"
         title="User Deleted Successfully"
@@ -147,69 +178,84 @@ export default function ModalContent({
         }}
       />
     );
-  
-  } else if (type === "confirm-block-user") {
-    modalContent = (
+  } else if (type === "confirm-block-class") {
+    return (
       <ConfirmModal
         color="red"
-        title="User Blocked Successfully"
-        description="User has been successfully blocked."
+        title="Class Blocked Successfully"
+        description="Class has been successfully blocked."
+        onConfirm={() => {
+          navigate("/classes");
+          dispatch(setModalType());
+        }}
       />
     );
-  }
-  else if (type === "confirm-activate-user") {
-    modalContent = (
+  } else if (type === "confirm-activate-user") {
+    return (
       <ConfirmModal
         color="green"
         title="User activated Successfully"
         description="User has been successfully activated."
       />
     );
-  }
-  else if (type === "confirm-notify-membership-user") {
-    modalContent = (
+  } else if (type === "confirm-block-user") {
+    return (
+      <ConfirmModal
+        color="red"
+        title="User blocked Successfully"
+        description="User has been successfully blocked."
+      />
+    );
+  } else if (type === "confirm-notify-membership-user") {
+    console.log('hi')
+    return (
       <ConfirmModal
         color="green"
         title="User Membership Notification Sent Successfully"
         description="A membership notification has been successfully sent to the user."
+        onConfirm={() => dispatch(setModalType())}
       />
     );
   } else if (type === "confirm-custom-message") {
-    modalContent = (
+    return (
       <ConfirmModal
         color="green"
         title="The Custom Message Has Been Sent Successfully"
         description="The custom message has been successfully sent to the user."
       />
     );
-  }
-  
-
-  else if (type === "confirm-add-user") {
-    modalContent = (
+  } else if (type === "confirm-add-user") {
+    return (
       <ConfirmModal
         color="blue"
         title="User Added Successfully"
         description="User has been successfully added."
-   
       />
     );
-  }
-  else if (type === "create-class") {
-    modalContent = (
+  } else if (type === "create-class") {
+    return (
       <ConfirmModal
         color="blue"
         title="Class Created Successfully"
         description="Class has been successfully created."
-        onConfirm={()=>{
-          dispatch(setModalType())
-          navigate('/classes');
+        onConfirm={() => {
+          dispatch(setModalType());
+          navigate("/classes");
         }}
       />
     );
-  } 
-  else if (type === "confirm-sign-out") {
-    modalContent = (
+  }
+  if (type === "edit-class") {
+    return (
+      <ConfirmModal
+        color="blue"
+        title="Class updated Successfully"
+        description="Class has been successfully updated."
+        onConfirm={() => dispatch(setModalType())}
+      />
+    );
+  } else if (type === "confirm-sign-out") {
+    return (
       <ConfirmModal
         title="Are You Sure You Want to Sign Out?"
         description="Are you sure you want to sign out of your account? Click 'Confirm' to sign out."
@@ -218,54 +264,32 @@ export default function ModalContent({
       />
     );
   } else if (type === "view-certification") {
-    modalContent = <CertificationModal imageSrc={imageSrc} />;
-  } else if (type === "delete-notification") {
-    modalContent = (
-      <ConfirmationModal
-        title="Delete Notification"
-        description="Are you sure you want to delete this notification? Once deleted, it cannot be recovered."
-        confirmActionLabel="Delete"
-        onConfirm={() => {}}
-      />
-    );
+    return <CertificationModal imageSrc={imageSrc} />;
   } else if (type === "add-transaction") {
-    modalContent = <AddTransactionModal />;
+    return <AddTransactionModal />;
   } else if (type === "recharge-user-membership") {
-    return (modalContent = (
-      <RechargeUserMembership remainingDay={remainingDay} />
-    ));
+    return <RechargeUserMembership remainingDay={remainingDay} />;
   } else if (type === "notify-membership-end") {
-    return (modalContent = (
+    return (
       <NotifyMembershipEnd
         onConfirm={() => onConfirm("confirm-notify-membership-user")}
       />
-    ));
-  } else if (type === "custom-message") {
-    return (modalContent = (
-      <SendCustomMessage
-        onConfirm={() => onConfirm("confirm-custom-message")}
-      />
-    ));
-  } else if (type === "add-equipment") {
-    return (modalContent = <AddEquipmentModal onClose={onClose} />);
-  } else if (type === "edit-equipment") {
-    return (modalContent = (
-      <EditEquipmentModal equipmentData={equipmentData} onClose={onClose} />
-    ));
-  } else if (type === "delete-class") {
-    modalContent = (
-      <ConfirmationModal
-        title="Delete Class"
-        description=" Are you sure you want to delete this class? All of the data will be permanently removed. This action cannot be undone."
-        confirmActionLabel="Delete"
-        onConfirm={() =>
-          handleSendReq(`http://localhost:8081/class/${classId}`, "DELETE")
-        }
+    );
+  } else if (type === "confirm-delete-class") {
+    return (
+      <ConfirmModal
+        color="red"
+        title="Class Deleted Successfully"
+        description="Class has been successfully deleted."
+        onConfirm={() => {
+          navigate("/classes");
+          dispatch(setModalType());
+        }}
       />
     );
   } else {
     return (
-      <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-10">
+      <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-20 bg-white rounded-md">
         <p className="font-semibold"> Nothing to show !</p>
         <button
           onClick={onClose}
@@ -276,5 +300,4 @@ export default function ModalContent({
       </div>
     );
   }
-  return modalContent;
 }

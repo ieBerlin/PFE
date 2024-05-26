@@ -117,7 +117,6 @@ export default function EquipmentsTable({ data }) {
                   </thead>
                   <tbody className="divide-y divide-gray-200 ">
                     {filteredBookings.map((booking, index) => {
-                      console.log(booking);
                       return (
                         <tr key={index}>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
@@ -408,9 +407,10 @@ function UserTypeData({ type }) {
 
 const filterBookings = (data, selectedBookings) => {
   return data.filter((booking) => {
+    console.log(booking)
     const isUserTypeSelected = Object.entries(selectedBookings.userType).every(
       ([userType, isSelected]) =>
-        isSelected || booking.userType.toLowerCase() !== userType
+        isSelected || booking.staff.toLowerCase() !== userType
     );
     const isStatusSelected = Object.entries(selectedBookings.status).every(
       ([status, isSelected]) =>

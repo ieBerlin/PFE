@@ -33,7 +33,6 @@ export default function CoachesPage() {
         <h1 className="font-medium text-lg text-red-500">Errors </h1>
         {error
           ? Object.entries(error.info).map(([key, value]) => {
-              console.log(error.info);
               return <ErrorMessage key={key} title={key} message={value} />;
             })
           : "An error occured!"}

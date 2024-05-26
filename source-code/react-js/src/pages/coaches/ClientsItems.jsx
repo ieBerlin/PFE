@@ -13,7 +13,6 @@ export default function ClientsItems({ data: clients }) {
     useState(selectedClients);
 
   const filteredClients = filterClients(clients, currentSelectedClients);
-  console.log(filteredClients);
 
   return (
     <div className="bg-white rounded-md">

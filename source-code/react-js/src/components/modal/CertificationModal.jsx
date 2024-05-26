@@ -3,7 +3,6 @@ import { setModalType } from "../../features/modal/modalSlice";
 import { useDispatch } from "react-redux";
 
 export default function CertificationModal({ imageSrc }) {
-    console.log(imageSrc)
     const dispatch = useDispatch();
   return (
     <div className="relative h-2/3">

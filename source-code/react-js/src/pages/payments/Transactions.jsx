@@ -3,6 +3,7 @@ import { Menu } from "@headlessui/react";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
 import FilterDropdown from "../../components/FilterDropdown.jsx";
+import { Link } from "react-router-dom";
 
 const initialSelectedTransactions = {
   options: {
@@ -97,20 +98,42 @@ export default function Transactions({ transactionsData }) {
                 </div>
               </div>
               <div className="flex flex-column justify-between items-center">
-                {(transaction.email && transaction.email !== "" )? (
-                  <div className="flex items-center gap-5">
-                    <img
-                      className="w-14 h-14 fill object-cover rounded-full"
-                      src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
-                      alt=""
-                    />
-                    <h1 className="text-sm font-semibold">
-                      {transaction.email}
-                    </h1>
-                  </div>
+                {transaction.userId ? (
+                  // If transaction.userId exists
+                  <>
+                    {transaction.userEmail === "" && transaction.name === "" ? (
+                      // If userEmail and name are both empty strings
+                      <Link to={`/user/${transaction.userId}`}>
+                        <div className="flex items-center gap-5">
+                          <img
+                            className="w-14 h-14 fill object-cover rounded-full"
+                            src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
+                            alt=""
+                          />
+                          <div>
+                            <h1 className="text-sm font-semibold text-gray-600">
+                              {transaction.userEmail}
+                            </h1>
+                            <h1 className="text-sm font-semibold text-black">
+                              {transaction.name}
+                            </h1>
+                          </div>
+                        </div>
+                      </Link>
+                    ) : (
+                      // If either userEmail or name is not empty
+                      <h1 className="text-center text-sm font-medium text-black bg-gray-100 px-4 py-2 rounded-md">
+                        This transaction seems to be from a deleted user!
+                      </h1>
+                    )}
+                  </>
                 ) : (
-                  <h3 className="font-semibold p-2 text-center text-red-500 bg-red-50 rounded-md">Non-User Related</h3>
+                  // If transaction.userId does not exist
+                  <h3 className="font-semibold p-2 text-center text-red-500 bg-red-50 rounded-md">
+                    Non-User Related
+                  </h3>
                 )}
+
                 <h1
                   className={`text-2xl ${
                     transaction.paymentType === "income"

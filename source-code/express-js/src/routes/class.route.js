@@ -14,7 +14,7 @@ router.get("/", verifyToken, getAllClasses);
 router.get("/:classId", verifyToken, getSingleClass);
 router.post("/", verifyToken, authAdminOrManager, createClass);
 router.put("/:classId", verifyToken, updateClass);
-router.delete("/:classId", verifyToken, authAdminOrManager, deleteClass);
+router.delete("/:classId", verifyToken, deleteClass);
 router.put("/:classId/:status", verifyToken, authAdminOrManager, updateClassStatus);
 
 module.exports = router;

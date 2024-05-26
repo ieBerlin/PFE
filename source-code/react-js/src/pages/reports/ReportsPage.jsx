@@ -7,45 +7,48 @@ import {
   DUMMY_DAILY_EXPENSES,
 } from "../../dummy_data/dummy_reports.js";
 import ReportCard from "./ReportCard.jsx";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import ChartComponent from "../payments/ChartComponent.jsx";
 import { fetchFun, getToken } from "../../hooks/http.js";
 export default function ReportsPage() {
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: ["payments"],
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/transactions/last-7-payments",
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
+      {
+        queryKey: ["users"],
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/users/all-users-number",
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
+    ],
+  });
+
+  const { isPending: paymentsLoaderIndicator, data: paymentsData } = results[0];
   const {
     isPending: usersLoaderIndicator,
     data: usersData,
     isError,
     error,
-  } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const response = await fetchFun({
-        url: "http://localhost:8081/users/all-users-number",
-        options: {
-          method: "GET",
-          headers: {
-            "x-access-token": getToken(),
-          },
-        },
-      });
-      return response;
-    },
-  });
-  const { isPending: paymentsLoaderIndicator, data: paymentsData } = useQuery({
-    queryKey: ["payments"],
-    queryFn: async () => {
-      const response = await fetchFun({
-        url: "http://localhost:8081/payments/last-7-payments",
-        options: {
-          method: "GET",
-          headers: {
-            "x-access-token": getToken(),
-          },
-        },
-      });
-      return response;
-    },
-  });
+  } = results[1];
 
   let incomes = [];
   let expenses = [];
@@ -78,8 +81,7 @@ export default function ReportsPage() {
           </>
         )}
 
-        {
-          !paymentsLoaderIndicator &&
+        {!paymentsLoaderIndicator && (
           <div>
             <h1 className="my-2 font-semibold text-gray-700 text-xl">
               Financials
@@ -109,39 +111,12 @@ export default function ReportsPage() {
               />
             </div>
           </div>
-      }
+        )}
       </div>
     </div>
   );
 }
-export function loader() {
-  return defer({
-    transactionsLoaderTimeout: transactionsLoaderTimeout(),
-  });
-}
 
-async function transactionsLoaderTimeout() {
-  const incomes = await incomeTimeOut();
-  const expenses = await expenseTimeOut();
-  return {
-    incomes,
-    expenses,
-  };
-}
-function incomeTimeOut() {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve(DUMMY_DAILY_INCOME);
-    }, 1000)
-  );
-}
-function expenseTimeOut() {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve(DUMMY_DAILY_EXPENSES);
-    }, 1000)
-  );
-}
 function findMaxIncome(data) {
   return Math.max(...data.map((item) => item.amount), 1000);
 }

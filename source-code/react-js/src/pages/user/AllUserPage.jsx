@@ -13,11 +13,18 @@ export default function AllUserPage() {
   return (
     <>
       <Modal />
-      <Suspense fallback={<FallbackText title={"Fetching Users data..."} />}>
-        <Await resolve={loader()}>
-          {(resolvedData) => <AllUsersList users={resolvedData} />}
-        </Await>
-      </Suspense>
+      <div className="bg-gray-50 w-full px-5 pt-4 pb-10">
+        <h1 className="text-4xl mb-3">Reports</h1>
+        <div className="my-4">
+          <Suspense
+            fallback={<FallbackText title={"Fetching Users data..."} />}
+          >
+            <Await resolve={loader()}>
+              {(resolvedData) => <AllUsersList users={resolvedData} />}
+            </Await>
+          </Suspense>
+        </div>
+      </div>
     </>
   );
 }
@@ -60,7 +67,6 @@ export async function action({ request }) {
         },
       });
       if (response.status === 200 || response.status === 201) {
-        console.log("success");
         return json({ status: 200, success: true });
       }
       if (response.status === 422 || response.status === 409) {

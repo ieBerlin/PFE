@@ -33,17 +33,12 @@ function MembershipNotificationForm({ onConfirm }) {
     error,
   } = useMutation({
     mutationKey: ["recharge"],
-    mutationFn: async () =>
+    mutationFn: async (data) =>
       await fetchFun({
         url: `${"http://localhost:8081/notification"}`,
         options: {
           method: "POST",
-          body: JSON.stringify({
-            userId: userId,
-            title: "Membership End Notification",
-            message: `Dear Member,
-            We're writing to inform you that your membership with Organization/Service Name is approaching its end. Your access to specific features or benefits will be discontinued as of End Date.`,
-          }),
+          body: JSON.stringify(data),
           headers: {
             "x-access-token": getToken(),
             "Content-Type": "application/json",
@@ -58,7 +53,6 @@ function MembershipNotificationForm({ onConfirm }) {
       <h1 className="font-medium text-lg text-red-500">Errors </h1>
       {error
         ? Object.entries(error.info).map(([key, value]) => {
-            console.log(error.info);
             return <ErrorMessage key={key} title={key} message={value} />;
           })
         : "An error occured!"}
@@ -81,9 +75,19 @@ function MembershipNotificationForm({ onConfirm }) {
       </div>
     );
   }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const fd = {
+      userId: userId,
+      title: "Membership End Notification",
+      message: `Dear Member,
+      We're writing to inform you that your membership with Organization/Service Name is approaching its end. Your access to specific features or benefits will be discontinued as of End Date.`,
+    };
+    mutate(fd);
+  };
   return (
     <>
-      <Form onSubmit={mutate}>
+      <Form onSubmit={handleSubmit}>
         <div className="flex justify-end pt-3 gap-3">
           <CancelButton
             disabled={isFetching}

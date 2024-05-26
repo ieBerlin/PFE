@@ -34,7 +34,7 @@ export default function ConfirmModal({
 
         <button
           onClick={handleConfirmClick}
-          className={`mt-4 ${buttonBgClass} text-white font-semibold rounded-md px-32 py-1 ${buttonHoverBgClass}`}
+          className={`mt-4 ${buttonBgClass} whitespace-nowrap text-white font-semibold rounded-md px-32 py-1 ${buttonHoverBgClass}`}
         >
           {confirmButtonLabel}
         </button>

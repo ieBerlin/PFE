@@ -44,7 +44,6 @@ export default function AddTransactionModal() {
       <h1 className="font-medium text-lg text-red-500">Errors </h1>
       {error
         ? Object.entries(error.info).map(([key, value]) => {
-            console.log(error.info);
             return <ErrorMessage key={key} title={key} message={value} />;
           })
         : "An error occured!"}
@@ -54,12 +53,10 @@ export default function AddTransactionModal() {
   if (data && !isSubmitting) {
     content = (
       <div className="">
-        <h1 className="font-medium text-lg text-emerald-500">
-          Server feedback{" "}
-        </h1>
+        <h1 className="font-medium text-lg text-emerald-500">Payment Status</h1>
         <SuccessMessage
-          title="Request Successful"
-          message="Your request has been processed successfully."
+          title="Transaction Successful"
+          message="Your payment has been processed successfully."
         />
       </div>
     );

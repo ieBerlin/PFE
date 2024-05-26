@@ -90,13 +90,11 @@ export default function EditClassPage() {
     );
   }
   let content;
-  console.log(isError);
   content = !isEditingClass && isError && (
     <div className="">
       <h1 className="font-medium text-lg text-red-500">Errors </h1>
       {error
         ? Object.entries(error.info).map(([key, value]) => {
-            console.log(error.info);
             return <ErrorMessage key={key} title={key} message={value} />;
           })
         : "An error occured!"}
@@ -104,17 +102,7 @@ export default function EditClassPage() {
   );
 
   if (data && !isEditingClass) {
-    content = (
-      <div className="">
-        <h1 className="font-medium text-lg text-emerald-500">
-          Server feedback{" "}
-        </h1>
-        <SuccessMessage
-          title="Request Successful"
-          message="Your request has been processed successfully."
-        />
-      </div>
-    );
+    dispatch(setModalType("edit-class"));
   }
   return (
     <>

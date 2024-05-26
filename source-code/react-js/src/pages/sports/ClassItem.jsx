@@ -12,7 +12,6 @@ import {
 import { UserIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
 export default function ClassItem({ data }) {
-  console.log(data);
   const {
     classId: id,
     name: title,

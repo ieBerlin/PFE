@@ -22,8 +22,9 @@ export default function ConfirmationModal({
     queryKey: ["modal"],
     mutationFn,
   });
-  console.log("data : ");
-  console.log(data);
+if(isError){
+  console.log(error)
+}
   let content;
   if (isError) {
     content = (
@@ -37,7 +38,6 @@ export default function ConfirmationModal({
       </div>
     );
   } else if (data) {
-    console.log("on confirm");
     onConfirm();
   }
 
@@ -61,7 +61,7 @@ export default function ConfirmationModal({
       </div>
 
       {content}
-      <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
+      <div className="px-2 flex justify-start flex-row-reverse items-center mt-3">
         <button
           onClick={() => mutate()}
           disabled={isLoading}

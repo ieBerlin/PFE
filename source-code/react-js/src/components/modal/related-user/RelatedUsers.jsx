@@ -97,47 +97,59 @@ function FetchUser({ searchInputValue, userType, setIsRelatedUsersShown }) {
   );
 }
 function UserCredentials({ resolvedData, setIsRelatedUsersShown, isChecked }) {
+  const refs = useRef([]);
+
+  function handleClick(index) {
+    refs.current.forEach((ref, i) => {
+      if (ref) {
+        ref.checked = i === index;
+      }
+    });
+  }
+
   return (
-    <>
-      <div className="pl-3">
-        <div className="flex flex-row justify-between items-center mt-3">
-          <h4 className="text-gray-400 uppercase font-medium text-sm">Users</h4>
-          <button type="button" onClick={() => setIsRelatedUsersShown(false)}>
-            <XMarkIcon className="text-gray-400 w-6 h-6" />
-          </button>
-        </div>
-        {resolvedData && resolvedData.length > 0 ? (
-          <ul className="flex flex-col w-full gap-2 mt-3 px-3 max-h-[100px] overflow-y-auto shadow-sm">
-            {resolvedData.map((user) => (
-              <li key={user.email}>
-                <div className="flex gap-2 items-center hover:bg-gray-100 cursor-pointer">
-                  <input
-                    defaultChecked={isChecked}
-                    value={user.email}
-                    type="radio"
-                    name="related-user"
-                    className="cursor"
-                    htmlFor={user.email}
-                  />
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src={user.imageSrc}
-                    alt={user.fullName}
-                  />
-                  <h4 className="text-gray-600 text-sm">{user.email}</h4>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <h3 className="text-gray-700 font-medium text-center py-2">
-            No Users found
-          </h3>
-        )}
+    <div className="pl-3">
+      <div className="flex flex-row justify-between items-center mt-3">
+        <h4 className="text-gray-400 uppercase font-medium text-sm">Users</h4>
+        <button type="button" onClick={() => setIsRelatedUsersShown(false)}>
+          <XMarkIcon className="text-gray-400 w-6 h-6" />
+        </button>
       </div>
-    </>
+      {resolvedData && resolvedData.length > 0 ? (
+        <ul className="flex flex-col w-full gap-2 mt-3 px-3 max-h-[100px] overflow-y-auto shadow-sm">
+          {resolvedData.map((user, index) => (
+            <li key={user.email}>
+              <div
+                onClick={() => handleClick(index)}
+                className="flex gap-2 items-center hover:bg-gray-100 cursor-pointer p-1 rounded-md"
+              >
+                <input
+                  ref={(el) => (refs.current[index] = el)}
+                  defaultChecked={isChecked}
+                  value={user.userId}
+                  type="radio"
+                  name="related-user"
+                  className="cursor-pointer"
+                />
+                <img
+                  className="w-8 h-8 rounded-full"
+                  src={user.imageSrc}
+                  alt={user.fullName}
+                />
+                <h4 className="text-gray-600 text-sm">{user.email}</h4>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <h3 className="text-gray-700 font-medium text-center py-2">
+          No Users found
+        </h3>
+      )}
+    </div>
   );
 }
+
 async function usersLoader(searchInputValue, userType) {
   const response = await fetchFun({
     url: "http://localhost:8081/user/profile/all-users",
@@ -158,7 +170,9 @@ async function usersLoader(searchInputValue, userType) {
 
 function filterUsers(users, inputVal, userType) {
   return users.filter((user) => {
-    const emailMatch = user.email.toLowerCase().includes(inputVal.trim().toLowerCase());
+    const emailMatch = user.email
+      .toLowerCase()
+      .includes(inputVal.trim().toLowerCase());
     if (userType) {
       const roleMatch = user.role === userType;
       return emailMatch && roleMatch;
@@ -167,4 +181,3 @@ function filterUsers(users, inputVal, userType) {
     }
   });
 }
-

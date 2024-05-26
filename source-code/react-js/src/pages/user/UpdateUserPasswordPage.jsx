@@ -33,7 +33,6 @@ export default function UpdateUserPasswordPage() {
       });
     },
   });
-console.log(data)
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);

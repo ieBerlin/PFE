@@ -6,6 +6,7 @@ import FilterDropdown from "../../components/FilterDropdown.jsx";
 import { useState } from "react";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import Modal from "../../components/modal/Modal.jsx";
+import SearchInput from "../../components/SearchInput.jsx";
 const selectedEquipments = {
   category: {
     yoga: true,
@@ -15,6 +16,7 @@ const selectedEquipments = {
   },
 };
 export default function EquipmentsList({ data }) {
+  const [inputValue, setInputValue] = useState("");
   const isAdmin =
     useSelector((state) => state.userRole.userRole?.toLowerCase()) === "admin";
   const dispatch = useDispatch();
@@ -22,12 +24,17 @@ export default function EquipmentsList({ data }) {
     useState(selectedEquipments);
   const [currentSelectedEquipmentData, setCurrentSelectedEquipmentData] =
     useState(null);
-  const filteredEquipments = filterEquipements(data, currentSelectedEquipments);
+  const filteredEquipments = filterEquipements(
+    data,
+    currentSelectedEquipments,
+    inputValue
+  );
   const modal = isAdmin ? (
     <Modal equipmentData={currentSelectedEquipmentData} />
   ) : (
     <Modal />
   );
+
   return (
     <>
       {modal}
@@ -53,20 +60,26 @@ export default function EquipmentsList({ data }) {
           ) : (
             <div />
           )}
-          <FilterDropdown
-            currentSelectedData={currentSelectedEquipments}
-            setData={setCurrentSelectedEquipments}
-            filterOptionsData={[
-              {
-                title: "category",
-                options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
-              },
-              // {
-              //   title: "equipment.Status",
-              //   options: ["new", "old"],
-              // },
-            ]}
-          />
+          <div className="flex flex-row items-center gap-2">
+            <SearchInput
+              onSearch={(value) => setInputValue(value)}
+              placeholder="Type the Equipment's name"
+            />
+            <FilterDropdown
+              currentSelectedData={currentSelectedEquipments}
+              setData={setCurrentSelectedEquipments}
+              filterOptionsData={[
+                {
+                  title: "category",
+                  options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
+                },
+                // {
+                //   title: "equipment.Status",
+                //   options: ["new", "old"],
+                // },
+              ]}
+            />
+          </div>
         </div>
         <div
           className=" gap-x-3 justify-center grid"
@@ -120,14 +133,14 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
               {equipmentData.name}
             </h5>
           </div>
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <span className=" rounded bg-amber-400 text-white  px-2.5 py-0.5 text-xs font-semibold">
               {equipmentData.rating ?? 0}
             </span>
             <span className="text-gray-500 text-sm">
               ({equipmentData.rating ?? 0})
             </span>
-          </div>
+          </div> */}
         </div>
         <h3 className="text-start font-semibold text-gray-500 mb-5">
           ({equipmentData.availableQuantity}) Piece Left
@@ -159,16 +172,21 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
     </li>
   );
 }
-function filterEquipements(equipments, selectedEquipments) {
-  return equipments.filter((user) => {
-    // Check if the user's role is selected
-    const isCategorySelected = Object.entries(
-      selectedEquipments.category
-    ).every(
-      ([category, isSelected]) =>
-        isSelected || user.category.toLowerCase() !== category
+function filterEquipements(equipments, selectedEquipments, inputValue) {
+  const filterEquipmentsDependOnInputValue = equipments.filter((equipment) => {
+    return Object.entries(equipment).some(([key, value]) =>
+      (key === "name" || key === "category") &&
+      typeof value === "string" &&
+      value.toLowerCase().includes(inputValue.toLowerCase())
     );
+  });
+  
 
-    return isCategorySelected;
+  return filterEquipmentsDependOnInputValue.filter((equipment) => {
+    return !Object.entries(selectedEquipments.category).some(
+      ([category, isSelected]) =>
+        isSelected &&
+        equipment.category.toLowerCase() === category.toLowerCase()
+    );
   });
 }

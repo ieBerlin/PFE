@@ -53,5 +53,5 @@ export default function BillingHistory({ data }) {
     );
   }
 
-  return <div className="bg-white px-3 py-3 my-3">{content}</div>;
+  return <div className="bg-white px-3 py-3 rounded-md">{content}</div>;
 }

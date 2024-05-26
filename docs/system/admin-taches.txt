@@ -1,0 +1,37 @@
+Tâches de l'Administrateur :
+
+Modifier les Informations Personnelles : Mettre à jour les détails personnels d'un utilisateur.
+Mettre à Jour le Mot de Passe : Changer le mot de passe d'un utilisateur.
+Analyser le Tableau de Bord de la Salle de Sport : Examiner les insights et les métriques sur les performances de la salle de sport.
+Créer une Classe : Établir une nouvelle classe dans l'emploi du temps de la salle de sport.
+Modifier une Classe : Modifier les détails d'une classe existante.
+Supprimer une Classe : Retirer une classe de l'emploi du temps de la salle de sport.
+Analyser les Classes : Examiner les données et les statistiques liées aux classes.
+Gestion des Utilisateurs :
+
+Créer un Utilisateur : Ajouter un nouvel utilisateur au système.
+Modifier un Utilisateur : Modifier les informations ou les paramètres d'un utilisateur.
+Supprimer un Utilisateur : Supprimer un utilisateur du système.
+Analyser un Utilisateur : Examiner les données et les statistiques utilisateur.
+Recharger le Compte Utilisateur : Ajouter du crédit ou des fonds au compte d'un utilisateur.
+Supprimer le Compte Utilisateur : Supprimer définitivement le compte d'un utilisateur.
+Notifier l'Utilisateur de la Fin de l'Adhésion : Informer les utilisateurs de la fin de leur adhésion.
+Envoyer des Messages Personnalisés à l'Utilisateur : Envoyer des messages personnalisés aux utilisateurs.
+Bloquer le Compte Utilisateur : Restreindre l'accès au compte d'un utilisateur.
+Analyser le Profil de l'Utilisateur : Examiner les informations détaillées sur un utilisateur.
+Gestion des Transactions :
+
+Analyser les Transactions : Examiner et évaluer les enregistrements de transactions.
+Ajouter une Transaction : Enregistrer une nouvelle transaction.
+Modifier une Transaction : Modifier les détails d'une transaction existante.
+Gestion du Matériel :
+
+Ajouter du Matériel : Inclure de nouveaux équipements de salle de sport dans l'inventaire.
+Modifier le Matériel : Modifier les détails ou les attributs du matériel existant.
+Supprimer le Matériel : Retirer le matériel de l'inventaire.
+Gestion des Réservations :
+
+Gérer les Réservations : Gérer et organiser les réservations de sessions de salle de sport.
+Rapports :
+
+Analyser les Rapports : Examiner et analyser les données et les insights fournis dans les rapports.

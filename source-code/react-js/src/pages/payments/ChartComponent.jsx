@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import ApexCharts from "apexcharts";
-import { Menu } from "@headlessui/react";
-
 export default function ChartComponent({ incomeData, expenseData, dates }) {
-  console.log(dates)
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
 
@@ -24,7 +21,6 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
       year: "numeric",
     })
   );
-console.log(formattedDates)
   useEffect(() => {
     if (
       document.getElementById("line-chart") &&
@@ -38,10 +34,7 @@ console.log(formattedDates)
     }
   }, []);
 
-  const handleDropdown = (days) => {
-    console.log(`Selected ${days} days`);
-    // Implement dropdown functionality here
-  };
+
   const options = {
     chart: {
       height: "100%",

@@ -50,7 +50,6 @@ export default function UserPage() {
 
   const billingHistory = results[1].data ?? [];
   const userData = results[0].data;
-  console.log(userData);
   const dispatch = useDispatch();
   if (results[0].isPending || results[1].isPending) {
     return (
@@ -143,10 +142,10 @@ export default function UserPage() {
 
           {/* Billing History */}
           {isCoachAdditionalInformationsShown ? (
-            <div>
+            <>
               <BillingHistory data={billingHistory} />
               <CoachBio coachData={coachData} />
-            </div>
+            </>
           ) : (
             <BillingHistory data={billingHistory} />
           )}
