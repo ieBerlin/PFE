@@ -99,9 +99,9 @@ export default function Transactions({ transactionsData }) {
               </div>
               <div className="flex flex-column justify-between items-center">
                 {transaction.userId ? (
-                  // If transaction.userId exists
                   <>
-                    {transaction.userEmail === "" && transaction.name === "" ? (
+                    {transaction.userEmail !== null &&
+                    transaction.name !== null ? (
                       // If userEmail and name are both empty strings
                       <Link to={`/user/${transaction.userId}`}>
                         <div className="flex items-center gap-5">

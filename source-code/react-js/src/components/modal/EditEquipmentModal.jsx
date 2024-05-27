@@ -7,33 +7,32 @@ import TextAreaInput from "../TextAreaInput";
 import PriceInput from "../PriceInput";
 import ErrorMessage from "../ErrorMessage";
 import SelectInput from "../SelectInput";
-import { fetchFun, fetchFunction, getToken } from "../../hooks/http.js";
-import { Form, json } from "react-router-dom";
+import { fetchFun, getToken } from "../../hooks/http.js";
+import { Form } from "react-router-dom";
 import { categories } from "./AddEquipmentModal.jsx";
-import SuccessMessage from "../SuccessMessage.jsx";
+import { useDispatch } from "react-redux";
+import { setModalType } from "../../features/modal/modalSlice.js";
 
 export default function EditEquipmentModal({ onClose, equipmentData: data }) {
+  const dispatch = useDispatch();
   const submitButtonRef = useRef();
   const [previewImageSrc, setPreviewImageSrc] = useState(defaultEquipmentImage);
   const imageInputRef = useRef();
 
-  const { isPending, isError, error, mutate } = useMutation({
+  const { isPending, isError, error, mutate, data:mutationData } = useMutation({
     mutationKey: ["equipments"],
-    mutationFn: async (equipmentData) => {
-      const token = getToken();
-
-      return await fetchFun({
+    mutationFn: async (equipmentData) =>
+      await fetchFun({
         url: `${"http://localhost:8081/equipments/" + data.id}`,
         options: {
           method: "PUT",
           body: JSON.stringify(equipmentData),
           headers: {
-            "x-access-token": token,
+            "x-access-token": getToken(),
             "Content-Type": "application/json",
           },
         },
-      });
-    },
+      }),
   });
   function submitForm(e) {
     e.preventDefault();
@@ -76,18 +75,8 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
     </div>
   );
 
-  if (data && !isPending) {
-    content = (
-      <div className="">
-        <h1 className="font-medium text-lg text-emerald-500">
-          Server feedback{" "}
-        </h1>
-        <SuccessMessage
-          title="Request Successful"
-          message="Your request has been processed successfully."
-        />
-      </div>
-    );
+  if (mutationData && !isPending) {
+   dispatch(setModalType('confirm-update-equipment'))
   }
   return (
     <div className="bg-white px-3 py-2">

@@ -16,7 +16,7 @@ const getSingleCoach = async(req, res) => {
             "SELECT specialization, experienceLevel, totalTrainedMembers, bio, contact FROM coaches WHERE coachId = ?", [coachId]
         );
         const [certificationResult] = await pool.query(
-            "SELECT image , id  FROM certification WHERE coachId = ?", [coachId]
+            "SELECT image AS img FROM certification WHERE coachId = ?", [coachId]
         );
 
 
@@ -28,7 +28,7 @@ const getSingleCoach = async(req, res) => {
         const coachData = {
             ...result[0],
             ...coachResult[0],
-            certifications: certificationResult || []
+            certifications: certificationResult?.map(item => item.img) || []
         };
 
         return res.status(200).json(coachData);

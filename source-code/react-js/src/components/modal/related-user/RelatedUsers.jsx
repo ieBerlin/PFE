@@ -1,7 +1,7 @@
 import { Suspense, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { Await, json } from "react-router-dom";
-import { fetchFun, fetchFunction, getToken } from "../../../hooks/http";
+import { Await } from "react-router-dom";
+import { fetchFun, getToken } from "../../../hooks/http";
 
 export default function RelatedUserField({
   label,
@@ -118,7 +118,7 @@ function UserCredentials({ resolvedData, setIsRelatedUsersShown, isChecked }) {
       {resolvedData && resolvedData.length > 0 ? (
         <ul className="flex flex-col w-full gap-2 mt-3 px-3 max-h-[100px] overflow-y-auto shadow-sm">
           {resolvedData.map((user, index) => (
-            <li key={user.email}>
+            <li key={user.userId}>
               <div
                 onClick={() => handleClick(index)}
                 className="flex gap-2 items-center hover:bg-gray-100 cursor-pointer p-1 rounded-md"

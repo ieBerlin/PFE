@@ -51,15 +51,7 @@ export default function AddTransactionModal() {
   );
 
   if (data && !isSubmitting) {
-    content = (
-      <div className="">
-        <h1 className="font-medium text-lg text-emerald-500">Payment Status</h1>
-        <SuccessMessage
-          title="Transaction Successful"
-          message="Your payment has been processed successfully."
-        />
-      </div>
-    );
+    dispatch(setModalType("confirm-add-transaction"));
   }
   const submitHandler = (e) => {
     e.preventDefault();

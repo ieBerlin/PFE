@@ -90,12 +90,12 @@ export default function CoachesList() {
           />
         </div>
         <div
-          className="grid mt-4"
+          className="grid mt-4 gap-2"
           style={{
             gridTemplateColumns: "auto 1fr",
           }}
         >
-          <div className="bg-white shadow-md px-4 py-6">
+          <div className="bg-white shadow-md px-4 py-6 rounded-md">
             <div className="flex flex-row justify-between gap-3">
               <h1 className="font-bold text-2xl">{coachName}</h1>
               {isMember && (

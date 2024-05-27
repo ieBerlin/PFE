@@ -142,10 +142,10 @@ export default function UserPage() {
 
           {/* Billing History */}
           {isCoachAdditionalInformationsShown ? (
-            <>
+            <div className="flex flex-col gap-4">
               <BillingHistory data={billingHistory} />
               <CoachBio coachData={coachData} />
-            </>
+            </div>
           ) : (
             <BillingHistory data={billingHistory} />
           )}

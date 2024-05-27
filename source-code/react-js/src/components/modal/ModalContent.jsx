@@ -178,6 +178,42 @@ export default function ModalContent({
         }}
       />
     );
+  } else if (type === "confirm-update-equipment") {
+    return (
+      <ConfirmModal
+        color="green"
+        title="Equipment updated Successfully"
+        description="Equipment has been successfully updated."
+        onConfirm={() => {
+          queryClient.invalidateQueries(["equipments"]);
+          dispatch(setModalType());
+        }}
+      />
+    );
+  } else if (type === "confirm-add-transaction") {
+    return (
+      <ConfirmModal
+        color="green"
+        title="Transaction added Successfully"
+        description="Transaction has been successfully added."
+        onConfirm={() => {
+          queryClient.invalidateQueries(["transactions"]);
+          dispatch(setModalType());
+        }}
+      />
+    );
+  } else if (type === "confirm-add-equipment") {
+    return (
+      <ConfirmModal
+        color="amber"
+        title="Equipment added Successfully"
+        description="Equipment has been successfully added."
+        onConfirm={() => {
+          queryClient.invalidateQueries(["equipments"]);
+          dispatch(setModalType());
+        }}
+      />
+    );
   } else if (type === "confirm-block-class") {
     return (
       <ConfirmModal
@@ -207,7 +243,7 @@ export default function ModalContent({
       />
     );
   } else if (type === "confirm-notify-membership-user") {
-    console.log('hi')
+    console.log("hi");
     return (
       <ConfirmModal
         color="green"

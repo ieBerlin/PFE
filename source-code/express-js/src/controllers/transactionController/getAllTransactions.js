@@ -9,7 +9,6 @@ const getAllTransactions = async(req, res) => {
                 const [userResult] = await pool.query(
                     'SELECT email, first_name, last_name FROM users WHERE userId = ?', [transaction.userId]
                 );
-
                 if (userResult.length > 0) {
                     const user = userResult[0];
                     transaction.userEmail = user.email;

@@ -12,7 +12,6 @@ const selectedClasses = {
   },
 };
 export default function ClassesList({ data }) {
-
   const isAdmin =
     useSelector((state) =>
       (state.userRole?.userRole ?? "").trim().toLowerCase()
@@ -26,12 +25,20 @@ export default function ClassesList({ data }) {
         <div />
         <div className="flex flex-row items-center gap-2">
           {isAdmin && (
-            <Link
-              className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
-              to="/classes/create"
-            >
-              Add Class
-            </Link>
+            <div className="flex flex-row items-center gap-2">
+              <Link
+                className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
+                to="/classes/enrollment-requests"
+              >
+                Classes Enrollment Requests{" "}
+              </Link>
+              <Link
+                className="my-2 bg-blue-600 hover:bg-blue-500 text-white capitalize font-semibold rounded-md px-3 py-2"
+                to="/classes/create"
+              >
+                Add Class
+              </Link>
+            </div>
           )}
           <FilterDropdown
             currentSelectedData={currentSelectedClasses}
@@ -46,9 +53,10 @@ export default function ClassesList({ data }) {
         </div>
       </div>
       <ul
-        className="grid"
+        className="inline-grid "
         style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          // maxWidth: "400px",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 400px))",
         }}
       >
         <ClassesItems classes={fiteredClasses} />

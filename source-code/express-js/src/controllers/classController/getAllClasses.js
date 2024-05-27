@@ -5,9 +5,7 @@ const getAllClasses = async(req, res) => {
         const [results] = await pool.query('SELECT * FROM classes');
 
         const classesWithInstructorInfo = await Promise.all(results.map(async(classItem) => {
-            const [result] = await pool.query('SELECT userId FROM users WHERE email = ?', [classItem.instructor_email]);
-            const instructor_id = result[0].userId;
-            const [instructorInfo] = await pool.query('SELECT coachId, totalTrainedMembers, experienceLevel, specialization FROM coaches WHERE coachId = ?', [instructor_id]);
+            const [instructorInfo] = await pool.query('SELECT coachId, totalTrainedMembers, experienceLevel, specialization FROM coaches WHERE coachId = ?', [classItem.instructorId]);
 
             return {
                 ...classItem,

@@ -1,0 +1,7 @@
+Tâches du Coach :
+
+Analyser ses Clients : Examiner ses clients et leurs progrès.
+Accepter les Clients : Valider les demandes des clients pour des sessions.
+Contacter les Clients : Communiquer avec les clients pour des mises à jour ou des rappels.
+Réserver du Matériel : Réserver des équipements pour les sessions.
+Analyser les Classes de Coaching : Examiner les données des classes de coaching auxquelles il participe.

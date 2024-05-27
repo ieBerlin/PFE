@@ -1,21 +1,25 @@
 import { useState } from "react";
 import Modal from "../../components/modal/Modal";
+import { setModalType } from "../../features/modal/modalSlice";
+import { useDispatch } from "react-redux";
 export default function CoachBio({ coachData }) {
+  console.log(coachData);
   const [currentTab, setCurrentTab] = useState(1);
+  const dispatch = useDispatch();
   const [selectedCertification, setSelectedCertification] = useState(null);
-
   const handleTabChange = (tab) => {
     setCurrentTab(tab);
   };
 
   const renderCertification = (imageUrl) => {
+    dispatch(setModalType("view-certification"));
     setSelectedCertification(imageUrl);
   };
 
   return (
     <>
       <Modal imageSrc={selectedCertification} />
-      <div className="bg-white ml-2 rounded-lg shadow-md py-5">
+      <div className="bg-white rounded-lg shadow-md py-5">
         <ul className="flex justify-center py-1 text-sm font-medium text-center text-gray-500">
           <TabButton
             index={1}
@@ -46,9 +50,9 @@ export default function CoachBio({ coachData }) {
                     gridTemplateColumns: "repeat(auto-fill,200px)",
                   }}
                 >
-                  {coachData.certificationsImages.map(({ id, image }) => (
+                  {coachData.certificationsImages.map((image, index) => (
                     <CertificationItem
-                      key={id}
+                      key={index}
                       imageUrl={image}
                       onClick={() => renderCertification(image)}
                     />
@@ -77,13 +81,13 @@ export default function CoachBio({ coachData }) {
                   >
                     {coachData.classes.map((coachClass, index) => (
                       <li key={index}>
-                        <a href={coachClass.href}>
+                        <a href={`/classes/${coachClass.href}`}>
                           <img
                             className="w-full h-auto rounded-md"
                             src={coachClass.img}
                             alt=""
                           />
-                          <h2 className="font-semibold my-1 text-ellipsis w-full text-nowrap overflow-hidden">
+                          <h2 className=" truncate font-semibold my-1 text-ellipsis w-full text-nowrap overflow-hidden">
                             {coachClass.title}
                           </h2>
                           <p className="font-medium text-sm text-gray-500 text-nowrap overflow-hidden">
@@ -93,14 +97,6 @@ export default function CoachBio({ coachData }) {
                       </li>
                     ))}
                   </ul>
-                  <p className="text-center">
-                    <a
-                      href={`/classes/`}
-                      className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-10 py-1 text-xl rounded-md"
-                    >
-                      See All
-                    </a>
-                  </p>
                 </div>
               ) : (
                 <h1 className="text-gray-700 text-center text-xl font-semibold bg-gray-100 py-3 my-1 rounded-md">

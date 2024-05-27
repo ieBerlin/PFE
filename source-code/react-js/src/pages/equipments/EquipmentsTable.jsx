@@ -410,7 +410,7 @@ const filterBookings = (data, selectedBookings) => {
     console.log(booking)
     const isUserTypeSelected = Object.entries(selectedBookings.userType).every(
       ([userType, isSelected]) =>
-        isSelected || booking.staff.toLowerCase() !== userType
+        isSelected || booking?.staff?.toLowerCase() !== userType
     );
     const isStatusSelected = Object.entries(selectedBookings.status).every(
       ([status, isSelected]) =>

@@ -1,0 +1,9 @@
+Tâches du Membre :
+
+Analyser son Profil : Examiner ses propres informations et activités.
+Modifier les Informations Personnelles & le Mot de Passe : Mettre à jour ses détails personnels et son mot de passe.
+Analyser ses Dernières Activités : Examiner un aperçu de ses activités récentes.
+Consulter les Classes : Voir les classes disponibles.
+S'Inscrire à une Classe : S'inscrire à une classe.
+Réserver du Matériel : Réserver des équipements.
+Contacter les Entraîneurs : Entrer en contact avec les entraîneurs.

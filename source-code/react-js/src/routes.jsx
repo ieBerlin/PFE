@@ -20,7 +20,7 @@ import AllNotifications, {
 import CreateSportCategoriePage from "./pages/sports/CreateSportCategoriePage.jsx";
 import SportCategoriePage from "./pages/sports/SportCategoriePage.jsx";
 import DeleteSportCategorie from "./pages/sports/DeleteSportCategorie.jsx";
-import ReportsPage  from "./pages/reports/ReportsPage.jsx";
+import ReportsPage from "./pages/reports/ReportsPage.jsx";
 import UserProfil from "./pages/user/UserProfil.jsx";
 import CoachesPage from "./pages/coaches/CoachesPage.jsx";
 import ClientsPage from "./pages/coaches/ClientsPage.jsx";

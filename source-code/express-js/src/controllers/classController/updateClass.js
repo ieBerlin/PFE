@@ -2,9 +2,13 @@ const { pool } = require('../../models/db/connect.js');
 const getCurrentDateTime = require('../../utils/getCurrentDateTime.js');
 
 const updateClass = async(req, res) => {
-    console.log(req.body)
     try {
-        const { name, description, instructorEmail: instructor_email, startDate, startTime, endDate, endTime, maxSize, price, category } = req.body;
+        const classId = parseInt(req.params.classId);
+        if (isNaN(classId)) {
+            return res.status(400).json({ message: 'Invalid class id parameter' });
+        }
+
+        const { name, description, instructorId, startDate, startTime, endDate, endTime, maxSize, price, category } = req.body;
         let errors = {};
 
         if (!name) {
@@ -13,8 +17,8 @@ const updateClass = async(req, res) => {
         if (!description) {
             errors.description = "No provided description.";
         }
-        if (!instructor_email) {
-            errors.instructor_email = "No provided instructor email.";
+        if (!instructorId) {
+            errors.instructorId = "No provided instructor ID.";
         }
         if (!startDate || !startTime) {
             errors.startDateTime = "No provided start date or time.";
@@ -36,35 +40,26 @@ const updateClass = async(req, res) => {
             return res.status(400).json(errors);
         }
 
-        // Combine startDate and startTime, endDate and endTime to form date fields
         const startDateTime = new Date(`${startDate}T${startTime}`);
         const endDateTime = new Date(`${endDate}T${endTime}`);
 
         const sql = `
-            UPDATE classes 
-            SET 
-                name = ?,
-                description = ?,
-                instructor_email = ?,
-                startDate = ?,
-                startTime = ?,
-                endDate = ?,
-                endTime = ?,
-                maximum_capacity = ?,
-                price = ?,
-                category = ?,
-                updated_at = ?
-            WHERE 
-                classId = ?;
+            UPDATE classes
+            SET name = ?, description = ?, instructorId = ?, startDate = ?, startTime = ?, endDate = ?, endTime = ?, maximum_capacity = ?, price = ?, category = ?, updated_at = ?
+            WHERE classId = ?
         `;
-        const values = [name, description, instructor_email, startDate, startTime, endDate, endTime, maxSize, price, category, getCurrentDateTime(), req.params.classId];
+        const values = [name, description, instructorId, startDate, startTime, endDate, endTime, maxSize, price, category, getCurrentDateTime(), classId];
 
-        await pool.query(sql, values);
+        const [result] = await pool.query(sql, values);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Class not found' });
+        }
 
         return res.status(200).json({ message: "Class updated successfully" });
     } catch (error) {
-        console.error("Error updating class:", error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        console.error('Error updating class:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 

@@ -38,7 +38,7 @@ export default function CreateClassPage() {
       name: fd.get("class-name"),
       description: fd.get("class-description"),
       category: fd.get("class-category"),
-      instructorEmail: fd.get("related-user"),
+      instructorId: fd.get("related-user"),
       startDate: fd.get("class-start-date"),
       endDate: fd.get("class-end-date"),
       startTime: fd.get("class-start-time"),

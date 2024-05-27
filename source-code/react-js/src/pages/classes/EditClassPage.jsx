@@ -14,7 +14,6 @@ import { ActionButton } from "../user/UserPage.jsx";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
-import SuccessMessage from "../../components/SuccessMessage.jsx";
 import Modal from "../../components/modal/Modal.jsx";
 
 export default function EditClassPage() {
@@ -23,7 +22,7 @@ export default function EditClassPage() {
   const dispatch = useDispatch();
   const {
     isPending: isFetchingClass,
-    data: classData,
+    data: queryData,
     isError: fetchError,
   } = useQuery({
     queryKey: ["classes", `class-${classId}`],
@@ -65,11 +64,12 @@ export default function EditClassPage() {
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
+    console.log(fd.get("class-related-user"))
     const formData = {
       name: fd.get("class-name"),
       description: fd.get("class-description"),
       category: fd.get("class-category"),
-      instructorEmail: fd.get("related-user"),
+      instructorId: fd.get("related-user"),
       startDate: fd.get("class-start-date"),
       endDate: fd.get("class-end-date"),
       startTime: fd.get("class-start-time"),
@@ -84,7 +84,7 @@ export default function EditClassPage() {
     return <FallbackText title="Fetching class information" />;
   }
 
-  if (fetchError || !classData) {
+  if (fetchError || !queryData || !queryData.instructorData || !queryData.classData) {
     return (
       <p className="font-semibold text-gray-900 text-xl">Nothing to show!</p>
     );
@@ -104,6 +104,7 @@ export default function EditClassPage() {
   if (data && !isEditingClass) {
     dispatch(setModalType("edit-class"));
   }
+  const {classData} = queryData;
   return (
     <>
       <Modal classId={classId} />
@@ -143,7 +144,7 @@ export default function EditClassPage() {
               data={categories}
             />
             <RelatedUsers
-              defaultRelatedUser={[{ email: classData.instructor_email }]}
+              defaultRelatedUser={[{ email: queryData.instructorData.email }]}
               name="class-related-user"
               label="Who will be coaching this class?"
               userType="coach"
