@@ -20,10 +20,9 @@ export default function CoachesList() {
   const isMember = useSelector(
     (state) => state.userRole?.userRole?.toLowerCase() === "member"
   );
+  const isAlreadyConnect = false ;
   const { isPending, data, isError, error } = useQuery({
-    queryKey: ["coaches"],
-    staleTime: Infinity,
-    retry:false,
+    queryKey: ["coaches","coaches-"+coachId],
     queryFn: async () =>
       await fetchFun({
         url: "http://localhost:8081/coaches/" + coachId,
@@ -61,17 +60,13 @@ export default function CoachesList() {
     </p>;
   }
 
-  const {
-    first_name,
-    last_name,
-    email: coachEmail,
-    experienceLevel: coachExperience,
-    specialization: coachCategory,
-    totalTrainedMembers,
-    contact,
-    certifications,
-    bio,
-  } = data;
+  const { first_name, last_name, email: coachEmail } = data;
+  const coachExperience = data.experienceLevel ?? "not set yet";
+  const coachCategory = data.specialization ?? "not set yet";
+  const totalTrainedMembers = data.totalTrainedMembers ?? 0;
+  const contact = data.contact ?? "[]";
+  const certifications = data.certifications ?? [];
+  const bio = data.bio ?? "";
   const coachContact = JSON.parse(contact);
   const coachData = {
     bio,

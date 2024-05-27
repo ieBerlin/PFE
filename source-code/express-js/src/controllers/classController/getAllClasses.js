@@ -1,8 +1,15 @@
-const { pool } = require('../../models/db/connect.js');
+const { pool } = require("../../models/db/connect");
 
 const getAllClasses = async(req, res) => {
     try {
-        const [results] = await pool.query('SELECT * FROM classes');
+        // Check user role
+        const { userRole } = req;
+        let query = 'SELECT * FROM classes';
+        if (userRole === 'member' || userRole === 'coach') {
+            query += ' WHERE status = "open"';
+        }
+
+        const [results] = await pool.query(query);
 
         const classesWithInstructorInfo = await Promise.all(results.map(async(classItem) => {
             const [instructorInfo] = await pool.query('SELECT coachId, totalTrainedMembers, experienceLevel, specialization FROM coaches WHERE coachId = ?', [classItem.instructorId]);

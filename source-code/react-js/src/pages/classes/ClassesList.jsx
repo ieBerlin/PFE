@@ -22,8 +22,7 @@ export default function ClassesList({ data }) {
   return (
     <div className="bg-white rounded-md mt-5">
       <div className="flex flex-row w-full px-4 pt-3 mt-2 justify-between items-center ">
-        <div />
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-2 ">
           {isAdmin && (
             <div className="flex flex-row items-center gap-2">
               <Link
@@ -40,23 +39,23 @@ export default function ClassesList({ data }) {
               </Link>
             </div>
           )}
-          <FilterDropdown
-            currentSelectedData={currentSelectedClasses}
-            setData={setCurrentSelectedClasses}
-            filterOptionsData={[
-              {
-                title: "class.Category",
-                options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
-              },
-            ]}
-          />
         </div>
+        <FilterDropdown
+          currentSelectedData={currentSelectedClasses}
+          setData={setCurrentSelectedClasses}
+          filterOptionsData={[
+            {
+              title: "class.Category",
+              options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
+            },
+          ]}
+        />
       </div>
       <ul
-        className="inline-grid "
+        className="grid justify-center"
         style={{
           // maxWidth: "400px",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 400px))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 350px))",
         }}
       >
         <ClassesItems classes={fiteredClasses} />

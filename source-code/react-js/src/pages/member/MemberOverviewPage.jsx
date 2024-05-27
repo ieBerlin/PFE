@@ -1,5 +1,4 @@
 import { CalendarIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import ClassItem from "../sports/ClassItem";
 import BillingHistory from "../../components/BillingHistory.jsx";
 import { Link } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
@@ -52,12 +51,26 @@ export default function MemberOverviewPage() {
             },
           }),
       },
+
+      {
+        queryKey: ["classes"],
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/enrollements",
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
     ],
   });
   const membershipStatusData = results[0].data;
-  const equipmentsData = results[1].data||[];
-
+  const equipmentsData = results[1].data || [];
   const billingHistoryData = results[2].data || [];
+  const upcomingClasses = results[3].data || [];
   let membershipStatus;
   if (membershipStatusData && membershipStatusData.status) {
     membershipStatus = "active";
@@ -70,12 +83,6 @@ export default function MemberOverviewPage() {
       : membershipStatus === "end"
       ? "red"
       : "blue";
-  const upcomingClasses = [
-    // {
-    //   id: 1,
-    //   name: "Class 1",
-    // },
-  ];
 
   const coaches = [
     // {
@@ -116,7 +123,7 @@ export default function MemberOverviewPage() {
 
         {upcomingClasses && upcomingClasses.length > 0 ? (
           <div
-            className="grid gap-3 bg-white py-2 rounded-md mb-3"
+            className="grid gap-3 bg-white p-2 rounded-md mb-3 justify-center"
             style={{
               gridTemplateColumns: "repeat(auto-fit, minmax(auto,250px))",
             }}
@@ -213,5 +220,49 @@ function EmptyComponent({ title }) {
     <h3 className="text-black text-xl my-3 bg-white py-3 rounded-md text-center font-semibold">
       {title}
     </h3>
+  );
+}
+function ClassItem({ data }) {
+  const date = new Date(data.startDate);
+  const formattedDate = date.toLocaleDateString("en-us", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const formattedStartTime = formatTime(data.startDate, data.startTime);
+
+  function formatTime(dateString, timeString) {
+    // Combine date and time into a single string
+    const combinedString = `${dateString.split("T")[0]}T${timeString}`;
+
+    // Create a new Date object
+    const dateObj = new Date(combinedString);
+
+    // Format the time in 'en-US' locale
+    return dateObj.toLocaleTimeString("en-US");
+  }
+console.log(data)
+  return (
+    <Link to={"/classes/" + data.classId}>
+      <div className="p-3 bg-slate-200 rounded md">
+        <h1 className="font-semibold">
+          Status :{" "}
+          <span
+            className={
+              data.status === "pending" ? "text-amber-500" : "text-emerald-500"
+            }
+          >
+            {data.status}
+          </span>
+        </h1>
+        <h1 className="font-semibold">
+          Date : <span className="text-blue-700">{formattedDate}</span>
+        </h1>
+
+        <h1 className="font-semibold">
+          At <span className="text-blue-700">{formattedStartTime}</span>
+        </h1>
+      </div>
+    </Link>
   );
 }

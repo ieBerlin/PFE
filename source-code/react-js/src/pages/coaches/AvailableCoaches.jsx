@@ -18,6 +18,7 @@ const selectedCoaches = {
   },
 };
 export default function AvailableCoaches({ coaches }) {
+  console.log(coaches)
   const [currentSelectedCoaches, setCurrentSelectedCoaches] =
     useState(selectedCoaches);
 
@@ -63,7 +64,7 @@ function CoachList({ coaches }) {
       style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
     >
       {coaches.map((coach) => (
-        <CoachCard key={coach.coachId} coach={coach} />
+        <CoachCard key={coach.userId} coach={coach} />
       ))}
     </ul>
   );
@@ -78,24 +79,24 @@ export function CoachCard({ coach }) {
           alt="Coach"
         />
         <span className="absolute top-0 left-0 m-2 rounded-xl bg-gray-700 p-[4px] text-center text-sm font-medium text-white">
-          {coach.coachCategory}
+          {coach.specialization ?? "specialization"}
         </span>
       </div>
       <div className="mt-4 px-5 pb-5">
-        <Link to={`${coach.coachId}`}>
+        <Link to={`${coach.userId}`}>
           <h5 className="text-xl tracking-tight text-slate-900">
-            {coach.coachName}
+            {coach?.first_name + " " + coach?.last_name}
           </h5>
         </Link>
         <div className="mt-2 mb-5 flex items-center justify-between">
           <div className="flex items-center">
             <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
-              {coach.coachLevel}
+              {coach.experienceLevel ?? "experience level"}
             </span>
           </div>
         </div>
         <Link
-          to={`${coach.coachId}`}
+          to={`${coach.userId ?? ""}`}
           className="flex items-center justify-center rounded-md bg-blue-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
         >
           See more <ChevronRightIcon className="ml-2 h-6 w-6" />

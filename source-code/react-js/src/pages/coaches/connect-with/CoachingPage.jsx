@@ -5,7 +5,7 @@ import SubmitSvg from "../../../assets/send-svgrepo-com.svg";
 import Announce from "./Announce";
 export default function CoachingPage() {
   const data = useLoaderData();
-
+console.log(data)
   return (
     <div style={{ height: "calc(100vh - 100px)" }} className="mt-4 mb-8">
       <Announce />

@@ -22,6 +22,7 @@ export default function ClassItem({ data }) {
     startTime: time,
     instructor_extra_info,
     category: classCategory,
+    status: classStatus,
   } = data;
 
   const [isDropDownActive, setIsDropDownActive] = useState(false);
@@ -90,13 +91,19 @@ export default function ClassItem({ data }) {
               Coach: {coachName}
             </span>
           </button>
+          {isAdmin && (
+            <h2 className="text-blue-900 font-semibold">
+              {" "}
+              Status : <span className="font-medium text-cyan-600">{classStatus}</span>
+            </h2>
+          )}
           {isDropDownActive && (
             <div
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/coaches/" + instructor_extra_info?.coachId);
               }}
-              className={`${instructorDropDownMenuClasses} shadow-sm bg-amber-300 hover:bg-amber-500`}
+              className={`${instructorDropDownMenuClasses} shadow-sm bg-cyan-500 hover:bg-cyan-700`}
               onMouseOver={() => handleInstructorDropDown(true)}
               onMouseLeave={() => handleInstructorDropDown(false)}
             >

@@ -6,11 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 export default function CoachesPage() {
   const { isPending, data, isError, error } = useQuery({
     queryKey: ["coaches"],
-    staleTime: Infinity,
-    retry: false,
     queryFn: async () =>
       await fetchFun({
-        url: "http://localhost:8081/coaches",
+        url: "http://localhost:8081/coaches/get-all-coaches",
         options: {
           method: "GET",
           headers: {
@@ -44,7 +42,7 @@ export default function CoachesPage() {
       Nothing to show
     </p>;
   }
-
+  console.log(data);
   return (
     <section className="bg-gray-100 px-5   py-4">
       <h1 className="text-4xl text-black">Coaches</h1>

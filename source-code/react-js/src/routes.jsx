@@ -8,6 +8,7 @@ import LoginPage, {
 } from "./pages/auth/Login/Login.jsx";
 import SportsPage from "./pages/sports/SportsPage.jsx";
 import ClassesPage from "./pages/classes/ClassesPage.jsx";
+import EnrollmentRequestsPage from "./pages/classes/EnrollmentRequestsPage.jsx";
 import EquipmentsPage, {
   action as equipmentsPageAction,
   loader as equipmentsPageLoader,
@@ -112,6 +113,10 @@ const router = createBrowserRouter([
             ],
           },
           {
+            path: "enrollment-requests",
+            element: <EnrollmentRequestsPage />,
+          },
+          {
             path: ":classId",
             children: [
               {
@@ -142,6 +147,10 @@ const router = createBrowserRouter([
                 index: true,
                 element: <CoachPageDetails />,
               },
+              {
+                path:"connect",
+                element:<CoachingPage/>
+              }
             ],
           },
         ],
