@@ -44,9 +44,7 @@ import RootLayout, {
 import UpdateUserPasswordPage from "./pages/user/UpdateUserPasswordPage.jsx";
 import CoachPageDetails from "./pages/coaches/CoachPageDetails.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
-import CoachingPage, {
-  loader as connectLoader,
-} from "./pages/coaches/connect-with/CoachingPage.jsx";
+import CoachingPage from "./pages/coaches/connect-with/CoachingPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -203,7 +201,6 @@ const router = createBrowserRouter([
           {
             path: ":userId",
             element: <CoachingPage />,
-            loader: connectLoader,
           },
         ],
       },

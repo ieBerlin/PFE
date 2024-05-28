@@ -2,8 +2,8 @@ import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import "./MainNavigation.css";
 import { useSelector } from "react-redux";
-export default function aMainNavigation() {
-  const isOpen = useSelector((state) => state.sidebar.isOpen);
+export default function MainNavigation() {
+  const isOpen = useSelector((state) => state?.sidebar?.isOpen);
 
   return (
     <>
