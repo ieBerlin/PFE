@@ -109,6 +109,12 @@ const CoachNavs = {
       href: "/clients",
       labelSvg: <UserGroupIcon className={sidebarSvgClasses} />, // Add svgClasses here
     },
+    {
+      id: 5,
+      label: "Equipments",
+      href: "/equipments",
+      labelSvg: <Cog8ToothIcon className={sidebarSvgClasses} />, // Add svgClasses here
+    },
   ],
   dropDownMenu: [
     {
@@ -129,6 +135,12 @@ const CoachNavs = {
       label: "My clients",
       href: "/clients",
       labelSvg: <BanknotesIcon className={profileDropDownMenuSvgClasses} />,
+    },
+    {
+      id: 4,
+      label: "Equipments",
+      href: "/equipments",
+      labelSvg: <Cog6ToothIcon className={profileDropDownMenuSvgClasses} />,
     },
   ],
 };

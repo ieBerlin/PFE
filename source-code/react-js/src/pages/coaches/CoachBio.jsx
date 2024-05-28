@@ -3,7 +3,6 @@ import Modal from "../../components/modal/Modal";
 import { setModalType } from "../../features/modal/modalSlice";
 import { useDispatch } from "react-redux";
 export default function CoachBio({ coachData }) {
-  console.log(coachData);
   const [currentTab, setCurrentTab] = useState(1);
   const dispatch = useDispatch();
   const [selectedCertification, setSelectedCertification] = useState(null);

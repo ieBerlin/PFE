@@ -14,16 +14,17 @@ export default function ClientsList({ clients }) {
   return (
     <ul
       className="mt-30 grid gap-5 rounded-md pb-8"
-      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
+      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 350px))" }}
     >
       {clients.map((client) => (
-        <ClientCard key={client.id} client={client} />
+        <ClientCard key={client.member_id} client={client} />
       ))}
     </ul>
   );
 }
 
 function ClientCard({ client }) {
+  console.log(client)
   return (
     <li className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">
@@ -34,14 +35,17 @@ function ClientCard({ client }) {
         />
       </div>
       <div className="mt-2 px-5 pb-5">
-        <Link to={`/coaching/${client.memberEmail}`}>
+        <Link to={`/coaching/${client.member_id}`}>
           <h5 className="text-xl tracking-tight text-slate-900 mb-2 text-center">
-            {client.memberEmail}
+            {client.name}
+          </h5>
+          <h5 className="text-xl tracking-tight text-slate-900 mb-2 text-center">
+            {client.email}
           </h5>
         </Link>
 
         <Link
-          to={`/coaching/${client.memberEmail}`}
+          to={`/coaching/${client.member_id}`}
           className="flex items-center justify-center rounded-md bg-blue-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
         >
           Contact <ChevronRightIcon className="ml-2 h-6 w-6" />

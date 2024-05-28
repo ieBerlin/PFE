@@ -42,7 +42,6 @@ export default function CoachesPage() {
       Nothing to show
     </p>;
   }
-  console.log(data);
   return (
     <section className="bg-gray-100 px-5   py-4">
       <h1 className="text-4xl text-black">Coaches</h1>

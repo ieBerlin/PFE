@@ -165,7 +165,7 @@ function ClassInformations({
   } else {
     buttonLabel = "Enroll now";
   }
-
+console.log(status)
   return (
     <Form onSubmit={handleSubmit}>
       <div className={classes.sportContainer}>

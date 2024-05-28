@@ -18,7 +18,6 @@ const selectedCoaches = {
   },
 };
 export default function AvailableCoaches({ coaches }) {
-  console.log(coaches)
   const [currentSelectedCoaches, setCurrentSelectedCoaches] =
     useState(selectedCoaches);
 

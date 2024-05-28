@@ -10,72 +10,153 @@ import FallbackText from "../../components/FallbackText.jsx";
 import CoachBio from "../coaches/CoachBio.jsx";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
-import { fetchFun, getToken } from "../../hooks/http.js";
+import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
+import SuccessMessage from "../../components/SuccessMessage.jsx";
 
 export default function CoachesList() {
   const { coachId } = useParams();
-  const [imageSrc, setImageSrc] = useState(null);
-  const isMember = useSelector(
+  const [selectedImage, setSelectedImage] = useState(null);
+  const isUserMember = useSelector(
     (state) => state.userRole?.userRole?.toLowerCase() === "member"
   );
-  const isAlreadyConnect = false ;
-  const { isPending, data, isError, error } = useQuery({
-    queryKey: ["coaches","coaches-"+coachId],
-    queryFn: async () =>
+  const hasConnection = false;
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: ["coaches", "coaches-" + coachId],
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/coaches/" + coachId,
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
+      {
+        queryKey: ["clients", "clients-" + coachId],
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/clients/get-coach/" + coachId,
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
+    ],
+  });
+  const { isPending, mutate, data, isError, error } = useMutation({
+    mutationKey: ["client"],
+    mutationFn: async () =>
       await fetchFun({
-        url: "http://localhost:8081/coaches/" + coachId,
+        url: "http://localhost:8081/clients/enroll/"+coachId,
         options: {
-          method: "GET",
+          method: "POST",
           headers: {
             "x-access-token": getToken(),
           },
         },
       }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["clients", "clients-" + coachId]);
+    },
   });
-  if (isPending) {
+  let content;
+  content = !isPending && isError && (
+    <div className="">
+      <h1 className="font-medium text-lg text-red-500">Errors </h1>
+      {error
+        ? Object.entries(error.info).map(([key, value]) => {
+            return <ErrorMessage key={key} title={key} message={value} />;
+          })
+        : "An error occured!"}
+    </div>
+  );
+
+
+  
+  const {
+    isPending: isCoachDataLoading,
+    data: coachDetails,
+    isError: isCoachDataError,
+    error: coachDataError,
+  } = results[0];
+  const {
+    isPending: isClientStatusLoading,
+    data: clientStatus,
+    isError: isClientStatusError,
+    error: clientStatusError,
+  } = results[1];
+
+  if (isCoachDataLoading) {
     return <FallbackText title="Fetching coach data..." />;
   }
 
-  if (isError) {
-    if (error.code === 404) {
-      // throw { status: 404 };
+  if (isCoachDataError) {
+    if (coachDataError.code === 404) {
       return <FallbackText title="Coach not found!" />;
     }
     return (
       <div className="">
         <h1 className="font-medium text-lg text-red-500">Errors </h1>
-        {error
-          ? Object.entries(error.info).map(([key, value]) => {
+        {coachDataError
+          ? Object.entries(coachDataError.info).map(([key, value]) => {
               return <ErrorMessage key={key} title={key} message={value} />;
             })
-          : "An error occured!"}
+          : "An error occurred!"}
       </div>
     );
   }
-  if (!data) {
+
+  if (!coachDetails) {
     <p className="text-black text-center text-xl font-semibold my-16">
       Nothing to show
     </p>;
   }
 
-  const { first_name, last_name, email: coachEmail } = data;
-  const coachExperience = data.experienceLevel ?? "not set yet";
-  const coachCategory = data.specialization ?? "not set yet";
-  const totalTrainedMembers = data.totalTrainedMembers ?? 0;
-  const contact = data.contact ?? "[]";
-  const certifications = data.certifications ?? [];
-  const bio = data.bio ?? "";
-  const coachContact = JSON.parse(contact);
-  const coachData = {
-    bio,
-    certificationsImages: certifications,
+  const { first_name, last_name, email: coachEmail } = coachDetails;
+  const coachExperienceLevel = coachDetails.experienceLevel ?? "not set yet";
+  const coachSpecialization = coachDetails.specialization ?? "not set yet";
+  const totalMembersTrained = coachDetails.totalTrainedMembers ?? 0;
+  const contactDetails = coachDetails.contact ?? "[]";
+  const certificationList = coachDetails.certifications ?? [];
+  const coachBioText = coachDetails.bio ?? "";
+  const contactLinks = JSON.parse(contactDetails);
+  const coachBioData = {
+    bio: coachBioText,
+    certificationsImages: certificationList,
   };
-  const coachName = first_name + " " + last_name;
+  const coachFullName = first_name + " " + last_name;
+  const getStatusClass = () => {
+    if (clientStatus.status === "pending") {
+      return "bg-amber-500 cursor-default";
+    } else if (clientStatus.status === "contacted") {
+      return "bg-emerald-600 hover:bg-emerald-500";
+    } else {
+      return "bg-blue-600 hover:bg-blue-500";
+    }
+  };
+
+  const getStatusLabel = () => {
+    if (clientStatus.status === "pending") {
+      return "Pending";
+    } else if (clientStatus.status === "contacted") {
+      return isPending ? "Processing" : "Contacted";
+    } else {
+      return "Send Request";
+    }
+  };
+
   return (
     <>
-      <Modal imageSrc={imageSrc} />
+      <Modal imageSrc={selectedImage} />
       <div className="bg-gray-100 py-4 px-10">
         <div className="py-2 pl-5">
           <img
@@ -92,30 +173,42 @@ export default function CoachesList() {
         >
           <div className="bg-white shadow-md px-4 py-6 rounded-md">
             <div className="flex flex-row justify-between gap-3">
-              <h1 className="font-bold text-2xl">{coachName}</h1>
-              {isMember && (
-                <Link
-                  to={"connect"}
-                  className="px-3 py-2 bg-blue-600 hover:bg-blue-500 font-medium rounded-lg text-white"
-                >
-                  Contact with
-                </Link>
-              )}
+              <h1 className="font-bold text-2xl">{coachFullName}</h1>
+              {isUserMember &&
+                (clientStatus.status === "contacted" ? (
+                  <Link
+                    to={"connect"}
+                    className={
+                      "px-3 py-2 font-medium rounded-lg text-white " +
+                      getStatusClass()
+                    }
+                  >
+                    {getStatusLabel()}
+                  </Link>
+                ) : (
+                  <button
+                    disabled={isPending || clientStatus.status === "pending"}
+                    onClick={mutate}
+                    className={
+                      "px-3 py-2 font-medium rounded-lg text-white " +
+                      getStatusClass()
+                    }
+                  >
+                    {getStatusLabel()}
+                  </button>
+                ))}
             </div>
+              <h1>{content}</h1>
             <h3 className="text-sm text-blue-900 font-semibold bg-blue-100 px-3 py-1 inline-block rounded-md my-2">
-              {coachCategory}
+              {coachSpecialization}
             </h3>
 
             <h1 className="flex items-center gap-2">
               <UserGroupIcon className="w-6 h-6 text-gray-500" />
               <p className=" text-gray-500 font-medium text-sm">
-                {totalTrainedMembers} Total Trained Members
+                {totalMembersTrained} Total Trained Members
               </p>
             </h1>
-            {/* <h1 className="flex items-center gap-2 mt-2">
-              <AcademicCapIcon className="w-6 h-6 text-gray-500" />
-              <p className=" text-gray-500 font-medium text-sm">{coachLevel}</p>
-            </h1> */}
             <div className="mt-4">
               <h1 className="font-semibold my-2">Connect With Me</h1>
 
@@ -126,7 +219,7 @@ export default function CoachesList() {
                 {coachEmail}
               </a>
 
-              {coachContact.map((item) => (
+              {contactLinks.map((item) => (
                 <a
                   href={Object.values(item)[0]}
                   className="block cursor-pointer text-gray-600 font-medium my-1"
@@ -139,7 +232,7 @@ export default function CoachesList() {
             </div>
           </div>
 
-          <CoachBio coachData={coachData} setImage={setImageSrc} />
+          <CoachBio coachData={coachBioData} setImage={setSelectedImage} />
         </div>
       </div>
     </>
