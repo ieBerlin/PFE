@@ -3,13 +3,12 @@ import ApexCharts from "apexcharts";
 export default function ChartComponent({ incomeData, expenseData, dates }) {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
-
   useEffect(() => {
-    const incomeTotal = incomeData.reduce((acc, curr) => acc + curr.amount, 0);
-    const expenseTotal = expenseData.reduce(
-      (acc, curr) => acc + curr.amount,
-      0
-    );
+    const incomeTotal = incomeData.flat().reduce((acc, curr) => {
+      return acc + +curr.price;
+    }, 0);
+    const expenseTotal =
+      expenseData.flat().reduce((acc, curr) => acc + +curr.price, 0) 
     setTotalIncome(incomeTotal);
     setTotalExpense(expenseTotal);
   }, [incomeData, expenseData]);
@@ -33,7 +32,6 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
       chart.render();
     }
   }, []);
-
 
   const options = {
     chart: {
@@ -73,12 +71,20 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
     series: [
       {
         name: "Income",
-        data: incomeData.map(({ amount }) => amount),
+        data: incomeData.map((item) => {
+          if (item.length === 0) {
+            return 0;
+          } else {
+            const data = item.flat().map((item) => +item.price);
+            const sum = data.reduce((acc, curr) => acc + curr, 0);
+            return sum;
+          }
+        }),
         color: "#22C55E",
       },
       {
         name: "Expense",
-        data: expenseData.map(({ amount }) => amount),
+        data: expenseData.map(({ price }) => price),
         color: "#ef4444",
       },
     ],
@@ -119,7 +125,7 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
               {/* Expense popover */}
             </h5>
             <p className="text-gray-900 text-2xl leading-none font-bold">
-              ${totalExpense}
+              ${totalExpense??0}
             </p>
           </div>
           <div>
@@ -133,7 +139,7 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
           </div>
         </div>
         <div>
-        {/* <Menu as="div" className="relative inline-block text-left">
+          {/* <Menu as="div" className="relative inline-block text-left">
           <div>
             <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               {"selectedDate"}

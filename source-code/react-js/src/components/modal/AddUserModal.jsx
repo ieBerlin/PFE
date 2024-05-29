@@ -48,10 +48,10 @@ export default function AddUserModal() {
     mutate(userData);
   }
   return (
-    <div>
+    <div className="px-8 pb-4 pt-5 rounded-md bg-white">
       <Form
         onSubmit={handleSubmitForm}
-        className="px-8 pb-4 pt-5 rounded-md bg-white"
+        className=""
       >
         <input name="form-type" defaultValue="sign-up-form" hidden />
         <h3 className="text-black font-semibold text-xl mb-4">

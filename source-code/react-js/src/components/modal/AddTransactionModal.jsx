@@ -5,7 +5,7 @@ import { setModalType } from "../../features/modal/modalSlice.js";
 import PriceInput from "../PriceInput.jsx";
 import DatePicker from "../DatePicker.jsx";
 import SelectInputComponent from "../SelectInput.jsx";
-import { fetchFun, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 import { useMutation } from "@tanstack/react-query";
 import { Form } from "react-router-dom";
 import Input from "../Input.jsx";
@@ -37,6 +37,7 @@ export default function AddTransactionModal() {
       });
       return response;
     },
+    onSuccess: () => queryClient.invalidateQueries(["transactions"]),
   });
   let content;
   content = !isSubmitting && isError && (

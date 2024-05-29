@@ -7,28 +7,22 @@ export default function ReportCard({ clubMembers, newCoaches, newMembers }) {
         label="Club Members"
         description="Total number of gym users"
         number={clubMembers}
-        link="/users"
-        linkText="View Users"
       />
       <CardComponent
         label="New Members"
         description="Number of new members in the last month"
         number={newMembers}
-        link="/new-members"
-        linkText="View New Members"
       />
       <CardComponent
         label="New Coaches"
         description="Number of new coaches in the last month"
         number={newCoaches}
-        link="/new-coaches"
-        linkText="View New Coaches"
       />
     </div>
   );
 }
 
-function CardComponent({ label, description, number, link, linkText }) {
+function CardComponent({ label, description, number }) {
   return (
     <div className="bg-white border border-gray-200 hover:border-gray-300 p-4 rounded-md hover:shadow-lg">
       <h2 className="text-gray-700 text-lg font-semibold ">{label}</h2>
@@ -38,12 +32,6 @@ function CardComponent({ label, description, number, link, linkText }) {
         </div>
         <div className="flex flex-col ">
           <p className="text-sm text-gray-600">{description}</p>
-          <Link
-            to={link}
-            className="text-blue-600 hover:text-blue-800 text-sm mt-2 font-medium"
-          >
-            {linkText}
-          </Link>
         </div>
       </div>
     </div>

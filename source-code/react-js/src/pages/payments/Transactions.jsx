@@ -13,6 +13,7 @@ const initialSelectedTransactions = {
 };
 
 export default function Transactions({ transactionsData }) {
+
   const dispatch = useDispatch();
   const [selectedTransactions, setSelectedTransactions] = useState(
     initialSelectedTransactions

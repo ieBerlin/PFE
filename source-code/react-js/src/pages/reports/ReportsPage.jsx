@@ -1,11 +1,5 @@
-import { Suspense } from "react";
-import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import ChartBar from "../../components/ChartBar.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
-import {
-  DUMMY_DAILY_INCOME,
-  DUMMY_DAILY_EXPENSES,
-} from "../../dummy_data/dummy_reports.js";
 import ReportCard from "./ReportCard.jsx";
 import { useQueries } from "@tanstack/react-query";
 import ChartComponent from "../payments/ChartComponent.jsx";
@@ -14,7 +8,7 @@ export default function ReportsPage() {
   const results = useQueries({
     queries: [
       {
-        queryKey: ["payments"],
+        queryKey: ["transactions"],
         queryFn: async () =>
           await fetchFun({
             url: "http://localhost:8081/transactions/last-7-payments",
@@ -52,16 +46,34 @@ export default function ReportsPage() {
 
   let incomes = [];
   let expenses = [];
-  let dates = [];
-  if (paymentsData && paymentsData.incomePayments) {
-    incomes = paymentsData.incomePayments;
+  const dates = [];
+
+  if (paymentsData && paymentsData.length > 0) {
+    paymentsData.forEach((payment) => {
+      dates.push(payment.date);
+
+      const incomesInDay = [];
+      const expensesInDay = [];
+
+      if (payment.transactions && payment.transactions.length > 0) {
+        payment.transactions.forEach((item) => {
+          if (item.paymentType === "expense") {
+            expensesInDay.push(item);
+          } else {
+            incomesInDay.push(item);
+          }
+        });
+      }
+
+      incomes.push(incomesInDay);
+      expenses.push(expensesInDay);
+    });
+  } else {
+    incomes.push([]);
+    expenses.push([]);
   }
-  if (paymentsData && paymentsData.expensePayments) {
-    expenses = paymentsData.expensePayments;
-  }
-  if (paymentsData && paymentsData.dates) {
-    dates = paymentsData.dates;
-  }
+
+
   return (
     <div className="bg-gray-50 w-full px-5 pt-4 pb-10">
       <h1 className="text-4xl mb-3">Reports</h1>
@@ -84,7 +96,7 @@ export default function ReportsPage() {
         {!paymentsLoaderIndicator && (
           <div>
             <h1 className="my-2 font-semibold text-gray-700 text-xl">
-              Financials
+              Financials, Latest 7 Days
             </h1>
             <div className="flex flex-col gap-4">
               <div className="grid grid-cols-2  gap-4">
@@ -92,14 +104,14 @@ export default function ReportsPage() {
                   label="Income"
                   dates={dates}
                   data={incomes}
-                  maxYValue={findMaxIncome(incomes)}
+                  maxYValue={findMaxValue(incomes)}
                   color="green-500"
                 />
                 <ChartBar
                   label="Expense"
                   dates={dates}
                   data={expenses}
-                  maxYValue={findMaxIncome(expenses)}
+                  maxYValue={findMaxValue(expenses)}
                   color="red-500"
                 />
               </div>
@@ -117,6 +129,13 @@ export default function ReportsPage() {
   );
 }
 
-function findMaxIncome(data) {
-  return Math.max(...data.map((item) => item.amount), 1000);
+function findMaxValue(data) {
+  const flattenedData = data.flat();
+  if (flattenedData.length === 0) {
+    return 1000;
+  }
+  const prices = flattenedData.map((item) => +item.price);
+
+  // Calculate the maximum value among the prices, considering 1000 as the default minimum
+ return Math.max(...prices, 1000);
 }

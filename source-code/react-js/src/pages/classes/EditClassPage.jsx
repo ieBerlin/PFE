@@ -64,7 +64,6 @@ export default function EditClassPage() {
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    console.log(fd.get("class-related-user"))
     const formData = {
       name: fd.get("class-name"),
       description: fd.get("class-description"),

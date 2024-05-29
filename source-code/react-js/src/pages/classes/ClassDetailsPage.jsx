@@ -70,6 +70,7 @@ export default function ClassDetailsPage() {
     classData.startTime
   );
   const formattedEndTime = formatTime(classData.endDate, classData.endTime);
+  console.log(loaderData  )
   return (
     <section className={classes.sectionContainer}>
       <ClassInformations
@@ -116,6 +117,7 @@ function ClassInformations({
   classId,
   enrollmentResult,
 }) {
+  console.log(instructorData)
   const dispatch = useDispatch();
   const { isPending, isError, error, mutate, data } = useMutation({
     mutationKey: ["classes"],
@@ -241,7 +243,7 @@ console.log(status)
         </div>
         <div className="my-3 w-full flex justify-center">
           <button
-            disabled={enrollmentResult.status}
+            disabled={status}
             type="submit"
             className={`my-3 mx-auto w-min whitespace-nowrap rounded-lg font-bold py-2 px-8 
               ${
