@@ -83,7 +83,7 @@ export default function CoachBio({ coachData }) {
                         <a href={`/classes/${coachClass.href}`}>
                           <img
                             className="w-full h-auto rounded-md"
-                            src={coachClass.img}
+                            src={coachClass.image ?? "http://localhost:8081/uploads/images/sport/coach.jpg"}
                             alt=""
                           />
                           <h2 className=" truncate font-semibold my-1 text-ellipsis w-full text-nowrap overflow-hidden">

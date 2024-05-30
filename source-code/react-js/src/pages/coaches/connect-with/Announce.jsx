@@ -7,9 +7,7 @@ export default function Announce({ isFile }) {
       <div className="flex flex-row gap-5 items-center">
         <img
           className="w-10 h-10 rounded-full object-cover"
-          src={
-            "https://i.pinimg.com/originals/b3/b7/1d/b3b71d611085d3adbd2c2e68c018a35f.jpg"
-          }
+          src={"http://localhost:8081/uploads/images/sport/coach.jpg"}
           alt="Bonnie Green image"
         />
         <div>

@@ -3,17 +3,20 @@ const router = express.Router();
 const getUserProfile = require("../controllers/userProfile/getUserProfile.js");
 const getAllUsersProfiles = require("../controllers/userProfile/getAllUsersProfiles.js");
 const updateUserProfile = require("../controllers/userProfile/updateUserProfile.js");
+const updateUserImage = require("../controllers/userProfile/updateUserImage.js");
 const deleteUserProfile = require("../controllers/userProfile/deleteUserProfile.js");
 const verifyToken = require("../middlewares/auth/authJWT.js");
 const authUserRole = require('../middlewares/auth/authUserRole.js')
 const authAdminOrManager = require('../middlewares/auth/authAdminOrManager.js')
 const getUserProfileDependOnEmail = require('../controllers/userProfile/getUserProfileDependOnEmail.js')
-const updatePassword = require('../controllers/userProfile/updatePassword.js')
+const updatePassword = require('../controllers/userProfile/updatePassword.js');
+const { storageImage } = require("../utils/imageUploader/imageUploader.js");
 
 router.get("/", verifyToken, getUserProfileDependOnEmail)
 router.get("/all-users", verifyToken, getAllUsersProfiles);
 router.get("/:userId", verifyToken, getUserProfile);
 router.put("/", verifyToken, updateUserProfile)
+router.put("/update-user-image", verifyToken, storageImage, updateUserImage)
 router.post('/update-password', verifyToken, updatePassword)
 router.delete("/:userId", verifyToken, deleteUserProfile);
 module.exports = router;

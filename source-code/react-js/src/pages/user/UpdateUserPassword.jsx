@@ -6,7 +6,6 @@ import PhoneNumberInput from "../../components/PhoneNumberInput.jsx";
 import GenderInput from "../../components/GenderInput.jsx";
 import TextAreaInput from "../../components/TextAreaInput.jsx";
 import { PencilIcon } from "@heroicons/react/24/outline";
-import defaultUserImage from "../../assets/default-user.webp";
 import { useMutation } from "@tanstack/react-query";
 import { fetchFun, getToken } from "../../hooks/http.js";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
@@ -15,7 +14,14 @@ import { useSelector } from "react-redux";
 import CoachAdditionalInformations from "./CoachAdditionalInformations.jsx";
 const token = getToken();
 export default function UpdateUserPassword({ userData }) {
-  const [currentAvatar, setCurrentAvatar] = useState(defaultUserImage);
+  console.log(userData)
+  const [currentAvatar, setCurrentAvatar] = useState(
+    userData?.image
+      ? "http://localhost:8081/uploads/images/profile/" + userData.image
+      : "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+  );
+
+  const [image, setImage] = useState(null);
   const { isPending, data, isError, error, mutate } = useMutation({
     mutationKey: ["user-profile"],
     mutationFn: async (data) => {
@@ -34,14 +40,33 @@ export default function UpdateUserPassword({ userData }) {
   });
   const imagePickerButtonRef = useRef();
   const submitButtonRef = useRef();
-  const handleImagePicker = (e) => {
+  const handleImagePicker = async (e) => {
     const file = e.target.files[0];
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setCurrentAvatar(reader.result);
       };
       reader.readAsDataURL(file);
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+        const response = await fetch(
+          "http://localhost:8081/user/profile/update-user-image",
+          {
+            method: "PUT",
+            body: formData,
+            headers: {
+              "x-access-token": getToken(),
+            },
+          }
+        );
+
+        console.log(await response.json());
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   };
   let content;
@@ -60,7 +85,9 @@ export default function UpdateUserPassword({ userData }) {
   if (data && !isPending) {
     content = (
       <div className="">
-        <h1 className="font-medium text-lg text-emerald-500">Server feedback </h1>
+        <h1 className="font-medium text-lg text-emerald-500">
+          Server feedback{" "}
+        </h1>
         <SuccessMessage
           title="Request Successful"
           message="Your request has been processed successfully."
@@ -73,6 +100,7 @@ export default function UpdateUserPassword({ userData }) {
     e.preventDefault();
     const formData = new FormData(e.target);
     const userData = {
+      image,
       email: formData.get("email"),
       username: formData.get("username"),
       phoneNumber: formData.get("phone-number"),

@@ -5,7 +5,7 @@ const { pool } = require("../../models/db/connect");
  * @param {string} username The username of the user to fetch the email for.
  * @returns {string|null} The email of the user, or null if not found.
  */
-const fetchUserEmail = async({ username }) => {
+async function fetchUserEmail({ username }) {
 
     try {
 

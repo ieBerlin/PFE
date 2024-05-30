@@ -4,13 +4,12 @@ import FallbackText from "../../components/FallbackText.jsx";
 import ClassesList from "./ClassesList.jsx";
 import { fetchFun, getToken } from "../../hooks/http.js";
 export default function ClassesPage() {
- 
   return (
     <div className="bg-gray-100 min-h-[calc(100vh-60px)] px-5  pb-40 pt-4">
       <h1 className="text-4xl text-black">Classes</h1>
       <Suspense fallback={<FallbackText title="Fetching available classes" />}>
         <Await resolve={loader()}>
-          {(resolvedData) => <ClassesList data={resolvedData} />}
+          {(resolvedData) =>  <ClassesList data={resolvedData} />}
         </Await>
       </Suspense>
     </div>
@@ -25,7 +24,7 @@ async function loader() {
       },
     });
   } catch (error) {
-    return []
+    return [];
   }
 }
 export function action() {

@@ -146,7 +146,18 @@ export default function MemberOverviewPage() {
             }}
           >
             {coaches.map((coach) => (
-              <CoachCard key={coach.id} coach={coach} />
+              <Card key={coach.id} data={coach}>
+                <img
+                  className="object-cover flex w-full h-full"
+                  src={
+                    coach.image
+                      ? "http://localhost:8081/uploads/images/profile/" +
+                        coach.image
+                      : "http://localhost:8081/uploads/images/sport/coach.jpg"
+                  }
+                  alt="Coach"
+                />
+              </Card>
             ))}
           </div>
         ) : (
@@ -163,7 +174,18 @@ export default function MemberOverviewPage() {
             }}
           >
             {equipmentsData.map((equipment) => (
-              <CoachCard key={equipment.id} coach={equipment} />
+              <Card key={equipment.id} data={equipment}>
+                <img
+                  className="object-cover flex w-full h-full"
+                  src={
+                    equipment.image
+                      ? "http://localhost:8081/uploads/images/equipment/" +
+                        equipment.image
+                      : "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg"
+                  }
+                  alt="Coach"
+                />
+              </Card>
             ))}
           </div>
         ) : (
@@ -185,28 +207,24 @@ function DateComponent() {
   );
 }
 
-function CoachCard({ coach }) {
+function Card({ data, children }) {
   return (
     <li className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">
-        <img
-          className="object-cover flex w-full h-full"
-          src="https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTk2MTM1OTAwNDIyMzUwMzQx/main2-trainer2.jpg"
-          alt="Coach"
-        />
+        {children}
         <span className="absolute top-0 left-0 m-2 rounded-xl bg-amber-400 p-[4px] text-center text-sm font-medium text-white">
-          {coach.category}
+          {data.category}
         </span>
       </div>
       <div className="mt-2 px-5 pb-5">
-        <Link to={`${coach.id}`}>
+        <Link to={`${data.id}`}>
           <h5 className="text-xl tracking-tight text-center text-slate-900">
-            {coach.name}
+            {data.name}
           </h5>
         </Link>
 
         <Link
-          to={`${coach.id}`}
+          to={`${data.id}`}
           className="mt-2 flex items-center justify-center rounded-md bg-amber-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-amber-400 focus:outline-none focus:ring-4 focus:ring-blue-300"
         >
           See Progress <ChevronRightIcon className="ml-2 h-6 w-6" />
@@ -241,7 +259,7 @@ function ClassItem({ data }) {
     // Format the time in 'en-US' locale
     return dateObj.toLocaleTimeString("en-US");
   }
-console.log(data)
+  console.log(data);
   return (
     <Link to={"/classes/" + data.classId}>
       <div className="p-3 bg-slate-200 rounded md">

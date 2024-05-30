@@ -26,7 +26,8 @@ app.use(express.json());
 app.use(corsMiddleware);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
-// Authentication router
+
+
 app.use("/user/auth", usersAuthRouter);
 app.use('/users', usersRouter)
 app.use('/coaches', coachRouter)

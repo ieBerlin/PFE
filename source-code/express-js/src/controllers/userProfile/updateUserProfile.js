@@ -41,12 +41,10 @@ const updateUserProfile = async(req, res) => {
             errors.gender = "Invalid gender!";
         }
         if (Object.keys(errors).length) {
-            console.log(errors)
             return res.status(400).json(errors);
         }
 
         // Check if the user exists
-        console.log(userEmail)
         const [user] = await pool.query('SELECT * FROM users WHERE email = ?', [userEmail]);
         if (user.length === 0) {
             return res.status(404).json({ message: 'User not found.' });

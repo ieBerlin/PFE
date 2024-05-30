@@ -5,7 +5,7 @@ const getSingleCoach = async (req, res) => {
     const { coachId } = req.params;
 
     const [result] = await pool.query(
-      "SELECT email, username, first_name, last_name, date_of_birth, phone_number, gender, address, role, registration_date, last_time_login, status FROM users WHERE userId = ?",
+      "SELECT email, username, first_name, last_name, date_of_birth, phone_number, gender, address, role, registration_date, last_time_login,image, status FROM users WHERE userId = ?",
       [coachId]
     );
 

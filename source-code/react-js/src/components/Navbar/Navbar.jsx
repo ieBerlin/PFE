@@ -5,13 +5,14 @@ import ProfileDropdownMenu from "./ProfileDropdownMenu/ProfileDropDownMenu.jsx";
 import { fetchFun, getToken } from "../../hooks/http.js";
 
 import "./Navbar.css";
-import avatar from "/kilter.jpg";
-
 function Navbar({ width }) {
   const { data } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUserCredentials,
   });
+  const image = data?.image
+    ? "http://localhost:8081/uploads/images/profile/" + data.image
+    : "http://localhost:8081/uploads/images/profile/default-user-image.webp";
   const greetingMessage =
     new Date().getHours() > 12 ? "Good Evening" : "Good Morning";
   return (
@@ -28,7 +29,7 @@ function Navbar({ width }) {
       <div className="user-info">
         <NotificationBell />
         <Link to="/profile">
-          <img className="user-avatar" src={avatar} alt="User Avatar" />
+          <img className="user-avatar" src={image} alt="User Avatar" />
         </Link>
         <div className="user-name text-gray-800 ">
           {data?.username ?? "user"}

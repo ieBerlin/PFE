@@ -15,7 +15,7 @@ const getUserProfileDependOnEmail = async(req, res) => {
 
     try {
         // Fetch user profile data from the database
-        const [result] = await pool.query('SELECT email,username,first_name,last_name,date_of_birth,phone_number,gender,address,role FROM users WHERE email = ?', [userEmail]);
+        const [result] = await pool.query('SELECT image,email,username,first_name,last_name,date_of_birth,phone_number,gender,address,role FROM users WHERE email = ?', [userEmail]);
         if (result.length > 0) {
             const userProfile = result[0]; // Extract user profile data
             setTimeout(() => {

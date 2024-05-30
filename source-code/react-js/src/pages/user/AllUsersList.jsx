@@ -103,7 +103,10 @@ export default function AllUsersList({ users }) {
                 >
                   <img
                     className="rounded-full h-12 w-12 object-cover"
-                    src="https://i.pinimg.com/736x/54/97/92/549792a6dabb17e61a53be9f1ceb60a8.jpg"
+                    src={
+                      user.image ??
+                      "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+                    }
                     alt=""
                   />
                   <div className="flex flex-col">

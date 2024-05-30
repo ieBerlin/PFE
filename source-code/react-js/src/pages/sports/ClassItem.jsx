@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import kilterImage from "/kilter.jpg";
 import classesStyles from "../../pages/classes/ClassesPage.module.css";
 import {
   BriefcaseIcon,
@@ -13,10 +12,10 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
 export default function ClassItem({ data }) {
   const {
+    image: instructorImage,
     classId: id,
     name: title,
     description,
-    instructor_name: coachName,
     instructor_email: coachEmail,
     startDate: date,
     startTime: time,
@@ -48,9 +47,12 @@ export default function ClassItem({ data }) {
     day: "numeric",
     year: "numeric",
   });
-
+console.log(instructor_extra_info)
   const formattedTime = String(time).split(":").slice(0, 2).join(":");
-
+  const coachImage = instructor_extra_info?.image
+    ? "http://localhost:8081/uploads/images/profile/" +
+      instructor_extra_info.image
+    : "http://localhost:8081/uploads/images/sport/coach.jpg";
   return (
     <Link
       to={`/classes/${id}`}
@@ -59,7 +61,7 @@ export default function ClassItem({ data }) {
       <div className={classesStyles.classImageContainer}>
         <img
           className={classesStyles.classImg}
-          src="https://cdn.onefc.com/wp-content/uploads/2022/10/Zhang-Peimian-Jonathan-Di-Bella-ONE162-1920X1280-15.jpg"
+          src={`http://localhost:8081/uploads/images/sport/${classCategory}.jpg`}
           alt=""
         />
         <span className={classesStyles.classCategory}>{classCategory}</span>
@@ -88,13 +90,14 @@ export default function ClassItem({ data }) {
             onMouseLeave={() => handleInstructorDropDown(false)}
           >
             <span className="w-full text-gray-500 font-medium py-2 px-0.5 md:px-0 hover:text-gray-700 cursor-pointer">
-              Coach: {coachName}
+              Coach: {instructor_extra_info?.name}
             </span>
           </button>
           {isAdmin && (
             <h2 className="text-blue-900 font-semibold">
               {" "}
-              Status : <span className="font-medium text-cyan-600">{classStatus}</span>
+              Status :{" "}
+              <span className="font-medium text-cyan-600">{classStatus}</span>
             </h2>
           )}
           {isDropDownActive && (
@@ -108,10 +111,10 @@ export default function ClassItem({ data }) {
               onMouseLeave={() => handleInstructorDropDown(false)}
             >
               <div className={classesStyles.coachInfos + " p-2"}>
-                <img src={kilterImage} alt="coach avatar" />
+                <img src={coachImage} alt="coach avatar" />
                 <div className="text-start">
                   <h2 className="text-black text-md font-medium">
-                    {coachName}
+                  {instructor_extra_info?.name}
                   </h2>
                   <h4 className="text-white text-sm">{coachEmail}</h4>
                 </div>

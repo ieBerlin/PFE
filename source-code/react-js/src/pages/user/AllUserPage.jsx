@@ -14,7 +14,7 @@ export default function AllUserPage() {
     <>
       <Modal />
       <div className="bg-gray-50 w-full px-5 pt-4 pb-10">
-        <h1 className="text-4xl mb-3">Reports</h1>
+        <h1 className="text-4xl mb-3">Users</h1>
         <div className="my-4">
           <Suspense
             fallback={<FallbackText title={"Fetching Users data..."} />}

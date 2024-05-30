@@ -4,6 +4,7 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFun, getToken } from "../../hooks/http";
 import ClientsItems from "./ClientsItems.jsx";
+import { Link } from "react-router-dom";
 export default function ClientsPage() {
   const { isPending, data, isError, error } = useQuery({
     queryKey: ["clients"],
@@ -21,7 +22,7 @@ export default function ClientsPage() {
   return (
     <div className="bg-gray-100 min-h-[calc(100vh-60px)] px-5  pt-4">
       <h1 className="text-4xl text-black mb-5">Clients</h1>
-
+     
       {isPending ? (
         <FallbackText title="Loading clients..." />
       ) : data && data.length > 0 ? (

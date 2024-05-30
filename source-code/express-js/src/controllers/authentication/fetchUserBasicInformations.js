@@ -5,7 +5,7 @@ const SECRET_KEY = require("../../config/jwt_secret");
 const fetchUserBasicInformations = async(req, res) => {
     try {
         const { userEmail } = req;
-        const sql = 'SELECT username, first_name FROM users WHERE email = ?';
+        const sql = 'SELECT image,username, first_name FROM users WHERE email = ?';
         const [result] = await pool.query(sql, [userEmail]);
 
         if (result.length > 0) {

@@ -16,7 +16,7 @@ import { setModalType } from "../../features/modal/modalSlice.js";
 export default function EditEquipmentModal({ onClose, equipmentData: data }) {
   const dispatch = useDispatch();
   const submitButtonRef = useRef();
-  const [previewImageSrc, setPreviewImageSrc] = useState(defaultEquipmentImage);
+  const [previewImageSrc, setPreviewImageSrc] = useState(    "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg");
   const imageInputRef = useRef();
 
   const { isPending, isError, error, mutate, data:mutationData } = useMutation({

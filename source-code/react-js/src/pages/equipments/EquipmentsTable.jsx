@@ -247,7 +247,10 @@ function StatusTableData({ status, data }) {
               <div className="flex flex-row items-center justify-start px-8 bg-gray-100 gap-3 w-full  py-4">
                 <img
                   className="w-10 h-10 rounded-full"
-                  src="https://i1.sndcdn.com/avatars-l1naSpQtTriIecnJ-Rf6eyQ-t240x240.jpg"
+                  src={
+                    data.image ??
+                    "http://localhost:8081/uploads/images/sport/coach.jpg"
+                  }
                   alt=""
                 />
                 <h1 className="font-bold tracking-wide">{data.staff}</h1>
@@ -407,7 +410,7 @@ function UserTypeData({ type }) {
 
 const filterBookings = (data, selectedBookings) => {
   return data.filter((booking) => {
-    console.log(booking)
+    console.log(booking);
     const isUserTypeSelected = Object.entries(selectedBookings.userType).every(
       ([userType, isSelected]) =>
         isSelected || booking?.staff?.toLowerCase() !== userType

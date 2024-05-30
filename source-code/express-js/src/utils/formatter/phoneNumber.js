@@ -1,6 +1,6 @@
 function phoneNumberFormatter(phoneNum) {
     if (phoneNum.startsWith('+213')) {
-        return 0 + phoneNum.slice(4)
+        return 0 + phoneNum.slice(3)
     }
     return phoneNum;
 

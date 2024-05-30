@@ -111,6 +111,12 @@ export default function EquipmentsList({ data }) {
 function EquipmentItem({ equipmentData, onEditEquipment }) {
   const { userRole } = useSelector((state) => state.userRole);
   const dispatch = useDispatch();
+  const image = equipmentData.image
+  ? equipmentData.image.startsWith("http://")
+    ? equipmentData.image
+    : "http://localhost:8081/uploads/images/equipment/" + equipmentData.image
+  : "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg";
+
   return (
     <li
       key={"coach.coachId"}
@@ -119,7 +125,7 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">
         <img
           className="object-cover flex w-full h-full"
-          src="https://akfit.com/cdn/shop/articles/107194-exercise-equipmentg1.png?v=1694789703"
+          src={image}
           alt="Coach"
         />
         <span className="absolute top-0 left-0 m-2 rounded-xl text-center text-sm bg-blue-400   p-[4px]   text-white font-semibold">
@@ -174,13 +180,13 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
 }
 function filterEquipements(equipments, selectedEquipments, inputValue) {
   const filterEquipmentsDependOnInputValue = equipments.filter((equipment) => {
-    return Object.entries(equipment).some(([key, value]) =>
-      (key === "name" || key === "category") &&
-      typeof value === "string" &&
-      value.toLowerCase().includes(inputValue.toLowerCase())
+    return Object.entries(equipment).some(
+      ([key, value]) =>
+        (key === "name" || key === "category") &&
+        typeof value === "string" &&
+        value.toLowerCase().includes(inputValue.toLowerCase())
     );
   });
-  
 
   return filterEquipmentsDependOnInputValue.filter((equipment) => {
     return !Object.entries(selectedEquipments.category).some(

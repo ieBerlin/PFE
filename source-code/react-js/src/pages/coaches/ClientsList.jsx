@@ -24,13 +24,16 @@ export default function ClientsList({ clients }) {
 }
 
 function ClientCard({ client }) {
-  console.log(client)
+  console.log(client);
   return (
     <li className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">
         <img
           className="object-cover flex w-full h-full"
-          src="https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTk2MTM1OTAwNDIyMzUwMzQx/main2-trainer2.jpg"
+          src={
+            client.image ??
+            "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+          }
           alt="Coach"
         />
       </div>

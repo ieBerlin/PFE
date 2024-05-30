@@ -133,7 +133,10 @@ function UserCredentials({ resolvedData, setIsRelatedUsersShown, isChecked }) {
                 />
                 <img
                   className="w-8 h-8 rounded-full"
-                  src={user.imageSrc}
+                  src={
+                    user.imageSrc ??
+                    "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+                  }
                   alt={user.fullName}
                 />
                 <h4 className="text-gray-600 text-sm">{user.email}</h4>

@@ -13,7 +13,6 @@ const initialSelectedTransactions = {
 };
 
 export default function Transactions({ transactionsData }) {
-
   const dispatch = useDispatch();
   const [selectedTransactions, setSelectedTransactions] = useState(
     initialSelectedTransactions
@@ -108,7 +107,10 @@ export default function Transactions({ transactionsData }) {
                         <div className="flex items-center gap-5">
                           <img
                             className="w-14 h-14 fill object-cover rounded-full"
-                            src="https://www.wikihow.com/images/9/90/What_type_of_person_are_you_quiz_pic.png"
+                            src={
+                              transaction.image ??
+                              "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+                            }
                             alt=""
                           />
                           <div>

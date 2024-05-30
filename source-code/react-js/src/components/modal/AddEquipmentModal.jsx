@@ -1,7 +1,6 @@
 import { CameraIcon } from "@heroicons/react/24/solid";
 import { useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import defaultEquipmentImage from "../../assets/default-equipment.webp";
 import Input from "../Input";
 import TextAreaInput from "../TextAreaInput";
 import PriceInput from "../PriceInput";
@@ -15,7 +14,9 @@ import { useDispatch } from "react-redux";
 export default function AddEquipmentModal({ onClose }) {
   const dispatch = useDispatch();
   const submitButtonRef = useRef();
-  const [previewImageSrc, setPreviewImageSrc] = useState(defaultEquipmentImage);
+  const [previewImageSrc, setPreviewImageSrc] = useState(
+    "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg"
+  );
   const imageInputRef = useRef();
 
   const { isPending, isError, error, mutate, data } = useMutation({

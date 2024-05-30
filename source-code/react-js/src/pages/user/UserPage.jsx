@@ -4,7 +4,6 @@ import { setModalType } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import CoachBio from "../coaches/CoachBio.jsx";
-import Modal from "../../components/modal/Modal.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
 import BillingHistory from "../../components/BillingHistory.jsx";
 import { useQueries } from "@tanstack/react-query";
@@ -51,6 +50,7 @@ export default function UserPage() {
   const billingHistory = results[1].data ?? [];
   const userData = results[0].data;
   const dispatch = useDispatch();
+
   if (results[0].isPending || results[1].isPending) {
     return (
       <div className="px-5 py-7">
@@ -88,7 +88,10 @@ export default function UserPage() {
             style={{ minWidth: "174px" }}
           >
             <img
-              src={avatarSrc}
+              src={
+                avatarSrc ??
+                "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+              }
               className="rounded-full object-cover"
               style={{ height: "150px", width: "150px" }}
               alt="User Avatar"

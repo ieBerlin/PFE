@@ -70,10 +70,10 @@ export default function ClassDetailsPage() {
     classData.startTime
   );
   const formattedEndTime = formatTime(classData.endDate, classData.endTime);
-  console.log(loaderData  )
   return (
     <section className={classes.sectionContainer}>
       <ClassInformations
+        category={classData.category}
         instructorData={instructorData}
         title={classData.name}
         description={classData.description}
@@ -117,7 +117,6 @@ function ClassInformations({
   classId,
   enrollmentResult,
 }) {
-  console.log(instructorData)
   const dispatch = useDispatch();
   const { isPending, isError, error, mutate, data } = useMutation({
     mutationKey: ["classes"],
@@ -167,7 +166,7 @@ function ClassInformations({
   } else {
     buttonLabel = "Enroll now";
   }
-console.log(status)
+  console.log(`http://localhost:8081/uploads/images/sport/${category}.jpg`);
   return (
     <Form onSubmit={handleSubmit}>
       <div className={classes.sportContainer}>
@@ -180,7 +179,7 @@ console.log(status)
           </div>
           <div>
             <img
-              src="https://cdn.onefc.com/wp-content/uploads/2022/10/Zhang-Peimian-Jonathan-Di-Bella-ONE162-1920X1280-15.jpg"
+              src={`http://localhost:8081/uploads/images/sport/${category}.jpg`}
               alt=""
             />
             <div className="my-2">
@@ -217,9 +216,9 @@ console.log(status)
             </div>
             <div className=" my-2">
               <h3 className="text-gray-700 font-semibold text-lg capitalize">
-                Category : {category}
+                Category :
                 <span className="text-red-500 bg-red-100 rounded-md px-3 py-1">
-                  Kickboxing
+                  {category}
                 </span>
               </h3>
             </div>

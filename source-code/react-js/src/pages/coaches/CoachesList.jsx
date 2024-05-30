@@ -56,7 +56,7 @@ export default function CoachesList() {
     mutationKey: ["client"],
     mutationFn: async () =>
       await fetchFun({
-        url: "http://localhost:8081/clients/enroll/"+coachId,
+        url: "http://localhost:8081/clients/enroll/" + coachId,
         options: {
           method: "POST",
           headers: {
@@ -80,8 +80,6 @@ export default function CoachesList() {
     </div>
   );
 
-
-  
   const {
     isPending: isCoachDataLoading,
     data: coachDetails,
@@ -127,6 +125,10 @@ export default function CoachesList() {
   const totalMembersTrained = coachDetails.totalTrainedMembers ?? 0;
   const contactDetails = coachDetails.contact ?? "[]";
   const certificationList = coachDetails.certifications ?? [];
+  const coachImage = coachDetails.image
+    ? "http://localhost:8081/uploads/images/profile/" + coachDetails.image
+    : "http://localhost:8081/uploads/images/sport/coach.jpg";
+    console.log(coachDetails)
   const coachBioText = coachDetails.bio ?? "";
   const contactLinks = JSON.parse(contactDetails);
   const coachBioData = {
@@ -161,7 +163,7 @@ export default function CoachesList() {
         <div className="py-2 pl-5">
           <img
             className="rounded-full w-32 h-32 object-cover"
-            src="https://evilreporterchick.files.wordpress.com/2010/03/jeremy_renner.jpg"
+            src={coachImage}
             alt=""
           />
         </div>
@@ -198,7 +200,7 @@ export default function CoachesList() {
                   </button>
                 ))}
             </div>
-              <h1>{content}</h1>
+            <h1>{content}</h1>
             <h3 className="text-sm text-blue-900 font-semibold bg-blue-100 px-3 py-1 inline-block rounded-md my-2">
               {coachSpecialization}
             </h3>
