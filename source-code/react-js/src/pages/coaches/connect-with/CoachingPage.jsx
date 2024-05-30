@@ -37,7 +37,7 @@ export default function CoachingPage() {
       <div className="mb-20">
         <div style={{ height: "calc(100vh - 100px)" }} className="mt-4 mb-8 ">
           <Announce />
-          <Announce isFile />
+          <Announce />
           <Announce />
         </div>
       </div>

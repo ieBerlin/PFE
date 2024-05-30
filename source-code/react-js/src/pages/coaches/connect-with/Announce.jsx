@@ -1,6 +1,4 @@
-import Message from "./Message";
-
-export default function Announce({ isFile }) {
+export default function Announce() {
   const date = new Date().toLocaleTimeString();
   return (
     <div className="bg-white rounded-md ring-1 ring-gray-300 p-3 m-4">
@@ -27,46 +25,8 @@ export default function Announce({ isFile }) {
           tenetur nihil aliquam rerum facilis iusto? Nesciunt consectetur facere
           quos illo.
         </h4>
-        {isFile && <Message />}
+      
       </div>
     </div>
   );
 }
-
-const dummyChats = [
-  {
-    sender: 0,
-    date: "2024-05-09T11:46:00",
-    message: "Hey, how are you?",
-    isMessage: true,
-  },
-  {
-    sender: 1,
-    date: "2024-05-09T11:48:00",
-    message: "I'm doing great, thanks!",
-    isMessage: true,
-  },
-  {
-    sender: 0,
-    date: "2024-05-09T11:50:00",
-    message: "That's good to hear!",
-    isMessage: true,
-  },
-  {
-    sender: 0,
-    date: "2024-05-09T11:52:00",
-    message: "By the way, here's the latest report:",
-    isMessage: false,
-    file: {
-      name: "Latest_Report.pdf",
-      size: "5 MB",
-      link: "https://example.com/downloads/Latest_Report.pdf",
-    },
-  },
-  {
-    sender: 1,
-    date: "2024-05-09T11:54:00",
-    message: "Thanks! I'll take a look.",
-    isMessage: true,
-  },
-];

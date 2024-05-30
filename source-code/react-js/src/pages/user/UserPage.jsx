@@ -61,8 +61,6 @@ export default function UserPage() {
               },
             },
           }),
-
-        enabled: results[0].data?.role === "coach",
       },
       {
         queryKey: ["membership"],
@@ -143,25 +141,29 @@ export default function UserPage() {
                 info={email}
               />
             </div>
-            {role.toLowerCase() === "member" && queriesResult[1].isFetching ? (
-              <h1 className="text-blue-600 font-semibold bg-gray-blue p-2 rounded-md">
-                Loading...
-              </h1>
-            ) : (
+            {role.toLowerCase() === "member" && (
               <>
-                {queriesResult[1].data?.status ? (
-                  <div className="p-4 bg-blue-100 w-full text-center">
-                    <h4 className="font-medium text-sm mt-4 text-center inline-block">
-                      Remaining Days of User Membership
-                    </h4>
-                    <div className="inline-block mb-2 py-0.5 px-1.5 bg-blue-50 border border-blue-200 text-xs font-medium text-blue-600 rounded-lg">
-                      {queriesResult[1].data?.daysLeft} Day Left
-                    </div>
-                  </div>
-                ) : (
-                  <h1 className="text-red-600 font-semibold bg-red-100 p-2 rounded-md">
-                    Membership ends
+                {queriesResult[1].isFetching ? (
+                  <h1 className="text-blue-600 font-semibold bg-gray-blue p-2 rounded-md">
+                    Loading...
                   </h1>
+                ) : (
+                  <>
+                    {queriesResult[1].data?.status ? (
+                      <div className="p-4 bg-blue-100 w-full text-center">
+                        <h4 className="font-medium text-sm mt-4 text-center inline-block">
+                          Remaining Days of User Membership
+                        </h4>
+                        <div className="inline-block mb-2 py-0.5 px-1.5 bg-blue-50 border border-blue-200 text-xs font-medium text-blue-600 rounded-lg">
+                          {queriesResult[1].data?.daysLeft} Day Left
+                        </div>
+                      </div>
+                    ) : (
+                      <h1 className="text-red-600 font-semibold bg-red-100 p-2 rounded-md">
+                        Membership ends
+                      </h1>
+                    )}
+                  </>
                 )}
               </>
             )}

@@ -7,7 +7,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import LoadingIndicator from "../LoadingIndicator.jsx";
 import SelectInput from "../SelectInput.jsx";
 import PriceInput from "../PriceInput.jsx";
-export default function RechargeUserMembership({ remainingDay }) {
+export default function RechargeUserMembership({remainingDay }) {
   const { userId } = useParams();
   const { data: queryData, isFetching: isQueryPending } = useQuery({
     queryKey: ["membership"],
