@@ -5,9 +5,8 @@ export default function ChartBar({
   color = "blue-500",
   label,
 }) {
-  const total = chatData
-    .flat()
-    .reduce((prevItem, currentItem) => prevItem + +currentItem.price, 0);
+  const total = chatData.reduce((acc, curr) => acc + curr, 0);
+  console.log(total);
   return (
     <div className="bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg px-5 py-4 rounded-lg">
       <div className="flex flex-row justify-between items-center mb-3">
@@ -33,27 +32,18 @@ export default function ChartBar({
             }}
           >
             {chatData.map((dataItem) => {
-              const itemData = dataItem
-                .flat()
-                .reduce(
-                  (prevItem, currentItem) => prevItem + +currentItem.price,
-                  0
-                );
+             
               return (
                 <div
                   key={`label-${dataItem.transactionId}`}
                   className={`w-10 bg-${color} mx-auto my-0 rounded-t-md text-center text-sm text-white`}
                   style={{
-                    height: `${Math.ceil(
-                      (250 * itemData) / maxYValue
-                    )}px`,
+                    height: `${Math.ceil((250 * dataItem) / maxYValue)}px`,
                     verticalAlign: "middle",
-                    lineHeight: `${Math.ceil(
-                      (250 *itemData) / maxYValue
-                    )}px`,
+                    lineHeight: `${Math.ceil((250 * dataItem) / maxYValue)}px`,
                   }}
                 >
-                  {itemData}
+                  {dataItem}
                 </div>
               );
             })}

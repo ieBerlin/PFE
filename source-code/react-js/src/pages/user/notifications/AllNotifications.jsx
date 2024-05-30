@@ -8,7 +8,7 @@ export default function AllNotifications() {
   const loaderData = useRouteLoaderData("notifications-id");
   return (
     <div className="bg-gray-100 min-h-[calc(100vh-60px)] px-5  pb-40 pt-4">
-      <h1 className="text-4xl text-black">All notifications</h1>
+      <h1 className="text-4xl text-black mb-4">All notifications</h1>
       <Suspense
         fallback={<FallbackText title="Fetching notifications data..." />}
       >

@@ -12,23 +12,30 @@ const getLatestTransactions = async(req, res) => {
 
         const [transactions] = await pool.query(`
             SELECT * FROM transactions 
-            WHERE transactionDate >= CURDATE() - INTERVAL 7 DAY
+            WHERE transactionDate BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()
         `);
 
         const transactionsByDate = lastSevenDays.reduce((acc, date) => {
-            acc[date] = [];
+            acc[date] = { income: 0, expense: 0 };
             return acc;
         }, {});
+
         transactions.forEach(transaction => {
             const date = format(new Date(transaction.transactionDate), 'yyyy-MM-dd');
             if (transactionsByDate[date]) {
-                transactionsByDate[date].push(transaction);
+                if (transaction.paymentType === 'income') {
+                    transactionsByDate[date].income += parseFloat(transaction.price);
+                } else if (transaction.paymentType === 'expense') {
+                    transactionsByDate[date].expense += parseFloat(transaction.price);
+                }
             }
         });
 
         const result = lastSevenDays.map(date => ({
             date,
-            transactions: transactionsByDate[date]
+            income: transactionsByDate[date].income,
+            expense: transactionsByDate[date].expense,
+            paymentType: transactionsByDate[date].income > transactionsByDate[date].expense ? 'income' : 'expense'
         }));
 
         return res.status(200).json(result);

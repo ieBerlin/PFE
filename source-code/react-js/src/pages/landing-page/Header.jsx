@@ -12,26 +12,7 @@ export default function Header({ isValidLogin }) {
       <div className={classes.logo}>
         <img src={imgLogo} alt="image logo" />
       </div>
-      <nav className={classes.navbar}>
-        <ul className="nav-list">
-          <li className="nav-item">
-            <a href="/about" className={classes.headerAnchor}>
-              About
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="/services" className={classes.headerAnchor}>
-              Services
-            </a>
-          </li>
-
-          <li className="nav-item">
-            <a href="/contact" className={classes.headerAnchor}>
-              Contact
-            </a>
-          </li>
-        </ul>
-      </nav>
+      
       <div className={classes.authentication}>
         {!isValidLogin ? (
           <Link to="/auth">

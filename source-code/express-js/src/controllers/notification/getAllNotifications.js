@@ -2,14 +2,14 @@ const { pool } = require("../../models/db/connect");
 
 const getAllNotifications = async(req, res) => {
     try {
-        const { userEmail } = req
-        if (!userEmail) {
+        const { userId } = req
+        if (!userId) {
             return res.status(400).json({ error: 'No user email provided!' });
         }
 
 
-        const sql = 'SELECT * FROM notifications WHERE userEmail = ?';
-        const [result] = await pool.query(sql, [userEmail]);
+        const sql = 'SELECT * FROM notifications WHERE userId = ?';
+        const [result] = await pool.query(sql, [userId]);
 
         if (result.length > 0) {
             setTimeout(() => {

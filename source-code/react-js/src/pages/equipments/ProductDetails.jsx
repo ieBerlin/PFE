@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFetcher, useParams } from "react-router-dom";
 import { setModalType } from "../../features/modal/modalSlice";
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries } from "@tanstack/react-query";
 import { fetchFun, getToken, queryClient } from "../../hooks/http";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import SuccessMessage from "../../components/SuccessMessage.jsx";
@@ -50,7 +49,7 @@ export default function ProductDetails() {
   });
   let availability;
   const availabilityData = results[1];
-
+  console.log(availabilityData.error?.info);
   if (
     availabilityData.isError &&
     availabilityData.error &&
@@ -69,12 +68,12 @@ export default function ProductDetails() {
     error: mutationError,
   } = useMutation({
     mutationKey: ["equipments", "equipments-" + equipmentId],
-    mutationFn: async (data) =>
+    mutationFn: async () =>
       await fetchFun({
         url: "http://localhost:8081/booking",
         options: {
           method: "POST",
-          body: JSON.stringify({ ...data, equipmentId }),
+          body: JSON.stringify({ equipmentId }),
           headers: {
             "Content-Type": "application/json",
             "x-access-token": getToken(),
@@ -90,11 +89,6 @@ export default function ProductDetails() {
   });
   const { Form, state } = useFetcher();
   const isSubmitting = state === "submitting";
-  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
-  const [currentSelectedSize, setCurrentSelectedSize] = useState({
-    size: null,
-    index: null,
-  });
   const userRole = useSelector((state) => state.userRole?.userRole);
   if (results[0].isPending) {
     return <FallbackText title="Fetching equipment details" />;
@@ -103,28 +97,7 @@ export default function ProductDetails() {
     <FallbackText title="Nothing to show!" />;
   }
   const { name, description, price } = results[0].data;
-  const colors = [
-    {
-      color: "#000",
-      sizes: [
-        { size: "S", available: true },
-        { size: "M", available: false },
-        { size: "L", available: true },
-        { size: "XL", available: true },
-        { size: "XXL", available: false },
-      ],
-    },
-    {
-      color: "#FF0000",
-      sizes: [
-        { size: "S", available: false },
-        { size: "M", available: true },
-        { size: "L", available: true },
-        { size: "XL", available: false },
-        { size: "XXL", available: true },
-      ],
-    },
-  ];
+
   let content;
   content = !isFetching && isMutationError && (
     <div className="">
@@ -151,28 +124,16 @@ export default function ProductDetails() {
     );
   }
 
-  const handleColorChange = (index) => {
-    setSelectedColorIndex(index);
-    setCurrentSelectedSize({ size: null, index: null });
-  };
-
-  const selectedColor = colors[selectedColorIndex];
-  const availableSizes = selectedColor ? selectedColor.sizes : [];
   const isBookingValide =
     availabilityData.error?.info.unavailability ||
     availabilityData.isPending ||
-    isSubmitting ||
-    (currentSelectedSize.size === null && currentSelectedSize.index === null);
+    isSubmitting;
 
   function handleSubmit(e) {
     e.preventDefault();
-    const formData = {
-      size: currentSelectedSize.size,
-      color: colors[selectedColorIndex]?.color,
-    };
-    mutate(formData);
+    mutate();
   }
-
+  const quantity = results[0].data?.availableQuantity;
   return (
     <div className="bg-gray-100 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -196,7 +157,7 @@ export default function ProductDetails() {
                     <button
                       disabled={isBookingValide}
                       type="submit"
-                      className={`w-full ${
+                      className={`w-full  capitalize ${
                         !isBookingValide ? "bg-gray-900" : " bg-gray-500"
                       }  text-white py-2 px-4 rounded-full font-bold ${
                         !isBookingValide && " hover:bg-gray-800"
@@ -205,9 +166,7 @@ export default function ProductDetails() {
                       {availabilityData?.error?.info.unavailability
                         ? availabilityData?.error?.info.unavailability
                         : !isSubmitting && !availabilityData.isPending
-                        ? currentSelectedSize.size && currentSelectedSize.index
-                          ? "Book Now"
-                          : "Choose Equipment"
+                        ? "Book Now"
                         : "Processing..."}
                     </button>
                   </Form>
@@ -224,11 +183,7 @@ export default function ProductDetails() {
                   </button>
                 )}
               </div>
-              <div className="w-1/2 px-2">
-                <button className="w-full bg-gray-200 text-gray-800  py-2 px-4 rounded-full font-bold hover:bg-gray-300">
-                  Add to Wishlist
-                </button>
-              </div>
+           
             </div>
           </div>
           <div className="md:flex-1 px-4">
@@ -242,49 +197,17 @@ export default function ProductDetails() {
               <div>
                 <span className="font-bold text-gray-700">Availability: </span>
                 <span className="text-blue-600 font-semibold ">
-                  {availability}
+                  {quantity + " left" ?? "unknown"}
                 </span>
               </div>
             </div>
-            <div className="mb-4">
-              <span className="font-bold text-gray-700 ">Select Color:</span>
-              <div className="flex items-center mt-2 bg-gray-300 w-min p-4 rounded-md">
-                {colors.map((color, index) => (
-                  <button
-                    key={index}
-                    style={{ backgroundColor: color.color }}
-                    onClick={() => handleColorChange(index)}
-                    className={`w-6 h-6 rounded-full mr-2 ${
-                      index === selectedColorIndex ? "ring-gray-500 ring-2" : ""
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="mb-4">
-              <span className="font-bold text-gray-700 ">Select Size:</span>
-              <div className="flex items-center mt-2 bg-gray-300 w-min p-4 rounded-md">
-                {availableSizes.map(({ size, available }, index) => (
-                  <button
-                    key={index}
-                    disabled={!available}
-                    className={`${
-                      !available
-                        ? "bg-red-400 text-black"
-                        : index === currentSelectedSize.index
-                        ? "bg-emerald-500 text-white"
-                        : "bg-gray-400 text-white"
-                    } ${
-                      available && "hover:bg-emerald-500 hover:text-white"
-                    } py-2 px-4 rounded-full font-bold mr-2`}
-                    onClick={() => setCurrentSelectedSize({ size, index })}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-              {content}
-            </div>
+
+            <h1 className="text-red-500 font-semibold">
+              Note : <br/>{" "}<span className="text-gray-700">
+              If you've reserved this item, please ensure it is returned within 10 days, or you will receive a ban.
+              </span>
+            </h1>
+            {content}
           </div>
         </div>
       </div>

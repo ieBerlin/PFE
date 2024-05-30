@@ -5,7 +5,6 @@ export default function HeroSection() {
     <main>
       <div className={classes.heroSection}>
         <h1>Discover the Power of Fitness at Our Gym</h1>
-        <p>Start your transformation with expert guidance and encouragement.</p>
       </div>
       <div className={classes.buttons}>
         <a href="">

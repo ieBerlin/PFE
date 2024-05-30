@@ -10,7 +10,7 @@ const updateBookingStatus = async(req, res) => {
             });
         }
 
-        const validStatuses = ["pending", "approved", "rejected"];
+        const validStatuses = ["pending", "confirmed", "rejected"];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({
                 message: "Invalid status value.",

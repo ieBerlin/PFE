@@ -9,18 +9,18 @@ export default function EnrollmentRequestsTable({ data }) {
       <div className="-m-1.5 overflow-x-auto">
         <div className="p-1.5 min-w-full inline-block align-middle">
           <div className="overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200 ">
+            <table className="min-w-full divide-y divide-gray-200">
               <thead>
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase "
+                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                   >
                     Request ID
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase "
+                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                   >
                     Class ID
                   </th>
@@ -30,58 +30,76 @@ export default function EnrollmentRequestsTable({ data }) {
                   >
                     Request Date
                   </th>
-
                   <th
                     scope="col"
-                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase "
+                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                   >
                     Applicant User ID
                   </th>
-
                   <th
                     scope="col"
-                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase "
+                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                   >
                     Status
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase "
+                    className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                   >
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 ">
-                {filteredBookings.map((request, index) => {
-                  const date = new Date(request.date).toLocaleDateString(
-                    "en-US",
-                    { day: "numeric", month: "short", year: "numeric" }
-                  );
-                  return (
-                    <tr key={index}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
-                        {request.id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium ">
-                        {request.class_id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
-                        {date}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
-                        <Link to={`/user/${request.applicant_user_id}`}>
-                          {request.applicant_user_id}
-                        </Link>
-                      </td>
-                      <RequestStatus data={request.status} />
-                      {request?.status === "pending" && (
-                        <ActionButtons data={request.id} />
-                      )}
-                    </tr>
-                  );
-                })}
-              </tbody>
+              {filteredBookings && filteredBookings.length > 0 ? (
+                <tbody className="divide-y divide-gray-200">
+                  {filteredBookings.map((request, index) => {
+                    const date = new Date(request.date).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      }
+                    );
+                    return (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                          {request.id}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
+                          {request.class_id}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
+                          {date}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
+                          <Link to={`/user/${request.applicant_user_id}`}>
+                            {request.applicant_user_id}
+                          </Link>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
+                          <RequestStatus data={request.status} />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
+                          {request.status === "pending" && (
+                            <ActionButtons data={request.id} />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              ) : (
+                <tbody>
+                  <tr>
+                    <td colSpan="6" className="text-center py-4">
+                      <h3 className="text-black text-xl my-5 text-center font-semibold bg-red-200">
+                        Nothing to show!
+                      </h3>
+                    </td>
+                  </tr>
+                </tbody>
+              )}
             </table>
           </div>
         </div>

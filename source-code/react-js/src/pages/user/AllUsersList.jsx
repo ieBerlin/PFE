@@ -143,8 +143,7 @@ export default function AllUsersList({ users }) {
                 {user.status}
               </h1>
               <div className="flex flex-row gap-2 items-center justify-end">
-                {(user.role.toLowerCase() === "coach" ||
-                  user.role.toLowerCase() === "member") &&
+                {user.role.toLowerCase() === "member" &&
                   user.status.toLowerCase() === "active" && (
                     <button
                       onClick={() =>

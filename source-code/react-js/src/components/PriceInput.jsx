@@ -21,7 +21,7 @@ export default function PriceInput({ ...props }) {
             $
           </div>
           <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-4 text-gray-500">
-            DZD
+            {/* DZD */}
           </div>
         </div>
       </div>

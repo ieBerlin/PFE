@@ -36,7 +36,7 @@ export default function ReportsPage() {
     ],
   });
 
-  const { isPending: paymentsLoaderIndicator, data: paymentsData } = results[0];
+  const { isFetching: paymentsLoaderIndicator, data: paymentsData } = results[0];
   const {
     isPending: usersLoaderIndicator,
     data: usersData,
@@ -51,28 +51,10 @@ export default function ReportsPage() {
   if (paymentsData && paymentsData.length > 0) {
     paymentsData.forEach((payment) => {
       dates.push(payment.date);
-
-      const incomesInDay = [];
-      const expensesInDay = [];
-
-      if (payment.transactions && payment.transactions.length > 0) {
-        payment.transactions.forEach((item) => {
-          if (item.paymentType === "expense") {
-            expensesInDay.push(item);
-          } else {
-            incomesInDay.push(item);
-          }
-        });
-      }
-
-      incomes.push(incomesInDay);
-      expenses.push(expensesInDay);
+      incomes.push(payment.income);
+      expenses.push(payment.expense);
     });
-  } else {
-    incomes.push([]);
-    expenses.push([]);
   }
-
 
   return (
     <div className="bg-gray-50 w-full px-5 pt-4 pb-10">
@@ -130,12 +112,5 @@ export default function ReportsPage() {
 }
 
 function findMaxValue(data) {
-  const flattenedData = data.flat();
-  if (flattenedData.length === 0) {
-    return 1000;
-  }
-  const prices = flattenedData.map((item) => +item.price);
-
-  // Calculate the maximum value among the prices, considering 1000 as the default minimum
- return Math.max(...prices, 1000);
+  return Math.max(...data,200);
 }

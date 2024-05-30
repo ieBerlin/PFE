@@ -10,10 +10,9 @@ import FallbackText from "../../components/FallbackText.jsx";
 import CoachBio from "../coaches/CoachBio.jsx";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries } from "@tanstack/react-query";
 import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
-import SuccessMessage from "../../components/SuccessMessage.jsx";
 
 export default function CoachesList() {
   const { coachId } = useParams();
@@ -21,7 +20,6 @@ export default function CoachesList() {
   const isUserMember = useSelector(
     (state) => state.userRole?.userRole?.toLowerCase() === "member"
   );
-  const hasConnection = false;
   const results = useQueries({
     queries: [
       {
@@ -37,6 +35,7 @@ export default function CoachesList() {
             },
           }),
       },
+
       {
         queryKey: ["clients", "clients-" + coachId],
         queryFn: async () =>
@@ -52,7 +51,8 @@ export default function CoachesList() {
       },
     ],
   });
-  const { isPending, mutate, data, isError, error } = useMutation({
+
+  const { isPending, mutate, isError, error } = useMutation({
     mutationKey: ["client"],
     mutationFn: async () =>
       await fetchFun({
@@ -96,7 +96,6 @@ export default function CoachesList() {
   if (isCoachDataLoading) {
     return <FallbackText title="Fetching coach data..." />;
   }
-
   if (isCoachDataError) {
     if (coachDataError.code === 404) {
       return <FallbackText title="Coach not found!" />;
@@ -113,23 +112,26 @@ export default function CoachesList() {
     );
   }
 
-  if (!coachDetails) {
-    <p className="text-black text-center text-xl font-semibold my-16">
-      Nothing to show
-    </p>;
+  if (!coachDetails || coachDetails.length === 0) {
+    return (
+      <div className="px-3 my-4">
+        {" "}
+        <FallbackText title="No coach found" />
+      </div>
+    );
   }
 
   const { first_name, last_name, email: coachEmail } = coachDetails;
-  const coachExperienceLevel = coachDetails.experienceLevel ?? "not set yet";
-  const coachSpecialization = coachDetails.specialization ?? "not set yet";
-  const totalMembersTrained = coachDetails.totalTrainedMembers ?? 0;
-  const contactDetails = coachDetails.contact ?? "[]";
-  const certificationList = coachDetails.certifications ?? [];
-  const coachImage = coachDetails.image
+  const coachExperienceLevel = coachDetails?.experienceLevel ?? "not set yet";
+  const coachSpecialization = coachDetails?.specialization ?? "not set yet";
+  const totalMembersTrained = coachDetails?.totalTrainedMembers ?? 0;
+  const contactDetails = coachDetails?.contact ?? "[]";
+  const certificationList = coachDetails?.certifications ?? [];
+  const coachImage = coachDetails?.image
     ? "http://localhost:8081/uploads/images/profile/" + coachDetails.image
     : "http://localhost:8081/uploads/images/sport/coach.jpg";
-    console.log(coachDetails)
-  const coachBioText = coachDetails.bio ?? "";
+
+  const coachBioText = coachDetails?.bio ?? "";
   const contactLinks = JSON.parse(contactDetails);
   const coachBioData = {
     bio: coachBioText,
@@ -137,9 +139,9 @@ export default function CoachesList() {
   };
   const coachFullName = first_name + " " + last_name;
   const getStatusClass = () => {
-    if (clientStatus.status === "pending") {
+    if (clientStatus?.status === "pending") {
       return "bg-amber-500 cursor-default";
-    } else if (clientStatus.status === "contacted") {
+    } else if (clientStatus?.status === "contacted") {
       return "bg-emerald-600 hover:bg-emerald-500";
     } else {
       return "bg-blue-600 hover:bg-blue-500";
@@ -147,9 +149,9 @@ export default function CoachesList() {
   };
 
   const getStatusLabel = () => {
-    if (clientStatus.status === "pending") {
+    if (clientStatus?.status === "pending") {
       return "Pending";
-    } else if (clientStatus.status === "contacted") {
+    } else if (clientStatus?.status === "contacted") {
       return isPending ? "Processing" : "Contacted";
     } else {
       return "Send Request";
@@ -177,7 +179,7 @@ export default function CoachesList() {
             <div className="flex flex-row justify-between gap-3">
               <h1 className="font-bold text-2xl">{coachFullName}</h1>
               {isUserMember &&
-                (clientStatus.status === "contacted" ? (
+                (clientStatus?.status === "contacted" ? (
                   <Link
                     to={"connect"}
                     className={
@@ -189,7 +191,7 @@ export default function CoachesList() {
                   </Link>
                 ) : (
                   <button
-                    disabled={isPending || clientStatus.status === "pending"}
+                    disabled={isPending || clientStatus?.status === "pending"}
                     onClick={mutate}
                     className={
                       "px-3 py-2 font-medium rounded-lg text-white " +

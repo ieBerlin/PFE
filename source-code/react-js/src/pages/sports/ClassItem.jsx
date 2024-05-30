@@ -47,7 +47,6 @@ export default function ClassItem({ data }) {
     day: "numeric",
     year: "numeric",
   });
-console.log(instructor_extra_info)
   const formattedTime = String(time).split(":").slice(0, 2).join(":");
   const coachImage = instructor_extra_info?.image
     ? "http://localhost:8081/uploads/images/profile/" +
@@ -100,11 +99,13 @@ console.log(instructor_extra_info)
               <span className="font-medium text-cyan-600">{classStatus}</span>
             </h2>
           )}
-          {isDropDownActive && (
+          {isDropDownActive && instructor_extra_info?.coachId && (
             <div
               onClick={(e) => {
                 e.preventDefault();
-                navigate("/coaches/" + instructor_extra_info?.coachId);
+                if (instructor_extra_info?.coachId) {
+                  navigate("/coaches/" + instructor_extra_info?.coachId);
+                }
               }}
               className={`${instructorDropDownMenuClasses} shadow-sm bg-cyan-500 hover:bg-cyan-700`}
               onMouseOver={() => handleInstructorDropDown(true)}
@@ -114,7 +115,7 @@ console.log(instructor_extra_info)
                 <img src={coachImage} alt="coach avatar" />
                 <div className="text-start">
                   <h2 className="text-black text-md font-medium">
-                  {instructor_extra_info?.name}
+                    {instructor_extra_info?.name}
                   </h2>
                   <h4 className="text-white text-sm">{coachEmail}</h4>
                 </div>

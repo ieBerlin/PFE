@@ -323,6 +323,18 @@ export default function ModalContent({
         }}
       />
     );
+  } else if (type === "confirm-recharge-membership") {
+    return (
+      <ConfirmModal
+        color="blue"
+        title="Memberhsip recharged Successfully"
+        description="Memberhsip has been successfully recharged."
+        onConfirm={() => {
+          queryClient.invalidateQueries(["membership"]);
+          dispatch(setModalType());
+        }}
+      />
+    );
   } else {
     return (
       <div className="w-full h-full text-center py-10 flex flex-col gap-4 px-20 bg-white rounded-md">

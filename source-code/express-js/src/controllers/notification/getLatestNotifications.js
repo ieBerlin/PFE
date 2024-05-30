@@ -7,17 +7,14 @@ const getLatestNotifications = async(req, res) => {
             return res.status(400).json({ error: 'No user id provided!' });
         }
 
-        // Calculate the date 7 days ago
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        const sql = 'SELECT * FROM notifications WHERE userId = ? AND created_at >= ?';
-        const [result] = await pool.query(sql, [userId, sevenDaysAgo]);
+        const sql = 'SELECT * FROM notifications WHERE userId = ? AND isRead = 0';
+        const [result] = await pool.query(sql, [userId]);
 
 
         setTimeout(() => {
             return res.status(200).json(result);
-        }, 1500);
+        }, 500);
 
     } catch (error) {
         console.error('Error retrieving notifications:', error);

@@ -18,7 +18,6 @@ const upload = multer({
 
 function storageImage(req, res, next) {
     upload.single("image")(req, res, function(err) {
-        console.log(req.file)
         if (err instanceof multer.MulterError) {
             return res.status(400).json({ error: "Multer error occurred." });
         } else if (err) {

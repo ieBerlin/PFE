@@ -1,4 +1,4 @@
-const { validateLoginInputs, userExists, comparePassword } = require("./func");
+const { validateLoginInputs, userExists, comparePassword, checkUserStatus } = require("./func");
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../config/jwt_secret.js')
 const { fetchUserRole } = require('../../middlewares/auth/userRole.js')
@@ -23,6 +23,12 @@ const loginUser = async(req, res) => {
             if (!(await userExists(email, null))) {
                 return res.status(404).json({ message: "User not found" });
             }
+            console.log(await checkUserStatus(email, null))
+            if (await checkUserStatus(email, null)) {
+                console.log('user has been blocked!')
+                return res.status(403).json({ message: "User has been blocked!" });
+            }
+            console.log('user is active!')
             const passwordMatch = await comparePassword({
                 type: "email",
                 plainPassword: password,

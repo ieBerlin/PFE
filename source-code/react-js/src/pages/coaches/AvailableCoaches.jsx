@@ -56,11 +56,11 @@ function CoachList({ coaches }) {
       </div>
     );
   }
-
+console.log(coaches)
   return (
     <ul
-      className="mt-30 grid gap-5 rounded-md pb-8"
-      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
+      className="mt-30 grid gap-5 justify-center rounded-md pb-8"
+      style={{ gridTemplateColumns: "repeat(auto-fill, minmax(300px, 350px))" }}
     >
       {coaches.map((coach) => (
         <CoachCard key={coach.userId} coach={coach} />
@@ -70,16 +70,14 @@ function CoachList({ coaches }) {
 }
 export function CoachCard({ coach }) {
   const coachImage = coach.image
-  ? "http://localhost:8081/uploads/images/profile/" + coach.image
-  : "http://localhost:8081/uploads/images/sport/coach.jpg";
+    ? "http://localhost:8081/uploads/images/profile/" + coach.image
+    : "http://localhost:8081/uploads/images/sport/coach.jpg";
   return (
     <li className="relative my-4 mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl bg-red-500">
         <img
           className="object-cover flex w-full h-full"
-          src={
-           coachImage
-          }
+          src={coachImage}
           alt="Coach"
         />
         <span className="absolute top-0 left-0 m-2 rounded-xl bg-gray-700 p-[4px] text-center text-sm font-medium text-white">
@@ -87,7 +85,7 @@ export function CoachCard({ coach }) {
         </span>
       </div>
       <div className="mt-4 px-5 pb-5">
-        <Link to={`${coach.userId}`}>
+        <Link to={`${coach.coachId}`}>
           <h5 className="text-xl tracking-tight text-slate-900">
             {coach?.first_name + " " + coach?.last_name}
           </h5>
@@ -100,7 +98,7 @@ export function CoachCard({ coach }) {
           </div>
         </div>
         <Link
-          to={`${coach.userId ?? ""}`}
+          to={`${coach.coachId ?? ""}`}
           className="flex items-center justify-center rounded-md bg-blue-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
         >
           See more <ChevronRightIcon className="ml-2 h-6 w-6" />

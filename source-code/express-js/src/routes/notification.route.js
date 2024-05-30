@@ -10,6 +10,6 @@ const markNotificationAsRead = require("../controllers/notification/markAsRead.j
 router.get("/get-latest-notifications", verifyToken, getLatestNotifications);
 router.get("/get-all-notifications", verifyToken, getAllNotifications);
 router.post("/", verifyToken, createNotification);
-router.post("/mark-as-read/:messageId", verifyToken, authUserRole, markNotificationAsRead);
+router.put("/mark-as-read", verifyToken, markNotificationAsRead);
 
 module.exports = router;

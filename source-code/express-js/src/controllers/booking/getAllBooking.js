@@ -16,7 +16,7 @@ const getBooking = async (req, res) => {
 
         // Fetch user role
         const [userRoleResult] = await pool.query(
-          "SELECT role FROM users WHERE userId = ?",
+          "SELECT role,image FROM users WHERE userId = ?",
           [item.userId]
         );
 
@@ -34,6 +34,7 @@ const getBooking = async (req, res) => {
           ...item,
           price: equipmentResult[0]?.price,
           staff: userRoleResult[0]?.role,
+          image: userRoleResult[0]?.image,
           date: formattedDate,
           time: formattedTime,
         };

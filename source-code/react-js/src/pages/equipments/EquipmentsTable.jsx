@@ -17,14 +17,11 @@ import { Form, Link } from "react-router-dom";
 import FilterDropdown from "../../components/FilterDropdown";
 import { fetchFun, getToken, queryClient } from "../../hooks/http";
 const selectedBookings = {
-  userType: {
-    coach: true,
-    member: true,
-  },
   status: {
     rejected: true,
     pending: true,
-    approved: true,
+    confirmed: true,
+    overdue: true,
   },
 };
 export default function EquipmentsTable({ data }) {
@@ -47,12 +44,8 @@ export default function EquipmentsTable({ data }) {
           setData={setCurrentSelectedBookings}
           filterOptionsData={[
             {
-              title: "user.Type",
-              options: ["member", "coach"],
-            },
-            {
               title: "status",
-              options: ["pending", "approved", "rejected"],
+              options: ["pending", "confirmed", "rejected", "overdue"],
             },
           ]}
         />
@@ -117,6 +110,10 @@ export default function EquipmentsTable({ data }) {
                   </thead>
                   <tbody className="divide-y divide-gray-200 ">
                     {filteredBookings.map((booking, index) => {
+                      const image = booking?.image
+                        ? "http://localhost:8081/uploads/images/profile/" +
+                          booking.image
+                        : "http://localhost:8081/uploads/images/profile/default-user-image.webp";
                       return (
                         <tr key={index}>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
@@ -129,8 +126,8 @@ export default function EquipmentsTable({ data }) {
                             {booking.time}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
-                            <Link to={`/users/${booking.userId}`}>
-                              {booking.staff}
+                            <Link to={`/user/${booking.userId}`}>
+                              <img src={image} className="w-10 h-10 rounded-full object-cover" />
                             </Link>
                           </td>
                           <UserTypeData type={booking.staff} />
@@ -222,7 +219,7 @@ function StatusTableData({ status, data }) {
   let textStyle;
   if (status.toLowerCase() === "pending") {
     textStyle = " text-amber-500";
-  } else if (status.toLowerCase() === "approved") {
+  } else if (status.toLowerCase() === "confirmed") {
     textStyle = " text-green-500";
   } else if (status.toLowerCase() === "rejected") {
     textStyle = " text-red-500";
@@ -277,9 +274,9 @@ function StatusTableData({ status, data }) {
                   name="status"
                   className="py-2 outline-none px-4 pe-9  border-gray-200 rounded-lg text-sm border-1 focus:border-blue-500 ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                 >
-                  <option value="pending">pending</option>
-                  <option value="rejected">rejected</option>
-                  <option value="approved">approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="rejected">Rejected</option>
+                  <option value="confirmed">Confirmed</option>
                 </select>
 
                 {/* <Button
@@ -393,14 +390,7 @@ function StatusTableData({ status, data }) {
   );
 }
 function UserTypeData({ type }) {
-  let styles;
-  if (type?.toLowerCase() === "coach") {
-    styles = " text-blue-700 bg-blue-200";
-  } else if (type?.toLowerCase() === "member") {
-    styles = " text-emerald-700 bg-emerald-200";
-  } else {
-    styles = " text-gray-900 bg-gray-200";
-  }
+  let styles = "text-blue-700 bg-blue-200";
   return (
     <td className="px-6 py-4 whitespace-nowrap text-sm  font-medium">
       <div className={`${styles} text-center rounded-md`}>{type}</div>
@@ -410,16 +400,27 @@ function UserTypeData({ type }) {
 
 const filterBookings = (data, selectedBookings) => {
   return data.filter((booking) => {
-    console.log(booking);
-    const isUserTypeSelected = Object.entries(selectedBookings.userType).every(
-      ([userType, isSelected]) =>
-        isSelected || booking?.staff?.toLowerCase() !== userType
-    );
-    const isStatusSelected = Object.entries(selectedBookings.status).every(
-      ([status, isSelected]) =>
-        isSelected || booking.status.toLowerCase() !== status
+    const isStatusSelected = Object.entries(selectedBookings.status).some(
+      ([status, isSelected]) => {
+        if (!isSelected) return false;
+
+        if (
+          status === "overdue" &&
+          booking.status.toLowerCase() === "confirmed"
+        ) {
+          const currentDate = new Date();
+          const bookingDate = new Date(booking.date);
+
+          const differenceInMillis = currentDate - bookingDate;
+
+          const differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
+
+          return differenceInDays > 10;
+        }
+        return booking.status.toLowerCase() === status;
+      }
     );
 
-    return isUserTypeSelected && isStatusSelected;
+    return isStatusSelected;
   });
 };

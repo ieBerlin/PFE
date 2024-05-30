@@ -31,8 +31,9 @@ function ClientCard({ client }) {
         <img
           className="object-cover flex w-full h-full"
           src={
-            client.image ??
-            "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+            client.image
+              ? "http://localhost:8081/uploads/images/profile/" + client.image
+              : "http://localhost:8081/uploads/images/profile/default-user-image.webp"
           }
           alt="Coach"
         />

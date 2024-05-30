@@ -5,36 +5,30 @@ import DateInput from "../../../components/DateInput";
 import PhoneNumberInput from "../../../components/PhoneNumberInput";
 import TextAreaInput from "../../../components/TextAreaInput";
 import GenderInput from "../../../components/GenderInput";
-import defaultUserImage from "../../../assets/default-user.webp";
-import { useRef, useState } from "react";
+
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 
-export default function SignUpForm({submitButtonRef}) {
+export default function SignUpForm({
+  submitButtonRef,
+  currentImageSrc,
+  onImageChange,
+}) {
   const isAdmin = useSelector(
     (state) => state.userRole.userRole?.toLowerCase() === "admin"
   );
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCurrentImageSrc(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
   const pickImage = () => {
     if (imageRef.current) {
       imageRef.current.click();
     }
   };
-  const [currentImageSrc, setCurrentImageSrc] = useState(defaultUserImage);
+
   const imageRef = useRef();
 
   return (
     <>
       <div className="flex flex-row justify-between items-center gap-4">
-        <div className="flex relative">
+        {/* <div className="flex relative">
           <img
             className="rounded-xl  w-32 h-32 object-cover"
             src={currentImageSrc}
@@ -44,7 +38,7 @@ export default function SignUpForm({submitButtonRef}) {
             type="file"
             name=""
             accept="image/png, image/jpeg"
-            onChange={handleImageChange}
+            onChange={onImageChange}
             ref={imageRef}
             style={{ display: "none" }}
           />
@@ -54,7 +48,7 @@ export default function SignUpForm({submitButtonRef}) {
               style={{ bottom: "-16px", right: "-16px" }}
             />
           </button>
-        </div>
+        </div> */}
         {isAdmin ? (
           <select
             name="user-role"

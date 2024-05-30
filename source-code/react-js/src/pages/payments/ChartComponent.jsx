@@ -4,11 +4,10 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
   useEffect(() => {
-    const incomeTotal = incomeData.flat().reduce((acc, curr) => {
-      return acc + +curr.price;
+    const incomeTotal = incomeData?.reduce((acc, curr) => {
+      return acc + +curr;
     }, 0);
-    const expenseTotal =
-      expenseData.flat().reduce((acc, curr) => acc + +curr.price, 0) 
+    const expenseTotal = expenseData?.reduce((acc, curr) => acc + +curr, 0);
     setTotalIncome(incomeTotal);
     setTotalExpense(expenseTotal);
   }, [incomeData, expenseData]);
@@ -71,20 +70,12 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
     series: [
       {
         name: "Income",
-        data: incomeData.map((item) => {
-          if (item.length === 0) {
-            return 0;
-          } else {
-            const data = item.flat().map((item) => +item.price);
-            const sum = data.reduce((acc, curr) => acc + curr, 0);
-            return sum;
-          }
-        }),
+        data: incomeData,
         color: "#22C55E",
       },
       {
         name: "Expense",
-        data: expenseData.map(({ price }) => price),
+        data: expenseData,
         color: "#ef4444",
       },
     ],
@@ -125,7 +116,7 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
               {/* Expense popover */}
             </h5>
             <p className="text-gray-900 text-2xl leading-none font-bold">
-              ${totalExpense??0}
+              ${totalExpense ?? 0}
             </p>
           </div>
           <div>

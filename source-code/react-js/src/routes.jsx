@@ -45,6 +45,7 @@ import UpdateUserPasswordPage from "./pages/user/UpdateUserPasswordPage.jsx";
 import CoachPageDetails from "./pages/coaches/CoachPageDetails.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
 import CoachingPage from "./pages/coaches/connect-with/CoachingPage.jsx";
+import ClientsRequestsPage from "./pages/coaches/connect-with/ClientsRequestsPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -146,9 +147,9 @@ const router = createBrowserRouter([
                 element: <CoachPageDetails />,
               },
               {
-                path:"connect",
-                element:<CoachingPage/>
-              }
+                path: "connect",
+                element: <CoachingPage />,
+              },
             ],
           },
         ],
@@ -193,7 +194,16 @@ const router = createBrowserRouter([
       },
       {
         path: "clients",
-        element: <ClientsPage />,
+        children: [
+          {
+            index: true,
+            element: <ClientsPage />,
+          },
+          {
+            path: "requests",
+            element: <ClientsRequestsPage />,
+          },
+        ],
       },
       {
         path: "coaching",

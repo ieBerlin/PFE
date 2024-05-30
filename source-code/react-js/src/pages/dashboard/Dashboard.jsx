@@ -8,15 +8,16 @@ import { Link } from "react-router-dom";
 import BillingHistory from "../../components/BillingHistory.jsx";
 import { fetchFun, getToken } from "../../hooks/http.js";
 import { useQueries } from "@tanstack/react-query";
-import FallbackText from "../../components/FallbackText.jsx"
-import { useState } from "react";
+import FallbackText from "../../components/FallbackText.jsx";
 import { useSelector } from "react-redux";
 // Dashboard component
 export default function Dashboard() {
-  const userRole = useSelector(state=>state.userRole?.userRole?.toLowerCase()==='admin');
-  
-  if(!userRole){
-    throw {status:403}
+  const userRole = useSelector(
+    (state) => state.userRole?.userRole?.toLowerCase() === "admin"
+  );
+
+  if (!userRole) {
+    throw { status: 403 };
   }
   const data = useQueries({
     queries: [
@@ -76,7 +77,7 @@ export default function Dashboard() {
     ? [
         {
           label: "New Users",
-          value: `$${basicInformations?.newUsers?.currentMonth ?? 0}`, // Update value based on fetched data
+          value: `${basicInformations?.newUsers?.currentMonth ?? 0}`, // Update value based on fetched data
           icon: (
             <ChartBarIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
           ),
@@ -119,7 +120,7 @@ export default function Dashboard() {
         },
         {
           label: "Reserved Equipment",
-          value: `$${basicInformations?.reservedEquipments?.currentMonth ?? 0}`, // Update value based on fetched data
+          value: `${basicInformations?.reservedEquipments?.currentMonth ?? 0}`, // Update value based on fetched data
           icon: (
             <Cog8ToothIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
           ),
@@ -137,6 +138,9 @@ export default function Dashboard() {
     <div className="bg-gray-100 w-full px-5 pt-4 pb-10">
       <h1 className="text-4xl mb-3">Dashboard</h1>
       <div className="my-4 px-5">
+        <h1 className="my-2 font-semibold text-gray-700 text-xl">
+          Quantify the expansion of the gym from last month to this month
+        </h1>
         <div
           style={{
             gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
@@ -154,7 +158,10 @@ export default function Dashboard() {
             />
           ))}
         </div>
-        <div className="flex gap-2 flex-col bg-white mt-2 rounded-md hover:shadow-md">
+        <div className="flex gap-2 flex-col  mt-2 rounded-md hover:shadow-md">
+          <h1 className="my-2 font-semibold text-gray-700 text-xl">
+            Billing History of The gym
+          </h1>
           {data[1].isPending ? (
             <FallbackText title={"Fetching billing data"} />
           ) : (

@@ -12,6 +12,7 @@ import { setModalType } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
 
 export default function AddEquipmentModal({ onClose }) {
+  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
   const submitButtonRef = useRef();
   const [previewImageSrc, setPreviewImageSrc] = useState(
@@ -34,9 +35,28 @@ export default function AddEquipmentModal({ onClose }) {
         },
       }),
 
-    // onSuccess: () => {
-    //   window.location.reload();
-    // },
+    onSuccess: async (data) => {
+      if (image && data && data.id) {
+        try {
+          const formData = new FormData();
+          formData.append("image", image);
+          await fetch(
+            "http://localhost:8081/equipments/update-equipment-image/" +
+              data.id,
+            {
+              method: "PUT",
+              body: formData,
+              headers: {
+                "x-access-token": getToken(),
+              },
+            }
+          );
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+      dispatch(setModalType("confirm-add-equipment"));
+    },
     onError: (error) => {
       if (typeof error === "string") {
         return error;
@@ -75,6 +95,7 @@ export default function AddEquipmentModal({ onClose }) {
       reader.onloadend = () => {
         setPreviewImageSrc(reader.result);
       };
+      setImage(file);
       reader.readAsDataURL(file);
     }
   };
@@ -89,10 +110,6 @@ export default function AddEquipmentModal({ onClose }) {
         : "An error occured!"}
     </div>
   );
-
-  if (data && !isPending) {
-    dispatch(setModalType("confirm-add-equipment"));
-  }
 
   return (
     <div className="bg-white px-8 pb-4 pt-5 rounded-md ">

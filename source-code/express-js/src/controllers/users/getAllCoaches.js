@@ -12,7 +12,7 @@ const getAllCoach = async(req, res) => {
 
         // Loop over each user and get additional coach details
         const detailedResults = await Promise.all(users.map(async(user) => {
-            const [coachDetails] = await pool.query('SELECT * FROM coaches WHERE userId = ?', [user.userId]);
+            const [coachDetails] = await pool.query('SELECT * FROM coaches WHERE coachId = ?', [user.userId]);
             return {
                 ...user,
                 ...coachDetails[0]

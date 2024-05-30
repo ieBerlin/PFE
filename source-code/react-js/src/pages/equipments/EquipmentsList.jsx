@@ -112,10 +112,10 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
   const { userRole } = useSelector((state) => state.userRole);
   const dispatch = useDispatch();
   const image = equipmentData.image
-  ? equipmentData.image.startsWith("http://")
-    ? equipmentData.image
-    : "http://localhost:8081/uploads/images/equipment/" + equipmentData.image
-  : "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg";
+    ? equipmentData.image.startsWith("http://")
+      ? equipmentData.image
+      : "http://localhost:8081/uploads/images/equipment/" + equipmentData.image
+    : "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg";
 
   return (
     <li
@@ -189,10 +189,13 @@ function filterEquipements(equipments, selectedEquipments, inputValue) {
   });
 
   return filterEquipmentsDependOnInputValue.filter((equipment) => {
-    return !Object.entries(selectedEquipments.category).some(
-      ([category, isSelected]) =>
-        isSelected &&
-        equipment.category.toLowerCase() === category.toLowerCase()
+    return Object.entries(selectedEquipments.category).some(
+      ([category, isSelected]) => {
+        return (
+          isSelected &&
+          equipment.category.toLowerCase() === category.toLowerCase()
+        );
+      }
     );
   });
 }

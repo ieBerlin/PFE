@@ -6,7 +6,7 @@ import { useState } from "react";
 import CoachBio from "../coaches/CoachBio.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
 import BillingHistory from "../../components/BillingHistory.jsx";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchFun, getToken } from "../../hooks/http.js";
 export default function UserPage() {
@@ -46,7 +46,40 @@ export default function UserPage() {
       },
     ],
   });
+  const queriesResult = useQueries({
+    queries: [
+      {
+        queryKey: ["coaches"],
 
+        queryFn: async () =>
+          await fetchFun({
+            url: "http://localhost:8081/coaches/" + userId,
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+
+        enabled: results[0].data?.role === "coach",
+      },
+      {
+        queryKey: ["membership"],
+        queryFn: async () =>
+          await fetchFun({
+            url: `http://localhost:8081/membership/membership-status/` + userId,
+            options: {
+              method: "GET",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          }),
+      },
+    ],
+  });
+  const coachData = queriesResult[0].data;
   const billingHistory = results[1].data ?? [];
   const userData = results[0].data;
   const dispatch = useDispatch();
@@ -72,6 +105,7 @@ export default function UserPage() {
 
   // Calculate the width based on the membership days left
   // const width = Math.round(((30 - membershipDaysLeft) / 30) * 100);
+
   const name = first_name + " " + last_name;
   return (
     <>
@@ -109,26 +143,29 @@ export default function UserPage() {
                 info={email}
               />
             </div>
-            <div className="p-4 bg-blue-100 w-full">
-              <div className="inline-block mb-2 ml-[calc(25%-1.25rem)] py-0.5 px-1.5 bg-blue-50 border border-blue-200 text-xs font-medium text-blue-600 rounded-lg">
-                {/* {30 - membershipDaysLeft} */}
-              </div>
-              <div
-                className="flex w-full h-2 bg-gray-400 rounded-full overflow-hidden"
-                role="progressbar"
-                aria-valuenow="25"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                <div
-                  className="flex justify-center items-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500"
-                  // style={{ width: `${width}%` }}
-                ></div>
-              </div>
-              <h4 className="font-medium text-sm mt-4 text-center">
-                Remaining Days of User Membership
-              </h4>
-            </div>
+            {role.toLowerCase() === "member" && queriesResult[1].isFetching ? (
+              <h1 className="text-blue-600 font-semibold bg-gray-blue p-2 rounded-md">
+                Loading...
+              </h1>
+            ) : (
+              <>
+                {queriesResult[1].data?.status ? (
+                  <div className="p-4 bg-blue-100 w-full text-center">
+                    <h4 className="font-medium text-sm mt-4 text-center inline-block">
+                      Remaining Days of User Membership
+                    </h4>
+                    <div className="inline-block mb-2 py-0.5 px-1.5 bg-blue-50 border border-blue-200 text-xs font-medium text-blue-600 rounded-lg">
+                      {queriesResult[1].data?.daysLeft} Day Left
+                    </div>
+                  </div>
+                ) : (
+                  <h1 className="text-red-600 font-semibold bg-red-100 p-2 rounded-md">
+                    Membership ends
+                  </h1>
+                )}
+              </>
+            )}
+
             {role.toLowerCase() === "coach" && (
               <button
                 onClick={() =>
@@ -156,16 +193,25 @@ export default function UserPage() {
           {/* Action Buttons */}
           <div className="bg-white h-full w-min px-4 py-3 flex flex-col gap-2 items-center">
             <h1 className="font-semibold text-black">Actions</h1>
-            {(role.toLowerCase() === "member" ||
-              role.toLowerCase() === "coach") && (
-              <ActionButton
-                color="cyan"
-                onClick={() =>
-                  dispatch(setModalType("recharge-user-membership"))
-                }
-              >
-                Recharge
-              </ActionButton>
+            {role.toLowerCase() === "member" && (
+              <>
+                <ActionButton
+                  color="cyan"
+                  onClick={() =>
+                    dispatch(setModalType("recharge-user-membership"))
+                  }
+                >
+                  Recharge
+                </ActionButton>
+                <ActionButton
+                  color="blue"
+                  onClick={() =>
+                    dispatch(setModalType("notify-membership-end"))
+                  }
+                >
+                  Notify Membership End
+                </ActionButton>
+              </>
             )}
             <ActionButton
               color="red"
@@ -173,12 +219,7 @@ export default function UserPage() {
             >
               Delete Account
             </ActionButton>
-            <ActionButton
-              color="blue"
-              onClick={() => dispatch(setModalType("notify-membership-end"))}
-            >
-              Notify Membership End
-            </ActionButton>
+
             <ActionButton
               color="amber"
               onClick={() => dispatch(setModalType("custom-message"))}
@@ -227,25 +268,3 @@ function ContactInfoIcon({ icon, info }) {
     </div>
   );
 }
-const coachData = {
-  bio: `
-  John Doe is a passionate fitness coach with 5 years of experience.
-  Specializing in fitness training, he creates personalized programs
-  to help clients achieve their goals. John's approach is holistic,
-  focusing on strength, cardio, flexibility, and nutrition. With his
-  supportive and motivating style, he guides clients towards a
-  healthier lifestyle.`,
-  certificationsImages: [
-    "https://international-hospitality-institute.myshopify.com/cdn/shop/products/CHGMCertificateSample.png?v=1613853914",
-    "https://www.actfl.org/uploads/images/general/Opi-tester-certificate-sample.jpg",
-  ],
-  classes: [
-    {
-      href: "123",
-      img: "https://cdn.fleetfeet.com/assets/Blog/Post-Images/iStock-840886888.jpg/dynamic:1-aspect:2.4-fit:cover-strategy:entropy/iStock-840886888--1440.jpg",
-      title: "Class 2",
-      description:
-        "Phasellus consequat feugiat nulla at pharetra. Nulla facilisi. Cras sagittis placerat nisl, at efficitur libero fermentum id.",
-    },
-  ],
-};

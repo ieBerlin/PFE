@@ -99,6 +99,13 @@ const userExists = async(email, username) => {
     );
     return existingUser.length > 0;
 };
+const checkUserStatus = async(email, username) => {
+    const [result] = await pool.query(
+        "SELECT COUNT(*) AS count FROM users WHERE (email = ? OR username = ?) AND status = 'blocked'", [email, username]
+    );
+    return result[0].count;
+};
+
 
 const hashPassword = async(password) => {
     const saltRounds = 10;
@@ -172,5 +179,6 @@ module.exports = {
     userExists,
     validateLoginInputs,
     validateSignUpInputs,
-    comparePassword
+    comparePassword,
+    checkUserStatus
 };

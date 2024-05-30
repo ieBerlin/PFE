@@ -4,64 +4,72 @@ import { useState, useRef, useEffect } from "react";
 import { BellIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import NotificationItem from "./NotificationItem.jsx";
-import { fetchFun, getToken } from "../../../hooks/http.js";
+import { fetchFun, getToken, queryClient } from "../../../hooks/http.js";
 import LoadingIndicator from "../../LoadingIndicator.jsx";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 
 const token = getToken();
 
 const NotificationBell = () => {
-  const { data, isError, isPending } = useQuery({
-    queryKey: ["notifications"],
-    queryFn: async () => {
-      try {
-        const data = await fetchFun({
-          url: "http://localhost:8081/notification/get-latest-notifications",
-          options: {
-            method: "GET",
-            headers: {
-              "x-access-token": token,
-            },
-          },
-        });
-        return data || [];
-      } catch (error) {
-        return [];
-      }
-    },
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: ["notifications"],
+        queryFn: async () => {
+          try {
+            const data = await fetchFun({
+              url: "http://localhost:8081/notification/get-latest-notifications",
+              options: {
+                method: "GET",
+                headers: {
+                  "x-access-token": token,
+                },
+              },
+            });
+            return data || [];
+          } catch (error) {
+            return [];
+          }
+        },
+      },
+    ],
   });
-
+  const { data, isError, isFetching } = results[0];
+  const { mutate, error } = useMutation({
+    mutationKey: ["notification"],
+    mutationFn: async () =>
+      await fetchFun({
+        url: "http://localhost:8081/notification/mark-as-read",
+        options: {
+          method: "PUT",
+          headers: {
+            "x-access-token": getToken(),
+          },
+        },
+      }),
+    onMutate: () => console.log("mutated"),
+    onSuccess: () => queryClient.invalidateQueries(["notifications"]),
+  });
   const [isNotificationsVisible, setIsNotificationsVisible] = useState(false);
-  const [isNotificationsBoxAlreadyOpen, setIsNotificationsBoxAlreadyOpen] =
-    useState(false);
+  useEffect(() => {
+    if (isNotificationsVisible) {
+      return () => {
+        if (data) {
+          mutate();
+        }
+      };
+    }
+  }, [data, isNotificationsVisible, mutate]);
   const notificationBellRef = useRef(null);
   const notificationsMenuRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        !notificationBellRef.current.contains(event.target) &&
-        !notificationsMenuRef.current.contains(event.target)
-      ) {
-        setIsNotificationsVisible(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isNotificationsBoxAlreadyOpen]);
 
   const toggleNotifications = () => {
     setIsNotificationsVisible(
       (prevIsNotificationsVisible) => !prevIsNotificationsVisible
     );
-    setIsNotificationsBoxAlreadyOpen(true);
   };
   let notificationsContent;
-  if (isPending) {
+  if (isFetching) {
     notificationsContent = (
       <div className="py-3 items-center justify-center flex">
         <LoadingIndicator />
@@ -96,7 +104,7 @@ const NotificationBell = () => {
         <BellIcon className="text-white w-7 h-7" />
       </button>
 
-      {!isNotificationsBoxAlreadyOpen && data && !isError && (
+      {data && !isError && (
         <span className="badge">{data.length > 100 ? "+99" : data.length}</span>
       )}
 
@@ -108,7 +116,7 @@ const NotificationBell = () => {
         >
           <div className="notifications-header">
             <h1>Notifications</h1>
-            {data && !isError && (
+            {data && !isFetching && !isError && (
               <p className="new-notification">{data.length} New</p>
             )}
           </div>
