@@ -11,12 +11,13 @@ const rejectEquipmentBooking = require("../controllers/booking/rejectEquipmentBo
 const verifyToken = require("../middlewares/auth/authJWT.js");
 const authAdminOrManager = require("../middlewares/auth/authAdminOrManager.js");
 const authUserRole = require('../middlewares/auth/authUserRole.js');
+const createNotification = require("../controllers/notification/createNotification.js");
 
 router.get("/getUserEquipments", verifyToken, getUserEquipments);
 router.get("/", verifyToken, getAllBooking);
 router.get("/:bookingId", verifyToken, getSingleBooking);
 router.post("/", verifyToken, bookEquipment);
-router.put("/:bookingId", verifyToken, updateBooking);
+router.put("/:bookingId", verifyToken, updateBooking, createNotification);
 // Get single booking by ID
 
 // // Get all bookings (for admin or manager)

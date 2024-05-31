@@ -1,8 +1,6 @@
 import searchSvg from "../../assets/search-alt-2-svgrepo-com.svg";
-import logoutSvg from "../../assets/logout-3-svgrepo-com.svg";
 import SidebarListItem from "./SidebarListItem.jsx";
-import { useDispatch, useSelector } from "react-redux";
-import { setModalType } from "../../features/modal/modalSlice.js";
+import {  useSelector } from "react-redux";
 import { defineUserNavs } from "../../features/userRole/user-navs.jsx";
 import { useEffect, useState } from "react";
 
@@ -13,7 +11,7 @@ export default function NavList() {
     setCurrentDrawerItems(defineUserNavs(userRole)?.sidebar);
   }, [userRole]);
 
-  const dispatch = useDispatch();
+
 
   const toggleSearchInputChange = (e) => {
     const inputVal = e.target.value;
@@ -27,9 +25,7 @@ export default function NavList() {
       setCurrentDrawerItems(defineUserNavs(userRole)?.sidebar);
     }
   };
-  const signOutHandler = () => {
-    dispatch(setModalType("confirm-sign-out"));
-  };
+
   return (
     <ul className="nav-list">
       <li>

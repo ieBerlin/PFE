@@ -4,7 +4,21 @@ import ReportCard from "./ReportCard.jsx";
 import { useQueries } from "@tanstack/react-query";
 import ChartComponent from "../payments/ChartComponent.jsx";
 import { fetchFun, getToken } from "../../hooks/http.js";
+import { useSelector } from "react-redux";
+import ForbiddenPage from "../../components/ForbiddenPage.jsx";
 export default function ReportsPage() {
+  const userRole = useSelector(
+    (state) => state.userRole?.userRole?.toLowerCase() === "admin"
+  );
+
+  if (!userRole) {
+    return (
+      <ForbiddenPage
+        title=" Access Denied: Admins Only"
+        message="You do not have the necessary permissions to view this area. Admin access is required."
+      />
+    );
+  }
   const results = useQueries({
     queries: [
       {
@@ -36,7 +50,8 @@ export default function ReportsPage() {
     ],
   });
 
-  const { isFetching: paymentsLoaderIndicator, data: paymentsData } = results[0];
+  const { isFetching: paymentsLoaderIndicator, data: paymentsData } =
+    results[0];
   const {
     isPending: usersLoaderIndicator,
     data: usersData,
@@ -112,5 +127,5 @@ export default function ReportsPage() {
 }
 
 function findMaxValue(data) {
-  return Math.max(...data,200);
+  return Math.max(...data, 200);
 }

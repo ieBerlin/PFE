@@ -116,7 +116,7 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
               {/* Expense popover */}
             </h5>
             <p className="text-gray-900 text-2xl leading-none font-bold">
-              ${totalExpense ?? 0}
+              {totalExpense ?? 0} DZD
             </p>
           </div>
           <div>
@@ -125,7 +125,7 @@ export default function ChartComponent({ incomeData, expenseData, dates }) {
               {/* Income popover */}
             </h5>
             <p className="text-gray-900 text-2xl leading-none font-bold">
-              ${totalIncome}
+            {totalIncome ?? 0} DZD
             </p>
           </div>
         </div>

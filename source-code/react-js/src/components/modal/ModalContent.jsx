@@ -27,8 +27,7 @@ export default function ModalContent({
   function onClose() {
     dispatch(setModalType());
   }
-  const { userId } = useParams();
-
+  const { userId, coachId, classId: classID } = useParams();
   const navigate = useNavigate();
   function handleConfirmSignOut() {
     queryClient.cancelQueries();
@@ -55,6 +54,46 @@ export default function ModalContent({
         mutationFn={async () =>
           await fetchFun({
             url: "http://localhost:8081/user/profile/" + userId,
+            options: {
+              method: "DELETE",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          })
+        }
+      />
+    );
+  } else if (type === "delete-request") {
+    return (
+      <ConfirmationModal
+        title="Delete Request"
+        description="Are you certain you want to delete this coaching request? This action is irreversible."
+        confirmActionLabel="Delete"
+        onConfirm={() => onConfirm("confirm-delete-request")}
+        mutationFn={async () =>
+          await fetchFun({
+            url: "http://localhost:8081/clients/delete-coach/" + coachId,
+            options: {
+              method: "DELETE",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          })
+        }
+      />
+    );
+  } else if (type === "delete-class-request") {
+    return (
+      <ConfirmationModal
+        title="Delete Class Request"
+        description="Are you certain you want to delete this joing to class request? This action is irreversible."
+        confirmActionLabel="Delete"
+        onConfirm={() => onConfirm("confirm-delete-request-class")}
+        mutationFn={async () =>
+          await fetchFun({
+            url: "http://localhost:8081/enrollements/" + classID,
             options: {
               method: "DELETE",
               headers: {
@@ -128,7 +167,24 @@ export default function ModalContent({
   } else if (type === "custom-message") {
     return (
       <SendCustomMessage
+        title="Notify User of Custom Message"
         onConfirm={() => onConfirm("confirm-custom-message")}
+      />
+    );
+  } else if (type === "send-message-to-users") {
+    return (
+      <SendCustomMessage
+        title="Notify All Users with a notification"
+        onConfirm={() => onConfirm("confirm-custom-message")}
+        href={`${"http://localhost:8081/notification/all-users"}`}
+      />
+    );
+  } else if (type === "send-message-to-admin") {
+    return (
+      <SendCustomMessage
+        title="Send Message to Admin"
+        onConfirm={() => onConfirm("confirm-custom-message")}
+        href={`${"http://localhost:8081/notification/text-admin"}`}
       />
     );
   } else if (type === "delete-notification") {
@@ -174,6 +230,41 @@ export default function ModalContent({
         description="User has been successfully deleted."
         onConfirm={() => {
           navigate("/users");
+          dispatch(setModalType());
+        }}
+      />
+    );
+  } else if (type === "confirm-delete-request") {
+    return (
+      <ConfirmModal
+        color="red"
+        title="Request Deleted Successfully"
+        description="The request has been deleted successfully."
+        onConfirm={() => {
+          dispatch(setModalType());
+          queryClient.invalidateQueries(["clients", "clients-" + userId]);
+        }}
+      />
+    );
+  } else if (type === "confirm-delete-request-class") {
+    return (
+      <ConfirmModal
+        color="red"
+        title="Request Deleted Successfully"
+        description="The request has been deleted successfully."
+        onConfirm={() => {
+          dispatch(setModalType());
+          queryClient.invalidateQueries(["classes"]);
+        }}
+      />
+    );
+  } else if (type === "confirm-enroll-in-class") {
+    return (
+      <ConfirmModal
+        color="red"
+        title="Class Enrollment Request Submitted Successfully"
+        description="The class enrollment request has been successfully made."
+        onConfirm={() => {
           dispatch(setModalType());
         }}
       />
@@ -243,7 +334,6 @@ export default function ModalContent({
       />
     );
   } else if (type === "confirm-notify-membership-user") {
-    console.log("hi");
     return (
       <ConfirmModal
         color="green"

@@ -11,8 +11,16 @@ import { useMutation } from "@tanstack/react-query";
 import { fetchFun, getToken } from "../../hooks/http.js";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import { setModalType } from "../../features/modal/modalSlice.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ForbiddenPage from "../../components/ForbiddenPage.jsx";
 export default function CreateClassPage() {
+  const userRole = useSelector(
+    (state) => state.userRole?.userRole?.toLowerCase() === "admin"
+  );
+
+  if (!userRole) {
+   return <ForbiddenPage title=" Access Denied: Admins Only" message="You do not have the necessary permissions to view this area. Admin access is required."/>
+  }
   const dispatch = useDispatch();
   const submitButtonRef = useRef();
   const { isPending, data, isError, error, mutate } = useMutation({

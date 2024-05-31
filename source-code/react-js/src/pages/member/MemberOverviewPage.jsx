@@ -120,7 +120,7 @@ export default function MemberOverviewPage() {
               <p
                 className={`text-${membershipStatusStyle}-500 capitalize font-semibold`}
               >
-                {results[0].isLoading ? (
+                {results[0].isPending ? (
                   <h1 className=" text-blue-700 px-3 py-2 rounded">
                     Loading...
                   </h1>

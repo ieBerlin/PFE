@@ -144,7 +144,7 @@ export default function Transactions({ transactionsData }) {
                       : "text-red-500"
                   } font-bold`}
                 >
-                  ${transaction.price}
+                  {transaction.price} {" "}<span className="text-md text-gray-800 font-normal">dzd</span>
                 </h1>
               </div>
             </div>

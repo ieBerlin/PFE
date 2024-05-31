@@ -1,22 +1,15 @@
-import {
-  Await,
-  Form,
-  json,
-  Link,
-  useLoaderData,
-  useParams,
-} from "react-router-dom";
+import { Form, json, Link, useParams } from "react-router-dom";
 import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline";
 import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 import FallbackText from "../../components/FallbackText.jsx";
-import { Suspense } from "react";
 import SuggestedClassItem from "./SuggestedClassItem.jsx";
 import classes from "./ClassDetailPage.module.css";
 import brokenLinkSvg from "../../assets/broken-link-svgrepo-com.svg";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import { setModalType } from "../../features/modal/modalSlice.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ItemNotFound from "../../components/ItemNotFound.jsx";
 export default function ClassDetailsPage() {
   const { classId } = useParams();
 
@@ -26,7 +19,7 @@ export default function ClassDetailsPage() {
     error,
     data: loaderData,
   } = useQuery({
-    queryKey: ["enrollments-requests"],
+    queryKey: ["classes"],
     queryFn: async () =>
       await fetchFun({
         url: `http://localhost:8081/class/${classId}`,
@@ -36,19 +29,25 @@ export default function ClassDetailsPage() {
       }),
   });
   if (isPending) {
-    return <FallbackText title="Fetching enrollement requests" />;
+    return <FallbackText title="Fetching class data..." />;
   }
   if (isError) {
-    return (
-      <div className="">
-        <h1 className="font-medium text-lg text-red-500">Errors </h1>
-        {error
-          ? Object.entries(error.info).map(([key, value]) => (
-              <ErrorMessage key={key} title={key} message={value} />
-            ))
-          : "An error occured!"}
-      </div>
-    );
+    if (error?.code === 404) {
+      return (
+        <ItemNotFound title="The class information could not be retrieved." />
+      );
+    } else {
+      return (
+        <div className="">
+          <h1 className="font-medium text-lg text-red-500">Errors </h1>
+          {error
+            ? Object.entries(error.info).map(([key, value]) => (
+                <ErrorMessage key={key} title={key} message={value} />
+              ))
+            : "An error occured!"}
+        </div>
+      );
+    }
   }
   if (!loaderData) {
     return (
@@ -66,41 +65,28 @@ export default function ClassDetailsPage() {
     year: "numeric",
   });
   const formattedStartTime = formatTime(
-    classData.startDate,
-    classData.startTime
+    classData?.startDate,
+    classData?.startTime
   );
-  const formattedEndTime = formatTime(classData.endDate, classData.endTime);
+  const formattedEndTime = formatTime(classData?.endDate, classData?.endTime);
   return (
     <section className={classes.sectionContainer}>
       <ClassInformations
-        category={classData.category}
+        category={classData?.category}
         instructorData={instructorData}
-        title={classData.name}
-        description={classData.description}
+        title={classData?.name}
+        description={classData?.description}
         date={formattedDate}
         startTime={formattedStartTime}
         endTime={formattedEndTime}
-        maximumCapacity={classData.maximum_capacity}
-        instructor={classData.instructor_name}
-        currentEnrollementCount={classData.current_enrollment_count}
-        status={classData.status}
-        classId={classData.classId}
+        maximumCapacity={classData?.maximum_capacity}
+        instructor={classData?.instructor_name}
+        currentEnrollementCount={classData?.current_enrollment_count}
+        status={classData?.status}
+        classId={classData?.classId}
         enrollmentResult={enrollmentResult}
       />
     </section>
-  );
-}
-
-function NotFoundMessage() {
-  return (
-    <div className={classes.notFoundContainer}>
-      <img src={brokenLinkSvg} alt="" />
-      <p>Sorry, the sport you are looking for cannot be found.</p>
-      <p>Please check the URL or try navigating back to the classes page.</p>
-      <Link to="/classes" className={classes.backButton}>
-        Go back to classes page
-      </Link>
-    </div>
   );
 }
 
@@ -118,8 +104,8 @@ function ClassInformations({
   enrollmentResult,
 }) {
   const dispatch = useDispatch();
-  const { isPending, isError, error, mutate, data } = useMutation({
-    mutationKey: ["classes"],
+  const { isPending, isError, error, mutate } = useMutation({
+    mutationKey: ["class"],
     mutationFn: async () =>
       await fetchFun({
         url: "http://localhost:8081/class/enrollment-requests",
@@ -132,16 +118,18 @@ function ClassInformations({
           },
         },
       }),
-    onSuccess: () => queryClient.invalidateQueries(["enrollments-requests"]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["classes"]);
+      dispatch(setModalType("confirm-enroll-in-class"));
+    },
   });
   function handleSubmit(e) {
     e.preventDefault();
-    const fd = new FormData(e.target);
-    const transactionData = {
-      // applicant_user_id:,
-      // class_id:,
-    };
-    mutate(transactionData);
+    if (enrollmentResult?.status === "pending") {
+      dispatch(setModalType("delete-class-request"));
+    } else {
+      mutate();
+    }
   }
   let content;
   content = !isPending && isError && (
@@ -155,18 +143,19 @@ function ClassInformations({
     </div>
   );
 
-  if (data && !isPending) {
-    dispatch(setModalType("confirm-add-equipment"));
-  }
   let buttonLabel;
-  if (enrollmentResult && enrollmentResult.status === "pending") {
+  if (enrollmentResult && enrollmentResult?.status === "pending") {
     buttonLabel = "Pending";
+  } else if (enrollmentResult && enrollmentResult?.status === "confirmed") {
+    buttonLabel = "Enrolled";
   } else if (currentEnrollementCount >= maximumCapacity) {
     buttonLabel = "Full";
   } else {
     buttonLabel = "Enroll now";
   }
-  console.log(`http://localhost:8081/uploads/images/sport/${category}.jpg`);
+  const isMember = useSelector(
+    (state) => state?.userRole?.userRole?.toLowerCase() === "member"
+  );
   return (
     <Form onSubmit={handleSubmit}>
       <div className={classes.sportContainer}>
@@ -207,11 +196,11 @@ function ClassInformations({
                 With :{" "}
               </h3>
               <Link
-                to={`/coaches/${instructorData.userId}`}
+                to={`/coaches/${instructorData?.userId}`}
                 className="font-medium text-md text-gray-700 bg-blue-100 px-3 py-1 rounded-md"
               >
                 {" "}
-                {instructorData.name}
+                {instructorData?.name}
               </Link>
             </div>
             <div className=" my-2">
@@ -240,23 +229,26 @@ function ClassInformations({
             </div>
           </div>
         </div>
-        <div className="my-3 w-full flex justify-center">
-          <button
-            disabled={status}
-            type="submit"
-            className={`my-3 mx-auto w-min whitespace-nowrap rounded-lg font-bold py-2 px-8 
+        {isMember && (
+          <div className="my-3 w-full flex justify-center">
+            <button
+              disabled={status}
+              type="submit"
+              className={`my-3 mx-auto w-min whitespace-nowrap rounded-lg font-bold py-2 px-8 
               ${
-                enrollmentResult && enrollmentResult.status === "pending"
+                enrollmentResult && enrollmentResult?.status === "pending"
                   ? "bg-yellow-500 text-white"
+                  : enrollmentResult && enrollmentResult?.status === "confirmed"
+                  ? "bg-green-500 text-white"
                   : currentEnrollementCount >= maximumCapacity
                   ? "bg-red-600 text-white"
-                  : "bg-cyan-600 text-white hover:bg-cyan-400  hover:scale-105 "
-              }
-               hover:shadow-lgtransition duration-300`}
-          >
-            {buttonLabel}
-          </button>
-        </div>
+                  : "bg-cyan-600 text-white hover:bg-cyan-400 hover:scale-105"
+              } hover:shadow-lgtransition duration-300`}
+            >
+              {buttonLabel}
+            </button>
+          </div>
+        )}
         {content}
         {/* <RelatedItems title="Related Classes" items={DUMMY_SUGGESTED_CLASSES} /> */}
         {/* <RelatedItems title="Related Coaches" items={DUMMY_SUGGESTED_CLASSES} /> */}
@@ -265,42 +257,6 @@ function ClassInformations({
   );
 }
 
-function RelatedItems({ title, items }) {
-  return (
-    <div className={classes.relatedClasses}>
-      <h2 className="font-semibold text-lg text-gray-900">{title}</h2>
-      <ul>
-        {items.map((item) => (
-          <SuggestedClassItem
-            key={item.id}
-            title={item.title}
-            description={item.description}
-          />
-        ))}
-      </ul>
-      <div className={classes.allClassesButton}>
-        <Link to={`/all-${title.toLowerCase().replace(" ", "-")}`}>
-          See all {title.toLowerCase()}
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-export async function loader({ params }) {
-  const { classId } = params;
-  if (Number.isNaN(+classId)) {
-    return json({ status: 300 });
-  }
-
-  const data = await fetchFun({
-    url: `http://localhost:8081/class/${classId}`,
-    options: {
-      headers: { "x-access-token": getToken(), method: "GET" },
-    },
-  });
-  return data;
-}
 function formatTime(dateString, timeString) {
   // Combine date and time into a single string
   const combinedString = `${dateString.split("T")[0]}T${timeString}`;

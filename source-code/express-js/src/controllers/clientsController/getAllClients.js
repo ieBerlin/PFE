@@ -2,6 +2,7 @@ const { pool } = require("../../models/db/connect.js");
 
 const getAllClients = async (req, res) => {
   const { userId: coachId } = req;
+  console.log(coachId)
   const status = req.body?.status;
   let sql;
   if (status) {

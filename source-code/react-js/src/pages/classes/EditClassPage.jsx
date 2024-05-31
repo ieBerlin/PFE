@@ -12,11 +12,24 @@ import SelectInput from "../../components/SelectInput.jsx";
 import { categories } from "../../components/modal/AddEquipmentModal.jsx";
 import { ActionButton } from "../user/UserPage.jsx";
 import { setModalType } from "../../features/modal/modalSlice.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import Modal from "../../components/modal/Modal.jsx";
+import ForbiddenPage from "../../components/ForbiddenPage.jsx";
 
 export default function EditClassPage() {
+  const userRole = useSelector(
+    (state) => state.userRole?.userRole?.toLowerCase() === "admin"
+  );
+
+  if (!userRole) {
+    return (
+      <ForbiddenPage
+        title=" Access Denied: Admins Only"
+        message="You do not have the necessary permissions to view this area. Admin access is required."
+      />
+    );
+  }
   const submitButtonRef = useRef();
   const { classId } = useParams();
   const dispatch = useDispatch();
@@ -83,7 +96,12 @@ export default function EditClassPage() {
     return <FallbackText title="Fetching class information" />;
   }
 
-  if (fetchError || !queryData || !queryData.instructorData || !queryData.classData) {
+  if (
+    fetchError ||
+    !queryData ||
+    !queryData.instructorData ||
+    !queryData.classData
+  ) {
     return (
       <p className="font-semibold text-gray-900 text-xl">Nothing to show!</p>
     );
@@ -103,7 +121,7 @@ export default function EditClassPage() {
   if (data && !isEditingClass) {
     dispatch(setModalType("edit-class"));
   }
-  const {classData} = queryData;
+  const { classData } = queryData;
   return (
     <>
       <Modal classId={classId} />

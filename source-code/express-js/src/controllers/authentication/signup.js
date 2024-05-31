@@ -1,3 +1,4 @@
+const { pool } = require("../../models/db/connect.js");
 const {
     hashPassword,
     insertUser,
@@ -51,6 +52,7 @@ const createUser = async(req, res) => {
             phoneNumber,
             role
         });
+
         setTimeout(() => {
             return res.status(201).json({
                 message: "User created successfully"

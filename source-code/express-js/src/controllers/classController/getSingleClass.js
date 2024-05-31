@@ -31,9 +31,8 @@ const getSingleClass = async(req, res) => {
             if (classData.current_enrollment_count >= classData.maximum_capacity) {
                 status = "full";
             } else if (enrollmentResult[0]) {
-                status = "pending";
+                status = enrollmentResult[0].status;
             }
-            console.log(instructorResults[0]);
             return res.status(200).json({
                 classData,
                 instructorData: instructorResults[0],

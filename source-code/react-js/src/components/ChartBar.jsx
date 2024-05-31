@@ -6,7 +6,6 @@ export default function ChartBar({
   label,
 }) {
   const total = chatData.reduce((acc, curr) => acc + curr, 0);
-  console.log(total);
   return (
     <div className="bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg px-5 py-4 rounded-lg">
       <div className="flex flex-row justify-between items-center mb-3">
@@ -15,14 +14,14 @@ export default function ChartBar({
       <div className="flex flex-row items-center justify-between">
         <div />
         <h1 className="text-2xl font-bold">
-          ${isNaN(total) ? 0 : total.toFixed(2)}
+          {isNaN(total) ? 0 : total.toFixed(2)}{" "}DZD
         </h1>
       </div>
       <div>
         <div className="flex flex-row mt-2 text-stone-500 font-medium text-sm">
           <div className="grid grid-rows-5 w-14 text-center">
             {Array.from({ length: 5 }).map((_, index) => (
-              <h1 key={index}>${Math.ceil((maxYValue * (5 - index)) / 5)}</h1>
+              <h1 key={index}>{Math.ceil((maxYValue * (5 - index)) / 5)}</h1>
             ))}
           </div>
           <div

@@ -20,6 +20,7 @@ const getUserClasses = async(req, res) => {
             AND CONCAT(c.startDate, ' ', c.startTime) >= NOW() -- Filter out past events
     `;
         const [results] = await pool.query(sql, [userId]);
+        console.log(userId)
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error retrieving classes:", error);

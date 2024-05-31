@@ -9,7 +9,21 @@ import {
 } from "../../hooks/http.js";
 import AllUsersList from "./AllUsersList.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
+import { useSelector } from "react-redux";
+import ForbiddenPage from "../../components/ForbiddenPage.jsx";
 export default function AllUserPage() {
+  const userRole = useSelector(
+    (state) => state.userRole?.userRole?.toLowerCase() === "admin"
+  );
+
+  if (!userRole) {
+    return (
+      <ForbiddenPage
+        title=" Access Denied: Admins Only"
+        message="You do not have the necessary permissions to view this area. Admin access is required."
+      />
+    );
+  }
   return (
     <>
       <Modal />

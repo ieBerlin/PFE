@@ -152,8 +152,8 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
           ({equipmentData.availableQuantity}) Piece Left
         </h3>
         <div className="flex items-center gap-5">
-          <h2 className="text-purple-800 font-semibold text-xl">
-            ${equipmentData.price}
+          <h2 className="text-purple-800 font-semibold text-xl text-center">
+            {equipmentData.price} {" "}DZD
           </h2>
           {userRole?.toLowerCase() === "admin" ? (
             <button

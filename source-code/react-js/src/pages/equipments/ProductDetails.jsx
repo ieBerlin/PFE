@@ -6,6 +6,8 @@ import { fetchFun, getToken, queryClient } from "../../hooks/http";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import SuccessMessage from "../../components/SuccessMessage.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
+import { BellAlertIcon } from "@heroicons/react/20/solid";
+import ItemNotFound from "../../components/ItemNotFound.jsx";
 export default function ProductDetails() {
   const dispatch = useDispatch();
   const { equipmentId } = useParams();
@@ -28,6 +30,7 @@ export default function ProductDetails() {
               },
             },
           }),
+        retry: 2,
       },
       {
         queryKey: ["bookings", "bookings-" + equipmentId],
@@ -43,13 +46,13 @@ export default function ProductDetails() {
               },
             },
           }),
-        retryDelay: 3,
+        retry: 2,
       },
     ],
   });
+
   let availability;
   const availabilityData = results[1];
-  console.log(availabilityData.error?.info);
   if (
     availabilityData.isError &&
     availabilityData.error &&
@@ -96,6 +99,11 @@ export default function ProductDetails() {
   if (!results[0].data) {
     <FallbackText title="Nothing to show!" />;
   }
+  if (results[0].isError && results[0].error?.code === 404) {
+    return (
+      <ItemNotFound title="The equipment information could not be retrieved." />
+    );
+  }
   const { name, description, price } = results[0].data;
 
   let content;
@@ -134,6 +142,9 @@ export default function ProductDetails() {
     mutate();
   }
   const quantity = results[0].data?.availableQuantity;
+  const image = results[0].data.image
+    ? "http://localhost:8081/uploads/images/equipment/" + results[0].data.image
+    : "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg";
   return (
     <div className="bg-gray-100 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,9 +154,7 @@ export default function ProductDetails() {
               <img
                 loading="lazy"
                 className=" rounded-md w-full h-full object-cover"
-                src={
-                  "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg"
-                }
+                src={image}
                 alt={name}
               />
             </div>
@@ -183,7 +192,6 @@ export default function ProductDetails() {
                   </button>
                 )}
               </div>
-           
             </div>
           </div>
           <div className="md:flex-1 px-4">
@@ -192,7 +200,7 @@ export default function ProductDetails() {
             <div className="flex mb-4">
               <div className="mr-4">
                 <span className="font-bold text-gray-700 ">Price: </span>
-                <span className="text-gray-600 ">${price}</span>
+                <span className="text-gray-600 ">{price} DZD</span>
               </div>
               <div>
                 <span className="font-bold text-gray-700">Availability: </span>
@@ -203,8 +211,10 @@ export default function ProductDetails() {
             </div>
 
             <h1 className="text-red-500 font-semibold">
-              Note : <br/>{" "}<span className="text-gray-700">
-              If you've reserved this item, please ensure it is returned within 10 days, or you will receive a ban.
+              Note : <br />{" "}
+              <span className="text-gray-700">
+                If you've reserved this item, please ensure it is returned
+                within 10 days, or you will receive a ban.
               </span>
             </h1>
             {content}

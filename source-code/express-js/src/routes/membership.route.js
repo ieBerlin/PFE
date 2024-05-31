@@ -5,8 +5,14 @@ const getUsershipStatus = require("../controllers/membershipPlan/getUsershipStat
 const rechargerUserMembership = require("../controllers/membershipPlan/rechargerUserMembership.js");
 
 const verifyToken = require("../middlewares/auth/authJWT.js");
+const createNotification = require("../controllers/notification/createNotification.js");
 router.get("/membership-status", verifyToken, getUsershipStatus);
 router.get("/membership-status/:userId", verifyToken, getMembershipStatus);
-router.post("/recharge-user-membership/:userId", verifyToken, rechargerUserMembership);
+router.post(
+  "/recharge-user-membership/:userId",
+  verifyToken,
+  rechargerUserMembership,
+  createNotification
+);
 
 module.exports = router;

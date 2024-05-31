@@ -127,7 +127,10 @@ export default function EquipmentsTable({ data }) {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
                             <Link to={`/user/${booking.userId}`}>
-                              <img src={image} className="w-10 h-10 rounded-full object-cover" />
+                              <img
+                                src={image}
+                                className="w-10 h-10 rounded-full object-cover"
+                              />
                             </Link>
                           </td>
                           <UserTypeData type={booking.staff} />
@@ -163,7 +166,7 @@ function StatusTableData({ status, data }) {
     mutationKey: ["equipments", "bookings"],
     mutationFn: async (data) =>
       await fetchFun({
-        url: `${"http://localhost:8081/booking/" + data.bookingId}`,
+        url: `${"http://localhost:8081/booking/" + data?.bookingId}`,
         options: {
           method: "PUT",
           body: JSON.stringify(data),
@@ -177,7 +180,7 @@ function StatusTableData({ status, data }) {
       await queryClient.invalidateQueries([
         "equipments",
         "bookings",
-        "equipments-" + data.bookingId,
+        "equipments-" + data?.bookingId,
       ]),
   });
   let content;
@@ -209,19 +212,21 @@ function StatusTableData({ status, data }) {
   }
 
   function handleSubmit(e) {
+    e.preventDefault()
     const formData = new FormData(e.target);
     const fd = {
-      bookingId: data.bookingId,
+      bookingId: data?.bookingId,
       status: formData.get("status"),
+      userId: data?.userId,
     };
     mutate(fd);
   }
   let textStyle;
-  if (status.toLowerCase() === "pending") {
+  if (status?.toLowerCase() === "pending") {
     textStyle = " text-amber-500";
-  } else if (status.toLowerCase() === "confirmed") {
+  } else if (status?.toLowerCase() === "confirmed") {
     textStyle = " text-green-500";
-  } else if (status.toLowerCase() === "rejected") {
+  } else if (status?.toLowerCase() === "rejected") {
     textStyle = " text-red-500";
   } else {
     textStyle = " text-gray-800";
@@ -231,7 +236,7 @@ function StatusTableData({ status, data }) {
     <td
       className={`px-6 py-4 whitespace-nowrap text-sm ${textStyle} font-medium`}
     >
-      {status.toLowerCase() === "pending" ? (
+      {status?.toLowerCase() === "pending" ? (
         <Popover>
           <PopoverHandler>
             <Button className="p-0 shadow-none flex items-center flex-row bg-white">
@@ -245,26 +250,26 @@ function StatusTableData({ status, data }) {
                 <img
                   className="w-10 h-10 rounded-full"
                   src={
-                    data.image ??
+                    data?.image ??
                     "http://localhost:8081/uploads/images/sport/coach.jpg"
                   }
                   alt=""
                 />
-                <h1 className="font-bold tracking-wide">{data.staff}</h1>
+                <h1 className="font-bold tracking-wide">{data?.staff}</h1>
               </div>
               <div className="grid grid-cols-2 justify-center">
                 <div className="flex flex-row items-center  justify-center  m-2 gap-2">
                   <h3 className="text-gray-700">From </h3>
                   <h1 className="text-black font-semibold px-2 py-2 bg-gray-100 flex flex-row items-center gap-2 text-nowrap rounded-sm">
                     <CalendarDaysIcon className="w-4 h-4 text-gray-600" />
-                    {data.date}
+                    {data?.date}
                   </h1>
                 </div>
                 <div className="flex flex-row items-center   justify-center m-2 gap-2">
                   <h3 className="text-gray-700">To </h3>
                   <h1 className="text-black font-semibold px-2 py-2 bg-gray-100 flex flex-row items-center gap-2 text-nowrap rounded-sm">
                     <CalendarDaysIcon className="w-4 h-4 text-gray-600" />
-                    {data.time}
+                    {data?.time}
                   </h1>
                 </div>
               </div>
@@ -345,19 +350,19 @@ function StatusTableData({ status, data }) {
                     <h2 className="min-w-40 font-semibold inline-block  px-4 py-2">
                       Booking ID{" "}
                     </h2>
-                    <p className="inline">{data.bookingId}</p>
+                    <p className="inline">{data?.bookingId}</p>
                   </div>
                   <div>
                     <h2 className="min-w-40 font-semibold inline-block  px-4 py-2">
                       User Type{" "}
                     </h2>
-                    <p className="inline">{data.staff}</p>
+                    <p className="inline">{data?.staff}</p>
                   </div>
                   <div>
                     <h2 className="min-w-40 font-semibold inline-block  px-4 py-2">
                       Price{" "}
                     </h2>
-                    <p className="inline">{data.price}</p>
+                    <p className="inline">{data?.price}</p>
                   </div>
                 </div>
               </div>{" "}

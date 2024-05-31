@@ -8,6 +8,6 @@ export default function ErrorPage() {
     return <NotFoundPage />;
   }
   if (error && error.status === 403) {
-    return <ForbiddenPage />;
+    return <ForbiddenPage isThrownAsAnError />;
   } else return <ErrorBoundary />;
 }

@@ -62,7 +62,22 @@ const NotificationBell = () => {
   }, [data, isNotificationsVisible, mutate]);
   const notificationBellRef = useRef(null);
   const notificationsMenuRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        !notificationBellRef.current.contains(event.target) &&
+        !notificationsMenuRef.current.contains(event.target)
+      ) {
+        setIsNotificationsVisible(false);
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   const toggleNotifications = () => {
     setIsNotificationsVisible(
       (prevIsNotificationsVisible) => !prevIsNotificationsVisible

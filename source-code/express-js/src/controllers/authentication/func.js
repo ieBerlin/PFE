@@ -143,6 +143,7 @@ const insertUser = async({
     phoneNumber,
     role
 }) => {
+
     const formattedPhoneNumber = phoneNumberFormatter(phoneNumber);
     const formattedDateOfBirth = dateOfBirthFormatter(dateOfBirth);
     const sql = `
@@ -170,7 +171,10 @@ const insertUser = async({
         formattedPhoneNumber,
         role
     ];
-    await pool.execute(sql, values);
+    const [result] = await pool.execute(sql, values);
+    console.log(result)
+    await pool.query('INSERT INTO coaches (coachId) VALUES (?)', [result.insertId]);
+
 };
 
 module.exports = {

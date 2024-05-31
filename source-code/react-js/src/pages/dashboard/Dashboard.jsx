@@ -10,6 +10,7 @@ import { fetchFun, getToken } from "../../hooks/http.js";
 import { useQueries } from "@tanstack/react-query";
 import FallbackText from "../../components/FallbackText.jsx";
 import { useSelector } from "react-redux";
+import ForbiddenPage from "../../components/ForbiddenPage.jsx";
 // Dashboard component
 export default function Dashboard() {
   const userRole = useSelector(
@@ -17,7 +18,7 @@ export default function Dashboard() {
   );
 
   if (!userRole) {
-    throw { status: 403 };
+   return <ForbiddenPage title=" Access Denied: Admins Only" message="You do not have the necessary permissions to view this area. Admin access is required."/>
   }
   const data = useQueries({
     queries: [
@@ -90,9 +91,9 @@ export default function Dashboard() {
         },
         {
           label: "Spend this month",
-          value: `$${
+          value: `${
             basicInformations?.transactions?.expense?.currentMonth ?? 0
-          }`, // Update value based on fetched data
+          } DZD`, // Update value based on fetched data
           icon: (
             <ArrowTrendingDownIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
           ),
@@ -105,9 +106,9 @@ export default function Dashboard() {
         },
         {
           label: "Earn this month",
-          value: `$${
+          value: `${
             basicInformations?.transactions?.income?.currentMonth ?? 0
-          }`, // Update value based on fetched data
+          } DZD`, // Update value based on fetched data
           icon: (
             <ArrowTrendingUpIcon className="w-10 h-10 text-blue-800 bg-blue-100 rounded-full p-2" />
           ),

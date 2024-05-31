@@ -1,20 +1,31 @@
 import { useState } from "react";
 
-import {
-  AcademicCapIcon,
-  StarIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/solid";
+import { UserGroupIcon } from "@heroicons/react/24/solid";
 import Modal from "../../components/modal/Modal.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
-import CoachBio from "../coaches/CoachBio.jsx";
+import CoachBio from "./CoachBio.jsx";
 import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQueries } from "@tanstack/react-query";
 import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
+import ForbiddenPage from "../../components/ForbiddenPage.jsx";
+import ItemNotFound from "../../components/ItemNotFound.jsx";
+import { setModalType } from "../../features/modal/modalSlice.js";
 
 export default function CoachesList() {
+  const userRole = useSelector(
+    (state) => state.userRole?.userRole?.toLowerCase() === "member"
+  );
+
+  if (!userRole) {
+    return (
+      <ForbiddenPage
+        title="Members Only"
+        message="This section is restricted to members only. Please log in with your member credentials to proceed."
+      />
+    );
+  }
   const { coachId } = useParams();
   const [selectedImage, setSelectedImage] = useState(null);
   const isUserMember = useSelector(
@@ -51,7 +62,27 @@ export default function CoachesList() {
       },
     ],
   });
+  console.log(results[1].data);
 
+  if (results[0].isError) {
+    if (results[0].error?.code === 404) {
+      return (
+        <ItemNotFound title="The coach you're searching for couldn't be located." />
+      );
+    } else {
+      return (
+        <div className="">
+          <h1 className="font-medium text-lg text-red-500">Errors </h1>
+          {coachDataError
+            ? Object.entries(coachDataError.info).map(([key, value]) => {
+                return <ErrorMessage key={key} title={key} message={value} />;
+              })
+            : "An error occurred!"}
+        </div>
+      );
+    }
+  }
+const dispatch= useDispatch()
   const { isPending, mutate, isError, error } = useMutation({
     mutationKey: ["client"],
     mutationFn: async () =>
@@ -64,6 +95,7 @@ export default function CoachesList() {
           },
         },
       }),
+    // onMutate: (data) =>data,
     onSuccess: () => {
       queryClient.invalidateQueries(["clients", "clients-" + coachId]);
     },
@@ -83,46 +115,20 @@ export default function CoachesList() {
   const {
     isPending: isCoachDataLoading,
     data: coachDetails,
-    isError: isCoachDataError,
     error: coachDataError,
   } = results[0];
-  const {
-    isPending: isClientStatusLoading,
-    data: clientStatus,
-    isError: isClientStatusError,
-    error: clientStatusError,
-  } = results[1];
+  const { data: clientStatus } = results[1];
 
   if (isCoachDataLoading) {
     return <FallbackText title="Fetching coach data..." />;
   }
-  if (isCoachDataError) {
-    if (coachDataError.code === 404) {
-      return <FallbackText title="Coach not found!" />;
-    }
-    return (
-      <div className="">
-        <h1 className="font-medium text-lg text-red-500">Errors </h1>
-        {coachDataError
-          ? Object.entries(coachDataError.info).map(([key, value]) => {
-              return <ErrorMessage key={key} title={key} message={value} />;
-            })
-          : "An error occurred!"}
-      </div>
-    );
-  }
-
   if (!coachDetails || coachDetails.length === 0) {
     return (
-      <div className="px-3 my-4">
-        {" "}
-        <FallbackText title="No coach found" />
-      </div>
+      <ItemNotFound title="The coach you're searching for couldn't be located." />
     );
   }
 
   const { first_name, last_name, email: coachEmail } = coachDetails;
-  const coachExperienceLevel = coachDetails?.experienceLevel ?? "not set yet";
   const coachSpecialization = coachDetails?.specialization ?? "not set yet";
   const totalMembersTrained = coachDetails?.totalTrainedMembers ?? 0;
   const contactDetails = coachDetails?.contact ?? "[]";
@@ -140,7 +146,7 @@ export default function CoachesList() {
   const coachFullName = first_name + " " + last_name;
   const getStatusClass = () => {
     if (clientStatus?.status === "pending") {
-      return "bg-amber-500 cursor-default";
+      return "bg-amber-500 cursor-pointer";
     } else if (clientStatus?.status === "contacted") {
       return "bg-emerald-600 hover:bg-emerald-500";
     } else {
@@ -191,8 +197,12 @@ export default function CoachesList() {
                   </Link>
                 ) : (
                   <button
-                    disabled={isPending || clientStatus?.status === "pending"}
-                    onClick={mutate}
+                    disabled={isPending}
+                    onClick={
+                      clientStatus?.status === "pending"
+                        ? () => dispatch(setModalType('delete-request'))
+                        : () => mutate()
+                    }
                     className={
                       "px-3 py-2 font-medium rounded-lg text-white " +
                       getStatusClass()

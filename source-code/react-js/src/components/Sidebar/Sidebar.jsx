@@ -2,9 +2,18 @@ import "./Sidebar.css";
 import SidebarNavList from "./SidebarNavList.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../../features/sidebar/sidebarSlice.js";
-import { AcademicCapIcon, Bars3Icon } from "@heroicons/react/24/solid";
+import {
+  AcademicCapIcon,
+  Bars3Icon,
+  PlusIcon,
+} from "@heroicons/react/24/solid";
+import { setModalType } from "../../features/modal/modalSlice.js";
 export default function Sidebar() {
-  const isOpen = useSelector((state) => state.sidebar.isOpen);
+  const isOpen = useSelector((state) => state?.sidebar?.isOpen);
+  const isMemberOrCoach = useSelector((state) => {
+    const userRole = state?.userRole?.userRole?.toLowerCase();
+    return ["member", "coach"].some((role) => userRole === role);
+  });
   const dispatch = useDispatch();
   let sideBarClasses = "sidebar shadow-xl";
   if (isOpen) {
@@ -37,6 +46,15 @@ export default function Sidebar() {
           </div>
         </div>
         <SidebarNavList />
+        {isMemberOrCoach && (
+          <div className="flex justify-center w-full">
+            <button
+              onClick={() => dispatch(setModalType("send-message-to-admin"))}
+            >
+              <PlusIcon className="bg-red-100 text-red-500 w-8 h-8 p-2 rounded-full" />
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

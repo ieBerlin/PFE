@@ -1,11 +1,20 @@
-import { Suspense } from "react";
 import FallbackText from "../../components/FallbackText";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFun, getToken } from "../../hooks/http";
 import ClientsItems from "./ClientsItems.jsx";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import ForbiddenPage from "../../components/ForbiddenPage.jsx";
 export default function ClientsPage() {
+  const userRole = useSelector(
+    (state) => state.userRole?.userRole?.toLowerCase() === "coach"
+  );
+
+  if (!userRole) {
+   return <ForbiddenPage title=" Access Denied: Coaches Only" message="Coaches Only
+   Message: This area is reserved for coaches. Please log in with your coach credentials to access this section."/>
+  }
   const { isPending, data, isError, error } = useQuery({
     queryKey: ["clients"],
     queryFn: async () =>

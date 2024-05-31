@@ -14,7 +14,6 @@ import { useSelector } from "react-redux";
 import CoachAdditionalInformations from "./CoachAdditionalInformations.jsx";
 const token = getToken();
 export default function UpdateUserPassword({ userData }) {
-  console.log(userData)
   const [currentAvatar, setCurrentAvatar] = useState(
     userData?.image
       ? "http://localhost:8081/uploads/images/profile/" + userData.image
@@ -63,7 +62,6 @@ export default function UpdateUserPassword({ userData }) {
           }
         );
 
-        console.log(await response.json());
       } catch (error) {
         console.error("Error:", error);
       }

@@ -6,22 +6,20 @@ import { Form, useParams } from "react-router-dom";
 import SuccessMessage from "../SuccessMessage";
 import ErrorMessage from "../ErrorMessage";
 
-export default function SendCustomMessage({onConfirm}) {
+export default function SendCustomMessage({ onConfirm, title, href }) {
   return (
     <div
       className="bg-white px-7 py-5 rounded-md text-start"
       style={{ minWidth: "400px" }}
     >
-      <h1 className="text-gray-800 font-bold text-lg">
-        Notify User of Custom Message
-      </h1>
+      <h1 className="text-gray-800 font-bold text-lg">{title}</h1>
 
-      <MembershipNotificationForm onConfirm={onConfirm} />
+      <MembershipNotificationForm onConfirm={onConfirm} href={href} />
     </div>
   );
 }
 
-function MembershipNotificationForm({onConfirm}) {
+function MembershipNotificationForm({ onConfirm, href }) {
   const dispatch = useDispatch();
   const { userId } = useParams();
   const {
@@ -34,7 +32,7 @@ function MembershipNotificationForm({onConfirm}) {
     mutationKey: ["recharge"],
     mutationFn: async (data) =>
       await fetchFun({
-        url: `${"http://localhost:8081/notification"}`,
+        url: href ?? `${"http://localhost:8081/notification"}`,
         options: {
           method: "POST",
           body: JSON.stringify(data),
@@ -49,11 +47,19 @@ function MembershipNotificationForm({onConfirm}) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const fd = {
-      userId: userId,
-      title: formData.get("title"),
-      message: formData.get("description"),
-    };
+    let fd;
+    if (href) {
+      fd = {
+        title: formData.get("title"),
+        message: formData.get("description"),
+      };
+    } else {
+      fd = {
+        userId: userId,
+        title: formData.get("title"),
+        message: formData.get("description"),
+      };
+    }
     mutate(fd);
   };
   let content;
@@ -69,7 +75,7 @@ function MembershipNotificationForm({onConfirm}) {
   );
 
   if (data && !isFetching) {
-    if(onConfirm){
+    if (onConfirm) {
       return onConfirm();
     }
     content = (

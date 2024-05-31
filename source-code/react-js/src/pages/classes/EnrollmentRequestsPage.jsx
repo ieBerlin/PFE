@@ -3,7 +3,21 @@ import FallbackText from "../../components/FallbackText.jsx";
 import EnrollmentRequestsTable from "./EnrollmentRequestsTable.jsx";
 import { useQuery } from "@tanstack/react-query";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
+import { useSelector } from "react-redux";
+import ForbiddenPage from "../../components/ForbiddenPage.jsx";
 export default function EnrollmentRequestsPage() {
+  const userRole = useSelector(
+    (state) => state.userRole?.userRole?.toLowerCase() === "admin"
+  );
+
+  if (!userRole) {
+    return (
+      <ForbiddenPage
+        title=" Access Denied: Admins Only"
+        message="You do not have the necessary permissions to view this area. Admin access is required."
+      />
+    );
+  }
   const { isPending, isError, error, data } = useQuery({
     queryKey: ["enrollments-requests"],
     queryFn: async () => {
@@ -40,7 +54,7 @@ export default function EnrollmentRequestsPage() {
   }
   return (
     <div className="bg-gray-100 min-h-[calc(100vh-60px)] px-5  pb-40 pt-4">
-      <h1 className="text-4xl text-black">Enrollement requests</h1>
+      <h1 className="text-4xl text-black">Enrollement Requests</h1>
       {content}
     </div>
   );

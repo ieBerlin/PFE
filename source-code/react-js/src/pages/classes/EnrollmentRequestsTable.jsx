@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useMutation } from "@tanstack/react-query";
 import { fetchFun, getToken, queryClient } from "../../hooks/http";
+import ItemNotFound from "../../components/ItemNotFound";
 export default function EnrollmentRequestsTable({ data }) {
   const filteredBookings = data;
   return (
@@ -82,7 +83,10 @@ export default function EnrollmentRequestsTable({ data }) {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
                           {request.status === "pending" && (
-                            <ActionButtons data={request.id} />
+                            <ActionButtons
+                              data={request.id}
+                              applicant_user_id={request.applicant_user_id}
+                            />
                           )}
                         </td>
                       </tr>
@@ -93,9 +97,7 @@ export default function EnrollmentRequestsTable({ data }) {
                 <tbody>
                   <tr>
                     <td colSpan="6" className="text-center py-4">
-                      <h3 className="text-black text-xl my-5 text-center font-semibold bg-red-200">
-                        Nothing to show!
-                      </h3>
+                     <ItemNotFound title="There are no enrollments for the classes." isNotPage/>
                     </td>
                   </tr>
                 </tbody>
@@ -107,7 +109,7 @@ export default function EnrollmentRequestsTable({ data }) {
     </div>
   );
 }
-function ActionButtons({ data }) {
+function ActionButtons({ data, applicant_user_id }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
       <div className="flex flex-row gap-2">
@@ -118,7 +120,11 @@ function ActionButtons({ data }) {
                 url: "http://localhost:8081/class/class-status/" + data,
                 options: {
                   method: "PUT",
-                  body: JSON.stringify({ requestId: data, status: "rejected" }),
+                  body: JSON.stringify({
+                    userId: applicant_user_id,
+                    requestId: data,
+                    status: "rejected",
+                  }),
                   headers: {
                     "x-access-token": getToken(),
                     "Content-Type": "application/json",
@@ -140,6 +146,7 @@ function ActionButtons({ data }) {
                 options: {
                   method: "PUT",
                   body: JSON.stringify({
+                    userId: applicant_user_id,
                     requestId: data,
                     status: "confirmed",
                   }),

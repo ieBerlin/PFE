@@ -1,0 +1,21 @@
+email,username,password,first_name,last_name,date_of_birth,phone_number,gender,address,role,registration_date,last_time_login,userId,status,image
+user1@example.com,user1,password123,Ahmed,Alawi,1990-05-20,5551234567,Male,123 Main St,User,2024-05-31 08:00:00,2024-05-31 08:15:00,1,active,NULL
+user2@example.com,user2,password456,Mustafa,Khalid,1985-12-15,5559876543,Male,456 Elm St,Admin,2024-05-30 09:00:00,2024-05-31 09:30:00,2,active,NULL
+user3@example.com,user3,password789,Huda,Abdullah,1992-08-10,5552223333,Female,789 Oak St,User,2024-05-29 10:00:00,2024-05-31 10:45:00,3,active,NULL
+user4@example.com,user4,passwordabc,Layla,Mohammed,1988-03-25,5554445555,Female,101 Pine St,User,2024-05-28 11:00:00,2024-05-31 11:30:00,4,active,NULL
+user5@example.com,user5,passworddef,Karim,Al-Masri,1995-11-03,5556667777,Male,202 Cedar Ave,User,2024-05-27 12:00:00,2024-05-31 12:15:00,5,active,NULL
+user6@example.com,user6,passwordghi,Sara,Ahmad,1982-09-14,5558889999,Female,303 Maple Rd,Admin,2024-05-26 13:00:00,2024-05-31 13:45:00,6,active,NULL
+user7@example.com,user7,passwordjkl,Khalid,Mansour,1980-07-08,5552221111,Male,404 Elm Ln,User,2024-05-25 14:00:00,2024-05-31 14:30:00,7,active,NULL
+user8@example.com,user8,passwordmno,Lina,Fahd,1991-12-18,5557778888,Female,505 Oak Dr,User,2024-05-24 15:00:00,2024-05-31 15:15:00,8,active,NULL
+user9@example.com,user9,passwordpqr,Mohamed,Nasser,1987-04-30,5559990000,Male,606 Pine Ct,Admin,2024-05-23 16:00:00,2024-05-31 16:45:00,9,active,NULL
+user10@example.com,user10,passwordstu,Fatima,Salah,1993-06-12,5553334444,Female,707 Cedar Pl,User,2024-05-22 17:00:00,2024-05-31 17:30:00,10,active,NULL
+user11@example.com,user11,passwordvwx,Abdulaziz,Hassan,1986-02-05,5551112222,Male,808 Maple Ave,User,2024-05-21 18:00:00,2024-05-31 18:15:00,11,active,NULL
+user12@example.com,user12,passwordyz,Layla,Osman,1994-08-27,5554443333,Female,909 Elm Blvd,Admin,2024-05-20 19:00:00,2024-05-31 19:45:00,12,active,NULL
+user13@example.com,user13,password123abc,Khaled,Abdelrahman,1984-01-17,5557776666,Male,1010 Oak Rd,User,2024-05-19 20:00:00,2024-05-31 20:30:00,13,active,NULL
+user14@example.com,user14,password456def,Amal,Adel,1989-10-09,5559998888,Female,1111 Pine St,User,2024-05-18 21:00:00,2024-05-31 21:15:00,14,active,NULL
+user15@example.com,user15,password789ghi,Waleed,Ali,1983-07-23,5552223333,Male,1212 Cedar Ave,Admin,2024-05-17 22:00:00,2024-05-31 22:45:00,15,active,NULL
+user16@example.com,user16,passwordabcdef,Sarah,Abdulaziz,1990-04-06,5554445555,Female,1313 Maple Rd,User,2024-05-16 23:00:00,2024-05-31 23:30:00,16,active,NULL
+user17@example.com,user17,passworddefghi,Yousef,Mohammed,1981-11-28,5556667777,Male,1414 Elm Ln,User,2024-05-15 00:00:00,2024-05-31 00:15:00,17,active,NULL
+user18@example.com,user18,passwordghijkl,Nour,Ahmed,1996-09-10,5558889999,Female,1515 Oak Dr,User,2024-05-14 01:00:00,2024-05-31 01:45:00,18,active,NULL
+user19@example.com,user19,passwordmnopqr,Omar,Abdallah,1985-05-02,5552221111,Male,1616 Pine Ct,Admin,2024-05-13 02:00:00,2024-05-31 02:30:00,19,active,NULL
+user20@example.com,user20,passwordstuvwx,Rania,Mahmoud,1992-03-14,5557778888,Female,1717 Cedar Pl,User,2024-05-12 03:00:00,2024-05-31 03:15:00,20,active,NULL

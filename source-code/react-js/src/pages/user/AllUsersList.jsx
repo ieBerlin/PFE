@@ -27,7 +27,12 @@ export default function AllUsersList({ users }) {
   return (
     <main className="bg-white min-h-screen px-8 py-4 pb-8 shadow-md rounded-md">
       <div className="flex flex-row justify-between">
-        <div />
+      <button
+            onClick={() => dispatch(setModalType("send-message-to-users"))}
+            className="font-semibold whitespace-nowrap bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm ring-1 ring-inset ring-gray-300"
+          >
+            Send Notifications To All Users
+          </button>
 
         <div className="flex items-center flex-row gap-3">
           <SearchInput
