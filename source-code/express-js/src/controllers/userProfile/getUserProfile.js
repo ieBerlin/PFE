@@ -5,7 +5,7 @@ const getUserProfile = async(req, res) => {
         const { userId } = req.params;
 
         const [result] = await pool.query(
-            "SELECT email, username, first_name, last_name, date_of_birth, phone_number, gender, address, role, registration_date, last_time_login,status FROM users WHERE userId = ?", [userId]
+            "SELECT email, username, first_name, last_name, date_of_birth, phone_number, gender, address, role, registration_date, last_time_login,status,image FROM users WHERE userId = ?", [userId]
         );
         if (result.length > 0) {
             return res.status(200).json(result[0]); // Return the user profile data

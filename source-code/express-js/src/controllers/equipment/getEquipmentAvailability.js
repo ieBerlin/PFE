@@ -23,13 +23,7 @@ const getEquipmentAvailability = async(req, res) => {
         const [bookingStatusResult] = await pool.query(bookingStatusQuery, bookingStatusValues);
 
         if (bookingStatusResult.length > 0) {
-            if (bookingStatusResult[0].status === 'pending') {
-                return res.status(400).json({ unavailability: bookingStatusResult[0].status });
-            } else {
-                return res.status(400).json({ unavailability: bookingStatusResult[0].status });
-
-            }
-
+            return res.status(400).json({ unavailability: bookingStatusResult[0].status });
         }
 
         // Check equipment availability

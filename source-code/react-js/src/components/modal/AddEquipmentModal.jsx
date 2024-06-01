@@ -6,7 +6,7 @@ import TextAreaInput from "../TextAreaInput";
 import PriceInput from "../PriceInput";
 import ErrorMessage from "../ErrorMessage";
 import SelectInput from "../SelectInput";
-import { fetchFun, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 import { Form } from "react-router-dom";
 import { setModalType } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
@@ -55,6 +55,7 @@ export default function AddEquipmentModal({ onClose }) {
           console.error("Error:", error);
         }
       }
+      queryClient.invalidateQueries(["equipments"]);
       dispatch(setModalType("confirm-add-equipment"));
     },
     onError: (error) => {
@@ -87,7 +88,6 @@ export default function AddEquipmentModal({ onClose }) {
       imageInputRef.current.click();
     }
   };
-  console.log(data);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -215,6 +215,6 @@ export default function AddEquipmentModal({ onClose }) {
 export const categories = [
   { value: "kickboxing", label: "Kickboxing" },
   { value: "fitness", label: "Fitness" },
-  { value: "cardio", label: "Cardio" },
+  { value: "yoga", label: "Yoga" },
   { value: "bodybuilding", label: "Bodybuilding" },
 ];

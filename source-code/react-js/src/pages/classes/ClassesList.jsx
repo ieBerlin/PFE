@@ -51,28 +51,27 @@ export default function ClassesList({ data }) {
           ]}
         />
       </div>
-      <ul
-        className="grid justify-center"
-        style={{
-          // maxWidth: "400px",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 350px))",
-        }}
-      >
-        <ClassesItems classes={fiteredClasses} />
-      </ul>
+      {!fiteredClasses || fiteredClasses?.length === 0 ? (
+        <div className="mt-4 bg-white px-6 py-4 shadow-md mx-2 w-full">
+          <h1 className="text-stone-500 text-center font-bold text-xl">
+            No classes found!
+          </h1>
+        </div>
+      ) : (
+        <ul
+          className="grid justify-center"
+          style={{
+            // maxWidth: "400px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 350px))",
+          }}
+        >
+          <ClassesItems classes={fiteredClasses} />
+        </ul>
+      )}
     </div>
   );
 }
 function ClassesItems({ classes }) {
-  if (!classes || classes.length === 0) {
-    return (
-      <div className="mt-4 bg-white px-6 py-4 shadow-md mx-2">
-        <p className="text-stone-500 text-center font-bold text-xl">
-          No classes found!
-        </p>
-      </div>
-    );
-  }
   return classes.map((classItem) => (
     <ClassItem key={classItem.classId} data={classItem} />
   ));

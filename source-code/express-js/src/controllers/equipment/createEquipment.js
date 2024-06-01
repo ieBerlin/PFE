@@ -24,7 +24,7 @@ const createEquipment = async(req, res) => {
         } else if (+availableQuantity <= 0) {
             errors.availableQuantity = "Available quantity must be greater than 0.";
         }
-        if (max_quantity && availableQuantity && +max_quantity <= +availableQuantity) {
+        if (max_quantity && availableQuantity && +max_quantity < +availableQuantity) {
             errors.availableQuantity = "Available quantity must be less than max quantity.";
         }
         if (!price) {

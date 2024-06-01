@@ -9,7 +9,7 @@ const getTransactions = async(req, res) => {
                    transactionDate AS date, 
                    transactionNotes AS description 
             FROM transactions 
-            ORDER BY transactionDate`;
+            ORDER BY transactionDate DESC, transactionTime ASC`;
 
         const [results] = await pool.query(query);
 

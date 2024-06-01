@@ -23,8 +23,9 @@ const updatePassword = async(req, res) => {
         if (!comparePasswords) {
             return res.status(401).json({ message: "Current password is incorrect" });
         }
+        const cipherPassword = await hashPassword(newPassword)
 
-        await pool.query('UPDATE users SET password = ? WHERE email = ?', [newPassword, userEmail]);
+        await pool.query('UPDATE users SET password = ? WHERE email = ?', [cipherPassword, userEmail]);
 
         return res.status(200).json({ message: "Password updated successfully" });
     } catch (error) {

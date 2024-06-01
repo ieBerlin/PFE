@@ -27,12 +27,12 @@ export default function AllUsersList({ users }) {
   return (
     <main className="bg-white min-h-screen px-8 py-4 pb-8 shadow-md rounded-md">
       <div className="flex flex-row justify-between">
-      <button
-            onClick={() => dispatch(setModalType("send-message-to-users"))}
-            className="font-semibold whitespace-nowrap bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm ring-1 ring-inset ring-gray-300"
-          >
-            Send Notifications To All Users
-          </button>
+        <button
+          onClick={() => dispatch(setModalType("send-message-to-users"))}
+          className="font-semibold whitespace-nowrap bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm ring-1 ring-inset ring-gray-300"
+        >
+          Send Notifications To All Users
+        </button>
 
         <div className="flex items-center flex-row gap-3">
           <SearchInput
@@ -108,8 +108,10 @@ export default function AllUsersList({ users }) {
                   <img
                     className="rounded-full h-12 w-12 object-cover"
                     src={
-                      user.image ??
-                      "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+                      user.image
+                        ? "http://localhost:8081/uploads/images/profile/" +
+                          user.image
+                        : "http://localhost:8081/uploads/images/profile/default-user-image.webp"
                     }
                     alt=""
                   />
@@ -127,7 +129,9 @@ export default function AllUsersList({ users }) {
                 >
                   <img
                     className="rounded-full h-12 w-12 object-cover"
-                    src="https://i.pinimg.com/736x/54/97/92/549792a6dabb17e61a53be9f1ceb60a8.jpg"
+                    src={
+                      "http://localhost:8081/uploads/images/profile/admin.jpg"
+                    }
                     alt=""
                   />
                   <div className="flex flex-col">
@@ -146,7 +150,6 @@ export default function AllUsersList({ users }) {
               <h1 className={`font-bold ${statusClasses} text-center`}>
                 {user.status}
               </h1>
-             
             </div>
           );
         })

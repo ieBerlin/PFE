@@ -20,8 +20,8 @@ router.get("/:classId", verifyToken, getSingleClass);
 router.post("/", verifyToken, authAdminOrManager, createClass);
 router.post("/enrollment-requests", verifyToken, createEnrollment);
 router.put("/class-status/:requestId", verifyToken, updateEnrollmentRequest, createNotification);
-router.put("/:classId/:userId", verifyToken, updateClass);
-router.delete("/:classId", verifyToken, deleteClass);
+router.put("/update-class/:classId/", verifyToken, updateClass);
 router.put("/:classId/:status", verifyToken, authAdminOrManager, updateClassStatus);
+router.delete("/:classId", verifyToken, deleteClass);
 
 module.exports = router;

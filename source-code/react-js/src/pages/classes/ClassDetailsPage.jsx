@@ -28,6 +28,8 @@ export default function ClassDetailsPage() {
         },
       }),
   });
+  console.log(loaderData)
+
   if (isPending) {
     return <FallbackText title="Fetching class data..." />;
   }
@@ -259,7 +261,7 @@ function ClassInformations({
 
 function formatTime(dateString, timeString) {
   // Combine date and time into a single string
-  const combinedString = `${dateString.split("T")[0]}T${timeString}`;
+  const combinedString = `${dateString?.split("T")[0]}T${timeString}`;
 
   // Create a new Date object
   const dateObj = new Date(combinedString);

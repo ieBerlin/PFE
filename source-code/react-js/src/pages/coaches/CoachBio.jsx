@@ -3,6 +3,7 @@ import Modal from "../../components/modal/Modal";
 import { setModalType } from "../../features/modal/modalSlice";
 import { useDispatch } from "react-redux";
 export default function CoachBio({ coachData }) {
+  console.log(coachData)
   const [currentTab, setCurrentTab] = useState(1);
   const dispatch = useDispatch();
   const [selectedCertification, setSelectedCertification] = useState(null);
@@ -41,19 +42,19 @@ export default function CoachBio({ coachData }) {
               <h1 className="text-start font-bold text-black ml-2 text-xl mt-2">
                 Certification
               </h1>
-              {coachData.certificationsImages &&
-              coachData.certificationsImages.length > 0 ? (
+              {coachData.certifications &&
+              coachData.certifications.length > 0 ? (
                 <div
                   className="grid my-2 gap-2 items-center justify-center"
                   style={{
                     gridTemplateColumns: "repeat(auto-fill,200px)",
                   }}
                 >
-                  {coachData.certificationsImages.map((image, index) => (
+                  {coachData.certifications.map((image, index) => (
                     <CertificationItem
                       key={index}
                       imageUrl={image}
-                      onClick={() => renderCertification(image)}
+                      onClick={() => renderCertification(`http://localhost:8081/uploads/images/certifications/${image}`)}
                     />
                   ))}
                 </div>
@@ -80,18 +81,15 @@ export default function CoachBio({ coachData }) {
                   >
                     {coachData.classes.map((coachClass, index) => (
                       <li key={index}>
-                        <a href={`/classes/${coachClass.href}`}>
+                        <a href={`/classes/${coachClass?.classId}`}>
                           <img
                             className="w-full h-auto rounded-md"
-                            src={coachClass.image ?? "http://localhost:8081/uploads/images/sport/coach.jpg"}
+                            src={`http://localhost:8081/uploads/images/sport/${coachClass?.category}.jpg`}
                             alt=""
                           />
                           <h2 className=" truncate font-semibold my-1 text-ellipsis w-full text-nowrap overflow-hidden">
-                            {coachClass.title}
+                            {coachClass?.name}
                           </h2>
-                          <p className="font-medium text-sm text-gray-500 text-nowrap overflow-hidden">
-                            {coachClass.description}
-                          </p>
                         </a>
                       </li>
                     ))}
@@ -127,7 +125,7 @@ const CertificationItem = ({ imageUrl, onClick }) => {
   return (
     <button onClick={onClick}>
       <img
-        src={imageUrl}
+        src={`http://localhost:8081/uploads/images/certifications/${imageUrl}`}
         alt="Certification"
         className="w-full h-auto rounded-md"
       />

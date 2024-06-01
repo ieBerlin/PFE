@@ -34,6 +34,10 @@ const rechargeMembership = async(req, res, next) => {
                  WHERE userId = ?`, [membershipType, rechargeAmount, reqUserId]
             );
         }
+        await pool.query(
+            `INSERT INTO transactions (userId, transactionType,transactionMethod,price,paymentType,transactionStatus) 
+             VALUES (?,'Membership Fee','Cash',?,'income','completed')`, [reqUserId, rechargeAmount]
+        );
         let title = "User Account Recharged Successfully";
         let message = "Your account has been successfully recharged with the requested amount. You now have access to all features and services on our platform without interruption. If you encounter any difficulties or have questions, please don't hesitate to contact us. We're here to assist you every step of the way. Thank you for being a valued member of our platform!"
 

@@ -13,7 +13,7 @@ const createEnrollment = async(req, res) => {
         }
 
         // Check if the user is already enrolled in the class
-        const [existingEnrollment] = await pool.query('SELECT * FROM enrollmentrequests WHERE class_id = ? AND applicant_user_id = ? AND status = "pending"', [class_id, applicant_user_id]);
+        const [existingEnrollment] = await pool.query('SELECT * FROM enrollmentrequests WHERE class_id = ? AND applicant_user_id = ? ', [class_id, applicant_user_id]);
         if (existingEnrollment.length > 0) {
             return res.status(401).json({ message: 'Already enrolled in this class.' });
         }

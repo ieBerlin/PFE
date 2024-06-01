@@ -73,7 +73,7 @@ export default function MemberOverviewPage() {
           }),
       },
       {
-        queryKey: ["coaches"],
+        queryKey: ["my-coaches"],
         queryFn: async () =>
           await fetchFun({
             url: "http://localhost:8081/coaches/get-user-coaches",
@@ -90,9 +90,11 @@ export default function MemberOverviewPage() {
   });
   const membershipStatusData = results[0].data;
   const equipmentsData = results[1].data || [];
+  console.log(equipmentsData)
   const billingHistoryData = results[2].data || [];
   const upcomingClasses = results[3].data || [];
   const coachesData = results[4].data || [];
+  console.log(coachesData)
   let membershipStatus;
   if (membershipStatusData && membershipStatusData.status) {
     membershipStatus = "active";
@@ -291,7 +293,6 @@ function EmptyComponent({ title }) {
   );
 }
 function ClassItem({ data }) {
-  console.log(data);
   const date = new Date(data.startDate);
   const formattedDate = date.toLocaleDateString("en-us", {
     month: "short",

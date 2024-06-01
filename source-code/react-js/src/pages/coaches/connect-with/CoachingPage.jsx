@@ -36,7 +36,7 @@ export default function CoachingPage() {
   } else {
     userId = params.coachId;
   }
-
+  console.log('["member", "coach"].some((role');
   const {
     data: messages,
     error,
@@ -130,8 +130,7 @@ export default function CoachingPage() {
           style={{ minHeight: "calc(100vh - 100px)" }}
           className="mt-4 mb-16 "
         >
-          {messages &&
-            messages?.length > 0 &&
+          {messages && messages?.length > 0 ? (
             messages.map((item) => (
               <Announce
                 key={item?.message_id}
@@ -139,7 +138,10 @@ export default function CoachingPage() {
                 messageDate={item?.created_at}
                 coachName={item.name}
               />
-            ))}
+            ))
+          ) : (
+            <ItemNotFound title="There're no messages." />
+          )}
         </div>
       </div>
       {isCoach && (

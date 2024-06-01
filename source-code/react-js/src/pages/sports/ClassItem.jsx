@@ -64,7 +64,6 @@ export default function ClassItem({ data }) {
           alt=""
         />
         <span className={classesStyles.classCategory}>{classCategory}</span>
-        <span className={classesStyles.classDuration}>15 min</span>
       </div>
       <div className={classesStyles.classItemDetails}>
         <p className={classesStyles.itemTitle}>{title}</p>

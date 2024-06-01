@@ -14,10 +14,10 @@ import ItemNotFound from "../../components/ItemNotFound.jsx";
 import { setModalType } from "../../features/modal/modalSlice.js";
 
 export default function CoachesList() {
-  const userRole = useSelector(
-    (state) => state.userRole?.userRole?.toLowerCase() === "member"
-  );
-
+  const userRole = useSelector((state) => {
+    const userRole = state?.userRole?.userRole?.toLowerCase();
+    return ["member", "admin"].some((role) => userRole === role);
+  });
   if (!userRole) {
     return (
       <ForbiddenPage
@@ -62,7 +62,7 @@ export default function CoachesList() {
       },
     ],
   });
-  console.log(results[1].data);
+  console.log(results[0].data);
 
   if (results[0].isError) {
     if (results[0].error?.code === 404) {
@@ -82,7 +82,7 @@ export default function CoachesList() {
       );
     }
   }
-const dispatch= useDispatch()
+  const dispatch = useDispatch();
   const { isPending, mutate, isError, error } = useMutation({
     mutationKey: ["client"],
     mutationFn: async () =>
@@ -136,12 +136,13 @@ const dispatch= useDispatch()
   const coachImage = coachDetails?.image
     ? "http://localhost:8081/uploads/images/profile/" + coachDetails.image
     : "http://localhost:8081/uploads/images/sport/coach.jpg";
-
+  const classes = coachDetails?.classes ?? [];
   const coachBioText = coachDetails?.bio ?? "";
   const contactLinks = JSON.parse(contactDetails);
   const coachBioData = {
     bio: coachBioText,
-    certificationsImages: certificationList,
+    certifications: certificationList,
+    classes,
   };
   const coachFullName = first_name + " " + last_name;
   const getStatusClass = () => {
@@ -200,7 +201,7 @@ const dispatch= useDispatch()
                     disabled={isPending}
                     onClick={
                       clientStatus?.status === "pending"
-                        ? () => dispatch(setModalType('delete-request'))
+                        ? () => dispatch(setModalType("delete-request"))
                         : () => mutate()
                     }
                     className={

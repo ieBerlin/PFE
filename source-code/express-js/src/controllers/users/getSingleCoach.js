@@ -21,11 +21,16 @@ const getSingleCoach = async (req, res) => {
       "SELECT image AS img FROM certification WHERE coachId = ?",
       [coachId]
     );
+    const [classesResult] = await pool.query(
+      "SELECT classId,name,category FROM classes WHERE instructorId = ? AND status='open'",
+      [coachId]
+    );
 
     const coachData = {
       ...(result[0] || []),
       ...(coachResult[0] || []),
       certifications: certificationResult?.map((item) => item.img) || [],
+      classes:classesResult
     };
 
     return res.status(200).json(coachData);

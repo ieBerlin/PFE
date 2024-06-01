@@ -84,7 +84,7 @@ export default function EquipmentsList({ data }) {
         <div
           className=" gap-x-3 justify-center grid"
           style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 350px))",
           }}
         >
           {filteredEquipments && filteredEquipments.length > 0 ? (
@@ -109,9 +109,9 @@ export default function EquipmentsList({ data }) {
 }
 
 function EquipmentItem({ equipmentData, onEditEquipment }) {
-  const { userRole } = useSelector((state) => state.userRole);
+  const { userRole } = useSelector((state) => state?.userRole);
   const dispatch = useDispatch();
-  const image = equipmentData.image
+  const image = equipmentData?.image
     ? equipmentData.image.startsWith("http://")
       ? equipmentData.image
       : "http://localhost:8081/uploads/images/equipment/" + equipmentData.image
@@ -129,14 +129,14 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
           alt="Coach"
         />
         <span className="absolute top-0 left-0 m-2 rounded-xl text-center text-sm bg-blue-400   p-[4px]   text-white font-semibold">
-          {equipmentData.category}
+          {equipmentData?.category}
         </span>
       </div>
       <div className="mt-4 px-5 pb-5">
         <div className="my-2 flex items-center justify-between">
           <div className="overflow-hidden mr-2 text-ellipsis">
             <h5 className="text-xl tracking-tight text-purple-900 text-nowrap ">
-              {equipmentData.name}
+              {equipmentData?.name}
             </h5>
           </div>
           {/* <div className="flex items-center gap-1">
@@ -149,11 +149,11 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
           </div> */}
         </div>
         <h3 className="text-start font-semibold text-gray-500 mb-5">
-          ({equipmentData.availableQuantity}) Piece Left
+          ({equipmentData?.availableQuantity}) Piece Left
         </h3>
         <div className="flex items-center gap-5">
           <h2 className="text-purple-800 font-semibold text-xl text-center">
-            {equipmentData.price} {" "}DZD
+            {equipmentData?.price} DZD
           </h2>
           {userRole?.toLowerCase() === "admin" ? (
             <button
@@ -167,7 +167,7 @@ function EquipmentItem({ equipmentData, onEditEquipment }) {
             </button>
           ) : (
             <Link
-              to={`/equipments/book/${equipmentData.id}`}
+              to={`/equipments/book/${equipmentData?.id}`}
               className="w-full flex items-center justify-center rounded-md bg-purple-800 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-300"
             >
               See more <ChevronRightIcon className="ml-2 h-6 w-6" />
@@ -193,7 +193,7 @@ function filterEquipements(equipments, selectedEquipments, inputValue) {
       ([category, isSelected]) => {
         return (
           isSelected &&
-          equipment.category.toLowerCase() === category.toLowerCase()
+          equipment?.category?.toLowerCase() === category?.toLowerCase()
         );
       }
     );

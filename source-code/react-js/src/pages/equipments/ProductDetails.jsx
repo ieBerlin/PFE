@@ -6,7 +6,6 @@ import { fetchFun, getToken, queryClient } from "../../hooks/http";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import SuccessMessage from "../../components/SuccessMessage.jsx";
 import FallbackText from "../../components/FallbackText.jsx";
-import { BellAlertIcon } from "@heroicons/react/20/solid";
 import ItemNotFound from "../../components/ItemNotFound.jsx";
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -30,6 +29,7 @@ export default function ProductDetails() {
               },
             },
           }),
+        retryDelay: 400,
         retry: 2,
       },
       {
@@ -46,6 +46,7 @@ export default function ProductDetails() {
               },
             },
           }),
+        retryDelay: 400,
         retry: 2,
       },
     ],

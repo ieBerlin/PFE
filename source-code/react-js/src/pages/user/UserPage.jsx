@@ -81,7 +81,6 @@ export default function UserPage() {
   const billingHistory = results[1].data ?? [];
   const userData = results[0].data;
   const dispatch = useDispatch();
-
   if (results[0].isPending || results[1].isPending) {
     return (
       <div className="px-5 py-7">
@@ -93,7 +92,7 @@ export default function UserPage() {
     // membershipInfo,
     first_name,
     last_name,
-    avatarSrc,
+    image,
     address,
     phone_number,
     email,
@@ -121,8 +120,9 @@ export default function UserPage() {
           >
             <img
               src={
-                avatarSrc ??
-                "http://localhost:8081/uploads/images/profile/default-user-image.webp"
+                image
+                  ? "http://localhost:8081/uploads/images/profile/" + image
+                  : "http://localhost:8081/uploads/images/profile/default-user-image.webp"
               }
               className="rounded-full object-cover"
               style={{ height: "150px", width: "150px" }}

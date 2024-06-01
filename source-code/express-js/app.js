@@ -20,6 +20,7 @@ const clientsRouter = require("./src/routes/clients.route.js")
 const dashboardRouter = require("./src/routes/dashboard.route.js")
 const enrollementsRouter = require("./src/routes/enrollements.route.js")
 const messagesRouter = require("./src/routes/messages.route.js")
+const certificationRouter = require("./src/routes/certificationRouter.route.js")
     // Middlewares
 dotenv.config();
 app.use(express.static("./src"));
@@ -45,6 +46,7 @@ app.use('/clients', clientsRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/enrollements', enrollementsRouter);
 app.use('/messages', messagesRouter);
+app.use('/certification', certificationRouter);
 const port = process.env.PORT || 8080;
 
 // Start the server

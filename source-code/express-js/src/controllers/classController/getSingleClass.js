@@ -23,7 +23,7 @@ const getSingleClass = async(req, res) => {
         );
 
         const [instructorResults] = await pool.query(
-            'SELECT userId,email, CONCAT(first_name," ", last_name) AS name FROM users WHERE userId = ?', [classData.instructorId]
+            'SELECT userId,email, CONCAT(first_name," ", last_name) AS name,image FROM users WHERE userId = ?', [classData.instructorId]
         );
         if (userRole === "member") {
 

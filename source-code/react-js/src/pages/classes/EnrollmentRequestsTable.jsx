@@ -65,27 +65,28 @@ export default function EnrollmentRequestsTable({ data }) {
                     return (
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
-                          {request.id}
+                          {request?.id}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
-                          {request.class_id}
+                          {request?.class_id}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
                           {date}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
-                          <Link to={`/user/${request.applicant_user_id}`}>
-                            {request.applicant_user_id}
+                          <Link to={`/user/${request?.applicant_user_id}`}>
+                            {request?.applicant_user_id}
                           </Link>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
-                          <RequestStatus data={request.status} />
+                          <RequestStatus data={request?.status} />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">
                           {request.status === "pending" && (
                             <ActionButtons
-                              data={request.id}
-                              applicant_user_id={request.applicant_user_id}
+                              classId={request?.class_id}
+                              data={request?.id}
+                              applicant_user_id={request?.applicant_user_id}
                             />
                           )}
                         </td>
@@ -97,7 +98,10 @@ export default function EnrollmentRequestsTable({ data }) {
                 <tbody>
                   <tr>
                     <td colSpan="6" className="text-center py-4">
-                     <ItemNotFound title="There are no enrollments for the classes." isNotPage/>
+                      <ItemNotFound
+                        title="There are no enrollments for the classes."
+                        isNotPage
+                      />
                     </td>
                   </tr>
                 </tbody>
@@ -109,7 +113,7 @@ export default function EnrollmentRequestsTable({ data }) {
     </div>
   );
 }
-function ActionButtons({ data, applicant_user_id }) {
+function ActionButtons({ data, applicant_user_id, classId }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
       <div className="flex flex-row gap-2">
@@ -124,6 +128,7 @@ function ActionButtons({ data, applicant_user_id }) {
                     userId: applicant_user_id,
                     requestId: data,
                     status: "rejected",
+                    classId,
                   }),
                   headers: {
                     "x-access-token": getToken(),
@@ -149,6 +154,7 @@ function ActionButtons({ data, applicant_user_id }) {
                     userId: applicant_user_id,
                     requestId: data,
                     status: "confirmed",
+                    classId,
                   }),
                   headers: {
                     "x-access-token": getToken(),

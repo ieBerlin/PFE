@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Form, json, Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import Input from "../../components/Input.jsx";
 import DateInput from "../../components/DateInput.jsx";
 import PhoneNumberInput from "../../components/PhoneNumberInput.jsx";
@@ -7,7 +7,7 @@ import GenderInput from "../../components/GenderInput.jsx";
 import TextAreaInput from "../../components/TextAreaInput.jsx";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useMutation } from "@tanstack/react-query";
-import { fetchFun, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import SuccessMessage from "../../components/SuccessMessage.jsx";
 import { useSelector } from "react-redux";
@@ -39,19 +39,13 @@ export default function UpdateUserPassword({ userData }) {
   });
   const imagePickerButtonRef = useRef();
   const submitButtonRef = useRef();
-  const handleImagePicker = async (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCurrentAvatar(reader.result);
-      };
-      reader.readAsDataURL(file);
+  const { mutate: mutatePP } = useMutation({
+    mutationKey: ["profile-picture"],
+    mutationFn: async (picData) => {
       try {
         const formData = new FormData();
-        formData.append("image", file);
-        const response = await fetch(
+        formData.append("image", picData);
+        return await fetch(
           "http://localhost:8081/user/profile/update-user-image",
           {
             method: "PUT",
@@ -61,10 +55,23 @@ export default function UpdateUserPassword({ userData }) {
             },
           }
         );
-
       } catch (error) {
+        console.log(error);
         console.error("Error:", error);
       }
+    },
+    onSuccess: () => queryClient.invalidateQueries(["user"]),
+  });
+  const handleImagePicker = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCurrentAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
+      mutatePP(file);
     }
   };
   let content;
@@ -126,7 +133,7 @@ export default function UpdateUserPassword({ userData }) {
           />
           {/* Role Display */}
           <p className="text-center mt-2 font-semibold text-xl text-sky-800 bg-sky-200 rounded-md">
-            {userData.role}
+            {userData?.role}
           </p>
           {/* Image Picker */}
           <input
@@ -176,44 +183,44 @@ export default function UpdateUserPassword({ userData }) {
             <Form onSubmit={submitFormHandler}>
               <Input
                 name="email"
-                defaultValue={userData.email || ""}
+                defaultValue={userData?.email || ""}
                 label="Email"
                 placeholder="Enter Your Email"
                 type="email"
               />
               <Input
                 name="username"
-                defaultValue={userData.username || ""}
+                defaultValue={userData?.username || ""}
                 label="Username"
                 placeholder="Enter Your Username"
               />
               <Input
                 name="first-name"
-                defaultValue={userData.first_name || ""}
+                defaultValue={userData?.first_name || ""}
                 label="First Name"
                 placeholder="Enter Your First Name"
               />
               <Input
                 name="last-name"
-                defaultValue={userData.last_name || ""}
+                defaultValue={userData?.last_name || ""}
                 label="Last Name"
                 placeholder="Enter Your Last Name"
               />
               <DateInput
                 name="birthday-date"
-                defaultValue={userData.date_of_birth || ""}
+                defaultValue={userData?.date_of_birth || ""}
                 label="Date"
                 placeholder="Enter Your Birth Day"
               />
               <PhoneNumberInput
                 name="phone-number"
-                defaultValue={userData.phone_number || ""}
+                defaultValue={userData?.phone_number || ""}
               />
               <GenderInput />
               <TextAreaInput
                 name="address"
                 label="Address"
-                defaultValue={userData.address || ""}
+                defaultValue={userData?.address || ""}
               />
               {/* Hidden submit button to trigger form submission */}
               <button type="submit" className="hidden" ref={submitButtonRef} />

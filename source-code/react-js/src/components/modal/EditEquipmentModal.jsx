@@ -1,29 +1,33 @@
 import { CameraIcon } from "@heroicons/react/24/solid";
 import { useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import defaultEquipmentImage from "../../assets/default-equipment.webp";
 import Input from "../Input";
 import TextAreaInput from "../TextAreaInput";
 import PriceInput from "../PriceInput";
 import ErrorMessage from "../ErrorMessage";
 import SelectInput from "../SelectInput";
-import { fetchFun, getToken } from "../../hooks/http.js";
+import { fetchFun, getToken, queryClient } from "../../hooks/http.js";
 import { Form } from "react-router-dom";
 import { categories } from "./AddEquipmentModal.jsx";
 import { useDispatch } from "react-redux";
 import { setModalType } from "../../features/modal/modalSlice.js";
 
 export default function EditEquipmentModal({ onClose, equipmentData: data }) {
-  const dispatch = useDispatch();
-  const submitButtonRef = useRef();
-  const [previewImageSrc, setPreviewImageSrc] = useState(    "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg");
+  const [image, setImage] = useState(null);
   const imageInputRef = useRef();
 
-  const { isPending, isError, error, mutate, data:mutationData } = useMutation({
+  const dispatch = useDispatch();
+  const submitButtonRef = useRef();
+  const [previewImageSrc, setPreviewImageSrc] = useState(
+    data?.image
+    ? "http://localhost:8081/uploads/images/equipment/" + data.image
+    : "http://localhost:8081/uploads/images/equipment/default-equipment-image.jpg"
+  );
+  const { isPending, isError, error, mutate } = useMutation({
     mutationKey: ["equipments"],
-    mutationFn: async (equipmentData) =>
+    mutationFn: async (equipmentData) => {
       await fetchFun({
-        url: `${"http://localhost:8081/equipments/" + data.id}`,
+        url: `${"http://localhost:8081/equipments/" + data?.id}`,
         options: {
           method: "PUT",
           body: JSON.stringify(equipmentData),
@@ -32,7 +36,33 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
             "Content-Type": "application/json",
           },
         },
-      }),
+      });
+      return data?.id;
+    },
+    onSuccess: async (equipmentId) => {
+      if (image && equipmentId) {
+        try {
+          const formData = new FormData();
+          formData.append("image", image);
+          await fetchFun({
+            url:
+              "http://localhost:8081/equipments/update-equipment-image/" +
+              equipmentId,
+            options: {
+              method: "PUT",
+              body: formData,
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          });
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+      queryClient.invalidateQueries(["equipments"]);
+      dispatch(setModalType("confirm-update-equipment"));
+    },
   });
   function submitForm(e) {
     e.preventDefault();
@@ -60,6 +90,7 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
       reader.onloadend = () => {
         setPreviewImageSrc(reader.result);
       };
+      setImage(file);
       reader.readAsDataURL(file);
     }
   };
@@ -74,10 +105,6 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
         : "An error occured!"}
     </div>
   );
-
-  if (mutationData && !isPending) {
-   dispatch(setModalType('confirm-update-equipment'))
-  }
   return (
     <div className="bg-white px-3 py-2">
       <Form
@@ -114,30 +141,30 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
         </div>
         <div className="mt-10">
           <Input
-            defaultValue={(data && data.name) ?? ""}
+            defaultValue={(data && data?.name) ?? ""}
             name="equipment-name"
             label="Equipment Name"
             placeholder="Enter Equipment Name"
             type="text"
           />
           <TextAreaInput
-            defaultValue={(data && data.description) ?? ""}
+            defaultValue={(data && data?.description) ?? ""}
             name="equipment-description"
             label="Equipment Description"
           />
           <PriceInput
             name="equipment-price"
-            defaultValue={(data && data.price) ?? ""}
+            defaultValue={(data && data?.price) ?? ""}
           />
           <Input
-            defaultValue={(data && data.availableQuantity) ?? ""}
+            defaultValue={(data && data?.availableQuantity) ?? ""}
             label="Available Quantity"
             placeholder="Enter Equipment's Available Quantity"
             type="number"
             name="equipment-available-quantity"
           />
           <Input
-            defaultValue={(data && data.max_quantity) ?? ""}
+            defaultValue={(data && data?.max_quantity) ?? ""}
             label="Max Quantity"
             placeholder="Enter Equipment's Max Quantity"
             type="number"
@@ -146,7 +173,7 @@ export default function EditEquipmentModal({ onClose, equipmentData: data }) {
           <SelectInput
             data={categories}
             name="equipment-category"
-            selectedField={data && data.category}
+            selectedField={data && data?.category}
           />
           <button type="submit" className="hidden" ref={submitButtonRef} />
         </div>

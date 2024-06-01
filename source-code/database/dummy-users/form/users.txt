@@ -1,0 +1,11 @@
+admin@gmail.com
+Admin234@
+
+coaches email starts from 1 to 8:
+
+coach1@gmail.com
+Coach123@
+
+members email starts from 1 to 10:
+member1@gmail.com
+Member123@

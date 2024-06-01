@@ -18,6 +18,7 @@ export default function ModalContent({
   remainingDay,
   imageSrc,
   classId,
+  certificationId,
 }) {
   const dispatch = useDispatch();
   const type = useSelector((state) => state.modal.type);
@@ -102,6 +103,27 @@ export default function ModalContent({
             },
           })
         }
+      />
+    );
+  } else if (type === "delete-certification") {
+    return (
+      <ConfirmationModal
+        title="Delete Certification"
+        description="Are you certain you want to delete this certifications? This action is irreversible."
+        confirmActionLabel="Delete"
+        onConfirm={() => onConfirm("confirm-delete-certification")}
+        mutationFn={async () => {
+          console.log(certificationId);
+          return await fetchFun({
+            url: `http://localhost:8081/certification/${certificationId}`,
+            options: {
+              method: "DELETE",
+              headers: {
+                "x-access-token": getToken(),
+              },
+            },
+          });
+        }}
       />
     );
   } else if (type === "block-user") {
@@ -230,6 +252,18 @@ export default function ModalContent({
         description="User has been successfully deleted."
         onConfirm={() => {
           navigate("/users");
+          dispatch(setModalType());
+        }}
+      />
+    );
+  } else if (type === "confirm-delete-certification") {
+    return (
+      <ConfirmModal
+        color="red"
+        title="Certification Deleted Successfully"
+        description="Certification has been successfully deleted."
+        onConfirm={() => {
+          queryClient.invalidateQueries(["certifications"]);
           dispatch(setModalType());
         }}
       />

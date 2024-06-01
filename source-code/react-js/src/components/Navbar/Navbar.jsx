@@ -1,4 +1,4 @@
-import { json, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import NotificationBell from "./NotificationBell/NotificationBell.jsx";
 import ProfileDropdownMenu from "./ProfileDropdownMenu/ProfileDropDownMenu.jsx";
@@ -29,7 +29,11 @@ function Navbar({ width }) {
       <div className="user-info">
         <NotificationBell />
         <Link to="/profile">
-          <img className="user-avatar" src={image} alt="User Avatar" />
+          <img
+            className="user-avatar object-cover"
+            src={image}
+            alt="User Avatar"
+          />
         </Link>
         <div className="user-name text-gray-800 ">
           {data?.username ?? "user"}

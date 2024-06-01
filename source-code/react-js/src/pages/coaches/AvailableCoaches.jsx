@@ -34,10 +34,6 @@ export default function AvailableCoaches({ coaches }) {
               title: "coach.Category",
               options: ["kickboxing", "fitness", "yoga", "bodybuilding"],
             },
-            {
-              title: "coach.Level",
-              options: ["beginner", "intermediate", "advanced", "expert"],
-            },
           ]}
         />
       </div>
@@ -47,7 +43,7 @@ export default function AvailableCoaches({ coaches }) {
 }
 
 function CoachList({ coaches }) {
-  if (!coaches || coaches.length === 0) {
+  if (!coaches || coaches?.length === 0) {
     return (
       <div className="mt-4 bg-white px-6 py-4 shadow-md mx-2">
         <p className="text-stone-500 text-center font-bold text-xl">
@@ -56,20 +52,19 @@ function CoachList({ coaches }) {
       </div>
     );
   }
-console.log(coaches)
   return (
     <ul
       className="mt-30 grid gap-5 justify-center rounded-md pb-8"
       style={{ gridTemplateColumns: "repeat(auto-fill, minmax(300px, 350px))" }}
     >
-      {coaches.map((coach) => (
-        <CoachCard key={coach.userId} coach={coach} />
+      {coaches.map((coach, index) => (
+        <CoachCard key={coach?.coachId ?? index} coach={coach} />
       ))}
     </ul>
   );
 }
 export function CoachCard({ coach }) {
-  const coachImage = coach.image
+  const coachImage = coach?.image
     ? "http://localhost:8081/uploads/images/profile/" + coach.image
     : "http://localhost:8081/uploads/images/sport/coach.jpg";
   return (
@@ -81,24 +76,17 @@ export function CoachCard({ coach }) {
           alt="Coach"
         />
         <span className="absolute top-0 left-0 m-2 rounded-xl bg-gray-700 p-[4px] text-center text-sm font-medium text-white">
-          {coach.specialization ?? "specialization"}
+          {coach?.specialization ?? "specialization"}
         </span>
       </div>
-      <div className="mt-4 px-5 pb-5">
-        <Link to={`${coach.coachId}`}>
-          <h5 className="text-xl tracking-tight text-slate-900">
+      <div className="my-4 px-5 pb-5">
+        <Link to={coach?.coachId ?? ""} >
+          <h5 className="text-xl tracking-tight text-slate-900 mb-5">
             {coach?.first_name + " " + coach?.last_name}
           </h5>
         </Link>
-        <div className="mt-2 mb-5 flex items-center justify-between">
-          <div className="flex items-center">
-            <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
-              {coach.experienceLevel ?? "experience level"}
-            </span>
-          </div>
-        </div>
         <Link
-          to={`${coach.coachId ?? ""}`}
+          to={`${coach?.coachId ?? ""}`}
           className="flex items-center justify-center rounded-md bg-blue-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
         >
           See more <ChevronRightIcon className="ml-2 h-6 w-6" />

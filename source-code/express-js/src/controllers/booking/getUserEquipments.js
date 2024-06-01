@@ -6,7 +6,7 @@ const getUserEquipments = async(req, res) => {
 
         // Fetch all reserved equipment IDs for the user
         const [bookings] = await pool.query(
-            'SELECT equipmentId FROM bookings WHERE userId = ? AND status = "reserved"', [userId]
+            'SELECT equipmentId FROM bookings WHERE userId = ? AND status = "confirmed"', [userId]
         );
 
         // If no bookings found, return empty array

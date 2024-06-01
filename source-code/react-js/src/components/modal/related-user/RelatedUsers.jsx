@@ -131,10 +131,11 @@ function UserCredentials({ resolvedData, setIsRelatedUsersShown, isChecked }) {
                   name="related-user"
                   className="cursor-pointer"
                 />
+         
                 <img
-                  className="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full object-cover"
                   src={
-                    user.imageSrc ??
+                    user.image ? "http://localhost:8081/uploads/images/profile/"+  user.image:
                     "http://localhost:8081/uploads/images/profile/default-user-image.webp"
                   }
                   alt={user.fullName}

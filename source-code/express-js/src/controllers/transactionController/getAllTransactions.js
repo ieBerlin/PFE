@@ -2,7 +2,7 @@ const { pool } = require('../../models/db/connect.js');
 
 const getAllTransactions = async(req, res) => {
     try {
-        const [transactions] = await pool.query('SELECT * FROM transactions');
+        const [transactions] = await pool.query('SELECT * FROM transactions ');
 
         for (let transaction of transactions) {
             if (transaction.userId !== null) {

@@ -21,15 +21,6 @@ export default function EditClassPage() {
   const userRole = useSelector(
     (state) => state.userRole?.userRole?.toLowerCase() === "admin"
   );
-
-  if (!userRole) {
-    return (
-      <ForbiddenPage
-        title=" Access Denied: Admins Only"
-        message="You do not have the necessary permissions to view this area. Admin access is required."
-      />
-    );
-  }
   const submitButtonRef = useRef();
   const { classId } = useParams();
   const dispatch = useDispatch();
@@ -52,7 +43,6 @@ export default function EditClassPage() {
       });
     },
   });
-
   const {
     mutate,
     isPending: isEditingClass,
@@ -61,9 +51,9 @@ export default function EditClassPage() {
     error,
   } = useMutation({
     mutationKey: ["classes", `class-${classId}`],
-    mutationFn: async (data) =>
-      await fetchFun({
-        url: `http://localhost:8081/class/${classId}`,
+    mutationFn: async (data) => {
+      return await fetchFun({
+        url: `http://localhost:8081/class/update-class/${classId}`,
         options: {
           method: "PUT",
           body: JSON.stringify(data),
@@ -72,8 +62,18 @@ export default function EditClassPage() {
             "x-access-token": getToken(),
           },
         },
-      }),
+      });
+    },
   });
+  if (!userRole) {
+    return (
+      <ForbiddenPage
+        title=" Access Denied: Admins Only"
+        message="You do not have the necessary permissions to view this area. Admin access is required."
+      />
+    );
+  }
+
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
@@ -89,7 +89,7 @@ export default function EditClassPage() {
       price: fd.get("class-price"),
       maxSize: fd.get("class-max-size"),
     };
-    await mutate(formData);
+    mutate(formData);
   };
 
   if (isFetchingClass) {
@@ -99,8 +99,8 @@ export default function EditClassPage() {
   if (
     fetchError ||
     !queryData ||
-    !queryData.instructorData ||
-    !queryData.classData
+    !queryData?.instructorData ||
+    !queryData?.classData
   ) {
     return (
       <p className="font-semibold text-gray-900 text-xl">Nothing to show!</p>
@@ -145,23 +145,23 @@ export default function EditClassPage() {
           <hr className="w-full h-1 my-4" />
           <Form onSubmit={handleSubmitForm} method="POST" className="p-2">
             <Input
-              defaultValue={classData.name}
+              defaultValue={classData?.name}
               name="class-name"
               label="Class Name"
             />
             <TextAreaInput
-              defaultValue={classData.description}
+              defaultValue={classData?.description}
               name="class-description"
               label="Class Description"
             />
             <SelectInput
-              selectedField={classData.category}
+              selectedField={classData?.category}
               label="Category"
               name="class-category"
               data={categories}
             />
             <RelatedUsers
-              defaultRelatedUser={[{ email: queryData.instructorData.email }]}
+              defaultRelatedUser={[{ ...queryData?.instructorData }]}
               name="class-related-user"
               label="Who will be coaching this class?"
               userType="coach"
@@ -170,24 +170,24 @@ export default function EditClassPage() {
               label="Start Date and Time"
               dateName="class-start-date"
               timeName="class-start-time"
-              defaultDateValue={classData.startDate}
-              defaultTimeValue={classData.startTime}
+              defaultDateValue={classData?.startDate}
+              defaultTimeValue={classData?.startTime}
             />
             <DatePicker
               label="End Date and Time"
               dateName="class-end-date"
               timeName="class-end-time"
-              defaultDateValue={classData.endDate}
-              defaultTimeValue={classData.endTime}
+              defaultDateValue={classData?.endDate}
+              defaultTimeValue={classData?.endTime}
             />
             <div className="grid grid-cols-2 items-center justify-center">
               <Input
-                defaultValue={classData.maximum_capacity}
+                defaultValue={classData?.maximum_capacity}
                 name="class-max-size"
                 label="Maximum Class Size"
                 type="number"
               />
-              <PriceInput defaultValue={classData.price} name="class-price" />
+              <PriceInput defaultValue={classData?.price} name="class-price" />
             </div>
             <input type="submit" value="" hidden ref={submitButtonRef} />
           </Form>

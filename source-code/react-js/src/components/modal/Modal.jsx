@@ -9,6 +9,7 @@ export default function Modal({
   remainingDay,
   imageSrc,
   classId,
+  certificationId,
 }) {
   const dialog = useRef();
   const modalContentRef = useRef();
@@ -57,6 +58,7 @@ export default function Modal({
           className="fixed top-1/2 left-1/2 pt-6 transform -translate-x-1/2 -translate-y-1/2   max-h-screen  "
         >
           <ModalContent
+            certificationId={certificationId}
             equipmentData={equipmentData}
             remainingDay={remainingDay}
             imageSrc={imageSrc}

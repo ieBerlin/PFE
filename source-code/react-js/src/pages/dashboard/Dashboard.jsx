@@ -73,7 +73,6 @@ export default function Dashboard() {
   if (!data[1].isError && data[1].data) {
     transactionsData = data[1].data;
   }
-
   const cardData = basicInformations
     ? [
         {
@@ -100,7 +99,7 @@ export default function Dashboard() {
           href: "/reports",
           statistics: {
             title: "Sales This Month",
-            value: `+${basicInformations?.transactions?.expense?.growth ?? 0}%`, // Update growth percentage based on fetched data
+            value: `${basicInformations?.transactions?.expense?.growth ?? 0}%`, // Update growth percentage based on fetched data
             color: "red-500",
           },
         },
@@ -115,7 +114,7 @@ export default function Dashboard() {
           href: "/reports",
           statistics: {
             title: "Earnings This Month",
-            value: `+${basicInformations?.transactions?.income?.growth ?? 0}%`, // Update growth percentage based on fetched data
+            value: `${basicInformations?.transactions?.income?.growth ?? 0}%`, // Update growth percentage based on fetched data
             color: "emerald-500",
           },
         },
