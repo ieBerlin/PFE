@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Form } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -28,9 +28,7 @@ export default function AddUserModal() {
           },
         },
       }),
-      onSuccess:()=>{
-        window.location.reload();
-      }
+      onSuccess:()=>dispatch(setModalType('confirm-create-user'))
   });
 
   const submitButtonRef = useRef();

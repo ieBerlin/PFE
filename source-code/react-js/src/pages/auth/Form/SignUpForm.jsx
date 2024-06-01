@@ -1,29 +1,18 @@
-import { CameraIcon } from "@heroicons/react/24/outline";
 import PasswordInput from "../../../components/modal/PasswordInput";
 import Input from "../../../components/Input";
 import DateInput from "../../../components/DateInput";
 import PhoneNumberInput from "../../../components/PhoneNumberInput";
 import TextAreaInput from "../../../components/TextAreaInput";
 import GenderInput from "../../../components/GenderInput";
-
-import { useRef } from "react";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import SelectInput from "../../../components/SelectInput";
 
-export default function SignUpForm({
-  submitButtonRef,
-  currentImageSrc,
-  onImageChange,
-}) {
+export default function SignUpForm({ submitButtonRef }) {
+  const [currentSelectedUser, setCurrentSelectedUser] = useState("member");
   const isAdmin = useSelector(
     (state) => state.userRole.userRole?.toLowerCase() === "admin"
   );
-  const pickImage = () => {
-    if (imageRef.current) {
-      imageRef.current.click();
-    }
-  };
-
-  const imageRef = useRef();
 
   return (
     <>
@@ -51,6 +40,8 @@ export default function SignUpForm({
         </div> */}
         {isAdmin ? (
           <select
+            value={currentSelectedUser}
+            onChange={(e) => setCurrentSelectedUser(e.target.value)}
             name="user-role"
             className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
           >
@@ -60,6 +51,8 @@ export default function SignUpForm({
           </select>
         ) : (
           <select
+            value={currentSelectedUser}
+            onChange={(e) => setCurrentSelectedUser(e.target.value)}
             name="user-role"
             className="font-semibold py-2 px-4 pe-9 flex h-min bg-gray-100 border-transparent rounded-lg focus:outline-none text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
           >
@@ -108,6 +101,28 @@ export default function SignUpForm({
         <PhoneNumberInput name="phone-number" />
         <GenderInput />
         <TextAreaInput label="Address" name="address" />
+        {currentSelectedUser==='coach' && (
+          <>
+            <SelectInput
+              name="specialization"
+              label="Specialization"
+              data={[
+                { value: "kickboxing", label: "Kickboxing" },
+                { value: "fitness", label: "Fitness" },
+                { value: "yoga", label: "Yoga" },
+                { value: "bodybuilding", label: "Bodybuilding" },
+              ]}
+              placeholder="Select specialization"
+            />
+            <Input
+              label="Total Trained Members"
+              placeholder="Enter Total members you trained."
+              name="total-trained-members"
+              type="number"
+            />
+            <TextAreaInput label="Bio" name="bio" />
+          </>
+        )}
         <button type="submit" className="hidden" ref={submitButtonRef} />
       </div>
     </>

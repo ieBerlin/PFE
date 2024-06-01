@@ -1,7 +1,8 @@
 const { pool } = require("../../models/db/connect.js");
+const { dateOfBirthFormatter } = require("../../utils/formatter/dateOfBirth.js");
+const { phoneNumberFormatter } = require("../../utils/formatter/phoneNumber.js");
 const {
     hashPassword,
-    insertUser,
     userExists,
     validateSignUpInputs,
 } = require("./func.js");
@@ -17,8 +18,10 @@ const createUser = async(req, res) => {
         address,
         phoneNumber,
         role,
+        totalTrainedMembers,
+        specialization,
+        bio,
     } = req.body;
-
     const errors = validateSignUpInputs({
         email,
         password,
@@ -30,6 +33,9 @@ const createUser = async(req, res) => {
         gender,
         address,
         role,
+        totalTrainedMembers,
+        specialization,
+        bio,
     });
     if (Object.keys(errors).length > 0) {
         return res.status(422).json(errors);
@@ -40,19 +46,51 @@ const createUser = async(req, res) => {
             return res.status(409).json({ message: "User already exists" });
         }
         const hashedPassword = await hashPassword(password);
-        await insertUser({
+        const formattedPhoneNumber = phoneNumberFormatter(phoneNumber);
+        const formattedDateOfBirth = dateOfBirthFormatter(dateOfBirth);
+        const sql = `
+        INSERT INTO users (
+            email,
+            password,
+            username,
+            first_name,
+            last_name,
+            date_of_birth,
+            gender,
+            address,
+            phone_number,
+            role
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const values = [
             email,
             hashedPassword,
             username,
             firstName,
             lastName,
-            dateOfBirth,
+            formattedDateOfBirth,
             gender,
             address,
-            phoneNumber,
+            formattedPhoneNumber,
             role
-        });
+        ];
 
+        if (role === "coach") {
+            let errors = {};
+            if (totalTrainedMembers === undefined || totalTrainedMembers < 0) {
+                errors.totalTrainedMembers = "Please provide a valid total trained members.";
+            }
+            if (!bio) {
+                errors.bio = "Please provide a valid bio.";
+            }
+            if (Object.keys(errors).length) {
+                return res.status(422).json(errors);
+            }
+        }
+
+        const [result] = await pool.execute(sql, values);
+        if (role === "coach") {
+            await pool.query('INSERT INTO coaches (coachId, totalTrainedMembers, bio, specialization) VALUES (?, ?, ?, ?)', [result.insertId, totalTrainedMembers, bio, specialization]);
+        }
         setTimeout(() => {
             return res.status(201).json({
                 message: "User created successfully"

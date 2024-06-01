@@ -124,61 +124,14 @@ const comparePassword = async({ type, field, plainPassword }) => {
         }
         const hashedPasswordFromDB = result[0][0].password;
         const match = await bcrypt.compare(plainPassword, hashedPasswordFromDB);
-        console.log(match)
         return match;
     } catch (error) {
         throw new Error('Invalid credentials!');
     }
 };
 
-const insertUser = async({
-    email,
-    hashedPassword,
-    username,
-    firstName,
-    lastName,
-    dateOfBirth,
-    gender,
-    address,
-    phoneNumber,
-    role
-}) => {
-
-    const formattedPhoneNumber = phoneNumberFormatter(phoneNumber);
-    const formattedDateOfBirth = dateOfBirthFormatter(dateOfBirth);
-    const sql = `
-        INSERT INTO users (
-            email,
-            password,
-            username,
-            first_name,
-            last_name,
-            date_of_birth,
-            gender,
-            address,
-            phone_number,
-            role
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)`;
-    const values = [
-        email,
-        hashedPassword,
-        username,
-        firstName,
-        lastName,
-        formattedDateOfBirth,
-        gender,
-        address,
-        formattedPhoneNumber,
-        role
-    ];
-    const [result] = await pool.execute(sql, values);
-    console.log(result)
-    await pool.query('INSERT INTO coaches (coachId) VALUES (?)', [result.insertId]);
-
-};
 
 module.exports = {
-    insertUser,
     hashPassword,
     userExists,
     validateLoginInputs,

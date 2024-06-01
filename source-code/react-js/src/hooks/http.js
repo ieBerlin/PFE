@@ -118,6 +118,9 @@ export async function processSignUpForm(formData) {
         address: fd.address,
         gender: fd.gender,
         role: fd["user-role"],
+        specialization: fd.specialization,
+        totalTrainedMembers: fd['total-trained-members'],
+        bio: fd.bio
     };
 }
 export async function isAuthenticatedUser(token) {

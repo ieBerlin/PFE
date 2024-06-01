@@ -5,7 +5,7 @@ const secretKey = require('../../config/jwt_secret.js');
 const verifyToken = (req, res) => {
     let token = req.headers['x-access-token'] || req.headers['authorization'];
 
-    if (!token) {
+    if (!token && token !== 'null') {
         return res.status(403).json({ message: 'No token provided' });
     }
     try {

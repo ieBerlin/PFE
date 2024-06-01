@@ -350,6 +350,14 @@ export default function ModalContent({
         description="The custom message has been successfully sent to the user."
       />
     );
+  } else if (type === "confirm-create-user") {
+    return (
+      <ConfirmModal
+        color="blue"
+        title="Sign up"
+        description="Your account has been created Successfully, Login in with credentials you input."
+      />
+    );
   } else if (type === "confirm-add-user") {
     return (
       <ConfirmModal
