@@ -1,4 +1,4 @@
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 import FeaturesSection from "./FeaturesSection.jsx";
 import Footer from "./Footer";
 import Header from "./Header.jsx";
@@ -8,12 +8,11 @@ import { isAuthenticatedUser } from "../../hooks/http.js";
 export default function LandingPage() {
   const isValidLogin = useRouteLoaderData("landing-page-id");
   if (isValidLogin === null) {
-    // LoaderData not yet available, show loading spinner or placeholder
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="bg-blue-700">
+    <div className="bg-blue-600">
       <Header isValidLogin={isValidLogin} />
       <HeroSection />
       <FeaturesSection />

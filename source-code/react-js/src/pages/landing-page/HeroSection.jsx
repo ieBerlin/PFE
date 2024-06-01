@@ -6,15 +6,18 @@ export default function HeroSection() {
       <div className={classes.heroSection}>
         <h1>Discover the Power of Fitness at Our Gym</h1>
       </div>
-      <div className={classes.buttons}>
-        <a href="">
-          <button>Get Started </button>
+      <div className="flex justify-center gap-9 my-5">
+        <a
+          href="/auth"
+          className="flex justify-center items-center gap-3 cursor-pointer  p-3 bg-orange-600 rounded-xl hover:bg-orange-500 border border-white"
+        >
+          <h1 className=" text-white font-semibold inline-block">Get Started </h1>
           <img src={arrowSvg} alt="arrow svg" />
         </a>
-        <a href="">
+        {/* <a href="">
           <button>See how it works</button>{" "}
           <img src={arrowSvg} alt="arrow svg" />
-        </a>
+        </a> */}
       </div>
     </main>
   );
