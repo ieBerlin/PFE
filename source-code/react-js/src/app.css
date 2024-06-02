@@ -21,6 +21,28 @@ input {
     outline: none;
 }
 
+.landing-page-container {
+    position: relative;
+    background-image: url('./assets/landingPageImage.jpg');
+    /* background-size: cover; */
+    /* background-position: center; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* z-index: 0; */
+}
+
+.landing-page-container>* {
+    position: relative;
+    z-index: 1;
+}
+
+.absolutee {
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
 
 /* body {
         background-color: #120425;

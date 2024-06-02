@@ -2,7 +2,8 @@ body {
     position: relative;
 }
 
-.heroSection {
+
+/* .heroSection {
     margin-top: 50px;
     padding: 0 20%;
 }
@@ -18,7 +19,7 @@ body {
     color: #969799;
     text-align: center;
     font-size: 30px;
-}
+} */
 
 .buttons {
     display: flex;

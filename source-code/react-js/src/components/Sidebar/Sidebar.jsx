@@ -24,8 +24,8 @@ export default function Sidebar() {
       <div className={sideBarClasses}>
         <div className="logo-details">
           <a href="/" className="go-to-home-page">
-            <AcademicCapIcon className="text-gray-600 w-8 h-8" />
-            <div className="logo_name">HousesGym</div>
+            <AcademicCapIcon className="text-gray-900 w-8 h-8" />
+            <div className="logo_name">Powerhouse</div>
           </a>
           <div id="btn">
             {!isOpen ? (

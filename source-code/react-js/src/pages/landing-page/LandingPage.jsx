@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import Header from "./Header.jsx";
 import HeroSection from "./HeroSection.jsx";
 import { isAuthenticatedUser } from "../../hooks/http.js";
+import landingPageImage from "../../assets/landingPageImage.jpg";
 
 export default function LandingPage() {
   const isValidLogin = useRouteLoaderData("landing-page-id");
@@ -12,11 +13,17 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="bg-blue-600">
-      <Header isValidLogin={isValidLogin} />
-      <HeroSection />
-      <FeaturesSection />
-      <Footer />
+    <div className="relative">
+      <div
+        className="absolute top-0 left-0 w-full h-full bg-cover bg-no-repeat"
+        style={{ backgroundImage: `url(${landingPageImage})` }}
+      />
+      <div className="relative z-10">
+        <Header isValidLogin={isValidLogin} />
+        <HeroSection />
+        <FeaturesSection />
+        <Footer />
+      </div>
     </div>
   );
 }
